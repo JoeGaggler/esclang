@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using static System.Console;
+﻿using static System.Console;
 
 namespace EscLang;
 
@@ -37,6 +32,19 @@ class Program
 		}
 		Measure("Read", measurements, stopwatch);
 
+		// Lexer
+		Span<Lex.Lexeme> lexemes;
+		try
+		{
+			lexemes = Lex.Lexer.GetLexemes(escSourceCode).ToArray().AsSpan();
+		}
+		catch
+		{
+			WriteLine($"Unable to lex path: {filePath}");
+			return 1;
+		}
+		Measure("Lex", measurements, stopwatch);
+
 		// TODO: everything else
 
 		// Compiler not yet viable, so currently saving debug information as the output
@@ -47,6 +55,14 @@ class Program
 			{
 				outputFile.WriteLine("Stats:");
 				Stats(outputFile, measurements);
+
+				// Debug Lexer
+				outputFile.WriteLine();
+				outputFile.WriteLine("Lex:");
+				foreach (var lexeme in lexemes)
+				{
+					Printer.PrintLexeme(outputFile, lexeme);
+				}
 			}
 		}
 		catch
