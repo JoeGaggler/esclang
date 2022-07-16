@@ -1,10 +1,40 @@
 Stats:
-- Read: 0.01
--  Lex: 0.00
+-  Read: 0.01
+-   Lex: 0.00
+- Parse: 0.00
 
 Lex:
 0 + 5 -- (1, 1) -- Identifier -- print
 5 + 1 -- (1, 6) -- Spaces -- " "
 6 + 14 -- (1, 7) -- LiteralString -- "hello, world"
 20 + 1 -- (1, 21) -- EndOfLine -- \n
-21 + 0 -- (2, 1) -- EndOfFile -- <EOF>
+21 + 5 -- (2, 1) -- Identifier -- print
+26 + 1 -- (2, 6) -- Spaces -- " "
+27 + 2 -- (2, 7) -- Number -- 13
+29 + 1 -- (2, 9) -- EndOfLine -- \n
+30 + 5 -- (3, 1) -- Identifier -- print
+35 + 1 -- (3, 6) -- Spaces -- " "
+36 + 1 -- (3, 7) -- Minus -- -
+37 + 1 -- (3, 8) -- Number -- 1
+38 + 1 -- (3, 9) -- EndOfLine -- \n
+39 + 5 -- (4, 1) -- Identifier -- print
+44 + 1 -- (4, 6) -- Spaces -- " "
+45 + 3 -- (4, 7) -- LiteralChar -- 'j'
+48 + 1 -- (4, 10) -- EndOfLine -- \n
+49 + 5 -- (5, 1) -- Identifier -- print
+54 + 1 -- (5, 6) -- Spaces -- " "
+55 + 5 -- (5, 7) -- LiteralString -- "bye"
+60 + 1 -- (5, 12) -- EndOfLine -- \n
+61 + 0 -- (6, 1) -- EndOfFile -- <EOF>
+
+Parse:
+print
+  "hello, world"
+print
+  "13"
+print
+  "-1"
+print
+  "j"
+print
+  "bye"

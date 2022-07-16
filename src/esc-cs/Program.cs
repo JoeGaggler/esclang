@@ -45,6 +45,15 @@ class Program
 		}
 		Measure("Lex", measurements, stopwatch);
 
+		// Parser
+		if (!Parse.Parser.TryParse(lexemes, out var file, out var error))
+		{
+			var errorMessage = Printer.PrintParseError(lexemes, error);
+			WriteLine(errorMessage);
+			return 1;
+		}
+		Measure("Parse", measurements, stopwatch);
+
 		// TODO: everything else
 
 		// Compiler not yet viable, so currently saving debug information as the output
@@ -63,6 +72,11 @@ class Program
 				{
 					Printer.PrintLexeme(outputFile, lexeme);
 				}
+
+				// Debug Parser
+				outputFile.WriteLine();
+				outputFile.WriteLine("Parse:");
+				Printer.PrintSyntax(outputFile, file, lexemes);
 			}
 		}
 		catch
