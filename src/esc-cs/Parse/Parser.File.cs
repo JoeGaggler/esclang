@@ -33,6 +33,18 @@ partial class Parser
 					position = next;
 					break;
 				}
+				case LexemeType.Identifier when peek.Text == "print":
+				{
+					position = next;
+					var node = Parse_File_Expression(input, ref position);
+					if (!node.HasValue)
+					{
+						return new(input[start], "invalid print expression", node.Error);
+					}
+
+					nodes.Add(new PrintNode(node.Value));
+					break;
+				}
 				default:
 				{
 					var node = Parse_File_Expression(input, ref position);
@@ -107,7 +119,7 @@ partial class Parser
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
 					break;
 				}
-                case LexemeType.Slash:
+				case LexemeType.Slash:
 				{
 					const Int32 priority = (Int32)OperatorPriority.Divide;
 					if (min_priority >= priority)
@@ -176,28 +188,7 @@ partial class Parser
 		switch (token.Type)
 		{
 			case LexemeType.Number: { return new(new LiteralNumberNode(token.Text)); }
-			case LexemeType.Identifier:
-			{
-				switch (token.Text)
-				{
-					// print is currently an intrinsic keyword
-					case "print":
-					{
-						var leftResult = Parse_File_Expression(input, ref start);
-						if (!leftResult.HasValue)
-						{
-							return new(input[start], "invalid print expression", leftResult.Error);
-						}
-
-						return new(new PrintNode(leftResult.Value));
-					}
-					default:
-					{
-						return new(new IdentifierNode(token.Text));
-					}
-				}
-
-			}
+			case LexemeType.Identifier: { return new(new IdentifierNode(token.Text)); }
 			case LexemeType.LiteralString: { return new(new LiteralStringNode(EscLang.Lex.Lexer.UnwrapString(token))); }
 			case LexemeType.LiteralChar: { return new(new LiteralCharNode(EscLang.Lex.Lexer.UnwrapString(token))); }
 			case LexemeType.Minus:
