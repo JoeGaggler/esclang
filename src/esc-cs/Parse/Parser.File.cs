@@ -57,7 +57,7 @@ partial class Parser
 	/// </remarks>
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
-	/// <returns><see cref="Expression"/> result</returns>
+	/// <returns><see cref="SyntaxNode"/> result</returns>
 	private static ParseResult<SyntaxNode> Parse_File_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, Int32 min_priority = 0)
 	{
 		var position = start;
@@ -83,6 +83,14 @@ partial class Parser
 				{
 					start = position; // at EndOfFile
 					return leftResult;
+				}
+				case LexemeType.Colon:
+				{
+					position = next;
+					var result = Parse_File_Expression_Declaration(input, ref position, leftResult.Value);
+					if (!result.HasValue) { return new(input[position], $"failed file declaration", result.Error); }
+					leftResult = new(result.Value);
+					break;
 				}
 				default:
 				{
@@ -160,5 +168,37 @@ partial class Parser
 				return new(token, $"unexpected expression atom: {token.Type}");
 			}
 		}
+	}
+
+	/// <summary>
+	/// Parses a declaration expression
+	/// </summary>
+	/// <remarks>
+	/// Preconditions: after the colon
+	/// Postcondition: after the expression
+	/// </remarks>
+	/// <param name="input">input</param>
+	/// <param name="start">start</param>
+	/// <returns><see cref="SyntaxNode"/> result</returns>
+	private static ParseResult<SyntaxNode> Parse_File_Expression_Declaration(ReadOnlySpan<Lexeme> input, ref Int32 start, SyntaxNode value)
+	{
+		var position = start;
+
+		if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is LexemeType mut)
+		{
+			// future implementation
+		}
+		else
+		{
+			return new(input[position], Error.NotImplemented(nameof(Parse_File_Expression_Declaration), "explicit type"));
+		}
+
+		var expr = Parse_File_Expression(input, ref position);
+		if (!expr.HasValue) { return new(input[position], $"failed assignment expression for declaration expression", expr.Error); }
+		start = position;
+
+		var right = expr.Value;
+
+		return new(new DeclarationNode(Left: value, Right: right));
 	}
 }

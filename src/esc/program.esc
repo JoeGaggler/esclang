@@ -1,5 +1,2 @@
-print "hello, world"
-print 13
-print -1
-print 'j'
-print "bye"
+text :: "hello, world"
+print text

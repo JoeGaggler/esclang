@@ -124,6 +124,21 @@ public static class Printer
 			case LiteralStringNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
 			case LiteralNumberNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
 			case LiteralCharNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
+			case IdentifierNode node: { outputFile.WriteLine($"identifier: {node.Text}"); break; }
+
+			case DeclarationNode node:
+			{
+				outputFile.WriteLine("declaration");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("left");
+				PrintSyntax(outputFile, node.Left, lexemes, level + 2);
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("right");
+				PrintSyntax(outputFile, node.Right, lexemes, level + 2);
+				break;
+			}
 
 			default:
 			{

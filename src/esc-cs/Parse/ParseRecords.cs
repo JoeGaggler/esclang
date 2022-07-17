@@ -15,3 +15,5 @@ public record NegationNode(SyntaxNode Node) : SyntaxNode { }
 public record IdentifierNode(String Text) : SyntaxNode { }
 
 public record PrintNode(SyntaxNode Node) : SyntaxNode { }
+
+public record DeclarationNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
