@@ -17,3 +17,17 @@ public record IdentifierNode(String Text) : SyntaxNode { }
 public record PrintNode(SyntaxNode Node) : SyntaxNode { }
 
 public record DeclarationNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
+
+public enum BinaryOperator
+{
+	Plus,
+	Minus,
+
+	Multiply,
+	Divide,
+
+	EqualTo,
+	NotEqualTo,
+}
+
+public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, SyntaxNode Right) : SyntaxNode { }

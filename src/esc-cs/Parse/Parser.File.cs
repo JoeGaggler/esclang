@@ -92,6 +92,66 @@ partial class Parser
 					leftResult = new(result.Value);
 					break;
 				}
+				case LexemeType.Star:
+				{
+					const Int32 priority = (Int32)OperatorPriority.Multiply;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
+					break;
+				}
+                case LexemeType.Slash:
+				{
+					const Int32 priority = (Int32)OperatorPriority.Divide;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Divide, Right: result.Value));
+					break;
+				}
+				case LexemeType.Plus:
+				{
+					const Int32 priority = (Int32)OperatorPriority.Plus;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Plus, Right: result.Value));
+					break;
+				}
+				case LexemeType.Minus:
+				{
+					const Int32 priority = (Int32)OperatorPriority.Minus;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Minus, Right: result.Value));
+					break;
+				}
 				default:
 				{
 					return new(peek, Error.UnexpectedToken(nameof(Parse_File_Expression), peek));

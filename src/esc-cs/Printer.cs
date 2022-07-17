@@ -122,7 +122,7 @@ public static class Printer
 			}
 
 			case LiteralStringNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
-			case LiteralNumberNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
+			case LiteralNumberNode node: { outputFile.WriteLine($"{node.Text}"); break; }
 			case LiteralCharNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
 			case IdentifierNode node: { outputFile.WriteLine($"identifier: {node.Text}"); break; }
 
@@ -137,6 +137,21 @@ public static class Printer
 				outputFile.Indent(level + 1);
 				outputFile.WriteLine("right");
 				PrintSyntax(outputFile, node.Right, lexemes, level + 2);
+				break;
+			}
+
+			case BinaryOperatorNode node:
+			{
+				String op = node.Operator switch {
+					BinaryOperator.Plus => "add",
+					BinaryOperator.Multiply => "multiply",
+					BinaryOperator.Minus => "subtract",
+					BinaryOperator.Divide => "divide",
+					_ => "unknown binary operator: " + node.Operator.ToString()
+				};
+				outputFile.WriteLine(op);
+				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
 				break;
 			}
 

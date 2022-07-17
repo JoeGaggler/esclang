@@ -4,24 +4,54 @@ Stats:
 - Parse: 0.00
 
 Lex:
-0 + 4 -- (1, 1) -- Identifier -- text
+0 + 4 -- (1, 1) -- Identifier -- math
 4 + 1 -- (1, 5) -- Spaces -- " "
 5 + 1 -- (1, 6) -- Colon -- :
 6 + 1 -- (1, 7) -- Colon -- :
 7 + 1 -- (1, 8) -- Spaces -- " "
-8 + 14 -- (1, 9) -- LiteralString -- "hello, world"
-22 + 1 -- (1, 23) -- EndOfLine -- \n
-23 + 5 -- (2, 1) -- Identifier -- print
-28 + 1 -- (2, 6) -- Spaces -- " "
-29 + 4 -- (2, 7) -- Identifier -- text
-33 + 1 -- (2, 11) -- EndOfLine -- \n
-34 + 0 -- (3, 1) -- EndOfFile -- <EOF>
+8 + 1 -- (1, 9) -- Number -- 1
+9 + 1 -- (1, 10) -- Spaces -- " "
+10 + 1 -- (1, 11) -- Star -- *
+11 + 1 -- (1, 12) -- Spaces -- " "
+12 + 1 -- (1, 13) -- Number -- 2
+13 + 1 -- (1, 14) -- Spaces -- " "
+14 + 1 -- (1, 15) -- Slash -- /
+15 + 1 -- (1, 16) -- Spaces -- " "
+16 + 1 -- (1, 17) -- Number -- 3
+17 + 1 -- (1, 18) -- Spaces -- " "
+18 + 1 -- (1, 19) -- Plus -- +
+19 + 1 -- (1, 20) -- Spaces -- " "
+20 + 1 -- (1, 21) -- Number -- 4
+21 + 1 -- (1, 22) -- Spaces -- " "
+22 + 1 -- (1, 23) -- Slash -- /
+23 + 1 -- (1, 24) -- Spaces -- " "
+24 + 1 -- (1, 25) -- Number -- 5
+25 + 1 -- (1, 26) -- Spaces -- " "
+26 + 1 -- (1, 27) -- Star -- *
+27 + 1 -- (1, 28) -- Spaces -- " "
+28 + 1 -- (1, 29) -- Number -- 6
+29 + 1 -- (1, 30) -- EndOfLine -- \n
+30 + 5 -- (2, 1) -- Identifier -- print
+35 + 1 -- (2, 6) -- Spaces -- " "
+36 + 4 -- (2, 7) -- Identifier -- math
+40 + 1 -- (2, 11) -- EndOfLine -- \n
+41 + 0 -- (3, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
   left
-    identifier: text
+    identifier: math
   right
-    "hello, world"
+    add
+      divide
+        multiply
+          1
+          2
+        3
+      multiply
+        divide
+          4
+          5
+        6
 print
-  identifier: text
+  identifier: math
