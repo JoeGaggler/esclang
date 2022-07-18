@@ -6,8 +6,8 @@ partial class Parser
 {
 	private static class Error
 	{
-        public static String NotImplemented(String source) => $"{source}: not implemented yet";
-		public static String NotImplemented(String source, String subsource) => $"{source}: not implemented yet: {subsource}";
-		public static String UnexpectedToken(String source, Lexeme lexeme) => $"{source}: unexpected token: {lexeme.Type}";
+		public static String Message(String message, [System.Runtime.CompilerServices.CallerMemberName] string caller = "UNKNOWN_CALLER") => $"{caller} -> {message}";
+		public static String NotImplemented(String message, [System.Runtime.CompilerServices.CallerMemberName] string caller = "UNKNOWN_CALLER") => $"{caller} -> not implemented yet: {message}";
+		public static String UnexpectedToken(Lexeme lexeme, [System.Runtime.CompilerServices.CallerMemberName] string caller = "UNKNOWN_CALLER") => $"{caller} -> unexpected token: {lexeme.Type}";
 	}
 }

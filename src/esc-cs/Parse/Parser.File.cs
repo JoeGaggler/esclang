@@ -39,7 +39,7 @@ partial class Parser
 					var node = Parse_File_Expression(input, ref position);
 					if (!node.HasValue)
 					{
-						return new(input[start], "invalid print expression", node.Error);
+						return new(input[start], Error.Message("invalid print expression"), node.Error);
 					}
 
 					nodes.Add(new PrintNode(node.Value));
@@ -50,7 +50,7 @@ partial class Parser
 					var node = Parse_File_Expression(input, ref position);
 					if (!node.HasValue)
 					{
-						return new(peek, "failed top level statement", node.Error);
+						return new(peek, Error.Message("failed top level statement"), node.Error);
 					}
 
 					nodes.Add(node.Value);
@@ -65,7 +65,7 @@ partial class Parser
 	/// </summary>
 	/// <remarks>
 	/// Preconditions: at the expression
-	/// Postcondition: token after the expression
+	/// Postcondition: after the expression
 	/// </remarks>
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
@@ -77,7 +77,7 @@ partial class Parser
 		var leftResult = Parse_File_Expression_Prefix(input, ref position);
 		if (!leftResult.HasValue)
 		{
-			return new(input[start], "invalid expression prefix", leftResult.Error);
+			return new(input[start], Error.Message("invalid expression prefix"), leftResult.Error);
 		}
 
 		while (true)
@@ -100,7 +100,7 @@ partial class Parser
 				{
 					position = next;
 					var result = Parse_File_Expression_Declaration(input, ref position, leftResult.Value);
-					if (!result.HasValue) { return new(input[position], $"failed file declaration", result.Error); }
+					if (!result.HasValue) { return new(input[position], Error.Message($"failed file declaration"), result.Error); }
 					leftResult = new(result.Value);
 					break;
 				}
@@ -115,7 +115,7 @@ partial class Parser
 
 					position = next;
 					var result = Parse_File_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
 					break;
 				}
@@ -130,7 +130,7 @@ partial class Parser
 
 					position = next;
 					var result = Parse_File_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Divide, Right: result.Value));
 					break;
 				}
@@ -145,7 +145,7 @@ partial class Parser
 
 					position = next;
 					var result = Parse_File_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Plus, Right: result.Value));
 					break;
 				}
@@ -160,13 +160,13 @@ partial class Parser
 
 					position = next;
 					var result = Parse_File_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], $"invalid binary operator expression", result.Error); }
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Minus, Right: result.Value));
 					break;
 				}
 				default:
 				{
-					return new(peek, Error.UnexpectedToken(nameof(Parse_File_Expression), peek));
+					return new(peek, Error.UnexpectedToken(peek));
 				}
 			}
 		}
@@ -196,7 +196,7 @@ partial class Parser
 				var right = Parse_File_Expression_Prefix(input, ref start);
 				if (!right.HasValue)
 				{
-					return new(token, $"Negation was not followed by a valid expression");
+					return new(token, Error.Message($"Negation was not followed by a valid expression"));
 				}
 				var inner = right.Value;
 				switch (inner)
@@ -216,7 +216,7 @@ partial class Parser
 			}
 			default:
 			{
-				return new(token, $"unexpected expression atom: {token.Type}");
+				return new(token, Error.Message($"unexpected expression atom: {token.Type}"));
 			}
 		}
 	}
@@ -231,25 +231,22 @@ partial class Parser
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
 	/// <returns><see cref="SyntaxNode"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression_Declaration(ReadOnlySpan<Lexeme> input, ref Int32 start, SyntaxNode value)
+	private static ParseResult<SyntaxNode> Parse_File_Expression_Declaration(ReadOnlySpan<Lexeme> input, ref Int32 start, SyntaxNode left)
 	{
 		var position = start;
 
-		if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is LexemeType mut)
+		if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is not LexemeType mut)
 		{
-			// future implementation
-		}
-		else
-		{
-			return new(input[position], Error.NotImplemented(nameof(Parse_File_Expression_Declaration), "explicit type"));
+			return new(input[position], Error.NotImplemented("explicit type"));
 		}
 
-		var expr = Parse_File_Expression(input, ref position);
-		if (!expr.HasValue) { return new(input[position], $"failed assignment expression for declaration expression", expr.Error); }
+		// TODO: distiction between :: and := operators
+
+		var expr = Parse_File_Expression(input, ref position, (Int32)OperatorPriority.Declaration);
+		if (!expr.HasValue) { return new(input[position], Error.Message($"failed assignment expression for declaration expression"), expr.Error); }
+
 		start = position;
-
 		var right = expr.Value;
-
-		return new(new DeclarationNode(Left: value, Right: right));
+		return new(new DeclarationNode(Left: left, Right: right));
 	}
 }
