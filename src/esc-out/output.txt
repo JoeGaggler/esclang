@@ -47,25 +47,24 @@ Lex:
 57 + 0 -- (4, 2) -- EndOfFile -- <EOF>
 
 Parse:
-print
-  if
-    condition
-      1
-    block
-      declaration
-        left
-          identifier: math
-        right
-          add
-            divide
-              multiply
-                1
-                2
-              3
-            multiply
-              divide
-                4
-                5
-              6
-      print
+if
+  condition
+    1
+  block
+    declaration
+      left
         identifier: math
+      right
+        add
+          divide
+            multiply
+              1
+              2
+            3
+          multiply
+            divide
+              4
+              5
+            6
+    print
+      identifier: math

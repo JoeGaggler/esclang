@@ -35,31 +35,25 @@ partial class Parser
 				}
 				case LexemeType.Identifier when peek.Text == "print":
 				{
-					position = next;
-					var node = Parse_File_Expression(input, ref position);
-					if (!node.HasValue)
-					{
-						return new(input[start], Error.Message("invalid print expression"), node.Error);
-					}
+					var node = Parse_File_Expression(input, ref next);
+					if (!node.HasValue) { return new(input[next], Error.Message("invalid print expression"), node.Error); }
 
+					position = next;
 					nodes.Add(new PrintNode(node.Value));
 					break;
 				}
 				case LexemeType.Identifier when peek.Text == "if":
 				{
 					var node = Parse_If(input, ref next);
-					if (!node) { return new(input[position], Error.Message("invalid print expression"), node.Error); }
+					if (!node) { return new(input[next], Error.Message("invalid print expression"), node.Error); }
 					position = next;
-					nodes.Add(new PrintNode(node.Value));
+					nodes.Add(node.Value);
 					break;
 				}
 				default:
 				{
 					var node = Parse_File_Expression(input, ref position);
-					if (!node.HasValue)
-					{
-						return new(peek, Error.Message("failed top level statement"), node.Error);
-					}
+					if (!node.HasValue) { return new(peek, Error.Message("failed top level statement"), node.Error); }
 
 					nodes.Add(node.Value);
 					break;
