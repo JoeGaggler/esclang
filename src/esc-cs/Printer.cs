@@ -111,23 +111,24 @@ public static class Printer
 
 	public static void PrintSyntax(TextWriter outputFile, SyntaxNode syntaxNode, Span<Lexeme> lexemes, int level = 0)
 	{
-		outputFile.Indent(level);
 		switch (syntaxNode)
 		{
 			case PrintNode node:
 			{
+				outputFile.Indent(level);
 				outputFile.WriteLine($"print");
 				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
 				break;
 			}
 
-			case LiteralStringNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
-			case LiteralNumberNode node: { outputFile.WriteLine($"{node.Text}"); break; }
-			case LiteralCharNode node: { outputFile.WriteLine($"\"{node.Text}\""); break; }
-			case IdentifierNode node: { outputFile.WriteLine($"identifier: {node.Text}"); break; }
+			case LiteralStringNode node: { outputFile.Indent(level); outputFile.WriteLine($"\"{node.Text}\""); break; }
+			case LiteralNumberNode node: { outputFile.Indent(level); outputFile.WriteLine($"{node.Text}"); break; }
+			case LiteralCharNode node: { outputFile.Indent(level); outputFile.WriteLine($"\"{node.Text}\""); break; }
+			case IdentifierNode node: { outputFile.Indent(level); outputFile.WriteLine($"identifier: {node.Text}"); break; }
 
 			case DeclarationNode node:
 			{
+				outputFile.Indent(level);
 				outputFile.WriteLine("declaration");
 
 				outputFile.Indent(level + 1);
@@ -142,21 +143,48 @@ public static class Printer
 
 			case BinaryOperatorNode node:
 			{
-				String op = node.Operator switch {
+				String op = node.Operator switch
+				{
 					BinaryOperator.Plus => "add",
 					BinaryOperator.Multiply => "multiply",
 					BinaryOperator.Minus => "subtract",
 					BinaryOperator.Divide => "divide",
 					_ => "unknown binary operator: " + node.Operator.ToString()
 				};
+				outputFile.Indent(level);
 				outputFile.WriteLine(op);
 				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
 				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
 				break;
 			}
 
+			case IfNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("if");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("condition");
+				PrintSyntax(outputFile, node.Condition, lexemes, level + 2);
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("block");
+				PrintSyntax(outputFile, node.Block, lexemes, level + 2);
+				break;
+			}
+
+			case Block node:
+			{
+				foreach (var statement in node.Statements)
+				{
+					PrintSyntax(outputFile, statement, lexemes, level);
+				}
+				break;
+			}
+
 			default:
 			{
+				outputFile.Indent(level);
 				outputFile.WriteLine($"Unable to print syntax node: {syntaxNode.GetType().Name}");
 				break;
 			}

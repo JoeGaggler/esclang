@@ -31,4 +31,53 @@ public static partial class Parser
 		file = parsedFile.Value;
 		return true;
 	}
+
+	/// <summary>
+	/// Parses an expression prefix
+	/// </summary>
+	/// <remarks>
+	/// Preconditions: at the prefix token
+	/// Postcondition: after the prefixed expression
+	/// </remarks>
+	/// <param name="input">input</param>
+	/// <param name="start">start</param>
+	/// <returns><see cref="Expression"/> result</returns>
+	private static ParseResult<SyntaxNode> Parse_Shared_Expression_Prefix(ReadOnlySpan<Lexeme> input, ref Int32 start)
+	{
+		var token = input.Consume(ref start);
+		switch (token.Type)
+		{
+			case LexemeType.Number: { return new(new LiteralNumberNode(token.Text)); }
+			case LexemeType.Identifier: { return new(new IdentifierNode(token.Text)); }
+			case LexemeType.LiteralString: { return new(new LiteralStringNode(EscLang.Lex.Lexer.UnwrapString(token))); }
+			case LexemeType.LiteralChar: { return new(new LiteralCharNode(EscLang.Lex.Lexer.UnwrapString(token))); }
+			case LexemeType.Minus:
+			{
+				var right = Parse_Shared_Expression_Prefix(input, ref start);
+				if (!right.HasValue)
+				{
+					return new(token, Error.Message($"Negation was not followed by a valid expression"));
+				}
+				var inner = right.Value;
+				switch (inner)
+				{
+					// Immediately negate the literal number
+					case LiteralNumberNode num:
+					{
+						return new(new LiteralNumberNode($"-{num.Text}"));
+					}
+
+					// Wrap everything else in negation
+					default:
+					{
+						return new(new NegationNode(right.Value));
+					}
+				}
+			}
+			default:
+			{
+				return new(token, Error.Message($"unexpected expression atom: {token.Type}"));
+			}
+		}
+	}
 }

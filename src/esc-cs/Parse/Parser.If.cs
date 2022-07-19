@@ -1,75 +1,51 @@
 using EscLang.Lex;
 
 namespace EscLang.Parse;
+
 partial class Parser
 {
 	/// <summary>
-	/// Parses a file
+	/// Parses a if condition expression
 	/// </summary>
 	/// <remarks>
-	/// Preconditions: start of a file
-	/// Postcondition: end of a file
+	/// Preconditions: after the if-keyword
+	/// Postcondition: after the if-block
 	/// </remarks>
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
-	/// <returns><see cref="EscFile"/> result</returns>
-	private static ParseResult<EscFile> Parse_File(ReadOnlySpan<Lexeme> input, ref Int32 start)
+	/// <returns><see cref="IfNode"/> result</returns>
+	private static ParseResult<IfNode> Parse_If(ReadOnlySpan<Lexeme> input, ref int start)
 	{
 		var position = start;
-		var nodes = new List<SyntaxNode>();
-		while (true)
+
+		var conditionResult = Parse_If_Condition_Expression(input, ref position);
+		if (!conditionResult) { return new(input[start], Error.Message("invalid if-condition"), conditionResult.Error); }
+		var conditionNode = conditionResult.Value;
+
+		var (peek, next) = input.Peek(position);
+		switch (peek.Type)
 		{
-			var (peek, next) = input.Peek(position);
-			switch (peek.Type)
+			case LexemeType.BraceOpen:
 			{
-				case LexemeType.EndOfFile:
-				{
-					start = next;
-					var file = new EscFile(nodes);
-					return new(file);
-				}
-				case LexemeType.EndOfLine:
-				{
-					position = next;
-					break;
-				}
-				case LexemeType.Identifier when peek.Text == "print":
-				{
-					position = next;
-					var node = Parse_File_Expression(input, ref position);
-					if (!node.HasValue)
-					{
-						return new(input[start], Error.Message("invalid print expression"), node.Error);
-					}
-
-					nodes.Add(new PrintNode(node.Value));
-					break;
-				}
-				case LexemeType.Identifier when peek.Text == "if":
-				{
-					var node = Parse_If(input, ref next);
-					if (!node) { return new(input[position], Error.Message("invalid print expression"), node.Error); }
-					position = next;
-					nodes.Add(new PrintNode(node.Value));
-					break;
-				}
-				default:
-				{
-					var node = Parse_File_Expression(input, ref position);
-					if (!node.HasValue)
-					{
-						return new(peek, Error.Message("failed top level statement"), node.Error);
-					}
-
-					nodes.Add(node.Value);
-					break;
-				}
+				break;
+			}
+			default:
+			{
+				return new(input[start], Error.Message("expected open brace after if-condition"));
 			}
 		}
+
+		var blockResult = Parse_Block(input, ref next);
+		if (!blockResult) { return new(input[position], Error.Message("invalid if-block"), blockResult.Error); }
+		var blockNode = blockResult.Value;
+
+		start = next;
+
+		return new(new IfNode(Condition: conditionNode, Block: blockNode));
 	}
 
 	/// <summary>
-	/// Parses a file-level expression
+	/// Parses a if condition expression
 	/// </summary>
 	/// <remarks>
 	/// Preconditions: at the expression
@@ -78,11 +54,11 @@ partial class Parser
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
 	/// <returns><see cref="SyntaxNode"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, Int32 min_priority = 0)
+	private static ParseResult<SyntaxNode> Parse_If_Condition_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, Int32 min_priority = 0)
 	{
 		var position = start;
 
-		var leftResult = Parse_File_Expression_Prefix(input, ref position);
+		var leftResult = Parse_If_Condition_Expression_Prefix(input, ref position);
 		if (!leftResult.HasValue)
 		{
 			return new(input[start], Error.Message("invalid expression prefix"), leftResult.Error);
@@ -104,13 +80,10 @@ partial class Parser
 					start = position; // at EndOfFile
 					return leftResult;
 				}
-				case LexemeType.Colon:
+				case LexemeType.BraceOpen:
 				{
-					position = next;
-					var result = Parse_File_Expression_Declaration(input, ref position, leftResult.Value);
-					if (!result.HasValue) { return new(input[position], Error.Message($"failed file declaration"), result.Error); }
-					leftResult = new(result.Value);
-					break;
+					start = position; // start of the if-block
+					return leftResult;
 				}
 				case LexemeType.Star:
 				{
@@ -190,35 +163,5 @@ partial class Parser
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
 	/// <returns><see cref="Expression"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression_Prefix(ReadOnlySpan<Lexeme> input, ref Int32 start) => Parse_Shared_Expression_Prefix(input, ref start);
-
-
-	/// <summary>
-	/// Parses a declaration expression
-	/// </summary>
-	/// <remarks>
-	/// Preconditions: after the colon
-	/// Postcondition: after the declaration
-	/// </remarks>
-	/// <param name="input">input</param>
-	/// <param name="start">start</param>
-	/// <returns><see cref="SyntaxNode"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression_Declaration(ReadOnlySpan<Lexeme> input, ref Int32 start, SyntaxNode left)
-	{
-		var position = start;
-
-		if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is not LexemeType mut)
-		{
-			return new(input[position], Error.NotImplemented("explicit type"));
-		}
-
-		// TODO: distiction between :: and := operators
-
-		var expr = Parse_File_Expression(input, ref position, (Int32)OperatorPriority.Declaration);
-		if (!expr.HasValue) { return new(input[position], Error.Message($"failed assignment expression for declaration expression"), expr.Error); }
-
-		start = position;
-		var right = expr.Value;
-		return new(new DeclarationNode(Left: left, Right: right));
-	}
+	private static ParseResult<SyntaxNode> Parse_If_Condition_Expression_Prefix(ReadOnlySpan<Lexeme> input, ref Int32 start) => Parse_Shared_Expression_Prefix(input, ref start);
 }

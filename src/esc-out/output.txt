@@ -4,54 +4,68 @@ Stats:
 - Parse: 0.00
 
 Lex:
-0 + 4 -- (1, 1) -- Identifier -- math
+0 + 2 -- (1, 1) -- Identifier -- if
+2 + 1 -- (1, 3) -- Spaces -- " "
+3 + 1 -- (1, 4) -- Number -- 1
 4 + 1 -- (1, 5) -- Spaces -- " "
-5 + 1 -- (1, 6) -- Colon -- :
-6 + 1 -- (1, 7) -- Colon -- :
-7 + 1 -- (1, 8) -- Spaces -- " "
-8 + 1 -- (1, 9) -- Number -- 1
-9 + 1 -- (1, 10) -- Spaces -- " "
-10 + 1 -- (1, 11) -- Star -- *
-11 + 1 -- (1, 12) -- Spaces -- " "
-12 + 1 -- (1, 13) -- Number -- 2
-13 + 1 -- (1, 14) -- Spaces -- " "
-14 + 1 -- (1, 15) -- Slash -- /
-15 + 1 -- (1, 16) -- Spaces -- " "
-16 + 1 -- (1, 17) -- Number -- 3
-17 + 1 -- (1, 18) -- Spaces -- " "
-18 + 1 -- (1, 19) -- Plus -- +
-19 + 1 -- (1, 20) -- Spaces -- " "
-20 + 1 -- (1, 21) -- Number -- 4
-21 + 1 -- (1, 22) -- Spaces -- " "
-22 + 1 -- (1, 23) -- Slash -- /
-23 + 1 -- (1, 24) -- Spaces -- " "
-24 + 1 -- (1, 25) -- Number -- 5
-25 + 1 -- (1, 26) -- Spaces -- " "
-26 + 1 -- (1, 27) -- Star -- *
-27 + 1 -- (1, 28) -- Spaces -- " "
-28 + 1 -- (1, 29) -- Number -- 6
-29 + 1 -- (1, 30) -- EndOfLine -- \n
-30 + 5 -- (2, 1) -- Identifier -- print
-35 + 1 -- (2, 6) -- Spaces -- " "
-36 + 4 -- (2, 7) -- Identifier -- math
-40 + 1 -- (2, 11) -- EndOfLine -- \n
-41 + 0 -- (3, 1) -- EndOfFile -- <EOF>
+5 + 1 -- (1, 6) -- BraceOpen -- {
+6 + 1 -- (1, 7) -- EndOfLine -- \n
+7 + 4 -- (2, 1) -- Spaces -- "    "
+11 + 4 -- (2, 5) -- Identifier -- math
+15 + 1 -- (2, 9) -- Spaces -- " "
+16 + 1 -- (2, 10) -- Colon -- :
+17 + 1 -- (2, 11) -- Colon -- :
+18 + 1 -- (2, 12) -- Spaces -- " "
+19 + 1 -- (2, 13) -- Number -- 1
+20 + 1 -- (2, 14) -- Spaces -- " "
+21 + 1 -- (2, 15) -- Star -- *
+22 + 1 -- (2, 16) -- Spaces -- " "
+23 + 1 -- (2, 17) -- Number -- 2
+24 + 1 -- (2, 18) -- Spaces -- " "
+25 + 1 -- (2, 19) -- Slash -- /
+26 + 1 -- (2, 20) -- Spaces -- " "
+27 + 1 -- (2, 21) -- Number -- 3
+28 + 1 -- (2, 22) -- Spaces -- " "
+29 + 1 -- (2, 23) -- Plus -- +
+30 + 1 -- (2, 24) -- Spaces -- " "
+31 + 1 -- (2, 25) -- Number -- 4
+32 + 1 -- (2, 26) -- Spaces -- " "
+33 + 1 -- (2, 27) -- Slash -- /
+34 + 1 -- (2, 28) -- Spaces -- " "
+35 + 1 -- (2, 29) -- Number -- 5
+36 + 1 -- (2, 30) -- Spaces -- " "
+37 + 1 -- (2, 31) -- Star -- *
+38 + 1 -- (2, 32) -- Spaces -- " "
+39 + 1 -- (2, 33) -- Number -- 6
+40 + 1 -- (2, 34) -- EndOfLine -- \n
+41 + 4 -- (3, 1) -- Spaces -- "    "
+45 + 5 -- (3, 5) -- Identifier -- print
+50 + 1 -- (3, 10) -- Spaces -- " "
+51 + 4 -- (3, 11) -- Identifier -- math
+55 + 1 -- (3, 15) -- EndOfLine -- \n
+56 + 1 -- (4, 1) -- BraceClose -- }
+57 + 0 -- (4, 2) -- EndOfFile -- <EOF>
 
 Parse:
-declaration
-  left
-    identifier: math
-  right
-    add
-      divide
-        multiply
-          1
-          2
-        3
-      multiply
-        divide
-          4
-          5
-        6
 print
-  identifier: math
+  if
+    condition
+      1
+    block
+      declaration
+        left
+          identifier: math
+        right
+          add
+            divide
+              multiply
+                1
+                2
+              3
+            multiply
+              divide
+                4
+                5
+              6
+      print
+        identifier: math
