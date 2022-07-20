@@ -21,7 +21,7 @@ internal enum OperatorPriority : Int32
 	LessThan,
 
 	MoreThan = LessThan,
-	
+
 	LessThanOrEqualTo = LessThan,
 	
 	MoreThanOrEqualTo = LessThan,
@@ -42,5 +42,5 @@ internal enum OperatorPriority : Int32
 
 	Call,
 
-	Dereference,
+	MemberAccess = Call,
 }

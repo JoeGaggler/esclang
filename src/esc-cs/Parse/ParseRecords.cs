@@ -32,7 +32,9 @@ public enum BinaryOperator
 	LessThan,
 	MoreThan,
 	MoreThanOrEqualTo,
-	LessThanOrEqualTo
+	LessThanOrEqualTo,
+
+	MemberAccess
 }
 
 public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, SyntaxNode Right) : SyntaxNode { }

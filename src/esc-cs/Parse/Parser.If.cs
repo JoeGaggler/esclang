@@ -248,6 +248,21 @@ partial class Parser
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
 					break;
 				}
+				case LexemeType.Period:
+				{
+					const Int32 priority = (Int32)OperatorPriority.MemberAccess;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid dereference expression"), result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.MemberAccess, Right: result.Value));
+					break;
+				}
 				default:
 				{
 					return new(peek, Error.UnexpectedToken(peek));

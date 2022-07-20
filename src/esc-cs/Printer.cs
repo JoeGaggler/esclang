@@ -155,6 +155,7 @@ public static class Printer
 					BinaryOperator.LessThan => "less than",
 					BinaryOperator.MoreThanOrEqualTo => "more than or equal to",
 					BinaryOperator.LessThanOrEqualTo => "less than or equal to",
+					BinaryOperator.MemberAccess => "member access",
 					_ => "unknown binary operator: " + node.Operator.ToString()
 				};
 				outputFile.Indent(level);
