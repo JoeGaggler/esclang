@@ -44,7 +44,24 @@ Lex:
 51 + 4 -- (3, 11) -- Identifier -- math
 55 + 1 -- (3, 15) -- EndOfLine -- \n
 56 + 1 -- (4, 1) -- BraceClose -- }
-57 + 0 -- (4, 2) -- EndOfFile -- <EOF>
+57 + 1 -- (4, 2) -- EndOfLine -- \n
+58 + 2 -- (5, 1) -- Identifier -- if
+60 + 1 -- (5, 3) -- Spaces -- " "
+61 + 1 -- (5, 4) -- Number -- 0
+62 + 1 -- (5, 5) -- EndOfLine -- \n
+63 + 1 -- (6, 1) -- BraceOpen -- {
+64 + 1 -- (6, 2) -- EndOfLine -- \n
+65 + 4 -- (7, 1) -- Spaces -- "    "
+69 + 3 -- (7, 5) -- Identifier -- foo
+72 + 1 -- (7, 8) -- Spaces -- " "
+73 + 1 -- (7, 9) -- Colon -- :
+74 + 1 -- (7, 10) -- Colon -- :
+75 + 1 -- (7, 11) -- Spaces -- " "
+76 + 1 -- (7, 12) -- Number -- 1
+77 + 1 -- (7, 13) -- EndOfLine -- \n
+78 + 1 -- (8, 1) -- BraceClose -- }
+79 + 1 -- (8, 2) -- EndOfLine -- \n
+80 + 0 -- (9, 1) -- EndOfFile -- <EOF>
 
 Parse:
 if
@@ -68,3 +85,12 @@ if
             6
     print
       identifier: math
+if
+  condition
+    0
+  block
+    declaration
+      left
+        identifier: foo
+      right
+        1

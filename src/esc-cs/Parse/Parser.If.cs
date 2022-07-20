@@ -29,6 +29,13 @@ partial class Parser
 			{
 				break;
 			}
+			case LexemeType.EndOfLine:
+			{
+				var (peek2, next2) = input.Peek(next);
+				if (peek2.Type != LexemeType.BraceOpen) { return new(input[next], Error.Message("expected open brace on new line after if-condition")); }
+				next = next2;
+				break;
+			}
 			default:
 			{
 				return new(input[start], Error.Message("expected open brace after if-condition"));

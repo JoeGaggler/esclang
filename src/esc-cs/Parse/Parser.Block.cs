@@ -50,7 +50,7 @@ partial class Parser
 				case LexemeType.Identifier when peek.Text == "if":
 				{
 					var node = Parse_If(input, ref next);
-					if (!node) { return new(input[next], Error.Message("invalid print expression"), node.Error); }
+					if (!node) { return new(input[next], Error.Message("invalid if expression"), node.Error); }
 					position = next;
 					nodes.Add(node.Value);
 					break;
