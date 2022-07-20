@@ -151,6 +151,10 @@ public static class Printer
 					BinaryOperator.Divide => "divide",
 					BinaryOperator.EqualTo => "equals",
 					BinaryOperator.NotEqualTo => "not equals",
+					BinaryOperator.MoreThan => "more than",
+					BinaryOperator.LessThan => "less than",
+					BinaryOperator.MoreThanOrEqualTo => "more than or equal to",
+					BinaryOperator.LessThanOrEqualTo => "less than or equal to",
 					_ => "unknown binary operator: " + node.Operator.ToString()
 				};
 				outputFile.Indent(level);

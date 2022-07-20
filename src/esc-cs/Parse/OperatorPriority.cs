@@ -16,6 +16,16 @@ internal enum OperatorPriority : Int32
 
 	NotEqualTo = EqualTo,
 
+	// comparison: inequality
+
+	LessThan,
+
+	MoreThan = LessThan,
+	
+	LessThanOrEqualTo = LessThan,
+	
+	MoreThanOrEqualTo = LessThan,
+
 	// math: addition and subtractions
 
 	Plus,

@@ -28,6 +28,11 @@ public enum BinaryOperator
 
 	EqualTo,
 	NotEqualTo,
+
+	LessThan,
+	MoreThan,
+	MoreThanOrEqualTo,
+	LessThanOrEqualTo
 }
 
 public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, SyntaxNode Right) : SyntaxNode { }

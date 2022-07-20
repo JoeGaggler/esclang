@@ -204,6 +204,64 @@ partial class Parser
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.NotEqualTo, Right: result.Value));
 					break;
 				}
+				case LexemeType.LessThan:
+				{
+					Int32 priority;
+					BinaryOperator binaryOperator;
+					var (peek2, next2) = input.Peek(next);
+					if (peek2.Type == LexemeType.Equals)
+					{
+						priority = (Int32)OperatorPriority.LessThanOrEqualTo;
+						binaryOperator = BinaryOperator.LessThanOrEqualTo;
+						next = next2;
+					}
+					else
+					{
+						priority = (Int32)OperatorPriority.LessThan;
+						binaryOperator = BinaryOperator.LessThan;
+					}
+
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
+					break;
+				}
+				case LexemeType.GreaterThan:
+				{
+					Int32 priority;
+					BinaryOperator binaryOperator;
+					var (peek2, next2) = input.Peek(next);
+					if (peek2.Type == LexemeType.Equals)
+					{
+						priority = (Int32)OperatorPriority.MoreThanOrEqualTo;
+						binaryOperator = BinaryOperator.MoreThanOrEqualTo;
+						next = next2;
+					}
+					else
+					{
+						priority = (Int32)OperatorPriority.MoreThan;
+						binaryOperator = BinaryOperator.MoreThan;
+					}
+
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_File_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
+					break;
+				}
 				default:
 				{
 					return new(peek, Error.UnexpectedToken(peek));

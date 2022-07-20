@@ -8,65 +8,63 @@ Lex:
 2 + 1 -- (1, 3) -- Spaces -- " "
 3 + 1 -- (1, 4) -- Number -- 1
 4 + 1 -- (1, 5) -- Spaces -- " "
-5 + 1 -- (1, 6) -- Exclamation -- !
-6 + 1 -- (1, 7) -- Equals -- =
-7 + 1 -- (1, 8) -- Spaces -- " "
-8 + 1 -- (1, 9) -- Number -- 0
-9 + 1 -- (1, 10) -- Spaces -- " "
-10 + 1 -- (1, 11) -- BraceOpen -- {
-11 + 1 -- (1, 12) -- EndOfLine -- \n
-12 + 4 -- (2, 1) -- Spaces -- "    "
-16 + 4 -- (2, 5) -- Identifier -- math
-20 + 1 -- (2, 9) -- Spaces -- " "
-21 + 1 -- (2, 10) -- Colon -- :
-22 + 1 -- (2, 11) -- Colon -- :
-23 + 1 -- (2, 12) -- Spaces -- " "
-24 + 1 -- (2, 13) -- Number -- 1
-25 + 1 -- (2, 14) -- Spaces -- " "
-26 + 1 -- (2, 15) -- Exclamation -- !
-27 + 1 -- (2, 16) -- Equals -- =
-28 + 1 -- (2, 17) -- Spaces -- " "
-29 + 1 -- (2, 18) -- Number -- 0
-30 + 1 -- (2, 19) -- EndOfLine -- \n
-31 + 4 -- (3, 1) -- Spaces -- "    "
-35 + 5 -- (3, 5) -- Identifier -- print
-40 + 1 -- (3, 10) -- Spaces -- " "
-41 + 4 -- (3, 11) -- Identifier -- math
-45 + 1 -- (3, 15) -- EndOfLine -- \n
-46 + 1 -- (4, 1) -- BraceClose -- }
-47 + 1 -- (4, 2) -- EndOfLine -- \n
-48 + 2 -- (5, 1) -- Identifier -- if
-50 + 1 -- (5, 3) -- Spaces -- " "
-51 + 1 -- (5, 4) -- Number -- 0
-52 + 1 -- (5, 5) -- Spaces -- " "
-53 + 1 -- (5, 6) -- Equals -- =
-54 + 1 -- (5, 7) -- Equals -- =
-55 + 1 -- (5, 8) -- Spaces -- " "
-56 + 1 -- (5, 9) -- Number -- 1
-57 + 1 -- (5, 10) -- EndOfLine -- \n
-58 + 1 -- (6, 1) -- BraceOpen -- {
-59 + 1 -- (6, 2) -- EndOfLine -- \n
-60 + 4 -- (7, 1) -- Spaces -- "    "
-64 + 3 -- (7, 5) -- Identifier -- foo
-67 + 1 -- (7, 8) -- Spaces -- " "
-68 + 1 -- (7, 9) -- Colon -- :
-69 + 1 -- (7, 10) -- Colon -- :
-70 + 1 -- (7, 11) -- Spaces -- " "
-71 + 1 -- (7, 12) -- Number -- 1
-72 + 1 -- (7, 13) -- Spaces -- " "
-73 + 1 -- (7, 14) -- Equals -- =
-74 + 1 -- (7, 15) -- Equals -- =
-75 + 1 -- (7, 16) -- Spaces -- " "
-76 + 1 -- (7, 17) -- Number -- 1
-77 + 1 -- (7, 18) -- EndOfLine -- \n
-78 + 1 -- (8, 1) -- BraceClose -- }
-79 + 1 -- (8, 2) -- EndOfLine -- \n
-80 + 0 -- (9, 1) -- EndOfFile -- <EOF>
+5 + 1 -- (1, 6) -- GreaterThan -- >
+6 + 1 -- (1, 7) -- Spaces -- " "
+7 + 1 -- (1, 8) -- Number -- 0
+8 + 1 -- (1, 9) -- Spaces -- " "
+9 + 1 -- (1, 10) -- BraceOpen -- {
+10 + 1 -- (1, 11) -- EndOfLine -- \n
+11 + 4 -- (2, 1) -- Spaces -- "    "
+15 + 4 -- (2, 5) -- Identifier -- math
+19 + 1 -- (2, 9) -- Spaces -- " "
+20 + 1 -- (2, 10) -- Colon -- :
+21 + 1 -- (2, 11) -- Colon -- :
+22 + 1 -- (2, 12) -- Spaces -- " "
+23 + 1 -- (2, 13) -- Number -- 1
+24 + 1 -- (2, 14) -- Spaces -- " "
+25 + 1 -- (2, 15) -- GreaterThan -- >
+26 + 1 -- (2, 16) -- Spaces -- " "
+27 + 1 -- (2, 17) -- Number -- 0
+28 + 1 -- (2, 18) -- EndOfLine -- \n
+29 + 4 -- (3, 1) -- Spaces -- "    "
+33 + 5 -- (3, 5) -- Identifier -- print
+38 + 1 -- (3, 10) -- Spaces -- " "
+39 + 4 -- (3, 11) -- Identifier -- math
+43 + 1 -- (3, 15) -- EndOfLine -- \n
+44 + 1 -- (4, 1) -- BraceClose -- }
+45 + 1 -- (4, 2) -- EndOfLine -- \n
+46 + 2 -- (5, 1) -- Identifier -- if
+48 + 1 -- (5, 3) -- Spaces -- " "
+49 + 1 -- (5, 4) -- Number -- 0
+50 + 1 -- (5, 5) -- Spaces -- " "
+51 + 1 -- (5, 6) -- LessThan -- <
+52 + 1 -- (5, 7) -- Equals -- =
+53 + 1 -- (5, 8) -- Spaces -- " "
+54 + 1 -- (5, 9) -- Number -- 1
+55 + 1 -- (5, 10) -- EndOfLine -- \n
+56 + 1 -- (6, 1) -- BraceOpen -- {
+57 + 1 -- (6, 2) -- EndOfLine -- \n
+58 + 4 -- (7, 1) -- Spaces -- "    "
+62 + 3 -- (7, 5) -- Identifier -- foo
+65 + 1 -- (7, 8) -- Spaces -- " "
+66 + 1 -- (7, 9) -- Colon -- :
+67 + 1 -- (7, 10) -- Colon -- :
+68 + 1 -- (7, 11) -- Spaces -- " "
+69 + 1 -- (7, 12) -- Number -- 1
+70 + 1 -- (7, 13) -- Spaces -- " "
+71 + 1 -- (7, 14) -- LessThan -- <
+72 + 1 -- (7, 15) -- Equals -- =
+73 + 1 -- (7, 16) -- Spaces -- " "
+74 + 1 -- (7, 17) -- Number -- 1
+75 + 1 -- (7, 18) -- EndOfLine -- \n
+76 + 1 -- (8, 1) -- BraceClose -- }
+77 + 1 -- (8, 2) -- EndOfLine -- \n
+78 + 0 -- (9, 1) -- EndOfFile -- <EOF>
 
 Parse:
 if
   condition
-    not equals
+    more than
       1
       0
   block
@@ -74,14 +72,14 @@ if
       left
         identifier: math
       right
-        not equals
+        more than
           1
           0
     print
       identifier: math
 if
   condition
-    equals
+    less than or equal to
       0
       1
   block
@@ -89,6 +87,6 @@ if
       left
         identifier: foo
       right
-        equals
+        less than or equal to
           1
           1
