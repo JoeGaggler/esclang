@@ -8,57 +8,57 @@ Lex:
 2 + 1 -- (1, 3) -- Spaces -- " "
 3 + 1 -- (1, 4) -- Number -- 1
 4 + 1 -- (1, 5) -- Spaces -- " "
-5 + 1 -- (1, 6) -- BraceOpen -- {
-6 + 1 -- (1, 7) -- EndOfLine -- \n
-7 + 4 -- (2, 1) -- Spaces -- "    "
-11 + 4 -- (2, 5) -- Identifier -- math
-15 + 1 -- (2, 9) -- Spaces -- " "
-16 + 1 -- (2, 10) -- Colon -- :
-17 + 1 -- (2, 11) -- Colon -- :
-18 + 1 -- (2, 12) -- Spaces -- " "
-19 + 1 -- (2, 13) -- Number -- 1
-20 + 1 -- (2, 14) -- Spaces -- " "
-21 + 1 -- (2, 15) -- Star -- *
-22 + 1 -- (2, 16) -- Spaces -- " "
-23 + 1 -- (2, 17) -- Number -- 2
-24 + 1 -- (2, 18) -- Spaces -- " "
-25 + 1 -- (2, 19) -- Slash -- /
-26 + 1 -- (2, 20) -- Spaces -- " "
-27 + 1 -- (2, 21) -- Number -- 3
-28 + 1 -- (2, 22) -- Spaces -- " "
-29 + 1 -- (2, 23) -- Plus -- +
-30 + 1 -- (2, 24) -- Spaces -- " "
-31 + 1 -- (2, 25) -- Number -- 4
-32 + 1 -- (2, 26) -- Spaces -- " "
-33 + 1 -- (2, 27) -- Slash -- /
-34 + 1 -- (2, 28) -- Spaces -- " "
-35 + 1 -- (2, 29) -- Number -- 5
-36 + 1 -- (2, 30) -- Spaces -- " "
-37 + 1 -- (2, 31) -- Star -- *
-38 + 1 -- (2, 32) -- Spaces -- " "
-39 + 1 -- (2, 33) -- Number -- 6
-40 + 1 -- (2, 34) -- EndOfLine -- \n
-41 + 4 -- (3, 1) -- Spaces -- "    "
-45 + 5 -- (3, 5) -- Identifier -- print
-50 + 1 -- (3, 10) -- Spaces -- " "
-51 + 4 -- (3, 11) -- Identifier -- math
-55 + 1 -- (3, 15) -- EndOfLine -- \n
-56 + 1 -- (4, 1) -- BraceClose -- }
-57 + 1 -- (4, 2) -- EndOfLine -- \n
-58 + 2 -- (5, 1) -- Identifier -- if
-60 + 1 -- (5, 3) -- Spaces -- " "
-61 + 1 -- (5, 4) -- Number -- 0
-62 + 1 -- (5, 5) -- EndOfLine -- \n
-63 + 1 -- (6, 1) -- BraceOpen -- {
-64 + 1 -- (6, 2) -- EndOfLine -- \n
-65 + 4 -- (7, 1) -- Spaces -- "    "
-69 + 3 -- (7, 5) -- Identifier -- foo
-72 + 1 -- (7, 8) -- Spaces -- " "
-73 + 1 -- (7, 9) -- Colon -- :
-74 + 1 -- (7, 10) -- Colon -- :
-75 + 1 -- (7, 11) -- Spaces -- " "
-76 + 1 -- (7, 12) -- Number -- 1
-77 + 1 -- (7, 13) -- EndOfLine -- \n
+5 + 1 -- (1, 6) -- Exclamation -- !
+6 + 1 -- (1, 7) -- Equals -- =
+7 + 1 -- (1, 8) -- Spaces -- " "
+8 + 1 -- (1, 9) -- Number -- 0
+9 + 1 -- (1, 10) -- Spaces -- " "
+10 + 1 -- (1, 11) -- BraceOpen -- {
+11 + 1 -- (1, 12) -- EndOfLine -- \n
+12 + 4 -- (2, 1) -- Spaces -- "    "
+16 + 4 -- (2, 5) -- Identifier -- math
+20 + 1 -- (2, 9) -- Spaces -- " "
+21 + 1 -- (2, 10) -- Colon -- :
+22 + 1 -- (2, 11) -- Colon -- :
+23 + 1 -- (2, 12) -- Spaces -- " "
+24 + 1 -- (2, 13) -- Number -- 1
+25 + 1 -- (2, 14) -- Spaces -- " "
+26 + 1 -- (2, 15) -- Exclamation -- !
+27 + 1 -- (2, 16) -- Equals -- =
+28 + 1 -- (2, 17) -- Spaces -- " "
+29 + 1 -- (2, 18) -- Number -- 0
+30 + 1 -- (2, 19) -- EndOfLine -- \n
+31 + 4 -- (3, 1) -- Spaces -- "    "
+35 + 5 -- (3, 5) -- Identifier -- print
+40 + 1 -- (3, 10) -- Spaces -- " "
+41 + 4 -- (3, 11) -- Identifier -- math
+45 + 1 -- (3, 15) -- EndOfLine -- \n
+46 + 1 -- (4, 1) -- BraceClose -- }
+47 + 1 -- (4, 2) -- EndOfLine -- \n
+48 + 2 -- (5, 1) -- Identifier -- if
+50 + 1 -- (5, 3) -- Spaces -- " "
+51 + 1 -- (5, 4) -- Number -- 0
+52 + 1 -- (5, 5) -- Spaces -- " "
+53 + 1 -- (5, 6) -- Equals -- =
+54 + 1 -- (5, 7) -- Equals -- =
+55 + 1 -- (5, 8) -- Spaces -- " "
+56 + 1 -- (5, 9) -- Number -- 1
+57 + 1 -- (5, 10) -- EndOfLine -- \n
+58 + 1 -- (6, 1) -- BraceOpen -- {
+59 + 1 -- (6, 2) -- EndOfLine -- \n
+60 + 4 -- (7, 1) -- Spaces -- "    "
+64 + 3 -- (7, 5) -- Identifier -- foo
+67 + 1 -- (7, 8) -- Spaces -- " "
+68 + 1 -- (7, 9) -- Colon -- :
+69 + 1 -- (7, 10) -- Colon -- :
+70 + 1 -- (7, 11) -- Spaces -- " "
+71 + 1 -- (7, 12) -- Number -- 1
+72 + 1 -- (7, 13) -- Spaces -- " "
+73 + 1 -- (7, 14) -- Equals -- =
+74 + 1 -- (7, 15) -- Equals -- =
+75 + 1 -- (7, 16) -- Spaces -- " "
+76 + 1 -- (7, 17) -- Number -- 1
+77 + 1 -- (7, 18) -- EndOfLine -- \n
 78 + 1 -- (8, 1) -- BraceClose -- }
 79 + 1 -- (8, 2) -- EndOfLine -- \n
 80 + 0 -- (9, 1) -- EndOfFile -- <EOF>
@@ -66,31 +66,29 @@ Lex:
 Parse:
 if
   condition
-    1
+    not equals
+      1
+      0
   block
     declaration
       left
         identifier: math
       right
-        add
-          divide
-            multiply
-              1
-              2
-            3
-          multiply
-            divide
-              4
-              5
-            6
+        not equals
+          1
+          0
     print
       identifier: math
 if
   condition
-    0
+    equals
+      0
+      1
   block
     declaration
       left
         identifier: foo
       right
-        1
+        equals
+          1
+          1

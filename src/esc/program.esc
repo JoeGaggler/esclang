@@ -1,8 +1,8 @@
-if 1 {
-    math :: 1 * 2 / 3 + 4 / 5 * 6
+if 1 != 0 {
+    math :: 1 != 0
     print math
 }
-if 0
+if 0 == 1
 {
-    foo :: 1
+    foo :: 1 == 1
 }

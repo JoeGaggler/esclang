@@ -102,7 +102,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_If_Condition_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
 					break;
@@ -117,7 +117,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_If_Condition_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Divide, Right: result.Value));
 					break;
@@ -132,7 +132,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_If_Condition_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Plus, Right: result.Value));
 					break;
@@ -147,9 +147,47 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_If_Condition_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Minus, Right: result.Value));
+					break;
+				}
+				case LexemeType.Equals:
+				{
+					var (peek2, next2) = input.Peek(next);
+					if (peek2.Type != LexemeType.Equals) { return new(input[position], Error.NotImplemented("assignment not implemented yet")); }
+					next = next2;
+
+					const Int32 priority = (Int32)OperatorPriority.EqualTo;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_If_Condition_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.EqualTo, Right: result.Value));
+					break;
+				}
+				case LexemeType.Exclamation:
+				{
+					var (peek2, next2) = input.Peek(next);
+					if (peek2.Type != LexemeType.Equals) { return new(input[position], Error.NotImplemented("not(!) not implemented yet")); }
+					next = next2;
+
+					const Int32 priority = (Int32)OperatorPriority.EqualTo;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_If_Condition_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.NotEqualTo, Right: result.Value));
 					break;
 				}
 				default:
