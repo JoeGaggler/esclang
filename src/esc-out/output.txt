@@ -19,44 +19,52 @@ Lex:
 25 + 1 -- (2, 6) -- Identifier -- a
 26 + 1 -- (2, 7) -- Period -- .
 27 + 6 -- (2, 8) -- Identifier -- length
-33 + 1 -- (2, 14) -- EndOfLine -- \n
-34 + 1 -- (3, 1) -- Identifier -- c
-35 + 1 -- (3, 2) -- Spaces -- " "
-36 + 1 -- (3, 3) -- Colon -- :
-37 + 1 -- (3, 4) -- Colon -- :
-38 + 1 -- (3, 5) -- Spaces -- " "
-39 + 1 -- (3, 6) -- Identifier -- a
-40 + 1 -- (3, 7) -- Period -- .
-41 + 9 -- (3, 8) -- Identifier -- firstWord
-50 + 1 -- (3, 17) -- Period -- .
-51 + 6 -- (3, 18) -- Identifier -- length
-57 + 1 -- (3, 24) -- EndOfLine -- \n
-58 + 2 -- (4, 1) -- Identifier -- if
-60 + 1 -- (4, 3) -- Spaces -- " "
-61 + 1 -- (4, 4) -- Identifier -- a
-62 + 1 -- (4, 5) -- Period -- .
-63 + 9 -- (4, 6) -- Identifier -- firstWord
-72 + 1 -- (4, 15) -- Period -- .
-73 + 6 -- (4, 16) -- Identifier -- length
-79 + 1 -- (4, 22) -- Spaces -- " "
-80 + 1 -- (4, 23) -- Equals -- =
-81 + 1 -- (4, 24) -- Equals -- =
-82 + 1 -- (4, 25) -- Spaces -- " "
-83 + 1 -- (4, 26) -- Number -- 5
-84 + 1 -- (4, 27) -- Spaces -- " "
-85 + 1 -- (4, 28) -- BraceOpen -- {
-86 + 1 -- (4, 29) -- EndOfLine -- \n
-87 + 4 -- (5, 1) -- Spaces -- "    "
-91 + 5 -- (5, 5) -- Identifier -- print
-96 + 1 -- (5, 10) -- Spaces -- " "
-97 + 1 -- (5, 11) -- Identifier -- a
-98 + 1 -- (5, 12) -- Period -- .
-99 + 10 -- (5, 13) -- Identifier -- secondWord
-109 + 1 -- (5, 23) -- Period -- .
-110 + 6 -- (5, 24) -- Identifier -- length
-116 + 1 -- (5, 30) -- EndOfLine -- \n
-117 + 1 -- (6, 1) -- BraceClose -- }
-118 + 0 -- (6, 2) -- EndOfFile -- <EOF>
+33 + 1 -- (2, 14) -- ParenOpen -- (
+34 + 1 -- (2, 15) -- ParenClose -- )
+35 + 1 -- (2, 16) -- EndOfLine -- \n
+36 + 1 -- (3, 1) -- Identifier -- c
+37 + 1 -- (3, 2) -- Spaces -- " "
+38 + 1 -- (3, 3) -- Colon -- :
+39 + 1 -- (3, 4) -- Colon -- :
+40 + 1 -- (3, 5) -- Spaces -- " "
+41 + 1 -- (3, 6) -- Identifier -- a
+42 + 1 -- (3, 7) -- Period -- .
+43 + 9 -- (3, 8) -- Identifier -- firstWord
+52 + 1 -- (3, 17) -- ParenOpen -- (
+53 + 1 -- (3, 18) -- ParenClose -- )
+54 + 1 -- (3, 19) -- Period -- .
+55 + 6 -- (3, 20) -- Identifier -- length
+61 + 1 -- (3, 26) -- EndOfLine -- \n
+62 + 2 -- (4, 1) -- Identifier -- if
+64 + 1 -- (4, 3) -- Spaces -- " "
+65 + 1 -- (4, 4) -- Identifier -- a
+66 + 1 -- (4, 5) -- Period -- .
+67 + 9 -- (4, 6) -- Identifier -- firstWord
+76 + 1 -- (4, 15) -- ParenOpen -- (
+77 + 1 -- (4, 16) -- ParenClose -- )
+78 + 1 -- (4, 17) -- Period -- .
+79 + 6 -- (4, 18) -- Identifier -- length
+85 + 1 -- (4, 24) -- Spaces -- " "
+86 + 1 -- (4, 25) -- Equals -- =
+87 + 1 -- (4, 26) -- Equals -- =
+88 + 1 -- (4, 27) -- Spaces -- " "
+89 + 1 -- (4, 28) -- Number -- 5
+90 + 1 -- (4, 29) -- Spaces -- " "
+91 + 1 -- (4, 30) -- BraceOpen -- {
+92 + 1 -- (4, 31) -- EndOfLine -- \n
+93 + 4 -- (5, 1) -- Spaces -- "    "
+97 + 5 -- (5, 5) -- Identifier -- print
+102 + 1 -- (5, 10) -- Spaces -- " "
+103 + 1 -- (5, 11) -- Identifier -- a
+104 + 1 -- (5, 12) -- ParenOpen -- (
+105 + 1 -- (5, 13) -- ParenClose -- )
+106 + 1 -- (5, 14) -- Period -- .
+107 + 10 -- (5, 15) -- Identifier -- secondWord
+117 + 1 -- (5, 25) -- Period -- .
+118 + 6 -- (5, 26) -- Identifier -- length
+124 + 1 -- (5, 32) -- EndOfLine -- \n
+125 + 1 -- (6, 1) -- BraceClose -- }
+126 + 0 -- (6, 2) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
@@ -68,31 +76,39 @@ declaration
   left
     identifier: b
   right
-    member access
-      identifier: a
-      identifier: length
+    call
+      target
+        member access
+          identifier: a
+          identifier: length
 declaration
   left
     identifier: c
   right
     member access
-      member access
-        identifier: a
-        identifier: firstWord
+      call
+        target
+          member access
+            identifier: a
+            identifier: firstWord
       identifier: length
 if
   condition
     equals
       member access
-        member access
-          identifier: a
-          identifier: firstWord
+        call
+          target
+            member access
+              identifier: a
+              identifier: firstWord
         identifier: length
       5
   block
     print
       member access
         member access
-          identifier: a
+          call
+            target
+              identifier: a
           identifier: secondWord
         identifier: length

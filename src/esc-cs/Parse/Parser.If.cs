@@ -263,6 +263,23 @@ partial class Parser
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.MemberAccess, Right: result.Value));
 					break;
 				}
+				case LexemeType.ParenOpen:
+				{
+					const Int32 priority = (Int32)OperatorPriority.Call;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					var (peek2, next2) = input.Peek(next);
+					if (peek2.Type != LexemeType.ParenClose) { return new(input[next], Error.NotImplemented($"only support empty call syntax")); }
+					next = next2;
+
+					position = next;
+					leftResult = new(new CallNode(leftResult.Value));
+					break;
+				}
 				default:
 				{
 					return new(peek, Error.UnexpectedToken(peek));

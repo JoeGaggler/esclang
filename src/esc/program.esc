@@ -1,6 +1,6 @@
 a :: "hello, world"
-b :: a.length
-c :: a.firstWord.length
-if a.firstWord.length == 5 {
-    print a.secondWord.length
+b :: a.length()
+c :: a.firstWord().length
+if a.firstWord().length == 5 {
+    print a().secondWord.length
 }

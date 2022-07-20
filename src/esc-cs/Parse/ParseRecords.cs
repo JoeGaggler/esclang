@@ -42,3 +42,5 @@ public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, Synta
 public record IfNode(SyntaxNode Condition, Block Block) : SyntaxNode { }
 
 public record Block(List<SyntaxNode> Statements) : SyntaxNode { }
+
+public record CallNode(SyntaxNode Target) : SyntaxNode { }

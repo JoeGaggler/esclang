@@ -189,6 +189,17 @@ public static class Printer
 				break;
 			}
 
+			case CallNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("call");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("target");
+				PrintSyntax(outputFile, node.Target, lexemes, level + 2);
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);
