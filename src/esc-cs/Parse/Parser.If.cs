@@ -272,12 +272,12 @@ partial class Parser
 						return leftResult;
 					}
 
-					var (peek2, next2) = input.Peek(next);
-					if (peek2.Type != LexemeType.ParenClose) { return new(input[next], Error.NotImplemented($"only support empty call syntax")); }
-					next = next2;
+					var argumentResult = Parse_ArgumentList(input, ref next);
+					if (!argumentResult) { return new(input[position], Error.Message("unable to parse argument list"), argumentResult.Error); }
+					var arguments = argumentResult.Value;
 
 					position = next;
-					leftResult = new(new CallNode(leftResult.Value));
+					leftResult = new(new CallNode(Target: leftResult.Value, Arguments: arguments));
 					break;
 				}
 				default:

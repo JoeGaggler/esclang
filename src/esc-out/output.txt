@@ -4,111 +4,86 @@ Stats:
 - Parse: 0.00
 
 Lex:
-0 + 1 -- (1, 1) -- Identifier -- a
-1 + 1 -- (1, 2) -- Spaces -- " "
-2 + 1 -- (1, 3) -- Colon -- :
-3 + 1 -- (1, 4) -- Colon -- :
-4 + 1 -- (1, 5) -- Spaces -- " "
-5 + 14 -- (1, 6) -- LiteralString -- "hello, world"
-19 + 1 -- (1, 20) -- EndOfLine -- \n
-20 + 1 -- (2, 1) -- Identifier -- b
-21 + 1 -- (2, 2) -- Spaces -- " "
-22 + 1 -- (2, 3) -- Colon -- :
-23 + 1 -- (2, 4) -- Colon -- :
-24 + 1 -- (2, 5) -- Spaces -- " "
-25 + 1 -- (2, 6) -- Identifier -- a
-26 + 1 -- (2, 7) -- Period -- .
-27 + 6 -- (2, 8) -- Identifier -- length
-33 + 1 -- (2, 14) -- ParenOpen -- (
-34 + 1 -- (2, 15) -- ParenClose -- )
-35 + 1 -- (2, 16) -- EndOfLine -- \n
-36 + 1 -- (3, 1) -- Identifier -- c
-37 + 1 -- (3, 2) -- Spaces -- " "
-38 + 1 -- (3, 3) -- Colon -- :
-39 + 1 -- (3, 4) -- Colon -- :
-40 + 1 -- (3, 5) -- Spaces -- " "
-41 + 1 -- (3, 6) -- Identifier -- a
-42 + 1 -- (3, 7) -- Period -- .
-43 + 9 -- (3, 8) -- Identifier -- firstWord
-52 + 1 -- (3, 17) -- ParenOpen -- (
-53 + 1 -- (3, 18) -- ParenClose -- )
-54 + 1 -- (3, 19) -- Period -- .
-55 + 6 -- (3, 20) -- Identifier -- length
-61 + 1 -- (3, 26) -- EndOfLine -- \n
-62 + 2 -- (4, 1) -- Identifier -- if
-64 + 1 -- (4, 3) -- Spaces -- " "
-65 + 1 -- (4, 4) -- Identifier -- a
-66 + 1 -- (4, 5) -- Period -- .
-67 + 9 -- (4, 6) -- Identifier -- firstWord
-76 + 1 -- (4, 15) -- ParenOpen -- (
-77 + 1 -- (4, 16) -- ParenClose -- )
-78 + 1 -- (4, 17) -- Period -- .
-79 + 6 -- (4, 18) -- Identifier -- length
-85 + 1 -- (4, 24) -- Spaces -- " "
-86 + 1 -- (4, 25) -- Equals -- =
-87 + 1 -- (4, 26) -- Equals -- =
-88 + 1 -- (4, 27) -- Spaces -- " "
-89 + 1 -- (4, 28) -- Number -- 5
-90 + 1 -- (4, 29) -- Spaces -- " "
-91 + 1 -- (4, 30) -- BraceOpen -- {
-92 + 1 -- (4, 31) -- EndOfLine -- \n
-93 + 4 -- (5, 1) -- Spaces -- "    "
-97 + 5 -- (5, 5) -- Identifier -- print
-102 + 1 -- (5, 10) -- Spaces -- " "
-103 + 1 -- (5, 11) -- Identifier -- a
-104 + 1 -- (5, 12) -- ParenOpen -- (
-105 + 1 -- (5, 13) -- ParenClose -- )
-106 + 1 -- (5, 14) -- Period -- .
-107 + 10 -- (5, 15) -- Identifier -- secondWord
-117 + 1 -- (5, 25) -- Period -- .
-118 + 6 -- (5, 26) -- Identifier -- length
-124 + 1 -- (5, 32) -- EndOfLine -- \n
-125 + 1 -- (6, 1) -- BraceClose -- }
-126 + 0 -- (6, 2) -- EndOfFile -- <EOF>
+0 + 3 -- (1, 1) -- Identifier -- foo
+3 + 1 -- (1, 4) -- ParenOpen -- (
+4 + 1 -- (1, 5) -- Number -- 1
+5 + 1 -- (1, 6) -- ParenClose -- )
+6 + 1 -- (1, 7) -- EndOfLine -- \n
+7 + 3 -- (2, 1) -- Identifier -- foo
+10 + 1 -- (2, 4) -- ParenOpen -- (
+11 + 1 -- (2, 5) -- Number -- 1
+12 + 1 -- (2, 6) -- Comma -- ,
+13 + 1 -- (2, 7) -- Spaces -- " "
+14 + 1 -- (2, 8) -- Number -- 2
+15 + 1 -- (2, 9) -- ParenClose -- )
+16 + 1 -- (2, 10) -- EndOfLine -- \n
+17 + 3 -- (3, 1) -- Identifier -- foo
+20 + 1 -- (3, 4) -- ParenOpen -- (
+21 + 1 -- (3, 5) -- Number -- 1
+22 + 1 -- (3, 6) -- Comma -- ,
+23 + 1 -- (3, 7) -- Spaces -- " "
+24 + 1 -- (3, 8) -- Number -- 2
+25 + 1 -- (3, 9) -- Comma -- ,
+26 + 1 -- (3, 10) -- Spaces -- " "
+27 + 1 -- (3, 11) -- Number -- 3
+28 + 1 -- (3, 12) -- ParenClose -- )
+29 + 1 -- (3, 13) -- EndOfLine -- \n
+30 + 3 -- (4, 1) -- Identifier -- foo
+33 + 1 -- (4, 4) -- ParenOpen -- (
+34 + 1 -- (4, 5) -- Identifier -- a
+35 + 1 -- (4, 6) -- Period -- .
+36 + 6 -- (4, 7) -- Identifier -- length
+42 + 1 -- (4, 13) -- Comma -- ,
+43 + 1 -- (4, 14) -- Spaces -- " "
+44 + 1 -- (4, 15) -- Identifier -- b
+45 + 1 -- (4, 16) -- Period -- .
+46 + 8 -- (4, 17) -- Identifier -- toString
+54 + 1 -- (4, 25) -- ParenOpen -- (
+55 + 3 -- (4, 26) -- LiteralString -- "g"
+58 + 1 -- (4, 29) -- ParenClose -- )
+59 + 1 -- (4, 30) -- Comma -- ,
+60 + 1 -- (4, 31) -- Spaces -- " "
+61 + 1 -- (4, 32) -- Identifier -- c
+62 + 1 -- (4, 33) -- Spaces -- " "
+63 + 1 -- (4, 34) -- Plus -- +
+64 + 1 -- (4, 35) -- Spaces -- " "
+65 + 1 -- (4, 36) -- Number -- 1
+66 + 1 -- (4, 37) -- ParenClose -- )
+67 + 0 -- (4, 38) -- EndOfFile -- <EOF>
 
 Parse:
-declaration
-  left
-    identifier: a
-  right
-    "hello, world"
-declaration
-  left
-    identifier: b
-  right
+call
+  target
+    identifier: foo
+  arguments
+    1
+call
+  target
+    identifier: foo
+  arguments
+    1
+    2
+call
+  target
+    identifier: foo
+  arguments
+    1
+    2
+    3
+call
+  target
+    identifier: foo
+  arguments
+    member access
+      identifier: a
+      identifier: length
     call
       target
         member access
-          identifier: a
-          identifier: length
-declaration
-  left
-    identifier: c
-  right
-    member access
-      call
-        target
-          member access
-            identifier: a
-            identifier: firstWord
-      identifier: length
-if
-  condition
-    equals
-      member access
-        call
-          target
-            member access
-              identifier: a
-              identifier: firstWord
-        identifier: length
-      5
-  block
-    print
-      member access
-        member access
-          call
-            target
-              identifier: a
-          identifier: secondWord
-        identifier: length
+          identifier: b
+          identifier: toString
+      arguments
+        "g"
+    add
+      identifier: c
+      1

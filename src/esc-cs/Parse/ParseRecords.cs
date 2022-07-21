@@ -43,4 +43,4 @@ public record IfNode(SyntaxNode Condition, Block Block) : SyntaxNode { }
 
 public record Block(List<SyntaxNode> Statements) : SyntaxNode { }
 
-public record CallNode(SyntaxNode Target) : SyntaxNode { }
+public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNode { }
