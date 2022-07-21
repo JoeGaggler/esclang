@@ -10,6 +10,8 @@ internal enum OperatorPriority : Int32
 
 	Assignment,
 
+	Comma,
+
 	// comparison: equality
 
 	EqualTo,

@@ -132,11 +132,11 @@ public static class Printer
 				outputFile.WriteLine("declaration");
 
 				outputFile.Indent(level + 1);
-				outputFile.WriteLine("left");
+				outputFile.WriteLine("id");
 				PrintSyntax(outputFile, node.Left, lexemes, level + 2);
 
 				outputFile.Indent(level + 1);
-				outputFile.WriteLine("right");
+				outputFile.WriteLine("assignment");
 				PrintSyntax(outputFile, node.Right, lexemes, level + 2);
 				break;
 			}
@@ -206,6 +206,29 @@ public static class Printer
 					{
 						PrintSyntax(outputFile, arg, lexemes, level + 2);
 					}
+				}
+				break;
+			}
+
+			case ParensNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("parens");
+				foreach (var statement in node.Items)
+				{
+					PrintSyntax(outputFile, statement, lexemes, level + 1);
+				}
+				break;
+			}
+
+			case CommaNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("comma");
+
+				foreach (var statement in node.Items)
+				{
+					PrintSyntax(outputFile, statement, lexemes, level + 1);
 				}
 				break;
 			}

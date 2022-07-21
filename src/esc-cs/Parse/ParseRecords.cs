@@ -44,3 +44,10 @@ public record IfNode(SyntaxNode Condition, Block Block) : SyntaxNode { }
 public record Block(List<SyntaxNode> Statements) : SyntaxNode { }
 
 public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNode { }
+
+public record ParensNode(List<SyntaxNode> Items) : SyntaxNode { }
+
+// Internal record only used as a precursor to CommaNode
+public record CommaTempNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
+
+public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }

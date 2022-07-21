@@ -74,6 +74,15 @@ public static partial class Parser
 					}
 				}
 			}
+			case LexemeType.ParenOpen:
+			{
+				var position = start;
+				var result = Parse_Parens(input, ref position);
+				if (!result) { return new(input[start], Error.Message("unable to parse parens"), result.Error); }
+
+				start = position;
+				return new(new ParensNode(result.Value));
+			}
 			default:
 			{
 				return new(token, Error.Message($"unexpected expression atom: {token.Type}"));
