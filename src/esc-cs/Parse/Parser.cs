@@ -88,7 +88,30 @@ public static partial class Parser
 						var braceResult = Parse_Braces(input, ref next);
 						if (!braceResult) { return new(input[position], Error.Message("unable to parse braces"), braceResult.Error); }
 						start = next;
-						return new(new FunctionNode(Parameters: result.Value, Body: braceResult.Value));
+						return new(new FunctionNode(Parameters: result.Value, ReturnType: null, Body: braceResult.Value));
+					}
+					case LexemeType.Minus:
+					{
+						var (peek2, next2) = input.Peek(next);
+						if (peek2.Type != LexemeType.GreaterThan)
+						{
+							start = position;
+							return new(result.Value);
+						}
+
+						var returnResult = Parse_ReturnType_Expression(input, ref next2);
+						if (!returnResult) { return new(input[next], Error.Message("unable to parse return type"), returnResult.Error); }
+
+						(peek2, next2) = input.Peek(next2);
+						if (peek2.Type != LexemeType.BraceOpen)
+						{
+							return new(input[next2], Error.UnexpectedToken(peek2));
+						}
+
+						var braceResult = Parse_Braces(input, ref next2);
+						if (!braceResult) { return new(input[next2], Error.Message("unable to parse braces"), braceResult.Error); }
+						start = next2;
+						return new(new FunctionNode(Parameters: result.Value, ReturnType: returnResult.Value, Body: braceResult.Value));
 					}
 					default:
 					{

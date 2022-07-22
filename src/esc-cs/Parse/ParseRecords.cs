@@ -54,4 +54,4 @@ public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }
 
 public record BracesNode(List<SyntaxNode> Items) : SyntaxNode { }
 
-public record FunctionNode(SyntaxNode Parameters, SyntaxNode Body) : SyntaxNode { }
+public record FunctionNode(SyntaxNode Parameters, SyntaxNode? ReturnType, SyntaxNode Body) : SyntaxNode { }

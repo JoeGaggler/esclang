@@ -1,12 +1,13 @@
-foo :: () {
+foo :: () -> void {
     print "hello"
 }
-foo :: (1) {
+foo :: (1) -> void 
+{
     print "hello"
 }
-foo :: (1, 2) {
+foo :: (1, 2) -> void {
     print "hello"
 }
-foo :: (1, 2, 3) {
+foo :: (1, 2, 3) -> void {
     print "hello"
 }

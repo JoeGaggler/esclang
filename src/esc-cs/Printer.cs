@@ -242,6 +242,13 @@ public static class Printer
 				outputFile.WriteLine("parameters");
 				PrintSyntax(outputFile, node.Parameters, lexemes, level + 2);
 
+				if (node.ReturnType is SyntaxNode returnType)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("return type");
+					PrintSyntax(outputFile, returnType, lexemes, level + 2);
+				}
+
 				outputFile.Indent(level + 1);
 				outputFile.WriteLine("body");
 				PrintSyntax(outputFile, node.Body, lexemes, level + 2);
