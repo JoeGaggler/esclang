@@ -12,8 +12,8 @@ partial class Parser
 	/// </remarks>
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
-	/// <returns><see cref="SyntaxNode"/> result</returns>
-	private static ParseResult<List<SyntaxNode>> Parse_Parens(ReadOnlySpan<Lexeme> input, ref Int32 start)
+	/// <returns><see cref="ParensNode"/> result</returns>
+	private static ParseResult<ParensNode> Parse_Parens(ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
 		var position = start;
 		var nodes = new List<SyntaxNode>();
@@ -34,7 +34,16 @@ partial class Parser
 				case LexemeType.ParenClose:
 				{
 					start = next;
-					return new(nodes);
+					return new(new ParensNode(nodes));
+				}
+				case LexemeType.Identifier when peek.Text == "print":
+				{
+					var node = Parse_Parens_Expression(input, ref next);
+					if (!node.HasValue) { return new(input[next], Error.Message("invalid print expression"), node.Error); }
+
+					position = next;
+					nodes.Add(new PrintNode(node.Value));
+					break;
 				}
 				default:
 				{
@@ -45,7 +54,6 @@ partial class Parser
 					break;
 				}
 			}
-
 		}
 	}
 

@@ -80,8 +80,22 @@ public static partial class Parser
 				var result = Parse_Parens(input, ref position);
 				if (!result) { return new(input[start], Error.Message("unable to parse parens"), result.Error); }
 
-				start = position;
-				return new(new ParensNode(result.Value));
+				var (peek, next) = input.Peek(position);
+				switch (peek.Type)
+				{
+					case LexemeType.BraceOpen:
+					{
+						var braceResult = Parse_Braces(input, ref next);
+						if (!braceResult) { return new(input[position], Error.Message("unable to parse braces"), braceResult.Error); }
+						start = next;
+						return new(new FunctionNode(Parameters: result.Value, Body: braceResult.Value));
+					}
+					default:
+					{
+						start = position;
+						return new(result.Value);
+					}
+				}
 			}
 			default:
 			{

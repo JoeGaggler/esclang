@@ -233,6 +233,34 @@ public static class Printer
 				break;
 			}
 
+			case FunctionNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("function");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("parameters");
+				PrintSyntax(outputFile, node.Parameters, lexemes, level + 2);
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("body");
+				PrintSyntax(outputFile, node.Body, lexemes, level + 2);
+
+				break;
+			}
+
+			case BracesNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("braces");
+
+				foreach (var statement in node.Items)
+				{
+					PrintSyntax(outputFile, statement, lexemes, level + 1);
+				}
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);

@@ -4,16 +4,16 @@ namespace EscLang.Parse;
 partial class Parser
 {
 	/// <summary>
-	/// Parses a file
+	/// Parses a braces node
 	/// </summary>
 	/// <remarks>
-	/// Preconditions: start of a file
-	/// Postcondition: end of a file
+	/// Preconditions: after the open brace
+	/// Postcondition: after the close brace
 	/// </remarks>
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
-	/// <returns><see cref="EscFile"/> result</returns>
-	private static ParseResult<EscFile> Parse_File(ReadOnlySpan<Lexeme> input, ref Int32 start)
+	/// <returns><see cref="SyntaxNode"/> result</returns>
+	private static ParseResult<BracesNode> Parse_Braces(ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
 		var position = start;
 		var nodes = new List<SyntaxNode>();
@@ -24,36 +24,31 @@ partial class Parser
 			{
 				case LexemeType.EndOfFile:
 				{
-					start = next;
-					var file = new EscFile(nodes);
-					return new(file);
+					return new(input[next], Error.Message("end of file before close brace"));
 				}
 				case LexemeType.EndOfLine:
 				{
 					position = next;
 					break;
 				}
+				case LexemeType.BraceClose:
+				{
+					start = next;
+					return new(new BracesNode(nodes));
+				}
 				case LexemeType.Identifier when peek.Text == "print":
 				{
-					var node = Parse_File_Expression(input, ref next);
+					var node = Parse_Braces_Expression(input, ref next);
 					if (!node.HasValue) { return new(input[next], Error.Message("invalid print expression"), node.Error); }
 
 					position = next;
 					nodes.Add(new PrintNode(node.Value));
 					break;
 				}
-				case LexemeType.Identifier when peek.Text == "if":
-				{
-					var node = Parse_If(input, ref next);
-					if (!node) { return new(input[next], Error.Message("invalid if expression"), node.Error); }
-					position = next;
-					nodes.Add(node.Value);
-					break;
-				}
 				default:
 				{
-					var node = Parse_File_Expression(input, ref position);
-					if (!node.HasValue) { return new(peek, Error.Message("failed top level statement"), node.Error); }
+					var node = Parse_Braces_Expression(input, ref position);
+					if (!node.HasValue) { return new(peek, Error.Message("failed brace level expression"), node.Error); }
 
 					nodes.Add(node.Value);
 					break;
@@ -63,7 +58,7 @@ partial class Parser
 	}
 
 	/// <summary>
-	/// Parses a file-level expression
+	/// Parses a braces-level expression
 	/// </summary>
 	/// <remarks>
 	/// Preconditions: at the expression
@@ -72,11 +67,11 @@ partial class Parser
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
 	/// <returns><see cref="SyntaxNode"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, Int32 min_priority = 0)
+	private static ParseResult<SyntaxNode> Parse_Braces_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, Int32 min_priority = 0)
 	{
 		var position = start;
 
-		var leftResult = Parse_File_Expression_Prefix(input, ref position);
+		var leftResult = Parse_Braces_Expression_Prefix(input, ref position);
 		if (!leftResult.HasValue)
 		{
 			return new(input[start], Error.Message("invalid expression prefix"), leftResult.Error);
@@ -98,11 +93,16 @@ partial class Parser
 					start = position; // at EndOfFile
 					return leftResult;
 				}
+				case LexemeType.BraceClose:
+				{
+					start = position; // at BraceClose
+					return leftResult;
+				}
 				case LexemeType.Colon:
 				{
 					position = next;
-					var result = Parse_File_Expression_Declaration(input, ref position, leftResult.Value);
-					if (!result.HasValue) { return new(input[position], Error.Message($"failed file declaration"), result.Error); }
+					var result = Parse_Braces_Expression_Declaration(input, ref position, leftResult.Value);
+					if (!result.HasValue) { return new(input[position], Error.Message($"failed brace declaration"), result.Error); }
 					leftResult = new(result.Value);
 					break;
 				}
@@ -116,7 +116,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
 					break;
@@ -131,7 +131,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Divide, Right: result.Value));
 					break;
@@ -146,7 +146,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Plus, Right: result.Value));
 					break;
@@ -161,7 +161,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Minus, Right: result.Value));
 					break;
@@ -180,7 +180,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.EqualTo, Right: result.Value));
 					break;
@@ -199,7 +199,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.NotEqualTo, Right: result.Value));
 					break;
@@ -228,7 +228,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
 					break;
@@ -257,7 +257,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
 					break;
@@ -272,7 +272,7 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
+					var result = Parse_Braces_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid dereference expression"), result.Error); }
 					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.MemberAccess, Right: result.Value));
 					break;
@@ -312,7 +312,8 @@ partial class Parser
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
 	/// <returns><see cref="Expression"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression_Prefix(ReadOnlySpan<Lexeme> input, ref Int32 start) => Parse_Shared_Expression_Prefix(input, ref start);
+	private static ParseResult<SyntaxNode> Parse_Braces_Expression_Prefix(ReadOnlySpan<Lexeme> input, ref Int32 start) => Parse_Shared_Expression_Prefix(input, ref start);
+
 
 	/// <summary>
 	/// Parses a declaration expression
@@ -324,7 +325,7 @@ partial class Parser
 	/// <param name="input">input</param>
 	/// <param name="start">start</param>
 	/// <returns><see cref="SyntaxNode"/> result</returns>
-	private static ParseResult<SyntaxNode> Parse_File_Expression_Declaration(ReadOnlySpan<Lexeme> input, ref Int32 start, SyntaxNode left)
+	private static ParseResult<SyntaxNode> Parse_Braces_Expression_Declaration(ReadOnlySpan<Lexeme> input, ref Int32 start, SyntaxNode left)
 	{
 		var position = start;
 
@@ -335,7 +336,7 @@ partial class Parser
 
 		// TODO: distiction between :: and := operators
 
-		var expr = Parse_File_Expression(input, ref position, (Int32)OperatorPriority.Declaration);
+		var expr = Parse_Braces_Expression(input, ref position, (Int32)OperatorPriority.Declaration);
 		if (!expr.HasValue) { return new(input[position], Error.Message($"failed assignment expression for declaration expression"), expr.Error); }
 
 		start = position;
