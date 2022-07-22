@@ -90,6 +90,21 @@ public static partial class Parser
 						start = next;
 						return new(new FunctionNode(Parameters: result.Value, ReturnType: null, Body: braceResult.Value));
 					}
+					case LexemeType.EndOfLine: // check for function body starting on next line
+					{	
+						// todo: must first ensure that paren-node is unambiguously a func parameter list
+						//       otherwise the paren-node could have been a valid expression on its own.
+						//       perhaps function-node should always have higher priority?
+
+						var (peek2, next2) = input.Peek(next);
+						if (peek2.Type != LexemeType.BraceOpen)
+						{
+							start = position;
+							return new(result.Value);
+						}
+						next = next2;
+						goto case LexemeType.BraceOpen;
+					}
 					case LexemeType.Minus:
 					{
 						var (peek2, next2) = input.Peek(next);
