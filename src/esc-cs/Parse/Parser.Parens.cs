@@ -101,11 +101,11 @@ partial class Parser
 					if (ptr is CommaTempNode tmp)
 					{
 						var list = new List<SyntaxNode>();
-						void Visit(CommaTempNode temp)
+						static void Visit(CommaTempNode temp, List<SyntaxNode> list)
 						{
 							if (temp.Left is CommaTempNode left)
 							{
-								Visit(left);
+								Visit(left, list);
 							}
 							else
 							{
@@ -114,14 +114,14 @@ partial class Parser
 
 							if (temp.Right is CommaTempNode right)
 							{
-								Visit(right);
+								Visit(right, list);
 							}
 							else
 							{
 								list.Add(temp.Right);
 							}
 						}
-						Visit(tmp);
+						Visit(tmp, list);
 						return new(new CommaNode(Items: list));
 					}
 					return new(leftResult.Value);
@@ -139,6 +139,21 @@ partial class Parser
 					var result = Parse_Parens_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid comma expression"), result.Error); }
 					leftResult = new(new CommaTempNode(Left: leftResult.Value, Right: result.Value));
+					break;
+				}
+				case LexemeType.Colon:
+				{
+					const Int32 priority = (Int32)OperatorPriority.Colon;
+					if (min_priority >= priority)
+					{
+						start = position;
+						return leftResult;
+					}
+
+					position = next;
+					var result = Parse_Parens_Expression(input, ref position, priority);
+					if (!result.HasValue) { return new(input[position], Error.Message($"invalid declaration expression"), result.Error); }
+					leftResult = new(new DeclarationNode(Left: leftResult.Value, Right: result.Value));
 					break;
 				}
 				default:

@@ -12,6 +12,8 @@ internal enum OperatorPriority : Int32
 
 	Comma,
 
+	Colon,
+
 	// comparison: equality
 
 	EqualTo,

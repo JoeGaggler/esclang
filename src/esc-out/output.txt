@@ -1,5 +1,5 @@
 Stats:
--  Read: 0.01
+-  Read: 0.00
 -   Lex: 0.00
 - Parse: 0.00
 
@@ -85,7 +85,56 @@ Lex:
 138 + 1 -- (15, 18) -- EndOfLine -- \n
 139 + 1 -- (16, 1) -- BraceClose -- }
 140 + 1 -- (16, 2) -- EndOfLine -- \n
-141 + 0 -- (17, 1) -- EndOfFile -- <EOF>
+141 + 3 -- (17, 1) -- Identifier -- foo
+144 + 1 -- (17, 4) -- Spaces -- " "
+145 + 1 -- (17, 5) -- Colon -- :
+146 + 1 -- (17, 6) -- Colon -- :
+147 + 1 -- (17, 7) -- Spaces -- " "
+148 + 1 -- (17, 8) -- ParenOpen -- (
+149 + 1 -- (17, 9) -- Identifier -- a
+150 + 1 -- (17, 10) -- Colon -- :
+151 + 1 -- (17, 11) -- Spaces -- " "
+152 + 3 -- (17, 12) -- Identifier -- int
+155 + 1 -- (17, 15) -- ParenClose -- )
+156 + 1 -- (17, 16) -- Spaces -- " "
+157 + 1 -- (17, 17) -- EndOfLine -- \n
+158 + 1 -- (18, 1) -- BraceOpen -- {
+159 + 1 -- (18, 2) -- EndOfLine -- \n
+160 + 4 -- (19, 1) -- Spaces -- "    "
+164 + 5 -- (19, 5) -- Identifier -- print
+169 + 1 -- (19, 10) -- Spaces -- " "
+170 + 7 -- (19, 11) -- LiteralString -- "hello"
+177 + 1 -- (19, 18) -- EndOfLine -- \n
+178 + 1 -- (20, 1) -- BraceClose -- }
+179 + 1 -- (20, 2) -- EndOfLine -- \n
+180 + 3 -- (21, 1) -- Identifier -- foo
+183 + 1 -- (21, 4) -- Spaces -- " "
+184 + 1 -- (21, 5) -- Colon -- :
+185 + 1 -- (21, 6) -- Colon -- :
+186 + 1 -- (21, 7) -- Spaces -- " "
+187 + 1 -- (21, 8) -- ParenOpen -- (
+188 + 1 -- (21, 9) -- Identifier -- a
+189 + 1 -- (21, 10) -- Colon -- :
+190 + 1 -- (21, 11) -- Spaces -- " "
+191 + 3 -- (21, 12) -- Identifier -- int
+194 + 1 -- (21, 15) -- Comma -- ,
+195 + 1 -- (21, 16) -- Spaces -- " "
+196 + 1 -- (21, 17) -- Identifier -- b
+197 + 1 -- (21, 18) -- Colon -- :
+198 + 1 -- (21, 19) -- Spaces -- " "
+199 + 6 -- (21, 20) -- Identifier -- string
+205 + 1 -- (21, 26) -- ParenClose -- )
+206 + 1 -- (21, 27) -- Spaces -- " "
+207 + 1 -- (21, 28) -- EndOfLine -- \n
+208 + 1 -- (22, 1) -- BraceOpen -- {
+209 + 1 -- (22, 2) -- EndOfLine -- \n
+210 + 4 -- (23, 1) -- Spaces -- "    "
+214 + 5 -- (23, 5) -- Identifier -- print
+219 + 1 -- (23, 10) -- Spaces -- " "
+220 + 7 -- (23, 11) -- LiteralString -- "hello"
+227 + 1 -- (23, 18) -- EndOfLine -- \n
+228 + 1 -- (24, 1) -- BraceClose -- }
+229 + 0 -- (24, 2) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
@@ -136,6 +185,44 @@ declaration
             1
             2
             3
+      body
+        braces
+          print
+            "hello"
+declaration
+  id
+    identifier: foo
+  assignment
+    function
+      parameters
+        parens
+          declaration
+            id
+              identifier: a
+            assignment
+              identifier: int
+      body
+        braces
+          print
+            "hello"
+declaration
+  id
+    identifier: foo
+  assignment
+    function
+      parameters
+        parens
+          comma
+            declaration
+              id
+                identifier: a
+              assignment
+                identifier: int
+            declaration
+              id
+                identifier: b
+              assignment
+                identifier: string
       body
         braces
           print

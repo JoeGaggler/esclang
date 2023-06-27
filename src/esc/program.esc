@@ -14,3 +14,11 @@ foo :: (1, 2, 3)
 {
     print "hello"
 }
+foo :: (a: int) 
+{
+    print "hello"
+}
+foo :: (a: int, b: string) 
+{
+    print "hello"
+}
