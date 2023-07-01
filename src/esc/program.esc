@@ -1,24 +1,8 @@
-foo :: () 
+printWorld :: () { print "world" }
+printHello :: () 
 {
     print "hello"
 }
-foo :: (1)
-{
-    print "hello"
-}
-foo :: (1, 2)
-{
-    print "hello"
-}
-foo :: (1, 2, 3)
-{
-    print "hello"
-}
-foo :: (a: int) 
-{
-    print "hello"
-}
-foo :: (a: int, b: string) 
-{
-    print "hello"
-}
+
+printHello()
+printWorld()

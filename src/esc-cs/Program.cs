@@ -84,6 +84,11 @@ class Program
 			WriteLine($"Unable to write output to path: {outputPath}");
 			return 1;
 		}
+		Measure("Print", measurements, stopwatch);
+
+		// Evaluator
+		Eval.Evaluator.Evaluate(file);
+		Measure("Eval", measurements, stopwatch);
 
 		Stats(Console.Out, measurements);
 		return 0;

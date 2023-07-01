@@ -4,142 +4,55 @@ Stats:
 - Parse: 0.00
 
 Lex:
-0 + 3 -- (1, 1) -- Identifier -- foo
-3 + 1 -- (1, 4) -- Spaces -- " "
-4 + 1 -- (1, 5) -- Colon -- :
-5 + 1 -- (1, 6) -- Colon -- :
-6 + 1 -- (1, 7) -- Spaces -- " "
-7 + 1 -- (1, 8) -- ParenOpen -- (
-8 + 1 -- (1, 9) -- ParenClose -- )
-9 + 1 -- (1, 10) -- Spaces -- " "
-10 + 1 -- (1, 11) -- EndOfLine -- \n
-11 + 1 -- (2, 1) -- BraceOpen -- {
-12 + 1 -- (2, 2) -- EndOfLine -- \n
-13 + 4 -- (3, 1) -- Spaces -- "    "
-17 + 5 -- (3, 5) -- Identifier -- print
-22 + 1 -- (3, 10) -- Spaces -- " "
-23 + 7 -- (3, 11) -- LiteralString -- "hello"
-30 + 1 -- (3, 18) -- EndOfLine -- \n
-31 + 1 -- (4, 1) -- BraceClose -- }
-32 + 1 -- (4, 2) -- EndOfLine -- \n
-33 + 3 -- (5, 1) -- Identifier -- foo
-36 + 1 -- (5, 4) -- Spaces -- " "
-37 + 1 -- (5, 5) -- Colon -- :
-38 + 1 -- (5, 6) -- Colon -- :
-39 + 1 -- (5, 7) -- Spaces -- " "
-40 + 1 -- (5, 8) -- ParenOpen -- (
-41 + 1 -- (5, 9) -- Number -- 1
-42 + 1 -- (5, 10) -- ParenClose -- )
-43 + 1 -- (5, 11) -- EndOfLine -- \n
-44 + 1 -- (6, 1) -- BraceOpen -- {
-45 + 1 -- (6, 2) -- EndOfLine -- \n
-46 + 4 -- (7, 1) -- Spaces -- "    "
-50 + 5 -- (7, 5) -- Identifier -- print
-55 + 1 -- (7, 10) -- Spaces -- " "
-56 + 7 -- (7, 11) -- LiteralString -- "hello"
-63 + 1 -- (7, 18) -- EndOfLine -- \n
-64 + 1 -- (8, 1) -- BraceClose -- }
-65 + 1 -- (8, 2) -- EndOfLine -- \n
-66 + 3 -- (9, 1) -- Identifier -- foo
-69 + 1 -- (9, 4) -- Spaces -- " "
-70 + 1 -- (9, 5) -- Colon -- :
-71 + 1 -- (9, 6) -- Colon -- :
-72 + 1 -- (9, 7) -- Spaces -- " "
-73 + 1 -- (9, 8) -- ParenOpen -- (
-74 + 1 -- (9, 9) -- Number -- 1
-75 + 1 -- (9, 10) -- Comma -- ,
-76 + 1 -- (9, 11) -- Spaces -- " "
-77 + 1 -- (9, 12) -- Number -- 2
-78 + 1 -- (9, 13) -- ParenClose -- )
-79 + 1 -- (9, 14) -- EndOfLine -- \n
-80 + 1 -- (10, 1) -- BraceOpen -- {
-81 + 1 -- (10, 2) -- EndOfLine -- \n
-82 + 4 -- (11, 1) -- Spaces -- "    "
-86 + 5 -- (11, 5) -- Identifier -- print
-91 + 1 -- (11, 10) -- Spaces -- " "
-92 + 7 -- (11, 11) -- LiteralString -- "hello"
-99 + 1 -- (11, 18) -- EndOfLine -- \n
-100 + 1 -- (12, 1) -- BraceClose -- }
-101 + 1 -- (12, 2) -- EndOfLine -- \n
-102 + 3 -- (13, 1) -- Identifier -- foo
-105 + 1 -- (13, 4) -- Spaces -- " "
-106 + 1 -- (13, 5) -- Colon -- :
-107 + 1 -- (13, 6) -- Colon -- :
-108 + 1 -- (13, 7) -- Spaces -- " "
-109 + 1 -- (13, 8) -- ParenOpen -- (
-110 + 1 -- (13, 9) -- Number -- 1
-111 + 1 -- (13, 10) -- Comma -- ,
-112 + 1 -- (13, 11) -- Spaces -- " "
-113 + 1 -- (13, 12) -- Number -- 2
-114 + 1 -- (13, 13) -- Comma -- ,
-115 + 1 -- (13, 14) -- Spaces -- " "
-116 + 1 -- (13, 15) -- Number -- 3
-117 + 1 -- (13, 16) -- ParenClose -- )
-118 + 1 -- (13, 17) -- EndOfLine -- \n
-119 + 1 -- (14, 1) -- BraceOpen -- {
-120 + 1 -- (14, 2) -- EndOfLine -- \n
-121 + 4 -- (15, 1) -- Spaces -- "    "
-125 + 5 -- (15, 5) -- Identifier -- print
-130 + 1 -- (15, 10) -- Spaces -- " "
-131 + 7 -- (15, 11) -- LiteralString -- "hello"
-138 + 1 -- (15, 18) -- EndOfLine -- \n
-139 + 1 -- (16, 1) -- BraceClose -- }
-140 + 1 -- (16, 2) -- EndOfLine -- \n
-141 + 3 -- (17, 1) -- Identifier -- foo
-144 + 1 -- (17, 4) -- Spaces -- " "
-145 + 1 -- (17, 5) -- Colon -- :
-146 + 1 -- (17, 6) -- Colon -- :
-147 + 1 -- (17, 7) -- Spaces -- " "
-148 + 1 -- (17, 8) -- ParenOpen -- (
-149 + 1 -- (17, 9) -- Identifier -- a
-150 + 1 -- (17, 10) -- Colon -- :
-151 + 1 -- (17, 11) -- Spaces -- " "
-152 + 3 -- (17, 12) -- Identifier -- int
-155 + 1 -- (17, 15) -- ParenClose -- )
-156 + 1 -- (17, 16) -- Spaces -- " "
-157 + 1 -- (17, 17) -- EndOfLine -- \n
-158 + 1 -- (18, 1) -- BraceOpen -- {
-159 + 1 -- (18, 2) -- EndOfLine -- \n
-160 + 4 -- (19, 1) -- Spaces -- "    "
-164 + 5 -- (19, 5) -- Identifier -- print
-169 + 1 -- (19, 10) -- Spaces -- " "
-170 + 7 -- (19, 11) -- LiteralString -- "hello"
-177 + 1 -- (19, 18) -- EndOfLine -- \n
-178 + 1 -- (20, 1) -- BraceClose -- }
-179 + 1 -- (20, 2) -- EndOfLine -- \n
-180 + 3 -- (21, 1) -- Identifier -- foo
-183 + 1 -- (21, 4) -- Spaces -- " "
-184 + 1 -- (21, 5) -- Colon -- :
-185 + 1 -- (21, 6) -- Colon -- :
-186 + 1 -- (21, 7) -- Spaces -- " "
-187 + 1 -- (21, 8) -- ParenOpen -- (
-188 + 1 -- (21, 9) -- Identifier -- a
-189 + 1 -- (21, 10) -- Colon -- :
-190 + 1 -- (21, 11) -- Spaces -- " "
-191 + 3 -- (21, 12) -- Identifier -- int
-194 + 1 -- (21, 15) -- Comma -- ,
-195 + 1 -- (21, 16) -- Spaces -- " "
-196 + 1 -- (21, 17) -- Identifier -- b
-197 + 1 -- (21, 18) -- Colon -- :
-198 + 1 -- (21, 19) -- Spaces -- " "
-199 + 6 -- (21, 20) -- Identifier -- string
-205 + 1 -- (21, 26) -- ParenClose -- )
-206 + 1 -- (21, 27) -- Spaces -- " "
-207 + 1 -- (21, 28) -- EndOfLine -- \n
-208 + 1 -- (22, 1) -- BraceOpen -- {
-209 + 1 -- (22, 2) -- EndOfLine -- \n
-210 + 4 -- (23, 1) -- Spaces -- "    "
-214 + 5 -- (23, 5) -- Identifier -- print
-219 + 1 -- (23, 10) -- Spaces -- " "
-220 + 7 -- (23, 11) -- LiteralString -- "hello"
-227 + 1 -- (23, 18) -- EndOfLine -- \n
-228 + 1 -- (24, 1) -- BraceClose -- }
-229 + 0 -- (24, 2) -- EndOfFile -- <EOF>
+0 + 10 -- (1, 1) -- Identifier -- printWorld
+10 + 1 -- (1, 11) -- Spaces -- " "
+11 + 1 -- (1, 12) -- Colon -- :
+12 + 1 -- (1, 13) -- Colon -- :
+13 + 1 -- (1, 14) -- Spaces -- " "
+14 + 1 -- (1, 15) -- ParenOpen -- (
+15 + 1 -- (1, 16) -- ParenClose -- )
+16 + 1 -- (1, 17) -- Spaces -- " "
+17 + 1 -- (1, 18) -- BraceOpen -- {
+18 + 1 -- (1, 19) -- Spaces -- " "
+19 + 5 -- (1, 20) -- Identifier -- print
+24 + 1 -- (1, 25) -- Spaces -- " "
+25 + 7 -- (1, 26) -- LiteralString -- "world"
+32 + 1 -- (1, 33) -- Spaces -- " "
+33 + 1 -- (1, 34) -- BraceClose -- }
+34 + 1 -- (1, 35) -- EndOfLine -- \n
+35 + 10 -- (2, 1) -- Identifier -- printHello
+45 + 1 -- (2, 11) -- Spaces -- " "
+46 + 1 -- (2, 12) -- Colon -- :
+47 + 1 -- (2, 13) -- Colon -- :
+48 + 1 -- (2, 14) -- Spaces -- " "
+49 + 1 -- (2, 15) -- ParenOpen -- (
+50 + 1 -- (2, 16) -- ParenClose -- )
+51 + 1 -- (2, 17) -- Spaces -- " "
+52 + 1 -- (2, 18) -- EndOfLine -- \n
+53 + 1 -- (3, 1) -- BraceOpen -- {
+54 + 1 -- (3, 2) -- EndOfLine -- \n
+55 + 4 -- (4, 1) -- Spaces -- "    "
+59 + 5 -- (4, 5) -- Identifier -- print
+64 + 1 -- (4, 10) -- Spaces -- " "
+65 + 7 -- (4, 11) -- LiteralString -- "hello"
+72 + 1 -- (4, 18) -- EndOfLine -- \n
+73 + 1 -- (5, 1) -- BraceClose -- }
+74 + 1 -- (5, 2) -- EndOfLine -- \n
+75 + 1 -- (6, 1) -- EndOfLine -- \n
+76 + 10 -- (7, 1) -- Identifier -- printHello
+86 + 1 -- (7, 11) -- ParenOpen -- (
+87 + 1 -- (7, 12) -- ParenClose -- )
+88 + 1 -- (7, 13) -- EndOfLine -- \n
+89 + 10 -- (8, 1) -- Identifier -- printWorld
+99 + 1 -- (8, 11) -- ParenOpen -- (
+100 + 1 -- (8, 12) -- ParenClose -- )
+101 + 1 -- (8, 13) -- EndOfLine -- \n
+102 + 0 -- (9, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
   id
-    identifier: foo
+    identifier: printWorld
   assignment
     function
       parameters
@@ -147,83 +60,21 @@ declaration
       body
         braces
           print
-            "hello"
+            "world"
 declaration
   id
-    identifier: foo
+    identifier: printHello
   assignment
     function
       parameters
         parens
-          1
       body
         braces
           print
             "hello"
-declaration
-  id
-    identifier: foo
-  assignment
-    function
-      parameters
-        parens
-          comma
-            1
-            2
-      body
-        braces
-          print
-            "hello"
-declaration
-  id
-    identifier: foo
-  assignment
-    function
-      parameters
-        parens
-          comma
-            1
-            2
-            3
-      body
-        braces
-          print
-            "hello"
-declaration
-  id
-    identifier: foo
-  assignment
-    function
-      parameters
-        parens
-          declaration
-            id
-              identifier: a
-            assignment
-              identifier: int
-      body
-        braces
-          print
-            "hello"
-declaration
-  id
-    identifier: foo
-  assignment
-    function
-      parameters
-        parens
-          comma
-            declaration
-              id
-                identifier: a
-              assignment
-                identifier: int
-            declaration
-              id
-                identifier: b
-              assignment
-                identifier: string
-      body
-        braces
-          print
-            "hello"
+call
+  target
+    identifier: printHello
+call
+  target
+    identifier: printWorld
