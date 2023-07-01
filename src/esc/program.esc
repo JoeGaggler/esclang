@@ -1,8 +1,10 @@
-printWorld :: () { print "world" }
+printName :: (name: String) { print name }
 printHello :: () 
 {
     print "hello"
 }
 
 printHello()
-printWorld()
+
+myname :: "joe"
+printName(myname)

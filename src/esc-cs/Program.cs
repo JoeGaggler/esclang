@@ -56,7 +56,15 @@ class Program
 
 		// Evaluator
 		var programOutput = new StringWriter();
-		Eval.Evaluator.Evaluate(file, programOutput);
+		try
+		{
+			Eval.Evaluator.Evaluate(file, programOutput);
+		}
+		catch (Exception e)
+		{
+			programOutput.WriteLine("*** CRASH! ***");
+			programOutput.WriteLine(e.ToString());
+		}
 		Measure("Eval", measurements, stopwatch);
 
 		// Print

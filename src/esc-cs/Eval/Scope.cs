@@ -1,10 +1,12 @@
+using EscLang.Parse;
+
 namespace EscLang.Eval;
 
 public class Scope
 {
 	public Scope? Parent { get; }
 
-	public Dictionary<String, Object> Store { get; } = new();
+	public Dictionary<String, SyntaxNode> Store { get; } = new();
 
 	public Scope()
 	{
@@ -16,7 +18,7 @@ public class Scope
 		this.Parent = parent;
 	}
 
-	public Object? Get(String identifier)
+	public SyntaxNode? Get(String identifier)
 	{
 		if (this.Store.TryGetValue(identifier, out var value))
 		{
