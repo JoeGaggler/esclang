@@ -54,7 +54,15 @@ class Program
 		}
 		Measure("Parse", measurements, stopwatch);
 
-		// TODO: everything else
+		// Evaluator
+		var programOutput = new StringWriter();
+		Eval.Evaluator.Evaluate(file, programOutput);
+		Measure("Eval", measurements, stopwatch);
+
+		// Print
+		var programOutputString = programOutput.GetStringBuilder().ToString();
+		Console.Write(programOutputString);
+		Measure("Print", measurements, stopwatch);
 
 		// Compiler not yet viable, so currently saving debug information as the output
 		var outputFilePath = Path.Combine(outputPath, "output.txt");
@@ -77,6 +85,11 @@ class Program
 				outputFile.WriteLine();
 				outputFile.WriteLine("Parse:");
 				Printer.PrintSyntax(outputFile, file, lexemes);
+
+				// Debug Output
+				outputFile.WriteLine();
+				outputFile.WriteLine("Output:");
+				outputFile.Write(programOutputString);
 			}
 		}
 		catch
@@ -84,11 +97,6 @@ class Program
 			WriteLine($"Unable to write output to path: {outputPath}");
 			return 1;
 		}
-		Measure("Print", measurements, stopwatch);
-
-		// Evaluator
-		Eval.Evaluator.Evaluate(file);
-		Measure("Eval", measurements, stopwatch);
 
 		Stats(Console.Out, measurements);
 		return 0;

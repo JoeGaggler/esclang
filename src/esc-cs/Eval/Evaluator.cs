@@ -7,31 +7,32 @@ public static class Evaluator
 	private struct Nil { }
 	private static readonly Nil nil = new();
 
-	public static void Evaluate(EscFile file)
+	public static void Evaluate(EscFile file, StringWriter programOutput)
 	{
+		var environment = new Environment(programOutput);
 		var globalScope = new Scope();
 
 		foreach (var node in file.Nodes)
 		{
-			EvaluateSyntaxNode(node, globalScope);
+			EvaluateSyntaxNode(node, globalScope, environment);
 		}
 	}
 
-	private static Nil EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope)
+	private static Nil EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment)
 	{
 		_ = syntaxNode switch
 		{
-			DeclarationNode node => EvaluateNode(node, scope),
-			CallNode node => EvaluateNode(node, scope),
-			BracesNode node => EvaluateNode(node, scope),
-			PrintNode node => EvaluateNode(node, scope),
+			DeclarationNode node => EvaluateNode(node, scope, environment),
+			CallNode node => EvaluateNode(node, scope, environment),
+			BracesNode node => EvaluateNode(node, scope, environment),
+			PrintNode node => EvaluateNode(node, scope, environment),
 			_ => throw new NotImplementedException($"{nameof(EvaluateSyntaxNode)} not implemented for node type: {syntaxNode.GetType().Name}"),
 		};
 
 		return nil;
 	}
 
-	private static Nil EvaluateNode(DeclarationNode node, Scope scope)
+	private static Nil EvaluateNode(DeclarationNode node, Scope scope, Environment environment)
 	{
 		var left = node.Left;
 		var right = node.Right;
@@ -48,7 +49,7 @@ public static class Evaluator
 		return nil;
 	}
 
-	private static Nil EvaluateNode(CallNode node, Scope scope)
+	private static Nil EvaluateNode(CallNode node, Scope scope, Environment environment)
 	{
 		if (node.Target is not IdentifierNode identifierNode || identifierNode.Text is not { } identifier)
 		{
@@ -73,24 +74,24 @@ public static class Evaluator
 
 		var functionScope = new Scope(scope);
 
-		_ = EvaluateSyntaxNode(functionNode.Body, functionScope);
+		_ = EvaluateSyntaxNode(functionNode.Body, functionScope, environment);
 
 		return nil;
 	}
 
-	private static Nil EvaluateNode(BracesNode node, Scope scope)
+	private static Nil EvaluateNode(BracesNode node, Scope scope, Environment environment)
 	{
 		var bodyScope = new Scope(scope);
 
 		foreach (var childNode in node.Items)
 		{
-			EvaluateSyntaxNode(childNode, bodyScope);
+			EvaluateSyntaxNode(childNode, bodyScope, environment);
 		}
 
 		return nil;
 	}
 
-	private static Nil EvaluateNode(PrintNode node, Scope scope)
+	private static Nil EvaluateNode(PrintNode node, Scope scope, Environment environment)
 	{
 		String stringValue = node.Node switch
 		{
@@ -98,7 +99,7 @@ public static class Evaluator
 			_ => throw new NotImplementedException($"{nameof(EvaluateNode)}(PrintNode) not implemented for node type: {node.GetType().Name}"),
 		};
 
-		Console.WriteLine(stringValue);
+		environment.ProgramOutput.WriteLine(stringValue);
 
 		return nil;
 	}

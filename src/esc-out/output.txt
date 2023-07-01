@@ -2,6 +2,8 @@ Stats:
 -  Read: 0.00
 -   Lex: 0.00
 - Parse: 0.00
+-  Eval: 0.00
+- Print: 0.00
 
 Lex:
 0 + 10 -- (1, 1) -- Identifier -- printWorld
@@ -78,3 +80,7 @@ call
 call
   target
     identifier: printWorld
+
+Output:
+hello
+world
