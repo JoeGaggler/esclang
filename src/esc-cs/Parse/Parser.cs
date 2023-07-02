@@ -48,7 +48,28 @@ public static partial class Parser
 		switch (token.Type)
 		{
 			case LexemeType.Number: { return new(new LiteralNumberNode(token.Text)); }
-			case LexemeType.Identifier: { return new(new IdentifierNode(token.Text)); }
+			case LexemeType.Identifier:
+			{
+				var text = token.Text;
+
+				switch (text)
+				{
+					case "return":
+					{
+						var right = Parse_Return_Expression(input, ref start);
+						if (!right.HasValue)
+						{
+							return new(token, Error.Message($"Return was not followed by a valid expression"));
+						}
+
+						return new(new ReturnNode(right.Value));
+					}
+					default:
+					{
+						return new(new IdentifierNode(text));
+					}
+				}
+			}
 			case LexemeType.LiteralString: { return new(new LiteralStringNode(EscLang.Lex.Lexer.UnwrapString(token))); }
 			case LexemeType.LiteralChar: { return new(new LiteralCharNode(EscLang.Lex.Lexer.UnwrapString(token))); }
 			case LexemeType.Minus:
@@ -91,7 +112,7 @@ public static partial class Parser
 						return new(new FunctionNode(Parameters: result.Value, ReturnType: null, Body: braceResult.Value));
 					}
 					case LexemeType.EndOfLine: // check for function body starting on next line
-					{	
+					{
 						// todo: must first ensure that paren-node is unambiguously a func parameter list
 						//       otherwise the paren-node could have been a valid expression on its own.
 						//       perhaps function-node should always have higher priority?

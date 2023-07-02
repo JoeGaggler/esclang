@@ -1,9 +1,9 @@
 Stats:
--  Read: 0.00
--   Lex: 0.00
-- Parse: 0.00
--  Eval: 0.00
-- Print: 0.00
+-  Read: 0.00s
+-   Lex: 0.00s
+- Parse: 0.00s
+-  Eval: 0.00s
+- Print: 0.00s
 
 Lex:
 0 + 9 -- (1, 1) -- Identifier -- printName
@@ -18,51 +18,70 @@ Lex:
 20 + 6 -- (1, 21) -- Identifier -- String
 26 + 1 -- (1, 27) -- ParenClose -- )
 27 + 1 -- (1, 28) -- Spaces -- " "
-28 + 1 -- (1, 29) -- BraceOpen -- {
-29 + 1 -- (1, 30) -- Spaces -- " "
-30 + 5 -- (1, 31) -- Identifier -- print
-35 + 1 -- (1, 36) -- Spaces -- " "
-36 + 4 -- (1, 37) -- Identifier -- name
-40 + 1 -- (1, 41) -- Spaces -- " "
-41 + 1 -- (1, 42) -- BraceClose -- }
-42 + 1 -- (1, 43) -- EndOfLine -- \n
-43 + 10 -- (2, 1) -- Identifier -- printHello
-53 + 1 -- (2, 11) -- Spaces -- " "
-54 + 1 -- (2, 12) -- Colon -- :
-55 + 1 -- (2, 13) -- Colon -- :
-56 + 1 -- (2, 14) -- Spaces -- " "
-57 + 1 -- (2, 15) -- ParenOpen -- (
-58 + 1 -- (2, 16) -- ParenClose -- )
-59 + 1 -- (2, 17) -- Spaces -- " "
-60 + 1 -- (2, 18) -- EndOfLine -- \n
-61 + 1 -- (3, 1) -- BraceOpen -- {
-62 + 1 -- (3, 2) -- EndOfLine -- \n
-63 + 4 -- (4, 1) -- Spaces -- "    "
-67 + 5 -- (4, 5) -- Identifier -- print
-72 + 1 -- (4, 10) -- Spaces -- " "
-73 + 7 -- (4, 11) -- LiteralString -- "hello"
-80 + 1 -- (4, 18) -- EndOfLine -- \n
-81 + 1 -- (5, 1) -- BraceClose -- }
-82 + 1 -- (5, 2) -- EndOfLine -- \n
-83 + 1 -- (6, 1) -- EndOfLine -- \n
-84 + 10 -- (7, 1) -- Identifier -- printHello
-94 + 1 -- (7, 11) -- ParenOpen -- (
-95 + 1 -- (7, 12) -- ParenClose -- )
-96 + 1 -- (7, 13) -- EndOfLine -- \n
-97 + 1 -- (8, 1) -- EndOfLine -- \n
-98 + 6 -- (9, 1) -- Identifier -- myname
-104 + 1 -- (9, 7) -- Spaces -- " "
-105 + 1 -- (9, 8) -- Colon -- :
-106 + 1 -- (9, 9) -- Colon -- :
-107 + 1 -- (9, 10) -- Spaces -- " "
-108 + 5 -- (9, 11) -- LiteralString -- "joe"
-113 + 1 -- (9, 16) -- EndOfLine -- \n
-114 + 9 -- (10, 1) -- Identifier -- printName
-123 + 1 -- (10, 10) -- ParenOpen -- (
-124 + 6 -- (10, 11) -- Identifier -- myname
-130 + 1 -- (10, 17) -- ParenClose -- )
-131 + 1 -- (10, 18) -- EndOfLine -- \n
-132 + 0 -- (11, 1) -- EndOfFile -- <EOF>
+28 + 85 -- (1, 29) -- Comment -- // TODO: return type is implied, which is neat, but we should be able to typecheck it
+113 + 1 -- (1, 114) -- EndOfLine -- \n
+114 + 1 -- (2, 1) -- BraceOpen -- {
+115 + 1 -- (2, 2) -- Spaces -- " "
+116 + 1 -- (2, 3) -- EndOfLine -- \n
+117 + 4 -- (3, 1) -- Spaces -- "    "
+121 + 5 -- (3, 5) -- Identifier -- print
+126 + 1 -- (3, 10) -- Spaces -- " "
+127 + 4 -- (3, 11) -- Identifier -- name
+131 + 1 -- (3, 15) -- Spaces -- " "
+132 + 1 -- (3, 16) -- EndOfLine -- \n
+133 + 4 -- (4, 1) -- Spaces -- "    "
+137 + 6 -- (4, 5) -- Identifier -- return
+143 + 1 -- (4, 11) -- Spaces -- " "
+144 + 2 -- (4, 12) -- Number -- 13
+146 + 1 -- (4, 14) -- EndOfLine -- \n
+147 + 1 -- (5, 1) -- BraceClose -- }
+148 + 1 -- (5, 2) -- EndOfLine -- \n
+149 + 10 -- (6, 1) -- Identifier -- printHello
+159 + 1 -- (6, 11) -- Spaces -- " "
+160 + 1 -- (6, 12) -- Colon -- :
+161 + 1 -- (6, 13) -- Colon -- :
+162 + 1 -- (6, 14) -- Spaces -- " "
+163 + 1 -- (6, 15) -- ParenOpen -- (
+164 + 1 -- (6, 16) -- ParenClose -- )
+165 + 1 -- (6, 17) -- Spaces -- " "
+166 + 1 -- (6, 18) -- EndOfLine -- \n
+167 + 1 -- (7, 1) -- BraceOpen -- {
+168 + 1 -- (7, 2) -- EndOfLine -- \n
+169 + 4 -- (8, 1) -- Spaces -- "    "
+173 + 5 -- (8, 5) -- Identifier -- print
+178 + 1 -- (8, 10) -- Spaces -- " "
+179 + 7 -- (8, 11) -- LiteralString -- "hello"
+186 + 1 -- (8, 18) -- EndOfLine -- \n
+187 + 1 -- (9, 1) -- BraceClose -- }
+188 + 1 -- (9, 2) -- EndOfLine -- \n
+189 + 1 -- (10, 1) -- EndOfLine -- \n
+190 + 10 -- (11, 1) -- Identifier -- printHello
+200 + 1 -- (11, 11) -- ParenOpen -- (
+201 + 1 -- (11, 12) -- ParenClose -- )
+202 + 1 -- (11, 13) -- EndOfLine -- \n
+203 + 1 -- (12, 1) -- EndOfLine -- \n
+204 + 6 -- (13, 1) -- Identifier -- myname
+210 + 1 -- (13, 7) -- Spaces -- " "
+211 + 1 -- (13, 8) -- Colon -- :
+212 + 1 -- (13, 9) -- Colon -- :
+213 + 1 -- (13, 10) -- Spaces -- " "
+214 + 5 -- (13, 11) -- LiteralString -- "joe"
+219 + 1 -- (13, 16) -- EndOfLine -- \n
+220 + 6 -- (14, 1) -- Identifier -- retval
+226 + 1 -- (14, 7) -- Spaces -- " "
+227 + 1 -- (14, 8) -- Colon -- :
+228 + 1 -- (14, 9) -- Colon -- :
+229 + 1 -- (14, 10) -- Spaces -- " "
+230 + 9 -- (14, 11) -- Identifier -- printName
+239 + 1 -- (14, 20) -- ParenOpen -- (
+240 + 6 -- (14, 21) -- Identifier -- myname
+246 + 1 -- (14, 27) -- ParenClose -- )
+247 + 1 -- (14, 28) -- EndOfLine -- \n
+248 + 5 -- (15, 1) -- Identifier -- print
+253 + 1 -- (15, 6) -- Spaces -- " "
+254 + 6 -- (15, 7) -- Identifier -- retval
+260 + 1 -- (15, 13) -- EndOfLine -- \n
+261 + 0 -- (16, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
@@ -81,6 +100,8 @@ declaration
         braces
           print
             identifier: name
+          return
+            13
 declaration
   id
     identifier: printHello
@@ -100,12 +121,19 @@ declaration
     identifier: myname
   assignment
     "joe"
-call
-  target
-    identifier: printName
-  arguments
-    identifier: myname
+declaration
+  id
+    identifier: retval
+  assignment
+    call
+      target
+        identifier: printName
+      arguments
+        identifier: myname
+print
+  identifier: retval
 
 Output:
 hello
 joe
+13

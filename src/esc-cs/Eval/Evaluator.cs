@@ -2,11 +2,13 @@ using EscLang.Parse;
 
 namespace EscLang.Eval;
 
+// TODO: on crash, dump the AST with a pointer to the node that crashed
+
 public static class Evaluator
 {
-	// HACK: convenience for C# switch expressions that do not have an appropriate type
-	private struct Nil { }
-	private static readonly Nil nil = new();
+	// HACK: special nodes only needed for the evaluator that signals to stop evaluation in the current scope
+	public record ReturningNodeNode(SyntaxNode Node) : SyntaxNode { }
+	public record ReturningVoidNode() : SyntaxNode { }
 
 	public static void Evaluate(EscFile file, StringWriter programOutput)
 	{
@@ -19,21 +21,27 @@ public static class Evaluator
 		}
 	}
 
-	private static Nil EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment)
+	private static SyntaxNode EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment)
 	{
-		_ = syntaxNode switch
+		return syntaxNode switch
 		{
 			DeclarationNode node => EvaluateNode(node, scope, environment),
 			CallNode node => EvaluateNode(node, scope, environment),
 			BracesNode node => EvaluateNode(node, scope, environment),
 			PrintNode node => EvaluateNode(node, scope, environment),
+			ReturnNode node => EvaluateNode(node, scope, environment),
+
+			// Literals
+			LiteralCharNode node => node,
+			LiteralNumberNode node => node,
+			LiteralStringNode node => node,
+			FunctionNode node => node,
+
 			_ => throw new NotImplementedException($"{nameof(EvaluateSyntaxNode)} not implemented for node type: {syntaxNode.GetType().Name}"),
 		};
-
-		return nil;
 	}
 
-	private static Nil EvaluateNode(DeclarationNode node, Scope scope, Environment environment)
+	private static SyntaxNode EvaluateNode(DeclarationNode node, Scope scope, Environment environment)
 	{
 		var left = node.Left;
 		var right = node.Right;
@@ -44,13 +52,13 @@ public static class Evaluator
 		}
 
 		var identifier = identifierNode.Text;
-		var expression = right;
+		var expression = EvaluateSyntaxNode(right, scope, environment);
 		scope.Store[identifier] = expression;
 
-		return nil;
+		return left; // the "l-value"
 	}
 
-	private static Nil EvaluateNode(CallNode node, Scope scope, Environment environment)
+	private static SyntaxNode EvaluateNode(CallNode node, Scope scope, Environment environment)
 	{
 		if (node.Target is not IdentifierNode identifierNode || identifierNode.Text is not { } identifier)
 		{
@@ -95,9 +103,17 @@ public static class Evaluator
 			functionScope.Store[parameterIdentifier] = arg;
 		}
 
-		_ = EvaluateSyntaxNode(functionNode.Body, functionScope, environment);
-
-		return nil;
+		// CallNode should be the only node that "unwraps" the Returning*Node values
+		var returnValue = EvaluateSyntaxNode(functionNode.Body, functionScope, environment);
+		switch (returnValue)
+		{
+			case ReturningNodeNode returningNode: return returningNode.Node;
+			case ReturningVoidNode returningNode: return returningNode;
+			default:
+			{
+				throw new NotImplementedException($"Invalid return value for CallNode: {returnValue}");
+			}
+		}
 	}
 
 	private static void TypeCheck(String expectedTypeName, SyntaxNode actualExpression, Scope scope, Environment environment)
@@ -122,30 +138,45 @@ public static class Evaluator
 		throw new NotImplementedException($"{nameof(TypeCheck)} failed: left={expectedTypeName}, right={actualExpression}");
 	}
 
-	private static Nil EvaluateNode(BracesNode node, Scope scope, Environment environment)
+	private static SyntaxNode EvaluateNode(BracesNode node, Scope scope, Environment environment)
 	{
 		var bodyScope = new Scope(scope);
 
 		foreach (var childNode in node.Items)
 		{
-			EvaluateSyntaxNode(childNode, bodyScope, environment);
+			var result = EvaluateSyntaxNode(childNode, bodyScope, environment);
+
+			// If the child node is a return node, return the value
+			if (result is ReturningNodeNode || result is ReturningVoidNode)
+			{
+				return result;
+			}
 		}
 
-		return nil;
+		return new ReturningVoidNode();
 	}
 
-	private static Nil EvaluateNode(PrintNode node, Scope scope, Environment environment)
+	private static SyntaxNode EvaluateNode(PrintNode node, Scope scope, Environment environment)
 	{
-		var stringValue = EvaluateString(node.Node, scope, environment);
+		var expression = node.Node;
+		var stringValue = EvaluateString(expression, scope, environment);
 		environment.ProgramOutput.WriteLine(stringValue);
-		return nil;
+		return expression; // passthrough
+	}
+
+	private static SyntaxNode EvaluateNode(ReturnNode node, Scope scope, Environment environment)
+	{
+		var evaluated = EvaluateSyntaxNode(node.Node, scope, environment);
+		return new ReturningNodeNode(evaluated);
 	}
 
 	private static String EvaluateString(SyntaxNode node, Scope scope, Environment environment)
 	{
 		return node switch
 		{
+			LiteralCharNode expression => expression.Text,
 			LiteralStringNode expression => expression.Text,
+			LiteralNumberNode expression => expression.Text,
 
 			IdentifierNode expression =>
 				scope.Get(expression.Text) is SyntaxNode expressionSyntaxNode ?

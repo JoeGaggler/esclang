@@ -268,6 +268,14 @@ public static class Printer
 				break;
 			}
 
+			case ReturnNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("return");
+				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);

@@ -16,6 +16,8 @@ public record IdentifierNode(String Text) : SyntaxNode { }
 
 public record PrintNode(SyntaxNode Node) : SyntaxNode { }
 
+public record ReturnNode(SyntaxNode Node) : SyntaxNode { }
+
 public record DeclarationNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
 public enum BinaryOperator
@@ -47,7 +49,7 @@ public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNo
 
 public record ParensNode(List<SyntaxNode> Items) : SyntaxNode { }
 
-// Internal record only used as a precursor to CommaNode
+// TODO: internal record only used as a precursor to CommaNode, should be obviated
 public record CommaTempNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
 public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }
