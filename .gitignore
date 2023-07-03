@@ -4,3 +4,6 @@ obj
 # Ignore C# Dev Kit until it is stable and more open
 **/*.sln
 .vscode/settings.json
+
+# macOS
+.DS_Store

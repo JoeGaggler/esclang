@@ -12,6 +12,8 @@ public record LiteralStringNode(String Text) : SyntaxNode { }
 
 public record NegationNode(SyntaxNode Node) : SyntaxNode { }
 
+public record LogicalNegationNode(SyntaxNode Node) : SyntaxNode { }
+
 public record IdentifierNode(String Text) : SyntaxNode { }
 
 public record PrintNode(SyntaxNode Node) : SyntaxNode { }

@@ -9,6 +9,7 @@ public static class Evaluator
 	// HACK: special nodes only needed for the evaluator that signals to stop evaluation in the current scope
 	public record ReturningNodeNode(SyntaxNode Node) : SyntaxNode { }
 	public record ReturningVoidNode() : SyntaxNode { }
+	public record ImplicitVoidNode() : SyntaxNode { }
 
 	public static void Evaluate(EscFile file, StringWriter programOutput)
 	{
@@ -27,9 +28,13 @@ public static class Evaluator
 		{
 			DeclarationNode node => EvaluateNode(node, scope, environment),
 			CallNode node => EvaluateNode(node, scope, environment),
+			Block node => EvaluateNode(node, scope, environment), // TODO: merge with BracesNode?
 			BracesNode node => EvaluateNode(node, scope, environment),
 			PrintNode node => EvaluateNode(node, scope, environment),
 			ReturnNode node => EvaluateNode(node, scope, environment),
+			IfNode node => EvaluateNode(node, scope, environment),
+			IdentifierNode node => EvaluateNode(node, scope, environment),
+			LogicalNegationNode node => EvaluateNode(node, scope, environment),
 
 			// Literals
 			LiteralCharNode node => node,
@@ -39,6 +44,16 @@ public static class Evaluator
 
 			_ => throw new NotImplementedException($"{nameof(EvaluateSyntaxNode)} not implemented for node type: {syntaxNode.GetType().Name}"),
 		};
+	}
+
+	private static SyntaxNode EvaluateNode(IdentifierNode node, Scope scope, Environment environment)
+	{
+		var identifier = node.Text;
+		if (scope.Get(identifier) is not SyntaxNode expression)
+		{
+			throw new NotImplementedException($"{nameof(EvaluateNode)}(IdentifierNode) cannot find identifier in scope: {identifier}");
+		}
+		return expression;
 	}
 
 	private static SyntaxNode EvaluateNode(DeclarationNode node, Scope scope, Environment environment)
@@ -122,13 +137,13 @@ public static class Evaluator
 
 				return returningNode.Node;
 			}
-			case ReturningVoidNode returningNode:
+			case SyntaxNode voidNode when voidNode is ReturningNodeNode or ImplicitVoidNode:
 			{
 				if (functionNode.ReturnType is not null)
 				{
 					throw new InvalidOperationException($"Function returned void, but declared return type {functionNode.ReturnType}");
 				}
-				return returningNode;
+				return voidNode;
 			}
 			default:
 			{
@@ -182,7 +197,26 @@ public static class Evaluator
 			}
 		}
 
-		return new ReturningVoidNode();
+		return new ImplicitVoidNode();
+	}
+
+	// TODO: merge with BracesNode?
+	private static SyntaxNode EvaluateNode(Block node, Scope scope, Environment environment)
+	{
+		var bodyScope = new Scope(scope);
+
+		foreach (var childNode in node.Statements)
+		{
+			var result = EvaluateSyntaxNode(childNode, bodyScope, environment);
+
+			// If the child node is a return node, return the value
+			if (result is ReturningNodeNode || result is ReturningVoidNode)
+			{
+				return result;
+			}
+		}
+
+		return new ImplicitVoidNode();
 	}
 
 	private static SyntaxNode EvaluateNode(PrintNode node, Scope scope, Environment environment)
@@ -197,6 +231,44 @@ public static class Evaluator
 	{
 		var evaluated = EvaluateSyntaxNode(node.Node, scope, environment);
 		return new ReturningNodeNode(evaluated);
+	}
+
+	private static SyntaxNode EvaluateNode(IfNode node, Scope scope, Environment environment)
+	{
+		var condition = EvaluateSyntaxNode(node.Condition, scope, environment);
+		var test = condition switch
+		{
+			LiteralNumberNode literalNumberNode => literalNumberNode.Text switch
+			{
+				"0" => false,
+				"1" => true,
+				_ => throw new NotImplementedException($"Invalid condition for IfNode: {condition}")
+			},
+			_ => throw new NotImplementedException($"Invalid condition for IfNode: {condition}")
+		};
+
+		if (test)
+		{
+			return EvaluateSyntaxNode(node.Block, scope, environment);
+		}
+		else
+		{
+			return new ImplicitVoidNode(); // block not executed
+		}
+	}
+
+	private static SyntaxNode EvaluateNode(LogicalNegationNode node, Scope scope, Environment environment)
+	{
+		var condition = EvaluateSyntaxNode(node.Node, scope, environment);
+		return condition switch
+		{
+			LiteralNumberNode literalNumberNode => literalNumberNode.Text switch
+			{
+				"0" => new LiteralNumberNode("1"),
+				_ => new LiteralNumberNode("0"),
+			},
+			_ => throw new NotImplementedException($"Invalid condition for LogicalNegationNode: {condition}")
+		};
 	}
 
 	private static String EvaluateString(SyntaxNode node, Scope scope, Environment environment)

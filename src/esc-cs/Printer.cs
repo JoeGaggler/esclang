@@ -276,6 +276,14 @@ public static class Printer
 				break;
 			}
 
+			case LogicalNegationNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("not");
+				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);

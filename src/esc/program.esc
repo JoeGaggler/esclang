@@ -1,16 +1,15 @@
-printName :: (name: String) -> int
-{ 
-    print name 
-    return 13
-}
-
-printHello :: () 
+printGreeting :: (type: int) 
 {
-    print "hello"
+    // TODO: binary expressions in if-condition
+    if type {
+        print "hello"
+    }
+
+    // TODO: else-statements
+    if !type { 
+        print "bye"
+    }
 }
 
-printHello()
-
-myname :: "joe"
-retval :: printName(myname)
-print retval
+printGreeting(1)
+printGreeting(0)
