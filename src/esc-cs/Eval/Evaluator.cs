@@ -107,8 +107,29 @@ public static class Evaluator
 		var returnValue = EvaluateSyntaxNode(functionNode.Body, functionScope, environment);
 		switch (returnValue)
 		{
-			case ReturningNodeNode returningNode: return returningNode.Node;
-			case ReturningVoidNode returningNode: return returningNode;
+			case ReturningNodeNode returningNode:
+			{
+				if (functionNode.ReturnType is not { } returnTypeNode)
+				{
+					throw new InvalidOperationException($"Function returned {returningNode.Node}, but declared void return type");
+				}
+				if (returnTypeNode is not IdentifierNode returnTypeIdentifierNode || returnTypeIdentifierNode.Text is not { } returnTypeIdentifier)
+				{
+					throw new NotImplementedException($"Invalid return type for CallNode: {returnTypeNode}");
+				}
+
+				TypeCheck(expectedTypeName: returnTypeIdentifier, actualExpression: returningNode.Node, scope, environment);
+
+				return returningNode.Node;
+			}
+			case ReturningVoidNode returningNode:
+			{
+				if (functionNode.ReturnType is not null)
+				{
+					throw new InvalidOperationException($"Function returned void, but declared return type {functionNode.ReturnType}");
+				}
+				return returningNode;
+			}
 			default:
 			{
 				throw new NotImplementedException($"Invalid return value for CallNode: {returnValue}");
@@ -130,6 +151,14 @@ public static class Evaluator
 						TypeCheck(expectedTypeName, identifierSyntaxNode, scope, environment);
 						return;
 					}
+				}
+				break;
+			}
+			case "int":
+			{
+				switch (actualExpression)
+				{
+					case LiteralNumberNode _: return;
 				}
 				break;
 			}

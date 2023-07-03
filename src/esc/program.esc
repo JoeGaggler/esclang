@@ -1,8 +1,9 @@
-printName :: (name: String) // TODO: return type is implied, which is neat, but we should be able to typecheck it
+printName :: (name: String) -> int
 { 
     print name 
     return 13
 }
+
 printHello :: () 
 {
     print "hello"
