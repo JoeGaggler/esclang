@@ -3,10 +3,8 @@ printGreeting :: (type: int)
     // TODO: binary expressions in if-condition
     if type {
         print "hello"
-    }
-
-    // TODO: else-statements
-    if !type { 
+    } 
+    else { 
         print "bye"
     }
 }

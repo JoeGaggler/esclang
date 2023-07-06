@@ -251,6 +251,10 @@ public static class Evaluator
 		{
 			return EvaluateSyntaxNode(node.Block, scope, environment);
 		}
+		else if (node.ElseBlock is { } elseBlock)
+		{
+			return EvaluateSyntaxNode(elseBlock, scope, environment);
+		}
 		else
 		{
 			return new ImplicitVoidNode(); // block not executed

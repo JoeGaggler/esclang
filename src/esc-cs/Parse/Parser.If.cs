@@ -48,6 +48,39 @@ partial class Parser
 
 		start = next;
 
+		// Optional else block
+		(peek, next) = input.PeekThroughNewline(start);
+		if (peek.Type == LexemeType.Identifier && peek.Text == "else")
+		{
+			(peek, next) = input.Peek(next);
+			switch (peek.Type)
+			{
+				case LexemeType.BraceOpen:
+				{
+					break;
+				}
+				case LexemeType.EndOfLine:
+				{
+					var (peek2, next2) = input.Peek(next);
+					if (peek2.Type != LexemeType.BraceOpen) { return new(input[next], Error.Message("expected open brace on new line after if-condition")); }
+					next = next2;
+					break;
+				}
+				default:
+				{
+					return new(input[start], Error.Message("expected open brace after else keyword"));
+				}
+			}
+
+			start = next;
+
+			var elseResult = Parse_Block(input, ref start);
+			if (!elseResult) { return new(input[position], Error.Message("invalid else-block"), elseResult.Error); }
+			var elseNode = elseResult.Value;
+
+			return new(new IfNode(Condition: conditionNode, Block: blockNode, ElseBlock: elseNode));
+		}
+
 		return new(new IfNode(Condition: conditionNode, Block: blockNode));
 	}
 
@@ -78,212 +111,212 @@ partial class Parser
 			{
 				// end of expression tokens
 				case LexemeType.EndOfLine:
-				{
-					start = position; // at EndOfLine
-					return leftResult;
-				}
+					{
+						start = position; // at EndOfLine
+						return leftResult;
+					}
 				case LexemeType.EndOfFile:
-				{
-					start = position; // at EndOfFile
-					return leftResult;
-				}
+					{
+						start = position; // at EndOfFile
+						return leftResult;
+					}
 				case LexemeType.BraceOpen:
-				{
-					start = position; // start of the if-block
-					return leftResult;
-				}
+					{
+						start = position; // start of the if-block
+						return leftResult;
+					}
 				case LexemeType.Star:
-				{
-					const Int32 priority = (Int32)OperatorPriority.Multiply;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						const Int32 priority = (Int32)OperatorPriority.Multiply;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Multiply, Right: result.Value));
+						break;
+					}
 				case LexemeType.Slash:
-				{
-					const Int32 priority = (Int32)OperatorPriority.Divide;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						const Int32 priority = (Int32)OperatorPriority.Divide;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Divide, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Divide, Right: result.Value));
+						break;
+					}
 				case LexemeType.Plus:
-				{
-					const Int32 priority = (Int32)OperatorPriority.Plus;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						const Int32 priority = (Int32)OperatorPriority.Plus;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Plus, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Plus, Right: result.Value));
+						break;
+					}
 				case LexemeType.Minus:
-				{
-					const Int32 priority = (Int32)OperatorPriority.Minus;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						const Int32 priority = (Int32)OperatorPriority.Minus;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Minus, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.Minus, Right: result.Value));
+						break;
+					}
 				case LexemeType.Equals:
-				{
-					var (peek2, next2) = input.Peek(next);
-					if (peek2.Type != LexemeType.Equals) { return new(input[position], Error.NotImplemented("assignment not implemented yet")); }
-					next = next2;
-
-					const Int32 priority = (Int32)OperatorPriority.EqualTo;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						var (peek2, next2) = input.Peek(next);
+						if (peek2.Type != LexemeType.Equals) { return new(input[position], Error.NotImplemented("assignment not implemented yet")); }
+						next = next2;
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.EqualTo, Right: result.Value));
-					break;
-				}
+						const Int32 priority = (Int32)OperatorPriority.EqualTo;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
+
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.EqualTo, Right: result.Value));
+						break;
+					}
 				case LexemeType.Exclamation:
-				{
-					var (peek2, next2) = input.Peek(next);
-					if (peek2.Type != LexemeType.Equals) { return new(input[position], Error.NotImplemented("not(!) not implemented yet")); }
-					next = next2;
-
-					const Int32 priority = (Int32)OperatorPriority.EqualTo;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						var (peek2, next2) = input.Peek(next);
+						if (peek2.Type != LexemeType.Equals) { return new(input[position], Error.NotImplemented("not(!) not implemented yet")); }
+						next = next2;
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.NotEqualTo, Right: result.Value));
-					break;
-				}
+						const Int32 priority = (Int32)OperatorPriority.EqualTo;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
+
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.NotEqualTo, Right: result.Value));
+						break;
+					}
 				case LexemeType.LessThan:
-				{
-					Int32 priority;
-					BinaryOperator binaryOperator;
-					var (peek2, next2) = input.Peek(next);
-					if (peek2.Type == LexemeType.Equals)
 					{
-						priority = (Int32)OperatorPriority.LessThanOrEqualTo;
-						binaryOperator = BinaryOperator.LessThanOrEqualTo;
-						next = next2;
-					}
-					else
-					{
-						priority = (Int32)OperatorPriority.LessThan;
-						binaryOperator = BinaryOperator.LessThan;
-					}
+						Int32 priority;
+						BinaryOperator binaryOperator;
+						var (peek2, next2) = input.Peek(next);
+						if (peek2.Type == LexemeType.Equals)
+						{
+							priority = (Int32)OperatorPriority.LessThanOrEqualTo;
+							binaryOperator = BinaryOperator.LessThanOrEqualTo;
+							next = next2;
+						}
+						else
+						{
+							priority = (Int32)OperatorPriority.LessThan;
+							binaryOperator = BinaryOperator.LessThan;
+						}
 
-					if (min_priority >= priority)
-					{
-						start = position;
-						return leftResult;
-					}
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
+						break;
+					}
 				case LexemeType.GreaterThan:
-				{
-					Int32 priority;
-					BinaryOperator binaryOperator;
-					var (peek2, next2) = input.Peek(next);
-					if (peek2.Type == LexemeType.Equals)
 					{
-						priority = (Int32)OperatorPriority.MoreThanOrEqualTo;
-						binaryOperator = BinaryOperator.MoreThanOrEqualTo;
-						next = next2;
-					}
-					else
-					{
-						priority = (Int32)OperatorPriority.MoreThan;
-						binaryOperator = BinaryOperator.MoreThan;
-					}
+						Int32 priority;
+						BinaryOperator binaryOperator;
+						var (peek2, next2) = input.Peek(next);
+						if (peek2.Type == LexemeType.Equals)
+						{
+							priority = (Int32)OperatorPriority.MoreThanOrEqualTo;
+							binaryOperator = BinaryOperator.MoreThanOrEqualTo;
+							next = next2;
+						}
+						else
+						{
+							priority = (Int32)OperatorPriority.MoreThan;
+							binaryOperator = BinaryOperator.MoreThan;
+						}
 
-					if (min_priority >= priority)
-					{
-						start = position;
-						return leftResult;
-					}
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_If_Condition_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_If_Condition_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid binary operator expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: binaryOperator, Right: result.Value));
+						break;
+					}
 				case LexemeType.Period:
-				{
-					const Int32 priority = (Int32)OperatorPriority.MemberAccess;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
-					}
+						const Int32 priority = (Int32)OperatorPriority.MemberAccess;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
 
-					position = next;
-					var result = Parse_File_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid dereference expression"), result.Error); }
-					leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.MemberAccess, Right: result.Value));
-					break;
-				}
+						position = next;
+						var result = Parse_File_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid dereference expression"), result.Error); }
+						leftResult = new(new BinaryOperatorNode(Left: leftResult.Value, Operator: BinaryOperator.MemberAccess, Right: result.Value));
+						break;
+					}
 				case LexemeType.ParenOpen:
-				{
-					const Int32 priority = (Int32)OperatorPriority.Call;
-					if (min_priority >= priority)
 					{
-						start = position;
-						return leftResult;
+						const Int32 priority = (Int32)OperatorPriority.Call;
+						if (min_priority >= priority)
+						{
+							start = position;
+							return leftResult;
+						}
+
+						var argumentResult = Parse_ArgumentList(input, ref next);
+						if (!argumentResult) { return new(input[position], Error.Message("unable to parse argument list"), argumentResult.Error); }
+						var arguments = argumentResult.Value;
+
+						position = next;
+						leftResult = new(new CallNode(Target: leftResult.Value, Arguments: arguments));
+						break;
 					}
-
-					var argumentResult = Parse_ArgumentList(input, ref next);
-					if (!argumentResult) { return new(input[position], Error.Message("unable to parse argument list"), argumentResult.Error); }
-					var arguments = argumentResult.Value;
-
-					position = next;
-					leftResult = new(new CallNode(Target: leftResult.Value, Arguments: arguments));
-					break;
-				}
 				default:
-				{
-					return new(peek, Error.UnexpectedToken(peek));
-				}
+					{
+						return new(peek, Error.UnexpectedToken(peek));
+					}
 			}
 		}
 	}

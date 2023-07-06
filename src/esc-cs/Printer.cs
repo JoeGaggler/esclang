@@ -177,6 +177,17 @@ public static class Printer
 				outputFile.Indent(level + 1);
 				outputFile.WriteLine("block");
 				PrintSyntax(outputFile, node.Block, lexemes, level + 2);
+
+				if (node.ElseBlock is { } elseBlock)
+				{
+					outputFile.Indent(level);
+					outputFile.WriteLine("else");
+
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("block");
+					PrintSyntax(outputFile, elseBlock, lexemes, level + 2);
+				}
+
 				break;
 			}
 

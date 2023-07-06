@@ -31,6 +31,36 @@ internal static class LexemeSpanExtensions
 		}
 	}
 
+	public static (Lexeme, Int32) PeekThroughNewline(this ReadOnlySpan<Lexeme> input, Int32 start)
+	{
+		var position = start;
+		while (true)
+		{
+			if (position >= input.Length)
+			{
+				throw new InvalidOperationException($"{nameof(Peek)}@{position}: expected to see EndOfFile token");
+			}
+
+			var next = input[position];
+			var type = next.Type;
+			switch (type)
+			{
+				case LexemeType.Spaces: break; // Read through spaces
+				case LexemeType.Comment: break; // Read through comments
+				case LexemeType.EndOfLine: break; // Read through newlines
+				case LexemeType.EndOfFile:
+				{
+					return (next, position); // Already at end, don't go farther
+				}
+				default:
+				{
+					return (next, position + 1);
+				}
+			}
+			position++;
+		}
+	}
+
 	public static Lexeme Consume(this ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
 		var (token, position) = input.Peek(start);

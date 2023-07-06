@@ -38,42 +38,36 @@ Lex:
 115 + 1 -- (5, 22) -- EndOfLine -- \n
 116 + 4 -- (6, 1) -- Spaces -- "    "
 120 + 1 -- (6, 5) -- BraceClose -- }
-121 + 1 -- (6, 6) -- EndOfLine -- \n
-122 + 1 -- (7, 1) -- EndOfLine -- \n
-123 + 4 -- (8, 1) -- Spaces -- "    "
-127 + 24 -- (8, 5) -- Comment -- // TODO: else-statements
-151 + 1 -- (8, 29) -- EndOfLine -- \n
-152 + 4 -- (9, 1) -- Spaces -- "    "
-156 + 2 -- (9, 5) -- Identifier -- if
-158 + 1 -- (9, 7) -- Spaces -- " "
-159 + 1 -- (9, 8) -- Exclamation -- !
-160 + 4 -- (9, 9) -- Identifier -- type
-164 + 1 -- (9, 13) -- Spaces -- " "
-165 + 1 -- (9, 14) -- BraceOpen -- {
-166 + 1 -- (9, 15) -- Spaces -- " "
-167 + 1 -- (9, 16) -- EndOfLine -- \n
-168 + 8 -- (10, 1) -- Spaces -- "        "
-176 + 5 -- (10, 9) -- Identifier -- print
-181 + 1 -- (10, 14) -- Spaces -- " "
-182 + 5 -- (10, 15) -- LiteralString -- "bye"
-187 + 1 -- (10, 20) -- EndOfLine -- \n
-188 + 4 -- (11, 1) -- Spaces -- "    "
-192 + 1 -- (11, 5) -- BraceClose -- }
-193 + 1 -- (11, 6) -- EndOfLine -- \n
-194 + 1 -- (12, 1) -- BraceClose -- }
-195 + 1 -- (12, 2) -- EndOfLine -- \n
-196 + 1 -- (13, 1) -- EndOfLine -- \n
-197 + 13 -- (14, 1) -- Identifier -- printGreeting
-210 + 1 -- (14, 14) -- ParenOpen -- (
-211 + 1 -- (14, 15) -- Number -- 1
-212 + 1 -- (14, 16) -- ParenClose -- )
-213 + 1 -- (14, 17) -- EndOfLine -- \n
-214 + 13 -- (15, 1) -- Identifier -- printGreeting
-227 + 1 -- (15, 14) -- ParenOpen -- (
-228 + 1 -- (15, 15) -- Number -- 0
-229 + 1 -- (15, 16) -- ParenClose -- )
-230 + 1 -- (15, 17) -- EndOfLine -- \n
-231 + 0 -- (16, 1) -- EndOfFile -- <EOF>
+121 + 1 -- (6, 6) -- Spaces -- " "
+122 + 1 -- (6, 7) -- EndOfLine -- \n
+123 + 4 -- (7, 1) -- Spaces -- "    "
+127 + 4 -- (7, 5) -- Identifier -- else
+131 + 1 -- (7, 9) -- Spaces -- " "
+132 + 1 -- (7, 10) -- BraceOpen -- {
+133 + 1 -- (7, 11) -- Spaces -- " "
+134 + 1 -- (7, 12) -- EndOfLine -- \n
+135 + 8 -- (8, 1) -- Spaces -- "        "
+143 + 5 -- (8, 9) -- Identifier -- print
+148 + 1 -- (8, 14) -- Spaces -- " "
+149 + 5 -- (8, 15) -- LiteralString -- "bye"
+154 + 1 -- (8, 20) -- EndOfLine -- \n
+155 + 4 -- (9, 1) -- Spaces -- "    "
+159 + 1 -- (9, 5) -- BraceClose -- }
+160 + 1 -- (9, 6) -- EndOfLine -- \n
+161 + 1 -- (10, 1) -- BraceClose -- }
+162 + 1 -- (10, 2) -- EndOfLine -- \n
+163 + 1 -- (11, 1) -- EndOfLine -- \n
+164 + 13 -- (12, 1) -- Identifier -- printGreeting
+177 + 1 -- (12, 14) -- ParenOpen -- (
+178 + 1 -- (12, 15) -- Number -- 1
+179 + 1 -- (12, 16) -- ParenClose -- )
+180 + 1 -- (12, 17) -- EndOfLine -- \n
+181 + 13 -- (13, 1) -- Identifier -- printGreeting
+194 + 1 -- (13, 14) -- ParenOpen -- (
+195 + 1 -- (13, 15) -- Number -- 0
+196 + 1 -- (13, 16) -- ParenClose -- )
+197 + 1 -- (13, 17) -- EndOfLine -- \n
+198 + 0 -- (14, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
@@ -96,10 +90,7 @@ declaration
             block
               print
                 "hello"
-          if
-            condition
-              not
-                identifier: type
+          else
             block
               print
                 "bye"
