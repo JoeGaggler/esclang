@@ -85,7 +85,7 @@ public static partial class Parser
                 var result = Parse_Parens(input, ref position);
                 if (!result) { return new(input[start], Error.Message("unable to parse parens"), result.Error); }
 
-                var (peek, next) = input.Peek(position);
+                var (peek, next) = input.PeekThroughNewline(position);
                 switch (peek.Type)
                 {
                     case LexemeType.BraceOpen:
@@ -94,21 +94,6 @@ public static partial class Parser
                         if (!braceResult) { return new(input[position], Error.Message("unable to parse braces"), braceResult.Error); }
                         start = next;
                         return new(new FunctionNode(Parameters: result.Value, ReturnType: null, Body: braceResult.Value));
-                    }
-                    case LexemeType.EndOfLine: // check for function body starting on next line
-                    {
-                        // todo: must first ensure that paren-node is unambiguously a func parameter list
-                        //       otherwise the paren-node could have been a valid expression on its own.
-                        //       perhaps function-node should always have higher priority?
-
-                        var (peek2, next2) = input.Peek(next);
-                        if (peek2.Type != LexemeType.BraceOpen)
-                        {
-                            start = position;
-                            return new(result.Value);
-                        }
-                        next = next2;
-                        goto case LexemeType.BraceOpen;
                     }
                     case LexemeType.Minus:
                     {

@@ -22,18 +22,11 @@ partial class Parser
 		if (!conditionResult) { return new(input[start], Error.Message("invalid if-condition"), conditionResult.Error); }
 		var conditionNode = conditionResult.Value;
 
-		var (peek, next) = input.Peek(position);
+		var (peek, next) = input.PeekThroughNewline(position);
 		switch (peek.Type)
 		{
 			case LexemeType.BraceOpen:
 			{
-				break;
-			}
-			case LexemeType.EndOfLine:
-			{
-				var (peek2, next2) = input.Peek(next);
-				if (peek2.Type != LexemeType.BraceOpen) { return new(input[next], Error.Message("expected open brace on new line after if-condition")); }
-				next = next2;
 				break;
 			}
 			default:
@@ -52,18 +45,11 @@ partial class Parser
 		(peek, next) = input.PeekThroughNewline(start);
 		if (peek.Type == LexemeType.Identifier && peek.Text == "else")
 		{
-			(peek, next) = input.Peek(next);
+			(peek, next) = input.PeekThroughNewline(next);
 			switch (peek.Type)
 			{
 				case LexemeType.BraceOpen:
 				{
-					break;
-				}
-				case LexemeType.EndOfLine:
-				{
-					var (peek2, next2) = input.Peek(next);
-					if (peek2.Type != LexemeType.BraceOpen) { return new(input[next], Error.Message("expected open brace on new line after if-condition")); }
-					next = next2;
 					break;
 				}
 				default:

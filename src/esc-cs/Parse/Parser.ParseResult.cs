@@ -1,6 +1,6 @@
 namespace EscLang.Parse;
 
-public struct ParseResult<T>
+public readonly struct ParseResult<T>
 {
 	public readonly Boolean HasValue;
 	public readonly T Value;
