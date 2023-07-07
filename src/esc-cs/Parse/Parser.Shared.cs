@@ -81,10 +81,24 @@ public static partial class Parser
             }
             case LexemeType.ParenOpen:
             {
-                // TODO: if the parens are for a function declaration, then unwrap CommaNode into a list of expressions for the parameters
                 var position = start;
-                var result = Parse_Parens(input, ref position);
-                if (!result) { return new(input[start], Error.Message("unable to parse parens"), result.Error); }
+                var parensResult = Parse_Parens(input, ref position);
+                if (!parensResult) { return new(input[start], Error.Message("unable to parse parens"), parensResult.Error); }
+
+                static List<SyntaxNode> ConvertParensNodeToParameterList(ParensNode parensNode)
+                {
+                    var list = new List<SyntaxNode>();
+                    if (parensNode.Items.Count == 0) { return list; }
+                    if (parensNode.Items.Count == 1 && parensNode.Items[0] is CommaNode comma)
+                    {
+                        list.AddRange(comma.Items);
+                    }
+                    else
+                    {
+                        list.AddRange(parensNode.Items);
+                    }
+                    return list;
+                }
 
                 var (peek, next) = input.PeekThroughNewline(position);
                 switch (peek.Type)
@@ -94,7 +108,7 @@ public static partial class Parser
                         var braceResult = Parse_Braces(input, ref next);
                         if (!braceResult) { return new(input[position], Error.Message("unable to parse braces"), braceResult.Error); }
                         start = next;
-                        return new(new FunctionNode(Parameters: result.Value, ReturnType: null, Body: braceResult.Value));
+                        return new(new FunctionNode(Parameters: ConvertParensNodeToParameterList(parensResult.Value), ReturnType: null, Body: braceResult.Value));
                     }
                     case LexemeType.Minus:
                     {
@@ -102,7 +116,7 @@ public static partial class Parser
                         if (peek2.Type != LexemeType.GreaterThan)
                         {
                             start = position;
-                            return new(result.Value);
+                            return new(parensResult.Value);
                         }
 
                         var returnResult = Parse_ReturnType_Expression(input, ref next2);
@@ -117,12 +131,12 @@ public static partial class Parser
                         var braceResult = Parse_Braces(input, ref next2);
                         if (!braceResult) { return new(input[next2], Error.Message("unable to parse braces"), braceResult.Error); }
                         start = next2;
-                        return new(new FunctionNode(Parameters: result.Value, ReturnType: returnResult.Value, Body: braceResult.Value));
+                        return new(new FunctionNode(Parameters: ConvertParensNodeToParameterList(parensResult.Value), ReturnType: returnResult.Value, Body: braceResult.Value));
                     }
                     default:
                     {
                         start = position;
-                        return new(result.Value);
+                        return new(parensResult.Value);
                     }
                 }
             }

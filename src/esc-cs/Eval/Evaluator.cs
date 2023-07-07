@@ -87,27 +87,22 @@ public static class Evaluator
 		{
 			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for target object type: {rightObject.GetType().Name}");
 		}
-		if (functionNode.Parameters is not ParensNode parensNode)
+		if (functionNode.Parameters is not List<SyntaxNode> actualParameterList)
 		{
 			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for parameters node type: {functionNode.Parameters.GetType().Name}");
 		}
-		var actualArgList = parensNode.Items;
-		if (parensNode.Items.Count == 1 && parensNode.Items[0] is CommaNode commaNode)
+		if (node.Arguments.Count != actualParameterList.Count)
 		{
-			actualArgList = commaNode.Items;
-		}
-		if (node.Arguments.Count != actualArgList.Count)
-		{
-			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) argument count mismatch: {node.Arguments.Count} != {actualArgList.Count}");
+			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) argument count mismatch: {node.Arguments.Count} != {actualParameterList.Count} {actualParameterList[0]}");
 		}
 
 		var functionScope = new Scope(scope);
 
 		for (int i = 0; i < node.Arguments.Count; i++)
 		{
-			if (actualArgList[i] is not DeclarationNode parameterDeclarationNode)
+			if (actualParameterList[i] is not DeclarationNode parameterDeclarationNode)
 			{
-				throw new NotImplementedException($"Invalid parameter for CallNode: {actualArgList[i]}");
+				throw new NotImplementedException($"Invalid parameter for CallNode: {actualParameterList[i]}");
 			}
 			if (parameterDeclarationNode.Left is not IdentifierNode parameterIdentifierNode || parameterIdentifierNode.Text is not { } parameterIdentifier)
 			{

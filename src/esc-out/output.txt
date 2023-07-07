@@ -179,7 +179,6 @@ declaration
   assignment
     function
       parameters
-        parens
       body
         braces
           print
@@ -190,12 +189,11 @@ declaration
   assignment
     function
       parameters
-        parens
-          declaration
-            id
-              identifier: a
-            assignment
-              identifier: int
+        declaration
+          id
+            identifier: a
+          assignment
+            identifier: int
       body
         braces
           print
@@ -208,18 +206,16 @@ declaration
   assignment
     function
       parameters
-        parens
-          comma
-            declaration
-              id
-                identifier: a
-              assignment
-                identifier: int
-            declaration
-              id
-                identifier: b
-              assignment
-                identifier: int
+        declaration
+          id
+            identifier: a
+          assignment
+            identifier: int
+        declaration
+          id
+            identifier: b
+          assignment
+            identifier: int
       body
         braces
           print
@@ -234,23 +230,21 @@ declaration
   assignment
     function
       parameters
-        parens
-          comma
-            declaration
-              id
-                identifier: a
-              assignment
-                identifier: int
-            declaration
-              id
-                identifier: b
-              assignment
-                identifier: int
-            declaration
-              id
-                identifier: c
-              assignment
-                identifier: int
+        declaration
+          id
+            identifier: a
+          assignment
+            identifier: int
+        declaration
+          id
+            identifier: b
+          assignment
+            identifier: int
+        declaration
+          id
+            identifier: c
+          assignment
+            identifier: int
       body
         braces
           print

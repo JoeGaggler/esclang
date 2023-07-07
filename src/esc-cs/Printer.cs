@@ -251,7 +251,10 @@ public static class Printer
 
 				outputFile.Indent(level + 1);
 				outputFile.WriteLine("parameters");
-				PrintSyntax(outputFile, node.Parameters, lexemes, level + 2);
+				foreach (var p in node.Parameters)
+				{
+					PrintSyntax(outputFile, p, lexemes, level + 2);
+				}
 
 				if (node.ReturnType is SyntaxNode returnType)
 				{
