@@ -96,34 +96,6 @@ partial class Parser
 				case LexemeType.ParenClose:
 				{
 					start = position;
-
-					var ptr = leftResult.Value;
-					if (ptr is CommaTempNode tmp)
-					{
-						var list = new List<SyntaxNode>();
-						static void Visit(CommaTempNode temp, List<SyntaxNode> list)
-						{
-							if (temp.Left is CommaTempNode left)
-							{
-								Visit(left, list);
-							}
-							else
-							{
-								list.Add(temp.Left);
-							}
-
-							if (temp.Right is CommaTempNode right)
-							{
-								Visit(right, list);
-							}
-							else
-							{
-								list.Add(temp.Right);
-							}
-						}
-						Visit(tmp, list);
-						return new(new CommaNode(Items: list));
-					}
 					return new(leftResult.Value);
 				}
 				case LexemeType.Comma:
@@ -136,9 +108,24 @@ partial class Parser
 					}
 
 					position = next;
-					var result = Parse_Parens_Expression(input, ref position, priority);
-					if (!result.HasValue) { return new(input[position], Error.Message($"invalid comma expression"), result.Error); }
-					leftResult = new(new CommaTempNode(Left: leftResult.Value, Right: result.Value));
+					var list = new List<SyntaxNode>();
+					list.Add(leftResult.Value);
+					while(true)
+					{
+						var result = Parse_Comma_Expression(input, ref position, priority);
+						if (!result.HasValue) { return new(input[position], Error.Message($"invalid comma expression"), result.Error); }
+						list.Add(result.Value);
+
+						var (peek2, next2) = input.Peek(position);
+						if (peek2.Type == LexemeType.Comma)
+						{
+							position = next2;
+							continue;
+						}
+						break;
+					}
+
+					leftResult = new(new CommaNode(list));
 					break;
 				}
 				case LexemeType.Colon:

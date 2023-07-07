@@ -1,13 +1,30 @@
-printGreeting :: (type: int) 
+func0 :: () 
 {
-    // TODO: binary expressions in if-condition
-    if type {
-        print "hello"
-    } 
-    else { 
-        print "bye"
-    }
+    print "func0"
 }
 
-printGreeting(1)
-printGreeting(0)
+func1 :: (a: int) 
+{
+    print "func1"
+    print a
+}
+
+func2 :: (a: int, b: int) 
+{
+    print "func2"
+    print a
+    print b
+}
+
+func3 :: (a: int, b: int, c: int) 
+{
+    print "func3"
+    print a
+    print b
+    print c
+}
+
+func0()
+func1(1)
+func2(2, 3)
+func3(4, 5, 6)

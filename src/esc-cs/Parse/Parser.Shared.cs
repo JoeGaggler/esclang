@@ -81,6 +81,7 @@ public static partial class Parser
             }
             case LexemeType.ParenOpen:
             {
+                // TODO: if the parens are for a function declaration, then unwrap CommaNode into a list of expressions for the parameters
                 var position = start;
                 var result = Parse_Parens(input, ref position);
                 if (!result) { return new(input[start], Error.Message("unable to parse parens"), result.Error); }

@@ -51,9 +51,6 @@ public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNo
 
 public record ParensNode(List<SyntaxNode> Items) : SyntaxNode { }
 
-// TODO: internal record only used as a precursor to CommaNode, should be obviated
-public record CommaTempNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
-
 public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }
 
 public record BracesNode(List<SyntaxNode> Items) : SyntaxNode { }

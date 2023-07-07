@@ -91,18 +91,23 @@ public static class Evaluator
 		{
 			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for parameters node type: {functionNode.Parameters.GetType().Name}");
 		}
-		if (node.Arguments.Count != parensNode.Items.Count)
+		var actualArgList = parensNode.Items;
+		if (parensNode.Items.Count == 1 && parensNode.Items[0] is CommaNode commaNode)
 		{
-			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) argument count mismatch: {node.Arguments.Count} != {parensNode.Items.Count}");
+			actualArgList = commaNode.Items;
+		}
+		if (node.Arguments.Count != actualArgList.Count)
+		{
+			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) argument count mismatch: {node.Arguments.Count} != {actualArgList.Count}");
 		}
 
 		var functionScope = new Scope(scope);
 
 		for (int i = 0; i < node.Arguments.Count; i++)
 		{
-			if (parensNode.Items[i] is not DeclarationNode parameterDeclarationNode)
+			if (actualArgList[i] is not DeclarationNode parameterDeclarationNode)
 			{
-				throw new NotImplementedException($"Invalid parameter for CallNode: {parensNode.Items[i]}");
+				throw new NotImplementedException($"Invalid parameter for CallNode: {actualArgList[i]}");
 			}
 			if (parameterDeclarationNode.Left is not IdentifierNode parameterIdentifierNode || parameterIdentifierNode.Text is not { } parameterIdentifier)
 			{
