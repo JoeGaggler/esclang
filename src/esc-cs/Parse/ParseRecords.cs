@@ -49,7 +49,7 @@ public record Block(List<SyntaxNode> Statements) : SyntaxNode { }
 
 public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNode { }
 
-public record ParensNode(List<SyntaxNode> Items) : SyntaxNode { } // TODO: change this to a single item for the embedded expression
+public record ParensNode(SyntaxNode? Node = null) : SyntaxNode { }
 
 public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }
 

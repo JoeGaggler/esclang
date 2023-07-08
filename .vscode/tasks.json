@@ -29,6 +29,9 @@
                 "${workspaceFolder}/src/esc/program.esc",
                 "${workspaceFolder}/src/esc-out"
             ],
+            "presentation": {
+                "clear": true
+            },
             "problemMatcher": "$msCompile",
             "group": "none"
         }

@@ -225,9 +225,9 @@ public static class Printer
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine("parens");
-				foreach (var statement in node.Items)
+				if (node.Node is { } child)
 				{
-					PrintSyntax(outputFile, statement, lexemes, level + 1);
+					PrintSyntax(outputFile, child, lexemes, level + 1);
 				}
 				break;
 			}

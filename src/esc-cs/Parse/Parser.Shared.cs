@@ -88,14 +88,13 @@ public static partial class Parser
                 static List<SyntaxNode> ConvertParensNodeToParameterList(ParensNode parensNode)
                 {
                     var list = new List<SyntaxNode>();
-                    if (parensNode.Items.Count == 0) { return list; }
-                    if (parensNode.Items.Count == 1 && parensNode.Items[0] is CommaNode comma)
+                    if (parensNode.Node is CommaNode comma)
                     {
                         list.AddRange(comma.Items);
                     }
-                    else
+                    else if (parensNode.Node is { } innerNode)
                     {
-                        list.AddRange(parensNode.Items);
+                        list.Add(innerNode);
                     }
                     return list;
                 }

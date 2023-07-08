@@ -16,45 +16,27 @@ partial class Parser
 	private static ParseResult<ParensNode> Parse_Parens(ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
 		var position = start;
-		var nodes = new List<SyntaxNode>();
-		while (true)
+
+		var (peek, next) = input.PeekThroughNewline(start);
+		if (peek.Type == LexemeType.ParenClose)
 		{
-			var (peek, next) = input.Peek(position);
-			switch (peek.Type)
-			{
-				case LexemeType.EndOfFile:
-				{
-					return new(input[next], Error.Message("end of file before close paren"));
-				}
-				case LexemeType.EndOfLine:
-				{
-					position = next;
-					break;
-				}
-				case LexemeType.ParenClose:
-				{
-					start = next;
-					return new(new ParensNode(nodes));
-				}
-				case LexemeType.Identifier when peek.Text == "print":
-				{
-					var node = Parse_Parens_Expression(input, ref next);
-					if (!node.HasValue) { return new(input[next], Error.Message("invalid print expression"), node.Error); }
-
-					position = next;
-					nodes.Add(new PrintNode(node.Value));
-					break;
-				}
-				default:
-				{
-					var node = Parse_Parens_Expression(input, ref position);
-					if (!node.HasValue) { return new(peek, Error.Message("failed paren level expression"), node.Error); }
-
-					nodes.Add(node.Value);
-					break;
-				}
-			}
+			start = next;
+			return new(new ParensNode());
 		}
+
+		var node = Parse_Parens_Expression(input, ref position);
+		if (!node.HasValue) { return new(input[position], Error.Message("invalid parens expression"), node.Error); }
+
+		Console.WriteLine($"Parse_Parens: {node.Value}");
+
+		(peek, position) = input.PeekThroughNewline(position);
+		if (peek.Type != LexemeType.ParenClose)
+		{
+			return new(peek, Error.Message("expected close paren"), node.Error);
+		}
+
+		start = position;
+		return new(new ParensNode(node.Value));
 	}
 
 	/// <summary>
@@ -110,7 +92,7 @@ partial class Parser
 					position = next;
 					var list = new List<SyntaxNode>();
 					list.Add(leftResult.Value);
-					while(true)
+					while (true)
 					{
 						var result = Parse_Comma_Expression(input, ref position, priority);
 						if (!result.HasValue) { return new(input[position], Error.Message($"invalid comma expression"), result.Error); }
