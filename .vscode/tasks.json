@@ -34,6 +34,22 @@
             },
             "problemMatcher": "$msCompile",
             "group": "none"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/test"
+            },
+            "args": [
+                "run"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": "$msCompile",
+            "group": "test"
         }
     ]
 }
