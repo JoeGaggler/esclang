@@ -151,26 +151,32 @@ Lex:
 272 + 1 -- (28, 7) -- Number -- 1
 273 + 1 -- (28, 8) -- ParenClose -- )
 274 + 1 -- (28, 9) -- EndOfLine -- \n
-275 + 5 -- (29, 1) -- Identifier -- func2
-280 + 1 -- (29, 6) -- ParenOpen -- (
-281 + 1 -- (29, 7) -- Number -- 2
-282 + 1 -- (29, 8) -- Comma -- ,
-283 + 1 -- (29, 9) -- Spaces -- " "
-284 + 1 -- (29, 10) -- Number -- 3
-285 + 1 -- (29, 11) -- ParenClose -- )
-286 + 1 -- (29, 12) -- EndOfLine -- \n
-287 + 5 -- (30, 1) -- Identifier -- func3
-292 + 1 -- (30, 6) -- ParenOpen -- (
-293 + 1 -- (30, 7) -- Number -- 4
-294 + 1 -- (30, 8) -- Comma -- ,
-295 + 1 -- (30, 9) -- Spaces -- " "
-296 + 1 -- (30, 10) -- Number -- 5
-297 + 1 -- (30, 11) -- Comma -- ,
-298 + 1 -- (30, 12) -- Spaces -- " "
-299 + 1 -- (30, 13) -- Number -- 6
-300 + 1 -- (30, 14) -- ParenClose -- )
-301 + 1 -- (30, 15) -- EndOfLine -- \n
-302 + 0 -- (31, 1) -- EndOfFile -- <EOF>
+275 + 1 -- (29, 1) -- EndOfLine -- \n
+276 + 6 -- (30, 1) -- Identifier -- return
+282 + 1 -- (30, 7) -- Spaces -- " "
+283 + 1 -- (30, 8) -- Number -- 0
+284 + 1 -- (30, 9) -- EndOfLine -- \n
+285 + 1 -- (31, 1) -- EndOfLine -- \n
+286 + 5 -- (32, 1) -- Identifier -- func2
+291 + 1 -- (32, 6) -- ParenOpen -- (
+292 + 1 -- (32, 7) -- Number -- 2
+293 + 1 -- (32, 8) -- Comma -- ,
+294 + 1 -- (32, 9) -- Spaces -- " "
+295 + 1 -- (32, 10) -- Number -- 3
+296 + 1 -- (32, 11) -- ParenClose -- )
+297 + 1 -- (32, 12) -- EndOfLine -- \n
+298 + 5 -- (33, 1) -- Identifier -- func3
+303 + 1 -- (33, 6) -- ParenOpen -- (
+304 + 1 -- (33, 7) -- Number -- 4
+305 + 1 -- (33, 8) -- Comma -- ,
+306 + 1 -- (33, 9) -- Spaces -- " "
+307 + 1 -- (33, 10) -- Number -- 5
+308 + 1 -- (33, 11) -- Comma -- ,
+309 + 1 -- (33, 12) -- Spaces -- " "
+310 + 1 -- (33, 13) -- Number -- 6
+311 + 1 -- (33, 14) -- ParenClose -- )
+312 + 1 -- (33, 15) -- EndOfLine -- \n
+313 + 0 -- (34, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declaration
@@ -263,6 +269,8 @@ call
     identifier: func1
   arguments
     1
+return
+  0
 call
   target
     identifier: func2
@@ -281,10 +289,3 @@ Output:
 func0
 func1
 1
-func2
-2
-3
-func3
-4
-5
-6

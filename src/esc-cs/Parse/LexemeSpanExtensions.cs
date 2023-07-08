@@ -63,8 +63,7 @@ internal static class LexemeSpanExtensions
 
 	public static Lexeme Consume(this ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
-		var (token, position) = input.Peek(start);
-		start = position;
+		(var token, start) = input.Peek(start);
 		return token;
 	}
 

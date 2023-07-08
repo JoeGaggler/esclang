@@ -27,8 +27,6 @@ partial class Parser
 		var node = Parse_Parens_Expression(input, ref position);
 		if (!node.HasValue) { return new(input[position], Error.Message("invalid parens expression"), node.Error); }
 
-		Console.WriteLine($"Parse_Parens: {node.Value}");
-
 		(peek, position) = input.PeekThroughNewline(position);
 		if (peek.Type != LexemeType.ParenClose)
 		{
