@@ -34,7 +34,7 @@ public static class Evaluator
 		return new ReturningVoidNode();
 	}
 
-	private static SyntaxNode EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment)
+	public static SyntaxNode EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment)
 	{
 		return syntaxNode switch
 		{
@@ -47,6 +47,7 @@ public static class Evaluator
 			IfNode node => EvaluateNode(node, scope, environment),
 			IdentifierNode node => EvaluateNode(node, scope, environment),
 			LogicalNegationNode node => EvaluateNode(node, scope, environment),
+			BinaryOperatorNode node => EvaluateNode(node, scope, environment),
 
 			// Literals
 			LiteralCharNode node => node,
@@ -287,6 +288,25 @@ public static class Evaluator
 		};
 	}
 
+	private static SyntaxNode EvaluateNode(BinaryOperatorNode node, Scope scope, Environment environment)
+	{
+		var left = EvaluateSyntaxNode(node.Left, scope, environment);
+		var right = EvaluateSyntaxNode(node.Right, scope, environment);
+
+		return (left, right) switch
+		{
+			(LiteralNumberNode leftLiteralNumberNode, LiteralNumberNode rightLiteralNumberNode) => node.Operator switch
+			{
+				BinaryOperator.Plus => new LiteralNumberNode((Int32.Parse(leftLiteralNumberNode.Text) + Int32.Parse(rightLiteralNumberNode.Text)).ToString()),
+				BinaryOperator.Minus => new LiteralNumberNode((Int32.Parse(leftLiteralNumberNode.Text) - Int32.Parse(rightLiteralNumberNode.Text)).ToString()),
+				BinaryOperator.Multiply => new LiteralNumberNode((Int32.Parse(leftLiteralNumberNode.Text) * Int32.Parse(rightLiteralNumberNode.Text)).ToString()),
+				BinaryOperator.Divide => new LiteralNumberNode((Int32.Parse(leftLiteralNumberNode.Text) / Int32.Parse(rightLiteralNumberNode.Text)).ToString()),
+				_ => throw new NotImplementedException($"Invalid operator for BinaryOperatorNode: {node.Operator}")
+			},
+			_ => throw new NotImplementedException($"Invalid operands for BinaryOperatorNode: {left}, {right}")
+		};
+	}
+
 	private static String EvaluateString(SyntaxNode node, Scope scope, Environment environment)
 	{
 		return node switch
@@ -294,6 +314,7 @@ public static class Evaluator
 			LiteralCharNode expression => expression.Text,
 			LiteralStringNode expression => expression.Text,
 			LiteralNumberNode expression => expression.Text,
+			BinaryOperatorNode expression => EvaluateString(EvaluateNode(expression, scope, environment), scope, environment),
 
 			IdentifierNode expression =>
 				scope.Get(expression.Text) is SyntaxNode expressionSyntaxNode ?

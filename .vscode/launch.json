@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/esc-cs/bin/Debug/net7.0/esc.dll",
+            "program": "${workspaceFolder}/src/esc-cs/bin/Debug/net8.0/esc.dll",
             "args": [
                 "${workspaceFolder}/src/esc/program.esc",
                 "${workspaceFolder}/src/esc-out"
