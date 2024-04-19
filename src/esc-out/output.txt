@@ -6,213 +6,234 @@ Stats:
 - Print: 0.00s
 
 Lex:
-0 + 5 -- (1, 1) -- Identifier -- func0
-5 + 1 -- (1, 6) -- Spaces -- " "
-6 + 1 -- (1, 7) -- Colon -- :
-7 + 1 -- (1, 8) -- Colon -- :
-8 + 1 -- (1, 9) -- Spaces -- " "
-9 + 1 -- (1, 10) -- ParenOpen -- (
-10 + 1 -- (1, 11) -- ParenClose -- )
-11 + 1 -- (1, 12) -- Spaces -- " "
-12 + 1 -- (1, 13) -- EndOfLine -- \n
-13 + 1 -- (2, 1) -- BraceOpen -- {
-14 + 1 -- (2, 2) -- EndOfLine -- \n
-15 + 4 -- (3, 1) -- Spaces -- "    "
-19 + 5 -- (3, 5) -- Identifier -- print
-24 + 1 -- (3, 10) -- Spaces -- " "
-25 + 7 -- (3, 11) -- LiteralString -- "func0"
-32 + 1 -- (3, 18) -- EndOfLine -- \n
-33 + 1 -- (4, 1) -- BraceClose -- }
-34 + 1 -- (4, 2) -- EndOfLine -- \n
-35 + 1 -- (5, 1) -- EndOfLine -- \n
-36 + 5 -- (6, 1) -- Identifier -- func1
-41 + 1 -- (6, 6) -- Spaces -- " "
-42 + 1 -- (6, 7) -- Colon -- :
-43 + 1 -- (6, 8) -- Colon -- :
-44 + 1 -- (6, 9) -- Spaces -- " "
-45 + 1 -- (6, 10) -- ParenOpen -- (
-46 + 1 -- (6, 11) -- Identifier -- a
-47 + 1 -- (6, 12) -- Colon -- :
-48 + 1 -- (6, 13) -- Spaces -- " "
-49 + 3 -- (6, 14) -- Identifier -- int
-52 + 1 -- (6, 17) -- ParenClose -- )
-53 + 1 -- (6, 18) -- Spaces -- " "
-54 + 1 -- (6, 19) -- EndOfLine -- \n
-55 + 1 -- (7, 1) -- BraceOpen -- {
-56 + 1 -- (7, 2) -- EndOfLine -- \n
-57 + 4 -- (8, 1) -- Spaces -- "    "
-61 + 5 -- (8, 5) -- Identifier -- print
-66 + 1 -- (8, 10) -- Spaces -- " "
-67 + 7 -- (8, 11) -- LiteralString -- "func1"
-74 + 1 -- (8, 18) -- EndOfLine -- \n
-75 + 4 -- (9, 1) -- Spaces -- "    "
-79 + 5 -- (9, 5) -- Identifier -- print
-84 + 1 -- (9, 10) -- Spaces -- " "
-85 + 1 -- (9, 11) -- Identifier -- a
-86 + 1 -- (9, 12) -- EndOfLine -- \n
-87 + 1 -- (10, 1) -- BraceClose -- }
-88 + 1 -- (10, 2) -- EndOfLine -- \n
-89 + 1 -- (11, 1) -- EndOfLine -- \n
-90 + 5 -- (12, 1) -- Identifier -- func2
-95 + 1 -- (12, 6) -- Spaces -- " "
-96 + 1 -- (12, 7) -- Colon -- :
-97 + 1 -- (12, 8) -- Colon -- :
-98 + 1 -- (12, 9) -- Spaces -- " "
-99 + 1 -- (12, 10) -- ParenOpen -- (
-100 + 1 -- (12, 11) -- Identifier -- a
-101 + 1 -- (12, 12) -- Colon -- :
-102 + 1 -- (12, 13) -- Spaces -- " "
-103 + 3 -- (12, 14) -- Identifier -- int
-106 + 1 -- (12, 17) -- Comma -- ,
-107 + 1 -- (12, 18) -- Spaces -- " "
-108 + 1 -- (12, 19) -- Identifier -- b
-109 + 1 -- (12, 20) -- Colon -- :
-110 + 1 -- (12, 21) -- Spaces -- " "
-111 + 3 -- (12, 22) -- Identifier -- int
-114 + 1 -- (12, 25) -- ParenClose -- )
-115 + 1 -- (12, 26) -- Spaces -- " "
-116 + 1 -- (12, 27) -- EndOfLine -- \n
-117 + 1 -- (13, 1) -- BraceOpen -- {
-118 + 1 -- (13, 2) -- EndOfLine -- \n
-119 + 4 -- (14, 1) -- Spaces -- "    "
-123 + 5 -- (14, 5) -- Identifier -- print
-128 + 1 -- (14, 10) -- Spaces -- " "
-129 + 7 -- (14, 11) -- LiteralString -- "func2"
-136 + 1 -- (14, 18) -- EndOfLine -- \n
-137 + 4 -- (15, 1) -- Spaces -- "    "
-141 + 5 -- (15, 5) -- Identifier -- print
-146 + 1 -- (15, 10) -- Spaces -- " "
-147 + 1 -- (15, 11) -- Identifier -- a
-148 + 1 -- (15, 12) -- Spaces -- " "
-149 + 1 -- (15, 13) -- Star -- *
-150 + 1 -- (15, 14) -- Spaces -- " "
-151 + 1 -- (15, 15) -- Identifier -- b
-152 + 1 -- (15, 16) -- EndOfLine -- \n
-153 + 1 -- (16, 1) -- BraceClose -- }
-154 + 1 -- (16, 2) -- EndOfLine -- \n
-155 + 1 -- (17, 1) -- EndOfLine -- \n
-156 + 5 -- (18, 1) -- Identifier -- func3
-161 + 1 -- (18, 6) -- Spaces -- " "
-162 + 1 -- (18, 7) -- Colon -- :
-163 + 1 -- (18, 8) -- Colon -- :
-164 + 1 -- (18, 9) -- Spaces -- " "
-165 + 1 -- (18, 10) -- ParenOpen -- (
-166 + 1 -- (18, 11) -- Identifier -- a
-167 + 1 -- (18, 12) -- Colon -- :
-168 + 1 -- (18, 13) -- Spaces -- " "
-169 + 3 -- (18, 14) -- Identifier -- int
-172 + 1 -- (18, 17) -- Comma -- ,
-173 + 1 -- (18, 18) -- Spaces -- " "
-174 + 1 -- (18, 19) -- Identifier -- b
-175 + 1 -- (18, 20) -- Colon -- :
-176 + 1 -- (18, 21) -- Spaces -- " "
-177 + 3 -- (18, 22) -- Identifier -- int
-180 + 1 -- (18, 25) -- Comma -- ,
-181 + 1 -- (18, 26) -- Spaces -- " "
-182 + 1 -- (18, 27) -- Identifier -- c
-183 + 1 -- (18, 28) -- Colon -- :
-184 + 1 -- (18, 29) -- Spaces -- " "
-185 + 3 -- (18, 30) -- Identifier -- int
-188 + 1 -- (18, 33) -- ParenClose -- )
-189 + 1 -- (18, 34) -- Spaces -- " "
-190 + 1 -- (18, 35) -- EndOfLine -- \n
-191 + 1 -- (19, 1) -- BraceOpen -- {
-192 + 1 -- (19, 2) -- EndOfLine -- \n
-193 + 4 -- (20, 1) -- Spaces -- "    "
-197 + 5 -- (20, 5) -- Identifier -- print
-202 + 1 -- (20, 10) -- Spaces -- " "
-203 + 7 -- (20, 11) -- LiteralString -- "func3"
-210 + 1 -- (20, 18) -- EndOfLine -- \n
-211 + 4 -- (21, 1) -- Spaces -- "    "
-215 + 5 -- (21, 5) -- Identifier -- print
-220 + 1 -- (21, 10) -- Spaces -- " "
-221 + 1 -- (21, 11) -- Identifier -- a
-222 + 1 -- (21, 12) -- Spaces -- " "
-223 + 1 -- (21, 13) -- Plus -- +
-224 + 1 -- (21, 14) -- Spaces -- " "
-225 + 1 -- (21, 15) -- Identifier -- b
-226 + 1 -- (21, 16) -- Spaces -- " "
-227 + 1 -- (21, 17) -- Plus -- +
-228 + 1 -- (21, 18) -- Spaces -- " "
-229 + 1 -- (21, 19) -- Identifier -- c
-230 + 1 -- (21, 20) -- EndOfLine -- \n
-231 + 1 -- (22, 1) -- BraceClose -- }
-232 + 1 -- (22, 2) -- EndOfLine -- \n
-233 + 1 -- (23, 1) -- EndOfLine -- \n
-234 + 5 -- (24, 1) -- Identifier -- func4
-239 + 1 -- (24, 6) -- Spaces -- " "
-240 + 1 -- (24, 7) -- Colon -- :
-241 + 1 -- (24, 8) -- Colon -- :
-242 + 1 -- (24, 9) -- Spaces -- " "
-243 + 1 -- (24, 10) -- BraceOpen -- {
-244 + 1 -- (24, 11) -- EndOfLine -- \n
-245 + 4 -- (25, 1) -- Spaces -- "    "
-249 + 5 -- (25, 5) -- Identifier -- print
-254 + 1 -- (25, 10) -- Spaces -- " "
-255 + 7 -- (25, 11) -- LiteralString -- "func4"
-262 + 1 -- (25, 18) -- EndOfLine -- \n
-263 + 1 -- (26, 1) -- BraceClose -- }
-264 + 1 -- (26, 2) -- EndOfLine -- \n
-265 + 1 -- (27, 1) -- EndOfLine -- \n
-266 + 5 -- (28, 1) -- Identifier -- func5
-271 + 1 -- (28, 6) -- Spaces -- " "
-272 + 1 -- (28, 7) -- Colon -- :
-273 + 1 -- (28, 8) -- Colon -- :
-274 + 1 -- (28, 9) -- EndOfLine -- \n
-275 + 1 -- (29, 1) -- BraceOpen -- {
-276 + 1 -- (29, 2) -- EndOfLine -- \n
-277 + 4 -- (30, 1) -- Spaces -- "    "
-281 + 5 -- (30, 5) -- Identifier -- print
-286 + 1 -- (30, 10) -- Spaces -- " "
-287 + 7 -- (30, 11) -- LiteralString -- "func5"
-294 + 1 -- (30, 18) -- EndOfLine -- \n
-295 + 1 -- (31, 1) -- BraceClose -- }
-296 + 1 -- (31, 2) -- EndOfLine -- \n
-297 + 1 -- (32, 1) -- EndOfLine -- \n
-298 + 5 -- (33, 1) -- Identifier -- func0
-303 + 1 -- (33, 6) -- ParenOpen -- (
-304 + 1 -- (33, 7) -- ParenClose -- )
-305 + 1 -- (33, 8) -- EndOfLine -- \n
-306 + 5 -- (34, 1) -- Identifier -- func1
-311 + 1 -- (34, 6) -- ParenOpen -- (
-312 + 1 -- (34, 7) -- Number -- 1
-313 + 1 -- (34, 8) -- ParenClose -- )
-314 + 1 -- (34, 9) -- EndOfLine -- \n
-315 + 5 -- (35, 1) -- Identifier -- func2
-320 + 1 -- (35, 6) -- ParenOpen -- (
-321 + 1 -- (35, 7) -- Number -- 2
-322 + 1 -- (35, 8) -- Comma -- ,
-323 + 1 -- (35, 9) -- Spaces -- " "
-324 + 1 -- (35, 10) -- Number -- 3
-325 + 1 -- (35, 11) -- ParenClose -- )
-326 + 1 -- (35, 12) -- EndOfLine -- \n
-327 + 5 -- (36, 1) -- Identifier -- func3
-332 + 1 -- (36, 6) -- ParenOpen -- (
-333 + 1 -- (36, 7) -- Number -- 4
-334 + 1 -- (36, 8) -- Comma -- ,
-335 + 1 -- (36, 9) -- Spaces -- " "
-336 + 1 -- (36, 10) -- Number -- 5
-337 + 1 -- (36, 11) -- Comma -- ,
-338 + 1 -- (36, 12) -- Spaces -- " "
-339 + 1 -- (36, 13) -- Number -- 6
-340 + 1 -- (36, 14) -- ParenClose -- )
-341 + 1 -- (36, 15) -- EndOfLine -- \n
-342 + 5 -- (37, 1) -- Identifier -- func4
-347 + 1 -- (37, 6) -- ParenOpen -- (
-348 + 1 -- (37, 7) -- ParenClose -- )
-349 + 1 -- (37, 8) -- EndOfLine -- \n
-350 + 5 -- (38, 1) -- Identifier -- func5
-355 + 1 -- (38, 6) -- ParenOpen -- (
-356 + 1 -- (38, 7) -- ParenClose -- )
-357 + 1 -- (38, 8) -- EndOfLine -- \n
-358 + 1 -- (39, 1) -- EndOfLine -- \n
-359 + 6 -- (40, 1) -- Identifier -- return
-365 + 1 -- (40, 7) -- Spaces -- " "
-366 + 1 -- (40, 8) -- Number -- 0
-367 + 1 -- (40, 9) -- EndOfLine -- \n
-368 + 0 -- (41, 1) -- EndOfFile -- <EOF>
+0 + 4 -- (1, 1) -- Identifier -- zero
+4 + 1 -- (1, 5) -- Spaces -- " "
+5 + 1 -- (1, 6) -- Colon -- :
+6 + 1 -- (1, 7) -- Spaces -- " "
+7 + 3 -- (1, 8) -- Identifier -- int
+10 + 1 -- (1, 11) -- Spaces -- " "
+11 + 1 -- (1, 12) -- Colon -- :
+12 + 1 -- (1, 13) -- Spaces -- " "
+13 + 1 -- (1, 14) -- Number -- 0
+14 + 1 -- (1, 15) -- EndOfLine -- \n
+15 + 1 -- (2, 1) -- EndOfLine -- \n
+16 + 5 -- (3, 1) -- Identifier -- func0
+21 + 1 -- (3, 6) -- Spaces -- " "
+22 + 1 -- (3, 7) -- Colon -- :
+23 + 1 -- (3, 8) -- Colon -- :
+24 + 1 -- (3, 9) -- Spaces -- " "
+25 + 1 -- (3, 10) -- ParenOpen -- (
+26 + 1 -- (3, 11) -- ParenClose -- )
+27 + 1 -- (3, 12) -- Spaces -- " "
+28 + 1 -- (3, 13) -- EndOfLine -- \n
+29 + 1 -- (4, 1) -- BraceOpen -- {
+30 + 1 -- (4, 2) -- EndOfLine -- \n
+31 + 4 -- (5, 1) -- Spaces -- "    "
+35 + 5 -- (5, 5) -- Identifier -- print
+40 + 1 -- (5, 10) -- Spaces -- " "
+41 + 7 -- (5, 11) -- LiteralString -- "func0"
+48 + 1 -- (5, 18) -- EndOfLine -- \n
+49 + 1 -- (6, 1) -- BraceClose -- }
+50 + 1 -- (6, 2) -- EndOfLine -- \n
+51 + 1 -- (7, 1) -- EndOfLine -- \n
+52 + 5 -- (8, 1) -- Identifier -- func1
+57 + 1 -- (8, 6) -- Spaces -- " "
+58 + 1 -- (8, 7) -- Colon -- :
+59 + 1 -- (8, 8) -- Colon -- :
+60 + 1 -- (8, 9) -- Spaces -- " "
+61 + 1 -- (8, 10) -- ParenOpen -- (
+62 + 1 -- (8, 11) -- Identifier -- a
+63 + 1 -- (8, 12) -- Colon -- :
+64 + 1 -- (8, 13) -- Spaces -- " "
+65 + 3 -- (8, 14) -- Identifier -- int
+68 + 1 -- (8, 17) -- ParenClose -- )
+69 + 1 -- (8, 18) -- Spaces -- " "
+70 + 1 -- (8, 19) -- EndOfLine -- \n
+71 + 1 -- (9, 1) -- BraceOpen -- {
+72 + 1 -- (9, 2) -- EndOfLine -- \n
+73 + 4 -- (10, 1) -- Spaces -- "    "
+77 + 5 -- (10, 5) -- Identifier -- print
+82 + 1 -- (10, 10) -- Spaces -- " "
+83 + 7 -- (10, 11) -- LiteralString -- "func1"
+90 + 1 -- (10, 18) -- EndOfLine -- \n
+91 + 4 -- (11, 1) -- Spaces -- "    "
+95 + 5 -- (11, 5) -- Identifier -- print
+100 + 1 -- (11, 10) -- Spaces -- " "
+101 + 1 -- (11, 11) -- Identifier -- a
+102 + 1 -- (11, 12) -- EndOfLine -- \n
+103 + 1 -- (12, 1) -- BraceClose -- }
+104 + 1 -- (12, 2) -- EndOfLine -- \n
+105 + 1 -- (13, 1) -- EndOfLine -- \n
+106 + 5 -- (14, 1) -- Identifier -- func2
+111 + 1 -- (14, 6) -- Spaces -- " "
+112 + 1 -- (14, 7) -- Colon -- :
+113 + 1 -- (14, 8) -- Colon -- :
+114 + 1 -- (14, 9) -- Spaces -- " "
+115 + 1 -- (14, 10) -- ParenOpen -- (
+116 + 1 -- (14, 11) -- Identifier -- a
+117 + 1 -- (14, 12) -- Colon -- :
+118 + 1 -- (14, 13) -- Spaces -- " "
+119 + 3 -- (14, 14) -- Identifier -- int
+122 + 1 -- (14, 17) -- Comma -- ,
+123 + 1 -- (14, 18) -- Spaces -- " "
+124 + 1 -- (14, 19) -- Identifier -- b
+125 + 1 -- (14, 20) -- Colon -- :
+126 + 1 -- (14, 21) -- Spaces -- " "
+127 + 3 -- (14, 22) -- Identifier -- int
+130 + 1 -- (14, 25) -- ParenClose -- )
+131 + 1 -- (14, 26) -- Spaces -- " "
+132 + 1 -- (14, 27) -- EndOfLine -- \n
+133 + 1 -- (15, 1) -- BraceOpen -- {
+134 + 1 -- (15, 2) -- EndOfLine -- \n
+135 + 4 -- (16, 1) -- Spaces -- "    "
+139 + 5 -- (16, 5) -- Identifier -- print
+144 + 1 -- (16, 10) -- Spaces -- " "
+145 + 7 -- (16, 11) -- LiteralString -- "func2"
+152 + 1 -- (16, 18) -- EndOfLine -- \n
+153 + 4 -- (17, 1) -- Spaces -- "    "
+157 + 5 -- (17, 5) -- Identifier -- print
+162 + 1 -- (17, 10) -- Spaces -- " "
+163 + 1 -- (17, 11) -- Identifier -- a
+164 + 1 -- (17, 12) -- Spaces -- " "
+165 + 1 -- (17, 13) -- Star -- *
+166 + 1 -- (17, 14) -- Spaces -- " "
+167 + 1 -- (17, 15) -- Identifier -- b
+168 + 1 -- (17, 16) -- EndOfLine -- \n
+169 + 1 -- (18, 1) -- BraceClose -- }
+170 + 1 -- (18, 2) -- EndOfLine -- \n
+171 + 1 -- (19, 1) -- EndOfLine -- \n
+172 + 5 -- (20, 1) -- Identifier -- func3
+177 + 1 -- (20, 6) -- Spaces -- " "
+178 + 1 -- (20, 7) -- Colon -- :
+179 + 1 -- (20, 8) -- Colon -- :
+180 + 1 -- (20, 9) -- Spaces -- " "
+181 + 1 -- (20, 10) -- ParenOpen -- (
+182 + 1 -- (20, 11) -- Identifier -- a
+183 + 1 -- (20, 12) -- Colon -- :
+184 + 1 -- (20, 13) -- Spaces -- " "
+185 + 3 -- (20, 14) -- Identifier -- int
+188 + 1 -- (20, 17) -- Comma -- ,
+189 + 1 -- (20, 18) -- Spaces -- " "
+190 + 1 -- (20, 19) -- Identifier -- b
+191 + 1 -- (20, 20) -- Colon -- :
+192 + 1 -- (20, 21) -- Spaces -- " "
+193 + 3 -- (20, 22) -- Identifier -- int
+196 + 1 -- (20, 25) -- Comma -- ,
+197 + 1 -- (20, 26) -- Spaces -- " "
+198 + 1 -- (20, 27) -- Identifier -- c
+199 + 1 -- (20, 28) -- Colon -- :
+200 + 1 -- (20, 29) -- Spaces -- " "
+201 + 3 -- (20, 30) -- Identifier -- int
+204 + 1 -- (20, 33) -- ParenClose -- )
+205 + 1 -- (20, 34) -- Spaces -- " "
+206 + 1 -- (20, 35) -- EndOfLine -- \n
+207 + 1 -- (21, 1) -- BraceOpen -- {
+208 + 1 -- (21, 2) -- EndOfLine -- \n
+209 + 4 -- (22, 1) -- Spaces -- "    "
+213 + 5 -- (22, 5) -- Identifier -- print
+218 + 1 -- (22, 10) -- Spaces -- " "
+219 + 7 -- (22, 11) -- LiteralString -- "func3"
+226 + 1 -- (22, 18) -- EndOfLine -- \n
+227 + 4 -- (23, 1) -- Spaces -- "    "
+231 + 5 -- (23, 5) -- Identifier -- print
+236 + 1 -- (23, 10) -- Spaces -- " "
+237 + 1 -- (23, 11) -- Identifier -- a
+238 + 1 -- (23, 12) -- Spaces -- " "
+239 + 1 -- (23, 13) -- Plus -- +
+240 + 1 -- (23, 14) -- Spaces -- " "
+241 + 1 -- (23, 15) -- Identifier -- b
+242 + 1 -- (23, 16) -- Spaces -- " "
+243 + 1 -- (23, 17) -- Plus -- +
+244 + 1 -- (23, 18) -- Spaces -- " "
+245 + 1 -- (23, 19) -- Identifier -- c
+246 + 1 -- (23, 20) -- EndOfLine -- \n
+247 + 1 -- (24, 1) -- BraceClose -- }
+248 + 1 -- (24, 2) -- EndOfLine -- \n
+249 + 1 -- (25, 1) -- EndOfLine -- \n
+250 + 5 -- (26, 1) -- Identifier -- func4
+255 + 1 -- (26, 6) -- Spaces -- " "
+256 + 1 -- (26, 7) -- Colon -- :
+257 + 1 -- (26, 8) -- Colon -- :
+258 + 1 -- (26, 9) -- Spaces -- " "
+259 + 1 -- (26, 10) -- BraceOpen -- {
+260 + 1 -- (26, 11) -- EndOfLine -- \n
+261 + 4 -- (27, 1) -- Spaces -- "    "
+265 + 5 -- (27, 5) -- Identifier -- print
+270 + 1 -- (27, 10) -- Spaces -- " "
+271 + 7 -- (27, 11) -- LiteralString -- "func4"
+278 + 1 -- (27, 18) -- EndOfLine -- \n
+279 + 1 -- (28, 1) -- BraceClose -- }
+280 + 1 -- (28, 2) -- EndOfLine -- \n
+281 + 1 -- (29, 1) -- EndOfLine -- \n
+282 + 5 -- (30, 1) -- Identifier -- func5
+287 + 1 -- (30, 6) -- Spaces -- " "
+288 + 1 -- (30, 7) -- Colon -- :
+289 + 1 -- (30, 8) -- Spaces -- " "
+290 + 3 -- (30, 9) -- Identifier -- int
+293 + 1 -- (30, 12) -- Spaces -- " "
+294 + 1 -- (30, 13) -- Colon -- :
+295 + 1 -- (30, 14) -- Spaces -- " "
+296 + 1 -- (30, 15) -- BraceOpen -- {
+297 + 1 -- (30, 16) -- EndOfLine -- \n
+298 + 4 -- (31, 1) -- Spaces -- "    "
+302 + 5 -- (31, 5) -- Identifier -- print
+307 + 1 -- (31, 10) -- Spaces -- " "
+308 + 7 -- (31, 11) -- LiteralString -- "func5"
+315 + 1 -- (31, 18) -- EndOfLine -- \n
+316 + 1 -- (32, 1) -- BraceClose -- }
+317 + 1 -- (32, 2) -- EndOfLine -- \n
+318 + 1 -- (33, 1) -- EndOfLine -- \n
+319 + 5 -- (34, 1) -- Identifier -- func0
+324 + 1 -- (34, 6) -- ParenOpen -- (
+325 + 1 -- (34, 7) -- ParenClose -- )
+326 + 1 -- (34, 8) -- EndOfLine -- \n
+327 + 5 -- (35, 1) -- Identifier -- func1
+332 + 1 -- (35, 6) -- ParenOpen -- (
+333 + 1 -- (35, 7) -- Number -- 1
+334 + 1 -- (35, 8) -- ParenClose -- )
+335 + 1 -- (35, 9) -- EndOfLine -- \n
+336 + 5 -- (36, 1) -- Identifier -- func2
+341 + 1 -- (36, 6) -- ParenOpen -- (
+342 + 1 -- (36, 7) -- Number -- 2
+343 + 1 -- (36, 8) -- Comma -- ,
+344 + 1 -- (36, 9) -- Spaces -- " "
+345 + 1 -- (36, 10) -- Number -- 3
+346 + 1 -- (36, 11) -- ParenClose -- )
+347 + 1 -- (36, 12) -- EndOfLine -- \n
+348 + 5 -- (37, 1) -- Identifier -- func3
+353 + 1 -- (37, 6) -- ParenOpen -- (
+354 + 1 -- (37, 7) -- Number -- 4
+355 + 1 -- (37, 8) -- Comma -- ,
+356 + 1 -- (37, 9) -- Spaces -- " "
+357 + 1 -- (37, 10) -- Number -- 5
+358 + 1 -- (37, 11) -- Comma -- ,
+359 + 1 -- (37, 12) -- Spaces -- " "
+360 + 1 -- (37, 13) -- Number -- 6
+361 + 1 -- (37, 14) -- ParenClose -- )
+362 + 1 -- (37, 15) -- EndOfLine -- \n
+363 + 5 -- (38, 1) -- Identifier -- func4
+368 + 1 -- (38, 6) -- ParenOpen -- (
+369 + 1 -- (38, 7) -- ParenClose -- )
+370 + 1 -- (38, 8) -- EndOfLine -- \n
+371 + 5 -- (39, 1) -- Identifier -- func5
+376 + 1 -- (39, 6) -- ParenOpen -- (
+377 + 1 -- (39, 7) -- ParenClose -- )
+378 + 1 -- (39, 8) -- EndOfLine -- \n
+379 + 1 -- (40, 1) -- EndOfLine -- \n
+380 + 6 -- (41, 1) -- Identifier -- return
+386 + 1 -- (41, 7) -- Spaces -- " "
+387 + 1 -- (41, 8) -- Number -- 0
+388 + 1 -- (41, 9) -- EndOfLine -- \n
+389 + 0 -- (42, 1) -- EndOfFile -- <EOF>
 
 Parse:
+declaration
+  id
+    identifier: zero
+  type
+    identifier: int
+  assignment
+    0
 declaration
   id
     identifier: func0
@@ -308,6 +329,8 @@ declaration
 declaration
   id
     identifier: func5
+  type
+    identifier: int
   assignment
     function
       parameters

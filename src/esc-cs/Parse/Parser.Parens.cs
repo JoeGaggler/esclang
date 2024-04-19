@@ -120,7 +120,7 @@ partial class Parser
 					position = next;
 					var result = Parse_Parens_Expression(input, ref position, priority);
 					if (!result.HasValue) { return new(input[position], Error.Message($"invalid declaration expression"), result.Error); }
-					leftResult = new(new DeclarationNode(Left: leftResult.Value, Right: result.Value));
+					leftResult = new(new DeclarationNode(Left: leftResult.Value, Middle: null, Right: result.Value)); // TODO: middle
 					break;
 				}
 				default:

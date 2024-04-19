@@ -135,6 +135,13 @@ public static class Printer
 				outputFile.WriteLine("id");
 				PrintSyntax(outputFile, node.Left, lexemes, level + 2);
 
+				if (node.Middle is { } middle)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("type");
+					PrintSyntax(outputFile, middle, lexemes, level + 2);
+				}
+
 				outputFile.Indent(level + 1);
 				outputFile.WriteLine("assignment");
 				PrintSyntax(outputFile, node.Right, lexemes, level + 2);

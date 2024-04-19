@@ -328,9 +328,21 @@ partial class Parser
 	{
 		var position = start;
 
+		SyntaxNode? middle = null;
 		if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is not LexemeType mut)
 		{
-			return new(input[position], Error.NotImplemented("explicit type"));
+			var typeExpr = Parse_Expression(input, ref position, left, BinaryOperator.Colon.ToPrecendence() + 1);
+			if (!typeExpr.HasValue)
+			{
+				return new(input[position], Error.Message($"failed type expression for declaration expression"), typeExpr.Error);
+			}
+			middle = typeExpr.Value;
+			
+			if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is not LexemeType mut2)
+			{
+				return new(input[position], Error.Message($"failed assignment for declaration expression with type"), typeExpr.Error);
+			}
+			mut = mut2;
 		}
 
 		// TODO: distiction between :: and := operators
@@ -357,6 +369,6 @@ partial class Parser
 	resume:
 		start = position;
 		var right = expr.Value;
-		return new(new DeclarationNode(Left: left, Right: right));
+		return new(new DeclarationNode(Left: left, Middle: middle, Right: right));
 	}
 }

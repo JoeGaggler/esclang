@@ -20,10 +20,12 @@ public record PrintNode(SyntaxNode Node) : SyntaxNode { }
 
 public record ReturnNode(SyntaxNode Node) : SyntaxNode { }
 
-public record DeclarationNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
+public record DeclarationNode(SyntaxNode Left, SyntaxNode? Middle, SyntaxNode Right) : SyntaxNode { }
 
 public enum BinaryOperator
 {
+	Colon,
+
 	Plus,
 	Minus,
 
@@ -39,6 +41,32 @@ public enum BinaryOperator
 	LessThanOrEqualTo,
 
 	MemberAccess
+}
+
+public static class BinaryOperatorExtensions
+{
+	public static int ToPrecendence(this BinaryOperator op) => op switch
+	{
+		BinaryOperator.Colon => 0,
+
+		BinaryOperator.Plus or
+		BinaryOperator.Minus => 1,
+
+		BinaryOperator.Multiply or
+		BinaryOperator.Divide => 2,
+
+		BinaryOperator.EqualTo or
+		BinaryOperator.NotEqualTo => 3,
+
+		BinaryOperator.LessThan or
+		BinaryOperator.MoreThan or
+		BinaryOperator.MoreThanOrEqualTo or
+		BinaryOperator.LessThanOrEqualTo => 4,
+
+		BinaryOperator.MemberAccess => 5,
+
+		_ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
+	};
 }
 
 public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, SyntaxNode Right) : SyntaxNode { }

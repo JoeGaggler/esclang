@@ -337,6 +337,7 @@ partial class Parser
 	{
 		var position = start;
 
+		SyntaxNode? middle = null; // TODO: see "Parse_File_Expression_Declaration" for type parsing
 		if (input.ConsumeAny(ref position, LexemeType.Equals, LexemeType.Colon) is not LexemeType mut)
 		{
 			return new(input[position], Error.NotImplemented("explicit type"));
@@ -349,6 +350,6 @@ partial class Parser
 
 		start = position;
 		var right = expr.Value;
-		return new(new DeclarationNode(Left: left, Right: right));
+		return new(new DeclarationNode(Left: left, Middle: middle, Right: right));
 	}
 }

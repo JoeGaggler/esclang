@@ -1,3 +1,5 @@
+zero : int : 0
+
 func0 :: () 
 {
     print "func0"
@@ -25,8 +27,7 @@ func4 :: {
     print "func4"
 }
 
-func5 ::
-{
+func5 : int : {
     print "func5"
 }
 
