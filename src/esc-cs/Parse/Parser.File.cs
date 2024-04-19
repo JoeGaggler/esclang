@@ -336,8 +336,25 @@ partial class Parser
 		// TODO: distiction between :: and := operators
 
 		var expr = Parse_File_Expression(input, ref position, (Int32)OperatorPriority.Declaration);
-		if (!expr.HasValue) { return new(input[position], Error.Message($"failed assignment expression for declaration expression"), expr.Error); }
+		if (!expr.HasValue)
+		{
+			// allow braces to start on next line
+			var (peek, next) = input.Peek(position);
+			if (peek.Type == LexemeType.EndOfLine)
+			{
+				(peek, next) = input.PeekThroughNewline(position);
+				if (peek.Type == LexemeType.BraceOpen)
+				{
+					position = next - 1; // rewind to the brace
+					expr = Parse_File_Expression(input, ref position, (Int32)OperatorPriority.Declaration);
+					goto resume;
+				}
+			}
 
+			return new(input[position], Error.Message($"failed assignment expression for declaration expression"), expr.Error);
+		}
+
+	resume:
 		start = position;
 		var right = expr.Value;
 		return new(new DeclarationNode(Left: left, Right: right));

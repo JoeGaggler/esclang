@@ -21,9 +21,20 @@ func3 :: (a: int, b: int, c: int)
     print a + b + c
 }
 
+func4 :: {
+    print "func4"
+}
+
+func5 ::
+{
+    print "func5"
+}
+
 func0()
 func1(1)
 func2(2, 3)
 func3(4, 5, 6)
+func4()
+func5()
 
 return 0

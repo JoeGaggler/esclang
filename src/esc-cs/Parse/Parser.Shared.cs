@@ -139,6 +139,14 @@ public static partial class Parser
                     }
                 }
             }
+			case LexemeType.BraceOpen:
+			{
+				var position = start;
+				var braceResult = Parse_Braces(input, ref position);
+				if (!braceResult) { return new(input[position], Error.Message("unable to parse braces"), braceResult.Error); }
+				start = position;
+				return new(new FunctionNode(Parameters: [], ReturnType: null, Body: braceResult.Value));
+			}
             default:
             {
                 return new(token, Error.Message($"unexpected expression atom: {token.Type}"));
