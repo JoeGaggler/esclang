@@ -9,6 +9,9 @@ public readonly struct ParseResult<T>
 	// Implicit cast to boolean to allow use in if-statement
 	public static implicit operator bool(ParseResult<T> parseResult) => parseResult.HasValue;
 
+	// Implicit cast to T to allow use in assignment
+	public static implicit operator T(ParseResult<T> parseResult) => parseResult.HasValue ? parseResult.Value : throw new InvalidOperationException("Parse result has no value");
+
 	public ParseResult(T value)
 	{
 		this.Value = value;

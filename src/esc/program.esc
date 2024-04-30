@@ -27,8 +27,17 @@ func4 :: {
     print "func4"
 }
 
-func5 : int : {
+func5 : {} : {
     print "func5"
+}
+
+func6 : {void} : {
+    print "func6"
+}
+
+func7 : {int} : {
+    print "func7"
+    return 7
 }
 
 func0()
@@ -37,5 +46,6 @@ func2(2, 3)
 func3(4, 5, 6)
 func4()
 func5()
+func6()
 
 return 0

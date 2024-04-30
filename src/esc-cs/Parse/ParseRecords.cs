@@ -24,6 +24,8 @@ public record DeclarationNode(SyntaxNode Left, SyntaxNode? Middle, SyntaxNode Ri
 
 public enum BinaryOperator
 {
+	Comma,
+
 	Colon,
 
 	Plus,
@@ -43,32 +45,6 @@ public enum BinaryOperator
 	MemberAccess
 }
 
-public static class BinaryOperatorExtensions
-{
-	public static int ToPrecendence(this BinaryOperator op) => op switch
-	{
-		BinaryOperator.Colon => 0,
-
-		BinaryOperator.Plus or
-		BinaryOperator.Minus => 1,
-
-		BinaryOperator.Multiply or
-		BinaryOperator.Divide => 2,
-
-		BinaryOperator.EqualTo or
-		BinaryOperator.NotEqualTo => 3,
-
-		BinaryOperator.LessThan or
-		BinaryOperator.MoreThan or
-		BinaryOperator.MoreThanOrEqualTo or
-		BinaryOperator.LessThanOrEqualTo => 4,
-
-		BinaryOperator.MemberAccess => 5,
-
-		_ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
-	};
-}
-
 public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, SyntaxNode Right) : SyntaxNode { }
 
 public record IfNode(SyntaxNode Condition, Block Block, Block? ElseBlock = null) : SyntaxNode { }
@@ -83,4 +59,7 @@ public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }
 
 public record BracesNode(List<SyntaxNode> Items) : SyntaxNode { }
 
-public record FunctionNode(List<SyntaxNode> Parameters, SyntaxNode? ReturnType, SyntaxNode Body) : SyntaxNode { }
+// TODO: return types are no longer embedded in the function node
+public record FunctionNode(List<SyntaxNode> Parameters, [property:Obsolete] SyntaxNode? ReturnType, SyntaxNode Body) : SyntaxNode { }
+
+public record FunctionDeclarationNode(SyntaxNode? ReturnType) : SyntaxNode { }

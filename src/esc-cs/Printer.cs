@@ -263,12 +263,12 @@ public static class Printer
 					PrintSyntax(outputFile, p, lexemes, level + 2);
 				}
 
-				if (node.ReturnType is SyntaxNode returnType)
-				{
-					outputFile.Indent(level + 1);
-					outputFile.WriteLine("return type");
-					PrintSyntax(outputFile, returnType, lexemes, level + 2);
-				}
+				// if (node.ReturnType is SyntaxNode returnType)
+				// {
+				// 	outputFile.Indent(level + 1);
+				// 	outputFile.WriteLine("return type");
+				// 	PrintSyntax(outputFile, returnType, lexemes, level + 2);
+				// }
 
 				outputFile.Indent(level + 1);
 				outputFile.WriteLine("body");
@@ -302,6 +302,22 @@ public static class Printer
 				outputFile.Indent(level);
 				outputFile.WriteLine("not");
 				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
+				break;
+			}
+
+			case FunctionDeclarationNode node:
+			{
+				outputFile.Indent(level);
+				if (node.ReturnType is { } ret)
+				{
+					outputFile.WriteLine("function declaration");
+					PrintSyntax(outputFile, ret, lexemes, level + 1);
+				}
+				else
+				{
+					outputFile.WriteLine("procedure declaration");
+					break;
+				}
 				break;
 			}
 
