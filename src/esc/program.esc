@@ -47,5 +47,10 @@ func3(4, 5, 6)
 func4()
 func5()
 func6()
+f7 :: func7()
+print f7
+f7 :: func7() * 2
+print f7
+print f7 - 1
 
 return 0

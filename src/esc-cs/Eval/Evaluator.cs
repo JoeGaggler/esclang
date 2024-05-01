@@ -81,7 +81,7 @@ public static class Evaluator
 
 		var identifier = identifierNode.Text;
 		var expression = EvaluateSyntaxNode(right, scope, environment);
-		scope.Store[identifier] = node;
+		scope.Store[identifier] = expression;
 
 		return left; // the "l-value"
 	}
@@ -92,21 +92,9 @@ public static class Evaluator
 		{
 			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for target node type: {node.Target.GetType().Name}");
 		}
-		if (scope.Get(identifier) is not DeclarationNode declObj)
+		if (scope.Get(identifier) is not FunctionNode functionNode)
 		{
-			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) cannot find identifier in scope: {identifier}");
-		}
-		// if (declObj.Middle is not FunctionDeclarationNode functionDeclarationNode)
-		// {
-		// 	throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for declaration node type: {declObj.Left.GetType().Name}");
-		// }
-		if (declObj.Right is not { } rightObject)
-		{
-			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) cannot find right object in declaration: {declObj}");
-		}
-		if (rightObject is not FunctionNode functionNode)
-		{
-			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for target object type: {rightObject.GetType().Name}");
+			throw new NotImplementedException($"{nameof(EvaluateNode)}(CallNode) not implemented for target object type: {scope.Get(identifier)?.GetType().Name}");
 		}
 		if (functionNode.Parameters is not List<SyntaxNode> actualParameterList)
 		{
@@ -145,15 +133,17 @@ public static class Evaluator
 		{
 			case ReturningNodeNode returningNode:
 			{
-				if (declObj.Middle is FunctionDeclarationNode { ReturnType: { } returnTypeNode })
-				{
-					if (returnTypeNode is not IdentifierNode returnTypeIdentifierNode || returnTypeIdentifierNode.Text is not { } returnTypeIdentifier)
-					{
-						throw new NotImplementedException($"Invalid return type for CallNode: {returnTypeNode}");
-					}
+				// TODO: bring back type-checking with new function syntax
+				//
+				// if (declObj.Middle is FunctionDeclarationNode { ReturnType: { } returnTypeNode })
+				// {
+				// 	if (returnTypeNode is not IdentifierNode returnTypeIdentifierNode || returnTypeIdentifierNode.Text is not { } returnTypeIdentifier)
+				// 	{
+				// 		throw new NotImplementedException($"Invalid return type for CallNode: {returnTypeNode}");
+				// 	}
 
-					TypeCheck(expectedTypeName: returnTypeIdentifier, actualExpression: returningNode.Node, scope, environment);
-				}
+				// 	TypeCheck(expectedTypeName: returnTypeIdentifier, actualExpression: returningNode.Node, scope, environment);
+				// }
 				// if (functionDeclarationNode.ReturnType is not { } returnTypeNode)
 				// {
 				// 	throw new InvalidOperationException($"Function returned {returningNode.Node}, but declared void return type");
