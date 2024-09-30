@@ -84,9 +84,11 @@ class Program
 				// Debug Lexer
 				outputFile.WriteLine();
 				outputFile.WriteLine("Lex:");
+				int lexemeIndex = 0;
 				foreach (var lexeme in lexemes)
 				{
-					Printer.PrintLexeme(outputFile, lexeme);
+					Printer.PrintLexeme(outputFile, lexeme, lexemeIndex);
+					lexemeIndex++;
 				}
 
 				// Debug Parser
@@ -100,9 +102,10 @@ class Program
 				outputFile.Write(programOutputString);
 			}
 		}
-		catch
+		catch (Exception e)
 		{
-			WriteLine($"Unable to write output to path: {outputPath}");
+			WriteLine($"Unable to write output to path: {outputFilePath}");
+			WriteLine(e.ToString());
 			return 1;
 		}
 

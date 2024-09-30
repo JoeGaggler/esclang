@@ -6,524 +6,171 @@ Stats:
 - Print: 0.00s
 
 Lex:
-0 + 4 -- (1, 1) -- Identifier -- zero
-4 + 1 -- (1, 5) -- Spaces -- " "
-5 + 1 -- (1, 6) -- Colon -- :
-6 + 1 -- (1, 7) -- Spaces -- " "
-7 + 3 -- (1, 8) -- Identifier -- int
-10 + 1 -- (1, 11) -- Spaces -- " "
-11 + 1 -- (1, 12) -- Colon -- :
-12 + 1 -- (1, 13) -- Spaces -- " "
-13 + 1 -- (1, 14) -- Number -- 0
-14 + 1 -- (1, 15) -- EndOfLine -- \n
-15 + 1 -- (2, 1) -- EndOfLine -- \n
-16 + 5 -- (3, 1) -- Identifier -- func0
-21 + 1 -- (3, 6) -- Spaces -- " "
-22 + 1 -- (3, 7) -- Colon -- :
-23 + 1 -- (3, 8) -- Colon -- :
-24 + 1 -- (3, 9) -- Spaces -- " "
-25 + 1 -- (3, 10) -- ParenOpen -- (
-26 + 1 -- (3, 11) -- ParenClose -- )
-27 + 1 -- (3, 12) -- Spaces -- " "
-28 + 1 -- (3, 13) -- EndOfLine -- \n
-29 + 1 -- (4, 1) -- BraceOpen -- {
-30 + 1 -- (4, 2) -- EndOfLine -- \n
-31 + 4 -- (5, 1) -- Spaces -- "    "
-35 + 5 -- (5, 5) -- Identifier -- print
-40 + 1 -- (5, 10) -- Spaces -- " "
-41 + 7 -- (5, 11) -- LiteralString -- "func0"
-48 + 1 -- (5, 18) -- EndOfLine -- \n
-49 + 1 -- (6, 1) -- BraceClose -- }
-50 + 1 -- (6, 2) -- EndOfLine -- \n
-51 + 1 -- (7, 1) -- EndOfLine -- \n
-52 + 5 -- (8, 1) -- Identifier -- func1
-57 + 1 -- (8, 6) -- Spaces -- " "
-58 + 1 -- (8, 7) -- Colon -- :
-59 + 1 -- (8, 8) -- Colon -- :
-60 + 1 -- (8, 9) -- Spaces -- " "
-61 + 1 -- (8, 10) -- ParenOpen -- (
-62 + 1 -- (8, 11) -- Identifier -- a
-63 + 1 -- (8, 12) -- Colon -- :
-64 + 1 -- (8, 13) -- Spaces -- " "
-65 + 3 -- (8, 14) -- Identifier -- int
-68 + 1 -- (8, 17) -- ParenClose -- )
-69 + 1 -- (8, 18) -- Spaces -- " "
-70 + 1 -- (8, 19) -- EndOfLine -- \n
-71 + 1 -- (9, 1) -- BraceOpen -- {
-72 + 1 -- (9, 2) -- EndOfLine -- \n
-73 + 4 -- (10, 1) -- Spaces -- "    "
-77 + 5 -- (10, 5) -- Identifier -- print
-82 + 1 -- (10, 10) -- Spaces -- " "
-83 + 7 -- (10, 11) -- LiteralString -- "func1"
-90 + 1 -- (10, 18) -- EndOfLine -- \n
-91 + 4 -- (11, 1) -- Spaces -- "    "
-95 + 5 -- (11, 5) -- Identifier -- print
-100 + 1 -- (11, 10) -- Spaces -- " "
-101 + 1 -- (11, 11) -- Identifier -- a
-102 + 1 -- (11, 12) -- EndOfLine -- \n
-103 + 1 -- (12, 1) -- BraceClose -- }
-104 + 1 -- (12, 2) -- EndOfLine -- \n
-105 + 1 -- (13, 1) -- EndOfLine -- \n
-106 + 5 -- (14, 1) -- Identifier -- func2
-111 + 1 -- (14, 6) -- Spaces -- " "
-112 + 1 -- (14, 7) -- Colon -- :
-113 + 1 -- (14, 8) -- Colon -- :
-114 + 1 -- (14, 9) -- Spaces -- " "
-115 + 1 -- (14, 10) -- ParenOpen -- (
-116 + 1 -- (14, 11) -- Identifier -- a
-117 + 1 -- (14, 12) -- Colon -- :
-118 + 1 -- (14, 13) -- Spaces -- " "
-119 + 3 -- (14, 14) -- Identifier -- int
-122 + 1 -- (14, 17) -- Comma -- ,
-123 + 1 -- (14, 18) -- Spaces -- " "
-124 + 1 -- (14, 19) -- Identifier -- b
-125 + 1 -- (14, 20) -- Colon -- :
-126 + 1 -- (14, 21) -- Spaces -- " "
-127 + 3 -- (14, 22) -- Identifier -- int
-130 + 1 -- (14, 25) -- ParenClose -- )
-131 + 1 -- (14, 26) -- Spaces -- " "
-132 + 1 -- (14, 27) -- EndOfLine -- \n
-133 + 1 -- (15, 1) -- BraceOpen -- {
-134 + 1 -- (15, 2) -- EndOfLine -- \n
-135 + 4 -- (16, 1) -- Spaces -- "    "
-139 + 5 -- (16, 5) -- Identifier -- print
-144 + 1 -- (16, 10) -- Spaces -- " "
-145 + 7 -- (16, 11) -- LiteralString -- "func2"
-152 + 1 -- (16, 18) -- EndOfLine -- \n
-153 + 4 -- (17, 1) -- Spaces -- "    "
-157 + 5 -- (17, 5) -- Identifier -- print
-162 + 1 -- (17, 10) -- Spaces -- " "
-163 + 1 -- (17, 11) -- Identifier -- a
-164 + 1 -- (17, 12) -- Spaces -- " "
-165 + 1 -- (17, 13) -- Star -- *
-166 + 1 -- (17, 14) -- Spaces -- " "
-167 + 1 -- (17, 15) -- Identifier -- b
-168 + 1 -- (17, 16) -- EndOfLine -- \n
-169 + 1 -- (18, 1) -- BraceClose -- }
-170 + 1 -- (18, 2) -- EndOfLine -- \n
-171 + 1 -- (19, 1) -- EndOfLine -- \n
-172 + 5 -- (20, 1) -- Identifier -- func3
-177 + 1 -- (20, 6) -- Spaces -- " "
-178 + 1 -- (20, 7) -- Colon -- :
-179 + 1 -- (20, 8) -- Colon -- :
-180 + 1 -- (20, 9) -- Spaces -- " "
-181 + 1 -- (20, 10) -- ParenOpen -- (
-182 + 1 -- (20, 11) -- Identifier -- a
-183 + 1 -- (20, 12) -- Colon -- :
-184 + 1 -- (20, 13) -- Spaces -- " "
-185 + 3 -- (20, 14) -- Identifier -- int
-188 + 1 -- (20, 17) -- Comma -- ,
-189 + 1 -- (20, 18) -- Spaces -- " "
-190 + 1 -- (20, 19) -- Identifier -- b
-191 + 1 -- (20, 20) -- Colon -- :
-192 + 1 -- (20, 21) -- Spaces -- " "
-193 + 3 -- (20, 22) -- Identifier -- int
-196 + 1 -- (20, 25) -- Comma -- ,
-197 + 1 -- (20, 26) -- Spaces -- " "
-198 + 1 -- (20, 27) -- Identifier -- c
-199 + 1 -- (20, 28) -- Colon -- :
-200 + 1 -- (20, 29) -- Spaces -- " "
-201 + 3 -- (20, 30) -- Identifier -- int
-204 + 1 -- (20, 33) -- ParenClose -- )
-205 + 1 -- (20, 34) -- Spaces -- " "
-206 + 1 -- (20, 35) -- EndOfLine -- \n
-207 + 1 -- (21, 1) -- BraceOpen -- {
-208 + 1 -- (21, 2) -- EndOfLine -- \n
-209 + 4 -- (22, 1) -- Spaces -- "    "
-213 + 5 -- (22, 5) -- Identifier -- print
-218 + 1 -- (22, 10) -- Spaces -- " "
-219 + 7 -- (22, 11) -- LiteralString -- "func3"
-226 + 1 -- (22, 18) -- EndOfLine -- \n
-227 + 4 -- (23, 1) -- Spaces -- "    "
-231 + 5 -- (23, 5) -- Identifier -- print
-236 + 1 -- (23, 10) -- Spaces -- " "
-237 + 1 -- (23, 11) -- Identifier -- a
-238 + 1 -- (23, 12) -- Spaces -- " "
-239 + 1 -- (23, 13) -- Plus -- +
-240 + 1 -- (23, 14) -- Spaces -- " "
-241 + 1 -- (23, 15) -- Identifier -- b
-242 + 1 -- (23, 16) -- Spaces -- " "
-243 + 1 -- (23, 17) -- Plus -- +
-244 + 1 -- (23, 18) -- Spaces -- " "
-245 + 1 -- (23, 19) -- Identifier -- c
-246 + 1 -- (23, 20) -- EndOfLine -- \n
-247 + 1 -- (24, 1) -- BraceClose -- }
-248 + 1 -- (24, 2) -- EndOfLine -- \n
-249 + 1 -- (25, 1) -- EndOfLine -- \n
-250 + 5 -- (26, 1) -- Identifier -- func4
-255 + 1 -- (26, 6) -- Spaces -- " "
-256 + 1 -- (26, 7) -- Colon -- :
-257 + 1 -- (26, 8) -- Colon -- :
-258 + 1 -- (26, 9) -- Spaces -- " "
-259 + 1 -- (26, 10) -- BraceOpen -- {
-260 + 1 -- (26, 11) -- EndOfLine -- \n
-261 + 4 -- (27, 1) -- Spaces -- "    "
-265 + 5 -- (27, 5) -- Identifier -- print
-270 + 1 -- (27, 10) -- Spaces -- " "
-271 + 7 -- (27, 11) -- LiteralString -- "func4"
-278 + 1 -- (27, 18) -- EndOfLine -- \n
-279 + 1 -- (28, 1) -- BraceClose -- }
-280 + 1 -- (28, 2) -- EndOfLine -- \n
-281 + 1 -- (29, 1) -- EndOfLine -- \n
-282 + 5 -- (30, 1) -- Identifier -- func5
-287 + 1 -- (30, 6) -- Spaces -- " "
-288 + 1 -- (30, 7) -- Colon -- :
-289 + 1 -- (30, 8) -- Spaces -- " "
-290 + 1 -- (30, 9) -- BraceOpen -- {
-291 + 1 -- (30, 10) -- BraceClose -- }
-292 + 1 -- (30, 11) -- Spaces -- " "
-293 + 1 -- (30, 12) -- Colon -- :
-294 + 1 -- (30, 13) -- Spaces -- " "
-295 + 1 -- (30, 14) -- BraceOpen -- {
-296 + 1 -- (30, 15) -- EndOfLine -- \n
-297 + 4 -- (31, 1) -- Spaces -- "    "
-301 + 5 -- (31, 5) -- Identifier -- print
-306 + 1 -- (31, 10) -- Spaces -- " "
-307 + 7 -- (31, 11) -- LiteralString -- "func5"
-314 + 1 -- (31, 18) -- EndOfLine -- \n
-315 + 1 -- (32, 1) -- BraceClose -- }
-316 + 1 -- (32, 2) -- EndOfLine -- \n
-317 + 1 -- (33, 1) -- EndOfLine -- \n
-318 + 5 -- (34, 1) -- Identifier -- func6
-323 + 1 -- (34, 6) -- Spaces -- " "
-324 + 1 -- (34, 7) -- Colon -- :
-325 + 1 -- (34, 8) -- Spaces -- " "
-326 + 1 -- (34, 9) -- BraceOpen -- {
-327 + 4 -- (34, 10) -- Identifier -- void
-331 + 1 -- (34, 14) -- BraceClose -- }
-332 + 1 -- (34, 15) -- Spaces -- " "
-333 + 1 -- (34, 16) -- Colon -- :
-334 + 1 -- (34, 17) -- Spaces -- " "
-335 + 1 -- (34, 18) -- BraceOpen -- {
-336 + 1 -- (34, 19) -- EndOfLine -- \n
-337 + 4 -- (35, 1) -- Spaces -- "    "
-341 + 5 -- (35, 5) -- Identifier -- print
-346 + 1 -- (35, 10) -- Spaces -- " "
-347 + 7 -- (35, 11) -- LiteralString -- "func6"
-354 + 1 -- (35, 18) -- EndOfLine -- \n
-355 + 1 -- (36, 1) -- BraceClose -- }
-356 + 1 -- (36, 2) -- EndOfLine -- \n
-357 + 1 -- (37, 1) -- EndOfLine -- \n
-358 + 5 -- (38, 1) -- Identifier -- func7
-363 + 1 -- (38, 6) -- Spaces -- " "
-364 + 1 -- (38, 7) -- Colon -- :
-365 + 1 -- (38, 8) -- Spaces -- " "
-366 + 1 -- (38, 9) -- BraceOpen -- {
-367 + 3 -- (38, 10) -- Identifier -- int
-370 + 1 -- (38, 13) -- BraceClose -- }
-371 + 1 -- (38, 14) -- Spaces -- " "
-372 + 1 -- (38, 15) -- Colon -- :
-373 + 1 -- (38, 16) -- Spaces -- " "
-374 + 1 -- (38, 17) -- BraceOpen -- {
-375 + 1 -- (38, 18) -- EndOfLine -- \n
-376 + 4 -- (39, 1) -- Spaces -- "    "
-380 + 5 -- (39, 5) -- Identifier -- print
-385 + 1 -- (39, 10) -- Spaces -- " "
-386 + 7 -- (39, 11) -- LiteralString -- "func7"
-393 + 1 -- (39, 18) -- EndOfLine -- \n
-394 + 4 -- (40, 1) -- Spaces -- "    "
-398 + 6 -- (40, 5) -- Identifier -- return
-404 + 1 -- (40, 11) -- Spaces -- " "
-405 + 1 -- (40, 12) -- Number -- 7
-406 + 1 -- (40, 13) -- EndOfLine -- \n
-407 + 1 -- (41, 1) -- BraceClose -- }
-408 + 1 -- (41, 2) -- EndOfLine -- \n
-409 + 1 -- (42, 1) -- EndOfLine -- \n
-410 + 5 -- (43, 1) -- Identifier -- func0
-415 + 1 -- (43, 6) -- ParenOpen -- (
-416 + 1 -- (43, 7) -- ParenClose -- )
-417 + 1 -- (43, 8) -- EndOfLine -- \n
-418 + 5 -- (44, 1) -- Identifier -- func1
-423 + 1 -- (44, 6) -- ParenOpen -- (
-424 + 1 -- (44, 7) -- Number -- 1
-425 + 1 -- (44, 8) -- ParenClose -- )
-426 + 1 -- (44, 9) -- EndOfLine -- \n
-427 + 5 -- (45, 1) -- Identifier -- func2
-432 + 1 -- (45, 6) -- ParenOpen -- (
-433 + 1 -- (45, 7) -- Number -- 2
-434 + 1 -- (45, 8) -- Comma -- ,
-435 + 1 -- (45, 9) -- Spaces -- " "
-436 + 1 -- (45, 10) -- Number -- 3
-437 + 1 -- (45, 11) -- ParenClose -- )
-438 + 1 -- (45, 12) -- EndOfLine -- \n
-439 + 5 -- (46, 1) -- Identifier -- func3
-444 + 1 -- (46, 6) -- ParenOpen -- (
-445 + 1 -- (46, 7) -- Number -- 4
-446 + 1 -- (46, 8) -- Comma -- ,
-447 + 1 -- (46, 9) -- Spaces -- " "
-448 + 1 -- (46, 10) -- Number -- 5
-449 + 1 -- (46, 11) -- Comma -- ,
-450 + 1 -- (46, 12) -- Spaces -- " "
-451 + 1 -- (46, 13) -- Number -- 6
-452 + 1 -- (46, 14) -- ParenClose -- )
-453 + 1 -- (46, 15) -- EndOfLine -- \n
-454 + 5 -- (47, 1) -- Identifier -- func4
-459 + 1 -- (47, 6) -- ParenOpen -- (
-460 + 1 -- (47, 7) -- ParenClose -- )
-461 + 1 -- (47, 8) -- EndOfLine -- \n
-462 + 5 -- (48, 1) -- Identifier -- func5
-467 + 1 -- (48, 6) -- ParenOpen -- (
-468 + 1 -- (48, 7) -- ParenClose -- )
-469 + 1 -- (48, 8) -- EndOfLine -- \n
-470 + 5 -- (49, 1) -- Identifier -- func6
-475 + 1 -- (49, 6) -- ParenOpen -- (
-476 + 1 -- (49, 7) -- ParenClose -- )
-477 + 1 -- (49, 8) -- EndOfLine -- \n
-478 + 2 -- (50, 1) -- Identifier -- f7
-480 + 1 -- (50, 3) -- Spaces -- " "
-481 + 1 -- (50, 4) -- Colon -- :
-482 + 1 -- (50, 5) -- Colon -- :
-483 + 1 -- (50, 6) -- Spaces -- " "
-484 + 5 -- (50, 7) -- Identifier -- func7
-489 + 1 -- (50, 12) -- ParenOpen -- (
-490 + 1 -- (50, 13) -- ParenClose -- )
-491 + 1 -- (50, 14) -- EndOfLine -- \n
-492 + 5 -- (51, 1) -- Identifier -- print
-497 + 1 -- (51, 6) -- Spaces -- " "
-498 + 2 -- (51, 7) -- Identifier -- f7
-500 + 1 -- (51, 9) -- EndOfLine -- \n
-501 + 2 -- (52, 1) -- Identifier -- f7
-503 + 1 -- (52, 3) -- Spaces -- " "
-504 + 1 -- (52, 4) -- Colon -- :
-505 + 1 -- (52, 5) -- Colon -- :
-506 + 1 -- (52, 6) -- Spaces -- " "
-507 + 5 -- (52, 7) -- Identifier -- func7
-512 + 1 -- (52, 12) -- ParenOpen -- (
-513 + 1 -- (52, 13) -- ParenClose -- )
-514 + 1 -- (52, 14) -- Spaces -- " "
-515 + 1 -- (52, 15) -- Star -- *
-516 + 1 -- (52, 16) -- Spaces -- " "
-517 + 1 -- (52, 17) -- Number -- 2
-518 + 1 -- (52, 18) -- EndOfLine -- \n
-519 + 5 -- (53, 1) -- Identifier -- print
-524 + 1 -- (53, 6) -- Spaces -- " "
-525 + 2 -- (53, 7) -- Identifier -- f7
-527 + 1 -- (53, 9) -- EndOfLine -- \n
-528 + 5 -- (54, 1) -- Identifier -- print
-533 + 1 -- (54, 6) -- Spaces -- " "
-534 + 2 -- (54, 7) -- Identifier -- f7
-536 + 1 -- (54, 9) -- Spaces -- " "
-537 + 1 -- (54, 10) -- Minus -- -
-538 + 1 -- (54, 11) -- Spaces -- " "
-539 + 1 -- (54, 12) -- Number -- 1
-540 + 1 -- (54, 13) -- EndOfLine -- \n
-541 + 1 -- (55, 1) -- EndOfLine -- \n
-542 + 6 -- (56, 1) -- Identifier -- return
-548 + 1 -- (56, 7) -- Spaces -- " "
-549 + 1 -- (56, 8) -- Number -- 0
-550 + 1 -- (56, 9) -- EndOfLine -- \n
-551 + 0 -- (57, 1) -- EndOfFile -- <EOF>
+0000: 0 + 1 -- (1, 1) -- Identifier -- a
+0001: 1 + 1 -- (1, 2) -- Spaces -- " "
+0002: 2 + 1 -- (1, 3) -- Colon -- :
+0003: 3 + 1 -- (1, 4) -- Spaces -- " "
+0004: 4 + 4 -- (1, 5) -- Identifier -- typ1
+0005: 8 + 1 -- (1, 9) -- Spaces -- " "
+0006: 9 + 1 -- (1, 10) -- Equals -- =
+0007: 10 + 1 -- (1, 11) -- Spaces -- " "
+0008: 11 + 3 -- (1, 12) -- Number -- 123
+0009: 14 + 1 -- (1, 15) -- EndOfLine -- \n
+0010: 15 + 1 -- (2, 1) -- Identifier -- b
+0011: 16 + 1 -- (2, 2) -- Spaces -- " "
+0012: 17 + 1 -- (2, 3) -- Colon -- :
+0013: 18 + 1 -- (2, 4) -- Equals -- =
+0014: 19 + 1 -- (2, 5) -- Spaces -- " "
+0015: 20 + 3 -- (2, 6) -- Number -- 456
+0016: 23 + 1 -- (2, 9) -- EndOfLine -- \n
+0017: 24 + 1 -- (3, 1) -- Identifier -- c
+0018: 25 + 1 -- (3, 2) -- Spaces -- " "
+0019: 26 + 1 -- (3, 3) -- Colon -- :
+0020: 27 + 1 -- (3, 4) -- Colon -- :
+0021: 28 + 1 -- (3, 5) -- Spaces -- " "
+0022: 29 + 3 -- (3, 6) -- Number -- 789
+0023: 32 + 1 -- (3, 9) -- EndOfLine -- \n
+0024: 33 + 1 -- (4, 1) -- Identifier -- d
+0025: 34 + 1 -- (4, 2) -- Spaces -- " "
+0026: 35 + 1 -- (4, 3) -- Colon -- :
+0027: 36 + 1 -- (4, 4) -- Spaces -- " "
+0028: 37 + 4 -- (4, 5) -- Identifier -- typ2
+0029: 41 + 1 -- (4, 9) -- EndOfLine -- \n
+0030: 42 + 1 -- (5, 1) -- Identifier -- e
+0031: 43 + 1 -- (5, 2) -- Spaces -- " "
+0032: 44 + 1 -- (5, 3) -- Colon -- :
+0033: 45 + 1 -- (5, 4) -- Colon -- :
+0034: 46 + 1 -- (5, 5) -- Spaces -- " "
+0035: 47 + 1 -- (5, 6) -- BraceOpen -- {
+0036: 48 + 1 -- (5, 7) -- EndOfLine -- \n
+0037: 49 + 1 -- (6, 1) -- BraceClose -- }
+0038: 50 + 1 -- (6, 2) -- EndOfLine -- \n
+0039: 51 + 1 -- (7, 1) -- Identifier -- f
+0040: 52 + 1 -- (7, 2) -- Spaces -- " "
+0041: 53 + 1 -- (7, 3) -- Colon -- :
+0042: 54 + 1 -- (7, 4) -- Colon -- :
+0043: 55 + 1 -- (7, 5) -- Spaces -- " "
+0044: 56 + 1 -- (7, 6) -- BraceOpen -- {
+0045: 57 + 1 -- (7, 7) -- EndOfLine -- \n
+0046: 58 + 4 -- (8, 1) -- Spaces -- "    "
+0047: 62 + 1 -- (8, 5) -- Identifier -- g
+0048: 63 + 1 -- (8, 6) -- Spaces -- " "
+0049: 64 + 1 -- (8, 7) -- Colon -- :
+0050: 65 + 1 -- (8, 8) -- Colon -- :
+0051: 66 + 1 -- (8, 9) -- Spaces -- " "
+0052: 67 + 7 -- (8, 10) -- LiteralString -- "hello"
+0053: 74 + 1 -- (8, 17) -- EndOfLine -- \n
+0054: 75 + 4 -- (9, 1) -- Spaces -- "    "
+0055: 79 + 1 -- (9, 5) -- Identifier -- g
+0056: 80 + 1 -- (9, 6) -- Spaces -- " "
+0057: 81 + 1 -- (9, 7) -- Colon -- :
+0058: 82 + 1 -- (9, 8) -- Equals -- =
+0059: 83 + 1 -- (9, 9) -- Spaces -- " "
+0060: 84 + 7 -- (9, 10) -- LiteralString -- "world"
+0061: 91 + 1 -- (9, 17) -- EndOfLine -- \n
+0062: 92 + 1 -- (10, 1) -- BraceClose -- }
+0063: 93 + 1 -- (10, 2) -- EndOfLine -- \n
+0064: 94 + 1 -- (11, 1) -- Identifier -- h
+0065: 95 + 1 -- (11, 2) -- Colon -- :
+0066: 96 + 4 -- (11, 3) -- Identifier -- typ3
+0067: 100 + 1 -- (11, 7) -- EndOfLine -- \n
+0068: 101 + 1 -- (12, 1) -- Identifier -- i
+0069: 102 + 1 -- (12, 2) -- Colon -- :
+0070: 103 + 4 -- (12, 3) -- Identifier -- typ4
+0071: 107 + 1 -- (12, 7) -- Colon -- :
+0072: 108 + 3 -- (12, 8) -- Number -- 123
+0073: 111 + 1 -- (12, 11) -- EndOfLine -- \n
+0074: 112 + 1 -- (13, 1) -- Identifier -- j
+0075: 113 + 1 -- (13, 2) -- Colon -- :
+0076: 114 + 4 -- (13, 3) -- Identifier -- typ5
+0077: 118 + 1 -- (13, 7) -- Equals -- =
+0078: 119 + 3 -- (13, 8) -- Number -- 123
+0079: 122 + 1 -- (13, 11) -- EndOfLine -- \n
+0080: 123 + 0 -- (14, 1) -- EndOfFile -- <EOF>
 
 Parse:
-declaration
-  id
-    identifier: zero
-  type
-    identifier: int
-  assignment
-    0
-declaration
-  id
-    identifier: func0
-  assignment
-    function
-      parameters
-      body
-        braces
-          print
-            "func0"
-declaration
-  id
-    identifier: func1
-  assignment
-    function
-      parameters
-        declaration
-          id
-            identifier: a
-          assignment
-            identifier: int
-      body
-        braces
-          print
-            "func1"
-          print
-            identifier: a
-declaration
-  id
-    identifier: func2
-  assignment
-    function
-      parameters
-        declaration
-          id
-            identifier: a
-          assignment
-            identifier: int
-        declaration
-          id
-            identifier: b
-          assignment
-            identifier: int
-      body
-        braces
-          print
-            "func2"
-          print
-            multiply
-              identifier: a
-              identifier: b
-declaration
-  id
-    identifier: func3
-  assignment
-    function
-      parameters
-        declaration
-          id
-            identifier: a
-          assignment
-            identifier: int
-        declaration
-          id
-            identifier: b
-          assignment
-            identifier: int
-        declaration
-          id
-            identifier: c
-          assignment
-            identifier: int
-      body
-        braces
-          print
-            "func3"
-          print
-            add
-              add
-                identifier: a
-                identifier: b
-              identifier: c
-declaration
-  id
-    identifier: func4
-  assignment
-    function
-      parameters
-      body
-        braces
-          print
-            "func4"
-declaration
-  id
-    identifier: func5
-  type
-    procedure declaration
-  assignment
-    function
-      parameters
-      body
-        braces
-          print
-            "func5"
-declaration
-  id
-    identifier: func6
-  type
-    function declaration
-      identifier: void
-  assignment
-    function
-      parameters
-      body
-        braces
-          print
-            "func6"
-declaration
-  id
-    identifier: func7
-  type
-    function declaration
-      identifier: int
-  assignment
-    function
-      parameters
-      body
-        braces
-          print
-            "func7"
-          return
-            7
-call
-  target
-    identifier: func0
-call
-  target
-    identifier: func1
-  arguments
-    1
-call
-  target
-    identifier: func2
-  arguments
-    2
-    3
-call
-  target
-    identifier: func3
-  arguments
-    4
-    5
-    6
-call
-  target
-    identifier: func4
-call
-  target
-    identifier: func5
-call
-  target
-    identifier: func6
-declaration
-  id
-    identifier: f7
-  assignment
-    call
-      target
-        identifier: func7
-print
-  identifier: f7
-declaration
-  id
-    identifier: f7
-  assignment
-    multiply
-      call
-        target
-          identifier: func7
-      2
-print
-  identifier: f7
-print
-  subtract
-    identifier: f7
-    1
-return
-  0
+line
+  declare-assign
+    id
+      identifier: a
+    type
+      identifier: typ1
+    value
+      123
+line
+  declare-assign
+    id
+      identifier: b
+    value
+      456
+line
+  declare-static
+    id
+      identifier: c
+    value
+      789
+line
+  declare-assign
+    id
+      identifier: d
+    type
+      identifier: typ2
+line
+  declare-static
+    id
+      identifier: e
+    value
+      function
+        parameters
+        body
+          braces
+line
+  declare-static
+    id
+      identifier: f
+    value
+      function
+        parameters
+        body
+          braces
+            line
+              declare-static
+                id
+                  identifier: g
+                value
+                  "hello"
+            line
+              declare-assign
+                id
+                  identifier: g
+                value
+                  "world"
+line
+  declare-assign
+    id
+      identifier: h
+    type
+      identifier: typ3
+line
+  declare-static
+    id
+      identifier: i
+    type
+      identifier: typ4
+    value
+      123
+line
+  declare-assign
+    id
+      identifier: j
+    type
+      identifier: typ5
+    value
+      123
 
 Output:
-func0
-func1
-1
-func2
-6
-func3
-15
-func4
-func5
-func6
-func7
-7
-func7
-14
-13
+*** CRASH! ***
+System.NotImplementedException: EvaluateSyntaxNode not implemented for node type: LineNode
+   at EscLang.Eval.Evaluator.EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 58
+   at EscLang.Eval.Evaluator.Evaluate(EscFile file, StringWriter programOutput) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 21
+   at EscLang.Program.Main(String[] args) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Program.cs:line 61

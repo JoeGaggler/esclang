@@ -16,7 +16,7 @@ public static class Evaluator
 		var environment = new Environment(programOutput);
 		var globalScope = new Scope();
 
-		foreach (var node in file.Nodes)
+		foreach (var node in file.Lines)
 		{
 			switch (EvaluateSyntaxNode(node, globalScope, environment))
 			{
@@ -38,7 +38,7 @@ public static class Evaluator
 	{
 		return syntaxNode switch
 		{
-			DeclarationNode node => EvaluateNode(node, scope, environment),
+			DeclareStaticNode node => EvaluateNode(node, scope, environment),
 			CallNode node => EvaluateNode(node, scope, environment),
 			Block node => EvaluateNode(node, scope, environment), // TODO: merge with BracesNode?
 			BracesNode node => EvaluateNode(node, scope, environment),
@@ -69,10 +69,10 @@ public static class Evaluator
 		return expression;
 	}
 
-	private static SyntaxNode EvaluateNode(DeclarationNode node, Scope scope, Environment environment)
+	private static SyntaxNode EvaluateNode(DeclareStaticNode node, Scope scope, Environment environment)
 	{
-		var left = node.Left;
-		var right = node.Right;
+		var left = node.Identifier;
+		var right = node.Value;
 
 		if (left is not IdentifierNode identifierNode)
 		{
@@ -109,17 +109,17 @@ public static class Evaluator
 
 		for (int i = 0; i < node.Arguments.Count; i++)
 		{
-			if (actualParameterList[i] is not DeclarationNode parameterDeclarationNode)
+			if (actualParameterList[i] is not DeclareStaticNode parameterDeclarationNode)
 			{
 				throw new NotImplementedException($"Invalid parameter for CallNode: {actualParameterList[i]}");
 			}
-			if (parameterDeclarationNode.Left is not IdentifierNode parameterIdentifierNode || parameterIdentifierNode.Text is not { } parameterIdentifier)
+			if (parameterDeclarationNode.Identifier is not IdentifierNode parameterIdentifierNode || parameterIdentifierNode.Text is not { } parameterIdentifier)
 			{
-				throw new NotImplementedException($"Invalid parameter name identifier for CallNode: {parameterDeclarationNode.Left}");
+				throw new NotImplementedException($"Invalid parameter name identifier for CallNode: {parameterDeclarationNode.Identifier}");
 			}
-			if (parameterDeclarationNode.Right is not IdentifierNode parameterTypeIdentifierNode || parameterTypeIdentifierNode.Text is not { } parameterTypeIdentifier)
+			if (parameterDeclarationNode.Type is not IdentifierNode parameterTypeIdentifierNode || parameterTypeIdentifierNode.Text is not { } parameterTypeIdentifier)
 			{
-				throw new NotImplementedException($"Invalid parameter type identifier for CallNode: {parameterDeclarationNode.Right}");
+				throw new NotImplementedException($"Invalid parameter type identifier for CallNode: {parameterDeclarationNode.Type}");
 			}
 
 			var arg = node.Arguments[i];
@@ -206,7 +206,7 @@ public static class Evaluator
 	{
 		var bodyScope = new Scope(scope);
 
-		foreach (var childNode in node.Items)
+		foreach (var childNode in node.Lines)
 		{
 			var result = EvaluateSyntaxNode(childNode, bodyScope, environment);
 

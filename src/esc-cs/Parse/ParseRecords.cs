@@ -1,8 +1,26 @@
 namespace EscLang.Parse;
 
-public record EscFile(List<SyntaxNode> Nodes) { }
+public record EscFile(List<LineNode> Lines) { }
 
 public abstract record SyntaxNode { }
+
+public record LineNode(List<SyntaxNode> Items) : SyntaxNode { }
+
+public record BracesNode(List<LineNode> Lines) : SyntaxNode { }
+
+public record DotNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
+
+public record DeclareStaticNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }
+
+public record DeclareAssignNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }
+
+public record AssignNode(SyntaxNode Assignee, SyntaxNode Value) : SyntaxNode { }
+
+public record EmptyNode : SyntaxNode { }
+
+//
+// TODO: migrate older node types
+//
 
 public record LiteralCharNode(String Text) : SyntaxNode { }
 
@@ -20,7 +38,6 @@ public record PrintNode(SyntaxNode Node) : SyntaxNode { }
 
 public record ReturnNode(SyntaxNode Node) : SyntaxNode { }
 
-public record DeclarationNode(SyntaxNode Left, SyntaxNode? Middle, SyntaxNode Right) : SyntaxNode { }
 
 public enum BinaryOperator
 {
@@ -57,7 +74,6 @@ public record ParensNode(SyntaxNode? Node = null) : SyntaxNode { }
 
 public record CommaNode(List<SyntaxNode> Items) : SyntaxNode { }
 
-public record BracesNode(List<SyntaxNode> Items) : SyntaxNode { }
 
 // TODO: return types are no longer embedded in the function node
 public record FunctionNode(List<SyntaxNode> Parameters, [property:Obsolete] SyntaxNode? ReturnType, SyntaxNode Body) : SyntaxNode { }

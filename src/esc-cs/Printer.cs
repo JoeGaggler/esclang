@@ -5,7 +5,7 @@ namespace EscLang;
 
 public static class Printer
 {
-	public static void PrintLexeme(TextWriter textWriter, Lex.Lexeme lexeme)
+	public static void PrintLexeme(TextWriter textWriter, Lex.Lexeme lexeme, int lexemeIndex)
 	{
 		String text;
 		switch (lexeme.Type)
@@ -32,7 +32,7 @@ public static class Printer
 			}
 		}
 
-		textWriter.WriteLine($"{lexeme.Position} + {lexeme.Text.Length} -- ({lexeme.Line}, {lexeme.Column}) -- {lexeme.Type} -- {text}");
+		textWriter.WriteLine($"{lexemeIndex:0000}: {lexeme.Position} + {lexeme.Text.Length} -- ({lexeme.Line}, {lexeme.Column}) -- {lexeme.Type} -- {text}");
 	}
 
 	public static String PrintParseError(ReadOnlySpan<Lexeme> input, EscLang.Parse.ParseError error)
@@ -103,7 +103,7 @@ public static class Printer
 
 	public static void PrintSyntax(TextWriter outputFile, EscFile file, Span<Lexeme> lexemes)
 	{
-		foreach (var node in file.Nodes)
+		foreach (var node in file.Lines)
 		{
 			PrintSyntax(outputFile, node, lexemes, 0);
 		}
@@ -125,28 +125,6 @@ public static class Printer
 			case LiteralNumberNode node: { outputFile.Indent(level); outputFile.WriteLine($"{node.Text}"); break; }
 			case LiteralCharNode node: { outputFile.Indent(level); outputFile.WriteLine($"\"{node.Text}\""); break; }
 			case IdentifierNode node: { outputFile.Indent(level); outputFile.WriteLine($"identifier: {node.Text}"); break; }
-
-			case DeclarationNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("declaration");
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("id");
-				PrintSyntax(outputFile, node.Left, lexemes, level + 2);
-
-				if (node.Middle is { } middle)
-				{
-					outputFile.Indent(level + 1);
-					outputFile.WriteLine("type");
-					PrintSyntax(outputFile, middle, lexemes, level + 2);
-				}
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("assignment");
-				PrintSyntax(outputFile, node.Right, lexemes, level + 2);
-				break;
-			}
 
 			case BinaryOperatorNode node:
 			{
@@ -282,7 +260,7 @@ public static class Printer
 				outputFile.Indent(level);
 				outputFile.WriteLine("braces");
 
-				foreach (var statement in node.Items)
+				foreach (var statement in node.Lines)
 				{
 					PrintSyntax(outputFile, statement, lexemes, level + 1);
 				}
@@ -318,6 +296,94 @@ public static class Printer
 					outputFile.WriteLine("procedure declaration");
 					break;
 				}
+				break;
+			}
+
+			////////// TODO: Migrate cases above
+
+			case LineNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("line");
+				foreach (var child in node.Items)
+				{
+					PrintSyntax(outputFile, child, lexemes, level + 1);
+				}
+				break;
+			}
+
+			case DeclareStaticNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("declare-static");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("id");
+				PrintSyntax(outputFile, node.Identifier, lexemes, level + 2);
+
+				if (node.Type is { } middle)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("type");
+					PrintSyntax(outputFile, middle, lexemes, level + 2);
+				}
+
+				if (node.Value is { } right)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("value");
+					PrintSyntax(outputFile, right, lexemes, level + 2);
+				}
+				break;
+			}
+
+			case DeclareAssignNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("declare-assign");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("id");
+				PrintSyntax(outputFile, node.Identifier, lexemes, level + 2);
+
+				if (node.Type is { } middle)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("type");
+					PrintSyntax(outputFile, middle, lexemes, level + 2);
+				}
+
+				if (node.Value is { } right)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("value");
+					PrintSyntax(outputFile, right, lexemes, level + 2);
+				}
+				break;
+			}
+
+			case DotNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("dot");
+				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
+				break;
+			}
+
+			case AssignNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("assign");
+				PrintSyntax(outputFile, node.Assignee, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Value, lexemes, level + 1);
+				break;
+			}
+
+			case EmptyNode:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("(empty)");
 				break;
 			}
 
