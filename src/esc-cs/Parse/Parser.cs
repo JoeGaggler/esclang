@@ -165,12 +165,6 @@ public static partial class Parser
 				start = position;
 				return new(new FunctionNode(Parameters: [], ReturnType: null, Body: braceResult.Value));
 			}
-			case LexemeType.Colon or LexemeType.Equals:
-			{
-				// This is only valid for a declaration, e.g. "a := 1"
-				start = prev;
-				return new(new EmptyNode());
-			}
 			default:
 			{
 				return new(token, Error.Message($"unexpected expression leaf: {token.Type}"));
@@ -180,8 +174,9 @@ public static partial class Parser
 
 	private const int prec_colon = 2;
 	private const int prec_equals = 3;
-	private const int prec_plus = 4;
-	private const int prec_dot = 5;
+	private const int prec_call = 4;
+	private const int prec_plus = 5;
+	private const int prec_dot = 6;
 
 	private static ParseResult<SyntaxNode> Parse_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, int min_prec)
 	{
@@ -203,6 +198,36 @@ public static partial class Parser
 				LexemeType.Minus => prec_plus,
 
 				LexemeType.Period => prec_dot,
+
+				// contiguous expressions are treated as function calls
+				LexemeType.Identifier or LexemeType.LiteralChar or LexemeType.LiteralString or LexemeType.Number => prec_call,
+
+				< 0 or > LexemeType.EndOfFile => throw new NotImplementedException($"unexpected token in expression at {position}: {peek.Type}"),
+
+				// LexemeType.None => (int?)null,
+				// LexemeType.EndOfFile => (int?)null,
+				// LexemeType.Spaces => (int?)null,
+				// LexemeType.EndOfLine => (int?)null,
+				// LexemeType.Comma => (int?)null,
+				// LexemeType.Exclamation => (int?)null,
+				// LexemeType.SemiColon => (int?)null,
+				// LexemeType.LessThan => (int?)null,
+				// LexemeType.GreaterThan => (int?)null,
+				// LexemeType.Star => (int?)null,
+				// LexemeType.Slash => (int?)null,
+				// LexemeType.Caret => (int?)null,
+				// LexemeType.SingleQuote => (int?)null,
+				// LexemeType.DoubleQuote => (int?)null,
+				// LexemeType.ParenOpen => (int?)null,
+				// LexemeType.ParenClose => (int?)null,
+				// LexemeType.BracketOpen => (int?)null,
+				// LexemeType.BracketClose => (int?)null,
+				// LexemeType.BraceOpen => (int?)null,
+				// LexemeType.BraceClose => (int?)null,
+				// LexemeType.LogicalOr => (int?)null,
+				// LexemeType.LogicalAnd => (int?)null,
+				// LexemeType.Comment => (int?)null,
+
 				_ => (int?)null
 			} is not int prec)
 			{
@@ -215,22 +240,30 @@ public static partial class Parser
 			}
 			if (prec == min_prec)
 			{
-				if (prec == prec_colon)
+				// break unless operator is right-associative
+				if (prec is prec_colon)
 				{
-					// fallthrough, double-colon is right associative
+					// fallthrough
 				}
 				else
 				{
+					// left-associative
 					break;
 				}
 			}
 
-			position = next;
+			// HACK: chain does not have an operator
+			if (prec != prec_call)
+			{
+				position = next;
+			}
+
 			var right = peek.Type switch
 			{
 				LexemeType.Colon => Parse_Declaration(leftResult.Value, input, ref position, prec),
 				// LexemeType.Equals => new(new AssignNode(leftResult.Value, right.Value)),
 				// LexemeType.Period => new(new DotNode(leftResult.Value, right.Value)),
+				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
 				_ => throw new NotImplementedException($"binary expression {peek.Type} {position}")
 				// _ => Parse_Expression(input, ref position, prec)
 			};
@@ -241,6 +274,24 @@ public static partial class Parser
 
 		start = position;
 		return leftResult;
+	}
+
+	private static ParseResult<SyntaxNode> Parse_Call(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
+	{
+		List<SyntaxNode> args = [];
+
+		var position = start;
+
+		while (true)
+		{
+			var midResult = Parse_Expression(input, ref position, prec_call); // equals is part of the declaration
+			if (!midResult.HasValue) { break; }
+			args.Add(midResult.Value);
+		}
+
+		start = position;
+
+		return new(new CallNode(left, args));
 	}
 
 	private static ParseResult<SyntaxNode> Parse_Declaration(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start, int min_prec)

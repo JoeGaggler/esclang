@@ -10,6 +10,8 @@ public record BracesNode(List<LineNode> Lines) : SyntaxNode { }
 
 public record DotNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
+public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNode { }
+
 public record DeclareStaticNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }
 
 public record DeclareAssignNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }
@@ -67,8 +69,6 @@ public record BinaryOperatorNode(SyntaxNode Left, BinaryOperator Operator, Synta
 public record IfNode(SyntaxNode Condition, Block Block, Block? ElseBlock = null) : SyntaxNode { }
 
 public record Block(List<SyntaxNode> Statements) : SyntaxNode { }
-
-public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNode { }
 
 public record ParensNode(SyntaxNode? Node = null) : SyntaxNode { }
 

@@ -185,27 +185,6 @@ public static class Printer
 				break;
 			}
 
-			case CallNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("call");
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("target");
-				PrintSyntax(outputFile, node.Target, lexemes, level + 2);
-
-				if (node.Arguments.Count > 0)
-				{
-					outputFile.Indent(level + 1);
-					outputFile.WriteLine("arguments");
-					foreach (var arg in node.Arguments)
-					{
-						PrintSyntax(outputFile, arg, lexemes, level + 2);
-					}
-				}
-				break;
-			}
-
 			case ParensNode node:
 			{
 				outputFile.Indent(level);
@@ -384,6 +363,27 @@ public static class Printer
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine("(empty)");
+				break;
+			}
+
+			case CallNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("call");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("target");
+				PrintSyntax(outputFile, node.Target, lexemes, level + 2);
+
+				if (node.Arguments.Count > 0)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("arguments");
+					foreach (var arg in node.Arguments)
+					{
+						PrintSyntax(outputFile, arg, lexemes, level + 2);
+					}
+				}
 				break;
 			}
 

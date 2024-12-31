@@ -1,4 +1,4 @@
-a : typ1 = 123
+a : typ1 = 123 ToString
 b := 456
 c :: 789
 d : typ2

@@ -3,7 +3,6 @@ namespace EscLang.Lex;
 public enum LexemeType
 {
 	None = 0,
-	EndOfFile,
 
 	// Spacing
 	Spaces,
@@ -45,7 +44,10 @@ public enum LexemeType
 	LiteralString,
 
 	// Trivia
-	Comment
+	Comment,
+
+	// Note: this is used as a sentinel value for switch statements, keep it last.
+	EndOfFile,
 }
 
 public record Lexeme(LexemeType Type, String Text, Int32 Position, Int32 Line, Int32 Column)
