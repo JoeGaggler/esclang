@@ -18,6 +18,10 @@ public record DeclareAssignNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxN
 
 public record AssignNode(SyntaxNode Assignee, SyntaxNode Value) : SyntaxNode { }
 
+public record PlusNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
+
+public record MinusNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
+
 public record StarNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
 public record EmptyNode : SyntaxNode { }

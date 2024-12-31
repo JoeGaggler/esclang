@@ -387,6 +387,24 @@ public static class Printer
 				break;
 			}
 
+			case PlusNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("plus");
+				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
+				break;
+			}
+
+			case MinusNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("minus");
+				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
+				break;
+			}
+
 			case StarNode node:
 			{
 				outputFile.Indent(level);
