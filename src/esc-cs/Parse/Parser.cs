@@ -270,11 +270,13 @@ public static partial class Parser
 
 				LexemeType.Star => Parse_Star(leftResult.Value, input, ref position),
 
+				LexemeType.Equals => Parse_Assign(leftResult.Value, input, ref position),
+
 				// LexemeType.Equals => new(new AssignNode(leftResult.Value, right.Value)),
 				// LexemeType.Period => new(new DotNode(leftResult.Value, right.Value)),
 
 				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
-				
+
 				_ => throw new NotImplementedException($"binary expression {peek.Type} {position}")
 				// _ => Parse_Expression(input, ref position, prec)
 			};
@@ -287,11 +289,22 @@ public static partial class Parser
 		return leftResult;
 	}
 
+	private static ParseResult<SyntaxNode> Parse_Assign(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
+	{
+		var position = start;
+
+		var rightResult = Parse_Expression(input, ref position, prec_equals);
+		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for assign expression.", rightResult.Error); }
+
+		start = position;
+		return new(new AssignNode(left, rightResult.Value));
+	}
+
 	private static ParseResult<SyntaxNode> Parse_Plus(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
 		var position = start;
 
-		var rightResult = Parse_Expression(input, ref position, prec_star);
+		var rightResult = Parse_Expression(input, ref position, prec_plus);
 		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for plus expression.", rightResult.Error); }
 
 		start = position;
@@ -302,7 +315,7 @@ public static partial class Parser
 	{
 		var position = start;
 
-		var rightResult = Parse_Expression(input, ref position, prec_star);
+		var rightResult = Parse_Expression(input, ref position, prec_plus);
 		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for minus expression.", rightResult.Error); }
 
 		start = position;
