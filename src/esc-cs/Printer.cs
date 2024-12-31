@@ -387,6 +387,15 @@ public static class Printer
 				break;
 			}
 
+			case StarNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("star");
+				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);

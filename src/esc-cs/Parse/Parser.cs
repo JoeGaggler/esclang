@@ -176,7 +176,8 @@ public static partial class Parser
 	private const int prec_equals = 3;
 	private const int prec_call = 4;
 	private const int prec_plus = 5;
-	private const int prec_dot = 6;
+	private const int prec_star = 6;
+	private const int prec_dot = 7;
 
 	private static ParseResult<SyntaxNode> Parse_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, int min_prec)
 	{
@@ -196,6 +197,8 @@ public static partial class Parser
 
 				LexemeType.Plus => prec_plus,
 				LexemeType.Minus => prec_plus,
+
+				LexemeType.Star => prec_star,
 
 				LexemeType.Period => prec_dot,
 
@@ -261,6 +264,8 @@ public static partial class Parser
 			var right = peek.Type switch
 			{
 				LexemeType.Colon => Parse_Declaration(leftResult.Value, input, ref position, prec),
+
+				LexemeType.Star => Parse_Star(leftResult.Value, input, ref position),
 				// LexemeType.Equals => new(new AssignNode(leftResult.Value, right.Value)),
 				// LexemeType.Period => new(new DotNode(leftResult.Value, right.Value)),
 				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
@@ -274,6 +279,17 @@ public static partial class Parser
 
 		start = position;
 		return leftResult;
+	}
+
+	private static ParseResult<SyntaxNode> Parse_Star(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
+	{
+		var position = start;
+
+		var rightResult = Parse_Expression(input, ref position, prec_star);
+		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for star expression.", rightResult.Error); }
+
+		start = position;
+		return new(new StarNode(left, rightResult.Value));
 	}
 
 	private static ParseResult<SyntaxNode> Parse_Call(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)

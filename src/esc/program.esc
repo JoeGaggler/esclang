@@ -1,5 +1,5 @@
-a : typ1 = 123 ToString
-b := 456
+a : typ1 = 123 * 2 ToString * 3
+b := 456 * 2
 c :: 789
 d : typ2
 e :: {
