@@ -145,6 +145,12 @@ public static partial class Parser
 					return new(new ParameterNode());
 				}
 
+				if (peek.Type == LexemeType.Minus)
+				{
+					start = next;
+					return new(new LeftArrowNode());
+				}
+
 				return new(input[start], Error.Message("less than not yet implemented"));
 			}
 			default:

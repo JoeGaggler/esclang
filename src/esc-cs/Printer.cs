@@ -458,6 +458,13 @@ public static class Printer
 				break;
 			}
 
+			case LeftArrowNode:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("left-arrow");
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);

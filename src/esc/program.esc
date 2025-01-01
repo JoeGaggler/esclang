@@ -8,7 +8,8 @@ e :: struct {
 f :: 
 {
     g :: <>
-    g := <>
+    g := <-
+    <- g
 }
 h:typ3
 i:typ4:<>

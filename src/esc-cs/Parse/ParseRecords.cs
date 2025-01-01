@@ -32,6 +32,8 @@ public record SlashNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
 public record ParameterNode : SyntaxNode { }
 
+public record LeftArrowNode : SyntaxNode { }
+
 public record EmptyNode : SyntaxNode { }
 
 //
