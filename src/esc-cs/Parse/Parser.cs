@@ -161,6 +161,28 @@ public static partial class Parser
 	private const int prec_star = 6;
 	private const int prec_dot = 7;
 
+	private static ParseResult<SyntaxNode> Parse_Next_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, int min_prec)
+	{
+		var position = start;
+
+		var (peek, next) = input.Peek(position);
+		while (peek.Type is LexemeType.EndOfLine)
+		{
+			position = next;
+			(peek, next) = input.Peek(position);
+		}
+
+		if (peek.Type is LexemeType.EndOfFile)
+		{
+			return new(input[start], "Unable to parse next expression at end of file.");
+		}
+
+		start = position;
+		var result = Parse_Expression(input, ref start, min_prec);
+		if (!result.HasValue) { return new(peek, "Unable to parse next expression.", result.Error); }
+		return result;
+	}
+
 	private static ParseResult<SyntaxNode> Parse_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, int min_prec)
 	{
 		var position = start;
@@ -279,7 +301,7 @@ public static partial class Parser
 	{
 		var position = start;
 
-		var rightResult = Parse_Expression(input, ref position, prec_equals);
+		var rightResult = Parse_Next_Expression(input, ref position, prec_equals);
 		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for assign expression.", rightResult.Error); }
 
 		start = position;
@@ -345,7 +367,7 @@ public static partial class Parser
 		if (peek.Type is LexemeType.Colon)
 		{
 			position = next;
-			var rightResult = Parse_Expression(input, ref position, min_prec);
+			var rightResult = Parse_Next_Expression(input, ref position, min_prec);
 			if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for declaration expression.", rightResult.Error); }
 			start = position;
 			return new(new DeclareStaticNode(left, null, rightResult.Value));
@@ -353,7 +375,7 @@ public static partial class Parser
 		else if (peek.Type is LexemeType.Equals)
 		{
 			position = next;
-			var rightResult = Parse_Expression(input, ref position, min_prec);
+			var rightResult = Parse_Next_Expression(input, ref position, min_prec);
 			if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for declaration expression.", rightResult.Error); }
 			start = position;
 			return new(new DeclareAssignNode(left, null, rightResult.Value));
@@ -366,12 +388,12 @@ public static partial class Parser
 		if (peek.Type is LexemeType.EndOfFile or LexemeType.EndOfLine)
 		{
 			start = position;
-			return new(new DeclareNode(left, midResult.Value)); // defaults to assignment
+			return new(new DeclareNode(left, midResult.Value));
 		}
 		else if (peek.Type is LexemeType.Colon)
 		{
 			position = next;
-			var rightResult = Parse_Expression(input, ref position, min_prec);
+			var rightResult = Parse_Next_Expression(input, ref position, min_prec);
 			if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for declaration expression.", rightResult.Error); }
 			start = position;
 			return new(new DeclareStaticNode(left, midResult.Value, rightResult.Value));
@@ -379,7 +401,7 @@ public static partial class Parser
 		else if (peek.Type is LexemeType.Equals)
 		{
 			position = next;
-			var rightResult = Parse_Expression(input, ref position, min_prec);
+			var rightResult = Parse_Next_Expression(input, ref position, min_prec);
 			if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for declaration expression.", rightResult.Error); }
 			start = position;
 			return new(new DeclareAssignNode(left, midResult.Value, rightResult.Value));
