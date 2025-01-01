@@ -2,7 +2,7 @@ Stats:
 -  Read: 0.00s
 -   Lex: 0.00s
 - Parse: 0.00s
--  Eval: 0.01s
+-  Eval: 0.00s
 - Print: 0.00s
 
 Lex:
@@ -77,52 +77,54 @@ Lex:
 0068: 87 + 1 -- (6, 3) -- Colon -- :
 0069: 88 + 1 -- (6, 4) -- Colon -- :
 0070: 89 + 1 -- (6, 5) -- Spaces -- " "
-0071: 90 + 1 -- (6, 6) -- BraceOpen -- {
-0072: 91 + 1 -- (6, 7) -- EndOfLine -- \n
-0073: 92 + 1 -- (7, 1) -- BraceClose -- }
-0074: 93 + 1 -- (7, 2) -- EndOfLine -- \n
-0075: 94 + 1 -- (8, 1) -- Identifier -- f
-0076: 95 + 1 -- (8, 2) -- Spaces -- " "
-0077: 96 + 1 -- (8, 3) -- Colon -- :
-0078: 97 + 1 -- (8, 4) -- Colon -- :
-0079: 98 + 1 -- (8, 5) -- Spaces -- " "
-0080: 99 + 1 -- (8, 6) -- BraceOpen -- {
-0081: 100 + 1 -- (8, 7) -- EndOfLine -- \n
-0082: 101 + 4 -- (9, 1) -- Spaces -- "    "
-0083: 105 + 1 -- (9, 5) -- Identifier -- g
-0084: 106 + 1 -- (9, 6) -- Spaces -- " "
-0085: 107 + 1 -- (9, 7) -- Colon -- :
-0086: 108 + 1 -- (9, 8) -- Colon -- :
-0087: 109 + 1 -- (9, 9) -- Spaces -- " "
-0088: 110 + 7 -- (9, 10) -- LiteralString -- "hello"
-0089: 117 + 1 -- (9, 17) -- EndOfLine -- \n
-0090: 118 + 4 -- (10, 1) -- Spaces -- "    "
-0091: 122 + 1 -- (10, 5) -- Identifier -- g
-0092: 123 + 1 -- (10, 6) -- Spaces -- " "
-0093: 124 + 1 -- (10, 7) -- Colon -- :
-0094: 125 + 1 -- (10, 8) -- Equals -- =
-0095: 126 + 1 -- (10, 9) -- Spaces -- " "
-0096: 127 + 7 -- (10, 10) -- LiteralString -- "world"
-0097: 134 + 1 -- (10, 17) -- EndOfLine -- \n
-0098: 135 + 1 -- (11, 1) -- BraceClose -- }
-0099: 136 + 1 -- (11, 2) -- EndOfLine -- \n
-0100: 137 + 1 -- (12, 1) -- Identifier -- h
-0101: 138 + 1 -- (12, 2) -- Colon -- :
-0102: 139 + 4 -- (12, 3) -- Identifier -- typ3
-0103: 143 + 1 -- (12, 7) -- EndOfLine -- \n
-0104: 144 + 1 -- (13, 1) -- Identifier -- i
-0105: 145 + 1 -- (13, 2) -- Colon -- :
-0106: 146 + 4 -- (13, 3) -- Identifier -- typ4
-0107: 150 + 1 -- (13, 7) -- Colon -- :
-0108: 151 + 3 -- (13, 8) -- Number -- 123
-0109: 154 + 1 -- (13, 11) -- EndOfLine -- \n
-0110: 155 + 1 -- (14, 1) -- Identifier -- j
-0111: 156 + 1 -- (14, 2) -- Colon -- :
-0112: 157 + 4 -- (14, 3) -- Identifier -- typ5
-0113: 161 + 1 -- (14, 7) -- Equals -- =
-0114: 162 + 3 -- (14, 8) -- Number -- 123
-0115: 165 + 1 -- (14, 11) -- EndOfLine -- \n
-0116: 166 + 0 -- (15, 1) -- EndOfFile -- <EOF>
+0071: 90 + 6 -- (6, 6) -- Identifier -- struct
+0072: 96 + 1 -- (6, 12) -- Spaces -- " "
+0073: 97 + 1 -- (6, 13) -- BraceOpen -- {
+0074: 98 + 1 -- (6, 14) -- EndOfLine -- \n
+0075: 99 + 1 -- (7, 1) -- BraceClose -- }
+0076: 100 + 1 -- (7, 2) -- EndOfLine -- \n
+0077: 101 + 1 -- (8, 1) -- Identifier -- f
+0078: 102 + 1 -- (8, 2) -- Spaces -- " "
+0079: 103 + 1 -- (8, 3) -- Colon -- :
+0080: 104 + 1 -- (8, 4) -- Colon -- :
+0081: 105 + 1 -- (8, 5) -- Spaces -- " "
+0082: 106 + 1 -- (8, 6) -- BraceOpen -- {
+0083: 107 + 1 -- (8, 7) -- EndOfLine -- \n
+0084: 108 + 4 -- (9, 1) -- Spaces -- "    "
+0085: 112 + 1 -- (9, 5) -- Identifier -- g
+0086: 113 + 1 -- (9, 6) -- Spaces -- " "
+0087: 114 + 1 -- (9, 7) -- Colon -- :
+0088: 115 + 1 -- (9, 8) -- Colon -- :
+0089: 116 + 1 -- (9, 9) -- Spaces -- " "
+0090: 117 + 7 -- (9, 10) -- LiteralString -- "hello"
+0091: 124 + 1 -- (9, 17) -- EndOfLine -- \n
+0092: 125 + 4 -- (10, 1) -- Spaces -- "    "
+0093: 129 + 1 -- (10, 5) -- Identifier -- g
+0094: 130 + 1 -- (10, 6) -- Spaces -- " "
+0095: 131 + 1 -- (10, 7) -- Colon -- :
+0096: 132 + 1 -- (10, 8) -- Equals -- =
+0097: 133 + 1 -- (10, 9) -- Spaces -- " "
+0098: 134 + 7 -- (10, 10) -- LiteralString -- "world"
+0099: 141 + 1 -- (10, 17) -- EndOfLine -- \n
+0100: 142 + 1 -- (11, 1) -- BraceClose -- }
+0101: 143 + 1 -- (11, 2) -- EndOfLine -- \n
+0102: 144 + 1 -- (12, 1) -- Identifier -- h
+0103: 145 + 1 -- (12, 2) -- Colon -- :
+0104: 146 + 4 -- (12, 3) -- Identifier -- typ3
+0105: 150 + 1 -- (12, 7) -- EndOfLine -- \n
+0106: 151 + 1 -- (13, 1) -- Identifier -- i
+0107: 152 + 1 -- (13, 2) -- Colon -- :
+0108: 153 + 4 -- (13, 3) -- Identifier -- typ4
+0109: 157 + 1 -- (13, 7) -- Colon -- :
+0110: 158 + 3 -- (13, 8) -- Number -- 123
+0111: 161 + 1 -- (13, 11) -- EndOfLine -- \n
+0112: 162 + 1 -- (14, 1) -- Identifier -- j
+0113: 163 + 1 -- (14, 2) -- Colon -- :
+0114: 164 + 4 -- (14, 3) -- Identifier -- typ5
+0115: 168 + 1 -- (14, 7) -- Equals -- =
+0116: 169 + 3 -- (14, 8) -- Number -- 123
+0117: 172 + 1 -- (14, 11) -- EndOfLine -- \n
+0118: 173 + 0 -- (15, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -168,7 +170,7 @@ line
     value
       789
 line
-  declare-assign
+  declare-only
     id
       identifier: d
     type
@@ -178,33 +180,31 @@ line
     id
       identifier: e
     value
-      function
-        parameters
-        body
+      call
+        target
+          identifier: struct
+        arguments
           braces
 line
   declare-static
     id
       identifier: f
     value
-      function
-        parameters
-        body
-          braces
-            line
-              declare-static
-                id
-                  identifier: g
-                value
-                  "hello"
-            line
-              declare-assign
-                id
-                  identifier: g
-                value
-                  "world"
+      braces
+        line
+          declare-static
+            id
+              identifier: g
+            value
+              "hello"
+        line
+          declare-assign
+            id
+              identifier: g
+            value
+              "world"
 line
-  declare-assign
+  declare-only
     id
       identifier: h
     type

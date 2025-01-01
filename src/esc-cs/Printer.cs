@@ -291,6 +291,25 @@ public static class Printer
 				break;
 			}
 
+			case DeclareNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("declare-only");
+
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine("id");
+				PrintSyntax(outputFile, node.Identifier, lexemes, level + 2);
+
+				if (node.Type is { } middle)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("type");
+					PrintSyntax(outputFile, middle, lexemes, level + 2);
+				}
+
+				break;
+			}
+
 			case DeclareStaticNode node:
 			{
 				outputFile.Indent(level);

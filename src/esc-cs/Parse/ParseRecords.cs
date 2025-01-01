@@ -12,6 +12,8 @@ public record DotNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
 public record CallNode(SyntaxNode Target, List<SyntaxNode> Arguments) : SyntaxNode { }
 
+public record DeclareNode(SyntaxNode Identifier, SyntaxNode? Type) : SyntaxNode { }
+
 public record DeclareStaticNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }
 
 public record DeclareAssignNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }

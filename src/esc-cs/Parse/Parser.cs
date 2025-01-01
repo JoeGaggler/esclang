@@ -163,7 +163,7 @@ public static partial class Parser
 				var braceResult = Parse_Braces(input, ref position);
 				if (!braceResult) { return new(input[position], Error.Message("unable to parse braces"), braceResult.Error); }
 				start = position;
-				return new(new FunctionNode(Parameters: [], ReturnType: null, Body: braceResult.Value));
+				return new(new BracesNode(braceResult.Value.Lines));
 			}
 			default:
 			{
@@ -204,6 +204,8 @@ public static partial class Parser
 
 				// contiguous expressions are treated as function calls
 				LexemeType.Identifier or LexemeType.LiteralChar or LexemeType.LiteralString or LexemeType.Number => prec_call,
+				LexemeType.BraceOpen => prec_call,
+				LexemeType.ParenOpen => prec_call,
 
 				< 0 or > LexemeType.EndOfFile => throw new NotImplementedException($"unexpected token in expression at {position}: {peek.Type}"),
 
@@ -275,7 +277,9 @@ public static partial class Parser
 				// LexemeType.Equals => new(new AssignNode(leftResult.Value, right.Value)),
 				// LexemeType.Period => new(new DotNode(leftResult.Value, right.Value)),
 
+				// contiguous expressions are treated as function calls
 				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
+				LexemeType.BraceOpen => Parse_Call(leftResult.Value, input, ref position),
 
 				_ => throw new NotImplementedException($"binary expression {peek.Type} {position}")
 				// _ => Parse_Expression(input, ref position, prec)
@@ -341,7 +345,7 @@ public static partial class Parser
 
 		while (true)
 		{
-			var midResult = Parse_Expression(input, ref position, prec_call); // equals is part of the declaration
+			var midResult = Parse_Expression(input, ref position, prec_call);
 			if (!midResult.HasValue) { break; }
 			args.Add(midResult.Value);
 		}
@@ -380,7 +384,7 @@ public static partial class Parser
 		if (peek.Type is LexemeType.EndOfFile or LexemeType.EndOfLine)
 		{
 			start = position;
-			return new(new DeclareAssignNode(left, midResult.Value, null)); // defaults to assignment
+			return new(new DeclareNode(left, midResult.Value)); // defaults to assignment
 		}
 		else if (peek.Type is LexemeType.Colon)
 		{
