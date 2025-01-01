@@ -18,6 +18,8 @@ public record DeclareStaticNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxN
 
 public record DeclareAssignNode(SyntaxNode Identifier, SyntaxNode? Type, SyntaxNode? Value) : SyntaxNode { }
 
+public record MemberNode(SyntaxNode Target, SyntaxNode Member) : SyntaxNode { }
+
 public record AssignNode(SyntaxNode Assignee, SyntaxNode Value) : SyntaxNode { }
 
 public record PlusNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }

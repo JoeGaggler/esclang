@@ -378,6 +378,15 @@ public static class Printer
 				break;
 			}
 
+			case MemberNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("member");
+				PrintSyntax(outputFile, node.Target, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Member, lexemes, level + 1);
+				break;
+			}
+
 			case EmptyNode:
 			{
 				outputFile.Indent(level);

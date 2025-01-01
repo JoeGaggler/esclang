@@ -197,6 +197,7 @@ public static partial class Parser
 			if (peek.Type switch
 			{
 				LexemeType.Colon => prec_colon,
+
 				LexemeType.Equals => prec_equals,
 
 				LexemeType.Plus => prec_plus,
@@ -216,30 +217,6 @@ public static partial class Parser
 				LexemeType.ParenOpen => prec_call,
 
 				< 0 or > LexemeType.EndOfFile => throw new NotImplementedException($"unexpected token in expression at {position}: {peek.Type}"),
-
-				// LexemeType.None => (int?)null,
-				// LexemeType.EndOfFile => (int?)null,
-				// LexemeType.Spaces => (int?)null,
-				// LexemeType.EndOfLine => (int?)null,
-				// LexemeType.Comma => (int?)null,
-				// LexemeType.Exclamation => (int?)null,
-				// LexemeType.SemiColon => (int?)null,
-				// LexemeType.LessThan => (int?)null,
-				// LexemeType.GreaterThan => (int?)null,
-				// LexemeType.Star => (int?)null,
-				// LexemeType.Slash => (int?)null,
-				// LexemeType.Caret => (int?)null,
-				// LexemeType.SingleQuote => (int?)null,
-				// LexemeType.DoubleQuote => (int?)null,
-				// LexemeType.ParenOpen => (int?)null,
-				// LexemeType.ParenClose => (int?)null,
-				// LexemeType.BracketOpen => (int?)null,
-				// LexemeType.BracketClose => (int?)null,
-				// LexemeType.BraceOpen => (int?)null,
-				// LexemeType.BraceClose => (int?)null,
-				// LexemeType.LogicalOr => (int?)null,
-				// LexemeType.LogicalAnd => (int?)null,
-				// LexemeType.Comment => (int?)null,
 
 				_ => (int?)null
 			} is not int prec)
@@ -274,17 +251,12 @@ public static partial class Parser
 			var right = peek.Type switch
 			{
 				LexemeType.Colon => Parse_Declaration(leftResult.Value, input, ref position, prec),
-
 				LexemeType.Plus => Parse_Plus(leftResult.Value, input, ref position),
 				LexemeType.Minus => Parse_Minus(leftResult.Value, input, ref position),
-
 				LexemeType.Star => Parse_Star(leftResult.Value, input, ref position),
 				LexemeType.Slash => Parse_Slash(leftResult.Value, input, ref position),
-
 				LexemeType.Equals => Parse_Assign(leftResult.Value, input, ref position),
-
-				// LexemeType.Equals => new(new AssignNode(leftResult.Value, right.Value)),
-				// LexemeType.Period => new(new DotNode(leftResult.Value, right.Value)),
+				LexemeType.Period => Parse_Member(leftResult.Value, input, ref position),
 
 				// contiguous expressions are treated as function calls
 				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
@@ -304,6 +276,17 @@ public static partial class Parser
 
 		start = position;
 		return leftResult;
+	}
+
+	private static ParseResult<SyntaxNode> Parse_Member(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
+	{
+		var position = start;
+
+		var rightResult = Parse_Next_Expression(input, ref position, prec_dot);
+		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for member expression.", rightResult.Error); }
+
+		start = position;
+		return new(new MemberNode(left, rightResult.Value));
 	}
 
 	private static ParseResult<SyntaxNode> Parse_Assign(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
