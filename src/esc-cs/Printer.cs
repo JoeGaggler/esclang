@@ -433,6 +433,13 @@ public static class Printer
 				break;
 			}
 
+			case ParameterNode:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("parameter");
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);

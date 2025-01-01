@@ -136,6 +136,17 @@ public static partial class Parser
 				start = position;
 				return new(new BracesNode(braceResult.Value.Lines));
 			}
+			case LexemeType.LessThan:
+			{
+				var (peek, next) = input.Peek(start);
+				if (peek.Type == LexemeType.GreaterThan)
+				{
+					start = next;
+					return new(new ParameterNode());
+				}
+
+				return new(input[start], Error.Message("less than not yet implemented"));
+			}
 			default:
 			{
 				return new(token, Error.Message($"unexpected expression leaf: {token.Type}"));

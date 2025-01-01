@@ -1,14 +1,15 @@
 a : typ1 = 123 + 2 ToString - 3
-a = 1 * 2 + 3 * 4 + 5
+a = <>
 b := 456 + 2
 c :: 789
 d : typ2
 e :: struct {
 }
 f :: {
-    g :: "hello"
-    g := "world"
+    g :: <>
+    g := <>
 }
 h:typ3
-i:typ4:123
-j:typ5=123
+i:typ4:<>
+j:typ5=<>
+k :: <>

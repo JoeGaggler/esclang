@@ -26,6 +26,8 @@ public record MinusNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
 public record StarNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 
+public record ParameterNode : SyntaxNode { }
+
 public record EmptyNode : SyntaxNode { }
 
 //
