@@ -156,9 +156,9 @@ public static partial class Parser
 
 	private const int prec_colon = 2;
 	private const int prec_equals = 3;
-	private const int prec_call = 4;
-	private const int prec_plus = 5;
-	private const int prec_star = 6;
+	private const int prec_plus = 4;
+	private const int prec_star = 5;
+	private const int prec_call = 6;
 	private const int prec_dot = 7;
 
 	private static ParseResult<SyntaxNode> Parse_Next_Expression(ReadOnlySpan<Lexeme> input, ref Int32 start, int min_prec)
@@ -207,7 +207,10 @@ public static partial class Parser
 				LexemeType.Period => prec_dot,
 
 				// contiguous expressions are treated as function calls
-				LexemeType.Identifier or LexemeType.LiteralChar or LexemeType.LiteralString or LexemeType.Number => prec_call,
+				LexemeType.Identifier => prec_call,
+				LexemeType.LiteralChar => prec_call,
+				LexemeType.LiteralString => prec_call,
+				LexemeType.Number => prec_call,
 				LexemeType.BraceOpen => prec_call,
 				LexemeType.ParenOpen => prec_call,
 
@@ -283,7 +286,11 @@ public static partial class Parser
 
 				// contiguous expressions are treated as function calls
 				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
+				LexemeType.LiteralChar => Parse_Call(leftResult.Value, input, ref position),
+				LexemeType.LiteralString => Parse_Call(leftResult.Value, input, ref position),
+				LexemeType.Number => Parse_Call(leftResult.Value, input, ref position),
 				LexemeType.BraceOpen => Parse_Call(leftResult.Value, input, ref position),
+				LexemeType.ParenOpen => Parse_Call(leftResult.Value, input, ref position),
 
 				_ => throw new NotImplementedException($"binary expression {peek.Type} {position}")
 				// _ => Parse_Expression(input, ref position, prec)
@@ -327,7 +334,7 @@ public static partial class Parser
 		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for minus expression.", rightResult.Error); }
 
 		start = position;
-		return new(new StarNode(left, rightResult.Value));
+		return new(new MinusNode(left, rightResult.Value));
 	}
 
 	private static ParseResult<SyntaxNode> Parse_Star(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
