@@ -203,6 +203,7 @@ public static partial class Parser
 				LexemeType.Minus => prec_plus,
 
 				LexemeType.Star => prec_star,
+				LexemeType.Slash => prec_star,
 
 				LexemeType.Period => prec_dot,
 
@@ -278,6 +279,7 @@ public static partial class Parser
 				LexemeType.Minus => Parse_Minus(leftResult.Value, input, ref position),
 
 				LexemeType.Star => Parse_Star(leftResult.Value, input, ref position),
+				LexemeType.Slash => Parse_Slash(leftResult.Value, input, ref position),
 
 				LexemeType.Equals => Parse_Assign(leftResult.Value, input, ref position),
 
@@ -346,6 +348,17 @@ public static partial class Parser
 
 		start = position;
 		return new(new StarNode(left, rightResult.Value));
+	}
+
+	private static ParseResult<SyntaxNode> Parse_Slash(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)
+	{
+		var position = start;
+
+		var rightResult = Parse_Expression(input, ref position, prec_star);
+		if (!rightResult.HasValue) { return new(input[position], "Unable to parse leaf for slash expression.", rightResult.Error); }
+
+		start = position;
+		return new(new SlashNode(left, rightResult.Value));
 	}
 
 	private static ParseResult<SyntaxNode> Parse_Call(SyntaxNode left, ReadOnlySpan<Lexeme> input, ref Int32 start)

@@ -24,7 +24,7 @@ Lex:
 0015: 25 + 1 -- (1, 26) -- Spaces -- " "
 0016: 26 + 1 -- (1, 27) -- Number -- 2
 0017: 27 + 1 -- (1, 28) -- Spaces -- " "
-0018: 28 + 1 -- (1, 29) -- Minus -- -
+0018: 28 + 1 -- (1, 29) -- Slash -- /
 0019: 29 + 1 -- (1, 30) -- Spaces -- " "
 0020: 30 + 1 -- (1, 31) -- Number -- 4
 0021: 31 + 1 -- (1, 32) -- EndOfLine -- \n
@@ -134,16 +134,16 @@ line
     type
       identifier: typ1
     value
-      minus
-        plus
-          123
+      plus
+        123
+        slash
           call
             target
               identifier: power
             arguments
               10
               2
-        4
+          4
 line
   assign
     identifier: a

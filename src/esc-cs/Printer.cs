@@ -433,6 +433,15 @@ public static class Printer
 				break;
 			}
 
+			case SlashNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("slash");
+				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
+				break;
+			}
+
 			case ParameterNode:
 			{
 				outputFile.Indent(level);
