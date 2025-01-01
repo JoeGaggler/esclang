@@ -76,50 +76,21 @@ public static partial class Parser
 		if (!first) { return new(input[start], Error.Message("failed to parse line expression"), first.Error); }
 		nodes.Add(first);
 
-		// Trailing expressions
-		while (true)
+		// Line terminator
+		(peek, next) = input.Peek(start);
+		if (peek.Type is LexemeType.EndOfFile)
 		{
-			// Stop if end of file
-			(peek, next) = input.Peek(start);
-			if (peek.Type is LexemeType.EndOfFile)
-			{
-				start = next;
-				return new(line);
-			}
-			else if (peek.Type is LexemeType.EndOfLine)
-			{
-				var (peek2, next2) = input.PeekThroughNewline(start);
-				if (peek2.Type is not LexemeType.BraceOpen)
-				{
-					start = next;
-					return new(line);
-				}
-				throw new NotImplementedException("braces after newline");
-				// var right = Parse_Braces2(input, ref start);
-				// if (!right) { return new(peek, Error.Message("failed to parse braces expression"), right.Error); }
-				// nodes.Add(right);
-			}
-			else if (peek.Type is LexemeType.Identifier)
-			{
-				var right = Parse_Expression(input, ref start, 0);
-				if (!right) { return new(peek, Error.Message("failed to parse line expression 2"), right.Error); }
-				nodes.Add(right);
-			}
-			else if (peek.Type is LexemeType.BraceOpen)
-			{
-				start = next;
-				var right = Parse_Braces(input, ref start);
-				if (!right) { return new(peek, Error.Message("failed to parse line expression 3"), right.Error); }
-				nodes.Add(right);
-			}
-			else if (peek.Type is LexemeType.BraceClose)
-			{
-				return new(line);
-			}
-			else
-			{
-				return new(peek, Error.Message("expected line token"));
-			}
+			start = next;
+			return new(line);
+		}
+		else if (peek.Type is LexemeType.EndOfLine)
+		{
+			start = next;
+			return new(line);
+		}
+		else
+		{
+			return new(peek, Error.Message("expected line token"));
 		}
 	}
 
@@ -257,7 +228,7 @@ public static partial class Parser
 				}
 			}
 
-			// HACK: chain does not have an operator
+			// HACK: call chain does not have an operator to skip
 			if (prec != prec_call)
 			{
 				position = next;
