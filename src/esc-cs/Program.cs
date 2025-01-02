@@ -54,11 +54,15 @@ class Program
 		}
 		Measure("Parse", measurements, stopwatch);
 
+		// Analyzer
+		var unit = Analyze.Analyzer.Analyze(file);
+		Measure("Analyze", measurements, stopwatch);
+
 		// Evaluator
 		var programOutput = new StringWriter();
 		try
 		{
-			Eval.Evaluator.Evaluate(file, programOutput);
+			Eval.Evaluator.Evaluate(unit, programOutput);
 		}
 		catch (Exception e)
 		{

@@ -1,9 +1,10 @@
 Stats:
--  Read: 0.00s
--   Lex: 0.00s
-- Parse: 0.00s
--  Eval: 0.00s
-- Print: 0.00s
+-    Read: 0.00s
+-     Lex: 0.00s
+-   Parse: 0.00s
+- Analyze: 0.00s
+-    Eval: 0.00s
+-   Print: 0.00s
 
 Lex:
 0000: 0 + 1 -- (1, 1) -- Identifier -- a
@@ -237,8 +238,3 @@ line
       parameter
 
 Output:
-*** CRASH! ***
-System.NotImplementedException: EvaluateSyntaxNode not implemented for node type: LineNode
-   at EscLang.Eval.Evaluator.EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 58
-   at EscLang.Eval.Evaluator.Evaluate(EscFile file, StringWriter programOutput) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 21
-   at EscLang.Program.Main(String[] args) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Program.cs:line 61

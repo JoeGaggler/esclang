@@ -11,25 +11,27 @@ public static class Evaluator
 	public record ReturningVoidNode() : SyntaxNode { }
 	public record ImplicitVoidNode() : SyntaxNode { }
 
-	public static SyntaxNode Evaluate(EscFile file, StringWriter programOutput)
+	public static SyntaxNode Evaluate(Analyze.Analysis file, StringWriter programOutput)
 	{
 		var environment = new Environment(programOutput);
 		var globalScope = new Scope();
 
-		foreach (var node in file.Lines)
-		{
-			switch (EvaluateSyntaxNode(node, globalScope, environment))
-			{
-				case ReturningNodeNode returningNodeNode:
-				{
-					return returningNodeNode.Node;
-				}
-				case ReturningVoidNode _:
-				{
-					break;
-				}
-			}
-		}
+		// TODO: run analyzed program
+		//
+		// foreach (var node in file.Lines)
+		// {
+		// 	switch (EvaluateSyntaxNode(node, globalScope, environment))
+		// 	{
+		// 		case ReturningNodeNode returningNodeNode:
+		// 		{
+		// 			return returningNodeNode.Node;
+		// 		}
+		// 		case ReturningVoidNode _:
+		// 		{
+		// 			break;
+		// 		}
+		// 	}
+		// }
 
 		return new ReturningVoidNode();
 	}

@@ -264,7 +264,7 @@ public static partial class Parser
 				LexemeType.Equals => Parse_Assign(leftResult.Value, input, ref position),
 				LexemeType.Period => Parse_Member(leftResult.Value, input, ref position),
 
-				// contiguous expressions are treated as function calls
+				// sequence of expressions without infix operators treated as function calls
 				LexemeType.Identifier => Parse_Call(leftResult.Value, input, ref position),
 				LexemeType.LiteralChar => Parse_Call(leftResult.Value, input, ref position),
 				LexemeType.LiteralString => Parse_Call(leftResult.Value, input, ref position),
