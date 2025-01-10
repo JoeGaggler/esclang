@@ -100,6 +100,11 @@ class Program
 				outputFile.WriteLine("Parse:");
 				Printer.PrintSyntax(outputFile, file, lexemes);
 
+				// Debug Analyzer
+				outputFile.WriteLine();
+				outputFile.WriteLine("Analyze:");
+				Printer.PrintAnalysis(outputFile, unit);
+
 				// Debug Output
 				outputFile.WriteLine();
 				outputFile.WriteLine("Output:");

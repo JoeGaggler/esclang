@@ -1,8 +1,7 @@
+using EscLang.Analyze;
 using EscLang.Parse;
 
 namespace EscLang.Eval;
-
-// TODO: on crash, dump the AST with a pointer to the node that crashed
 
 public static class Evaluator
 {
@@ -11,30 +10,87 @@ public static class Evaluator
 	public record ReturningVoidNode() : SyntaxNode { }
 	public record ImplicitVoidNode() : SyntaxNode { }
 
-	public static SyntaxNode Evaluate(Analyze.Analysis file, StringWriter programOutput)
+	public static ExpressionResult Evaluate(Analyze.Analysis file, StringWriter programOutput)
 	{
 		var environment = new Environment(programOutput);
-		var globalScope = new Scope();
+		var globalTable = new ValueTable();
 
-		// TODO: run analyzed program
-		//
-		// foreach (var node in file.Lines)
-		// {
-		// 	switch (EvaluateSyntaxNode(node, globalScope, environment))
-		// 	{
-		// 		case ReturningNodeNode returningNodeNode:
-		// 		{
-		// 			return returningNodeNode.Node;
-		// 		}
-		// 		case ReturningVoidNode _:
-		// 		{
-		// 			break;
-		// 		}
-		// 	}
-		// }
-
-		return new ReturningVoidNode();
+		return EvaluateScope(file.Main, globalTable, programOutput);
 	}
+
+	private static ExpressionResult EvaluateScope(Analyze.Scope scope, ValueTable parentTable, StringWriter programOutput)
+	{
+		var table = new ValueTable(parentTable);
+		foreach (var step in scope.Steps)
+		{
+			var stepNode = EvaluateStep(step, table, programOutput);
+			// if (stepNode is ReturningNodeNode returningNodeNode)
+			// {
+			// 	return returningNodeNode.Node;
+			// }
+			// else if (stepNode is ReturningVoidNode)
+			// {
+			// 	return stepNode;
+			// }
+		}
+
+		return new ImplicitVoidExpressionResult();
+	}
+
+	private static ExpressionResult EvaluateStep(Analyze.Step step, ValueTable table, StringWriter programOutput)
+	{
+		return step switch
+		{
+			AssignStep assignStep => EvaluateAssignStep(assignStep, table, programOutput),
+			PrintStep printStep => EvaluatePrintStep(printStep, table, programOutput),
+			_ => throw new NotImplementedException($"Invalid step: {step}"),
+		};
+	}
+
+	private static ExpressionResult EvaluatePrintStep(PrintStep printStep, ValueTable table, StringWriter programOutput)
+	{
+		var rhs = EvaluateTypedExpression(printStep.Value, table, programOutput);
+		var val = rhs switch
+		{
+			IntExpressionResult intExpressionResult => intExpressionResult.Value.ToString(),
+			_ => throw new NotImplementedException($"Invalid print value: {rhs}"),
+		};
+		programOutput.WriteLine(val);
+		return rhs;
+	}
+
+	private static ExpressionResult EvaluateAssignStep(AssignStep assignStep, ValueTable table, StringWriter programOutput)
+	{
+		var rhs = EvaluateTypedExpression(assignStep.Value, table, programOutput);
+		table.Set(assignStep.Identifier, rhs);
+		return rhs; // TODO: return l-value?
+	}
+
+	private static ExpressionResult EvaluateTypedExpression(TypedExpression value, ValueTable table, StringWriter programOutput)
+	{
+		return value switch
+		{
+			IntLiteralExpression intLiteralExpression => new IntExpressionResult(intLiteralExpression.Value),
+			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
+			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
+		};
+	}
+
+	private static ExpressionResult EvaluateIdentifierExpression(IdentifierExpression identifierExpression, ValueTable table, StringWriter programOutput)
+	{
+		var id = identifierExpression.Identifier;
+		if (table.Get(id) is { } value)
+		{
+			return value;
+		}
+		else
+		{
+			throw new Exception("Unknown identifier");
+		}
+	}
+
+	////////////////////////////////////////
+	// Migrate code below
 
 	public static SyntaxNode EvaluateSyntaxNode(SyntaxNode syntaxNode, Scope scope, Environment environment)
 	{

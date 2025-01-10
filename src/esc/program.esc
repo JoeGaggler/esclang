@@ -1,17 +1,2 @@
-a : typ1 = 123 + power.one.two / 4
-a = <>
-b := 456 + 2
-c :: 789
-d : typ2
-e :: struct {
-}
-f :: 
-{
-    g :: <>
-    g := <-
-    <- g
-}
-h:typ3
-i:typ4:<>
-j:typ5=<>
-k :: <>
+a :: 13
+print a

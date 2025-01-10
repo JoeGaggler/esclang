@@ -1,3 +1,4 @@
+using EscLang.Analyze;
 using EscLang.Lex;
 using EscLang.Parse;
 
@@ -469,6 +470,47 @@ public static class Printer
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine($"Unable to print syntax node: {syntaxNode.GetType().Name}");
+				break;
+			}
+		}
+	}
+
+	public static void PrintAnalysis(TextWriter outputFile, Analysis analysis)
+	{
+		outputFile.WriteLine($"main procedure");
+		PrintAnalysis(outputFile, analysis.Main, 1);
+	}
+
+	public static void PrintAnalysis(TextWriter outputFile, Scope scope, int level)
+	{
+		outputFile.Indent(level);
+		outputFile.WriteLine($"scope");
+		foreach (var step in scope.Steps)
+		{
+			PrintAnalysis(outputFile, step, level + 1);
+		}
+	}
+
+	public static void PrintAnalysis(TextWriter outputFile, Step step, int level)
+	{
+		switch (step)
+		{
+			case AssignStep assignStep:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"assign: {assignStep.Identifier} = {assignStep.Value} ({assignStep.Value.GetType().Name})");
+				break;
+			}
+			case PrintStep printStep:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"print: {printStep.Value} ({printStep.Value.GetType().Name})");
+				break;
+			}
+			default:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"unknown step: {step.GetType().Name}");
 				break;
 			}
 		}

@@ -10,231 +10,35 @@ Lex:
 0000: 0 + 1 -- (1, 1) -- Identifier -- a
 0001: 1 + 1 -- (1, 2) -- Spaces -- " "
 0002: 2 + 1 -- (1, 3) -- Colon -- :
-0003: 3 + 1 -- (1, 4) -- Spaces -- " "
-0004: 4 + 4 -- (1, 5) -- Identifier -- typ1
-0005: 8 + 1 -- (1, 9) -- Spaces -- " "
-0006: 9 + 1 -- (1, 10) -- Equals -- =
-0007: 10 + 1 -- (1, 11) -- Spaces -- " "
-0008: 11 + 3 -- (1, 12) -- Number -- 123
-0009: 14 + 1 -- (1, 15) -- Spaces -- " "
-0010: 15 + 1 -- (1, 16) -- Plus -- +
-0011: 16 + 1 -- (1, 17) -- Spaces -- " "
-0012: 17 + 5 -- (1, 18) -- Identifier -- power
-0013: 22 + 1 -- (1, 23) -- Period -- .
-0014: 23 + 3 -- (1, 24) -- Identifier -- one
-0015: 26 + 1 -- (1, 27) -- Period -- .
-0016: 27 + 3 -- (1, 28) -- Identifier -- two
-0017: 30 + 1 -- (1, 31) -- Spaces -- " "
-0018: 31 + 1 -- (1, 32) -- Slash -- /
-0019: 32 + 1 -- (1, 33) -- Spaces -- " "
-0020: 33 + 1 -- (1, 34) -- Number -- 4
-0021: 34 + 1 -- (1, 35) -- EndOfLine -- \n
-0022: 35 + 1 -- (2, 1) -- Identifier -- a
-0023: 36 + 1 -- (2, 2) -- Spaces -- " "
-0024: 37 + 1 -- (2, 3) -- Equals -- =
-0025: 38 + 1 -- (2, 4) -- Spaces -- " "
-0026: 39 + 1 -- (2, 5) -- LessThan -- <
-0027: 40 + 1 -- (2, 6) -- GreaterThan -- >
-0028: 41 + 1 -- (2, 7) -- EndOfLine -- \n
-0029: 42 + 1 -- (3, 1) -- Identifier -- b
-0030: 43 + 1 -- (3, 2) -- Spaces -- " "
-0031: 44 + 1 -- (3, 3) -- Colon -- :
-0032: 45 + 1 -- (3, 4) -- Equals -- =
-0033: 46 + 1 -- (3, 5) -- Spaces -- " "
-0034: 47 + 3 -- (3, 6) -- Number -- 456
-0035: 50 + 1 -- (3, 9) -- Spaces -- " "
-0036: 51 + 1 -- (3, 10) -- Plus -- +
-0037: 52 + 1 -- (3, 11) -- Spaces -- " "
-0038: 53 + 1 -- (3, 12) -- Number -- 2
-0039: 54 + 1 -- (3, 13) -- EndOfLine -- \n
-0040: 55 + 1 -- (4, 1) -- Identifier -- c
-0041: 56 + 1 -- (4, 2) -- Spaces -- " "
-0042: 57 + 1 -- (4, 3) -- Colon -- :
-0043: 58 + 1 -- (4, 4) -- Colon -- :
-0044: 59 + 1 -- (4, 5) -- Spaces -- " "
-0045: 60 + 3 -- (4, 6) -- Number -- 789
-0046: 63 + 1 -- (4, 9) -- EndOfLine -- \n
-0047: 64 + 1 -- (5, 1) -- Identifier -- d
-0048: 65 + 1 -- (5, 2) -- Spaces -- " "
-0049: 66 + 1 -- (5, 3) -- Colon -- :
-0050: 67 + 1 -- (5, 4) -- Spaces -- " "
-0051: 68 + 4 -- (5, 5) -- Identifier -- typ2
-0052: 72 + 1 -- (5, 9) -- EndOfLine -- \n
-0053: 73 + 1 -- (6, 1) -- Identifier -- e
-0054: 74 + 1 -- (6, 2) -- Spaces -- " "
-0055: 75 + 1 -- (6, 3) -- Colon -- :
-0056: 76 + 1 -- (6, 4) -- Colon -- :
-0057: 77 + 1 -- (6, 5) -- Spaces -- " "
-0058: 78 + 6 -- (6, 6) -- Identifier -- struct
-0059: 84 + 1 -- (6, 12) -- Spaces -- " "
-0060: 85 + 1 -- (6, 13) -- BraceOpen -- {
-0061: 86 + 1 -- (6, 14) -- EndOfLine -- \n
-0062: 87 + 1 -- (7, 1) -- BraceClose -- }
-0063: 88 + 1 -- (7, 2) -- EndOfLine -- \n
-0064: 89 + 1 -- (8, 1) -- Identifier -- f
-0065: 90 + 1 -- (8, 2) -- Spaces -- " "
-0066: 91 + 1 -- (8, 3) -- Colon -- :
-0067: 92 + 1 -- (8, 4) -- Colon -- :
-0068: 93 + 1 -- (8, 5) -- Spaces -- " "
-0069: 94 + 1 -- (8, 6) -- EndOfLine -- \n
-0070: 95 + 1 -- (9, 1) -- BraceOpen -- {
-0071: 96 + 1 -- (9, 2) -- EndOfLine -- \n
-0072: 97 + 4 -- (10, 1) -- Spaces -- "    "
-0073: 101 + 1 -- (10, 5) -- Identifier -- g
-0074: 102 + 1 -- (10, 6) -- Spaces -- " "
-0075: 103 + 1 -- (10, 7) -- Colon -- :
-0076: 104 + 1 -- (10, 8) -- Colon -- :
-0077: 105 + 1 -- (10, 9) -- Spaces -- " "
-0078: 106 + 1 -- (10, 10) -- LessThan -- <
-0079: 107 + 1 -- (10, 11) -- GreaterThan -- >
-0080: 108 + 1 -- (10, 12) -- EndOfLine -- \n
-0081: 109 + 4 -- (11, 1) -- Spaces -- "    "
-0082: 113 + 1 -- (11, 5) -- Identifier -- g
-0083: 114 + 1 -- (11, 6) -- Spaces -- " "
-0084: 115 + 1 -- (11, 7) -- Colon -- :
-0085: 116 + 1 -- (11, 8) -- Equals -- =
-0086: 117 + 1 -- (11, 9) -- Spaces -- " "
-0087: 118 + 1 -- (11, 10) -- LessThan -- <
-0088: 119 + 1 -- (11, 11) -- Minus -- -
-0089: 120 + 1 -- (11, 12) -- EndOfLine -- \n
-0090: 121 + 4 -- (12, 1) -- Spaces -- "    "
-0091: 125 + 1 -- (12, 5) -- LessThan -- <
-0092: 126 + 1 -- (12, 6) -- Minus -- -
-0093: 127 + 1 -- (12, 7) -- Spaces -- " "
-0094: 128 + 1 -- (12, 8) -- Identifier -- g
-0095: 129 + 1 -- (12, 9) -- EndOfLine -- \n
-0096: 130 + 1 -- (13, 1) -- BraceClose -- }
-0097: 131 + 1 -- (13, 2) -- EndOfLine -- \n
-0098: 132 + 1 -- (14, 1) -- Identifier -- h
-0099: 133 + 1 -- (14, 2) -- Colon -- :
-0100: 134 + 4 -- (14, 3) -- Identifier -- typ3
-0101: 138 + 1 -- (14, 7) -- EndOfLine -- \n
-0102: 139 + 1 -- (15, 1) -- Identifier -- i
-0103: 140 + 1 -- (15, 2) -- Colon -- :
-0104: 141 + 4 -- (15, 3) -- Identifier -- typ4
-0105: 145 + 1 -- (15, 7) -- Colon -- :
-0106: 146 + 1 -- (15, 8) -- LessThan -- <
-0107: 147 + 1 -- (15, 9) -- GreaterThan -- >
-0108: 148 + 1 -- (15, 10) -- EndOfLine -- \n
-0109: 149 + 1 -- (16, 1) -- Identifier -- j
-0110: 150 + 1 -- (16, 2) -- Colon -- :
-0111: 151 + 4 -- (16, 3) -- Identifier -- typ5
-0112: 155 + 1 -- (16, 7) -- Equals -- =
-0113: 156 + 1 -- (16, 8) -- LessThan -- <
-0114: 157 + 1 -- (16, 9) -- GreaterThan -- >
-0115: 158 + 1 -- (16, 10) -- EndOfLine -- \n
-0116: 159 + 1 -- (17, 1) -- Identifier -- k
-0117: 160 + 1 -- (17, 2) -- Spaces -- " "
-0118: 161 + 1 -- (17, 3) -- Colon -- :
-0119: 162 + 1 -- (17, 4) -- Colon -- :
-0120: 163 + 1 -- (17, 5) -- Spaces -- " "
-0121: 164 + 1 -- (17, 6) -- LessThan -- <
-0122: 165 + 1 -- (17, 7) -- GreaterThan -- >
-0123: 166 + 1 -- (17, 8) -- EndOfLine -- \n
-0124: 167 + 0 -- (18, 1) -- EndOfFile -- <EOF>
+0003: 3 + 1 -- (1, 4) -- Colon -- :
+0004: 4 + 1 -- (1, 5) -- Spaces -- " "
+0005: 5 + 2 -- (1, 6) -- Number -- 13
+0006: 7 + 1 -- (1, 8) -- EndOfLine -- \n
+0007: 8 + 5 -- (2, 1) -- Identifier -- print
+0008: 13 + 1 -- (2, 6) -- Spaces -- " "
+0009: 14 + 1 -- (2, 7) -- Identifier -- a
+0010: 15 + 1 -- (2, 8) -- EndOfLine -- \n
+0011: 16 + 0 -- (3, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
-  declare-assign
+  declare-static
     id
       identifier: a
-    type
-      identifier: typ1
     value
-      plus
-        123
-        slash
-          member
-            member
-              identifier: power
-              identifier: one
-            identifier: two
-          4
+      13
 line
-  assign
-    identifier: a
-    parameter
-line
-  declare-assign
-    id
-      identifier: b
-    value
-      plus
-        456
-        2
-line
-  declare-static
-    id
-      identifier: c
-    value
-      789
-line
-  declare-only
-    id
-      identifier: d
-    type
-      identifier: typ2
-line
-  declare-static
-    id
-      identifier: e
-    value
-      call
-        target
-          identifier: struct
-        arguments
-          braces
-line
-  declare-static
-    id
-      identifier: f
-    value
-      braces
-        line
-          declare-static
-            id
-              identifier: g
-            value
-              parameter
-        line
-          declare-assign
-            id
-              identifier: g
-            value
-              left-arrow
-        line
-          call
-            target
-              left-arrow
-            arguments
-              identifier: g
-line
-  declare-only
-    id
-      identifier: h
-    type
-      identifier: typ3
-line
-  declare-static
-    id
-      identifier: i
-    type
-      identifier: typ4
-    value
-      parameter
-line
-  declare-assign
-    id
-      identifier: j
-    type
-      identifier: typ5
-    value
-      parameter
-line
-  declare-static
-    id
-      identifier: k
-    value
-      parameter
+  call
+    target
+      identifier: print
+    arguments
+      identifier: a
+
+Analyze:
+main procedure
+  scope
+    assign: a = IntLiteralExpression { Value = 13 } (IntLiteralExpression)
+    print: IdentifierExpression { Identifier = a } (IdentifierExpression)
 
 Output:
+13
