@@ -79,7 +79,7 @@ public static class Analyzer
 			case { } x when x is LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
 			{
 				var intVal = Int32.Parse(numberLiteral);
-				return new IntLiteralExpression(Value: intVal);
+				return new IntLiteralExpression(intVal);
 			}
 			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
 			{
@@ -88,7 +88,18 @@ public static class Analyzer
 					throw new Exception("Unknown identifier");
 				}
 
-				return new IdentifierExpression(Identifier: id);
+				var type = typeof(Int32); // TODO: type lookup
+
+				return new IdentifierExpression(type, Identifier: id);
+			}
+			case { } x when x is PlusNode { Left: { } left, Right: { } right }:
+			{
+				var leftValue = AnalyzeExpression(left, scope, queue);
+				var rightValue = AnalyzeExpression(right, scope, queue);
+
+				var type = typeof(Int32); // TODO: type lookup
+
+				return new AddExpression(type, Left: leftValue, Right: rightValue);
 			}
 			default:
 			{

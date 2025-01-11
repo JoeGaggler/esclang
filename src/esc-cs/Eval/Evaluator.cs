@@ -72,8 +72,30 @@ public static class Evaluator
 		{
 			IntLiteralExpression intLiteralExpression => new IntExpressionResult(intLiteralExpression.Value),
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
+			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateAddExpression(AddExpression addExpression, ValueTable table, StringWriter programOutput)
+	{
+		var left = EvaluateTypedExpression(addExpression.Left, table, programOutput);
+		var right = EvaluateTypedExpression(addExpression.Right, table, programOutput);
+
+		if (addExpression.Type != typeof(Int32))
+		{
+			throw new NotImplementedException($"Invalid add expression type: {addExpression.Type}");
+		}
+		if (left is not IntExpressionResult leftIntExpressionResult)
+		{
+			throw new NotImplementedException($"Invalid add expression left: {left}");
+		}
+		if (right is not IntExpressionResult rightIntExpressionResult)
+		{
+			throw new NotImplementedException($"Invalid add expression right: {right}");
+		}
+		var sum = leftIntExpressionResult.Value + rightIntExpressionResult.Value;
+		return new IntExpressionResult(sum);
 	}
 
 	private static ExpressionResult EvaluateIdentifierExpression(IdentifierExpression identifierExpression, ValueTable table, StringWriter programOutput)
