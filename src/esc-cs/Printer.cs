@@ -484,21 +484,34 @@ public static class Printer
 	public static void PrintAnalysis(TextWriter outputFile, Scope scope, int level)
 	{
 		outputFile.Indent(level);
+		PrintAnalysisScope(outputFile, scope, level);		
+	}
+
+	public static void PrintAnalysisScope(TextWriter outputFile, Scope scope, int level)
+	{
+		outputFile.Indent(level);
 		outputFile.WriteLine($"scope");
+		// foreach (var (key, value) in scope.NameTable)
+		// {
+		// 	outputFile.Indent(level + 1);
+		// 	outputFile.WriteLine($"name: {key} ({value})");
+		// }
+
 		foreach (var step in scope.Steps)
 		{
-			PrintAnalysis(outputFile, step, level + 1);
+			PrintAnalysisStep(outputFile, step, level + 1);
 		}
 	}
 
-	public static void PrintAnalysis(TextWriter outputFile, Step step, int level)
+	public static void PrintAnalysisStep(TextWriter outputFile, Step step, int level)
 	{
 		switch (step)
 		{
 			case AssignStep assignStep:
 			{
 				outputFile.Indent(level);
-				outputFile.WriteLine($"assign: {assignStep.Identifier} = {assignStep.Value} ({assignStep.Value.GetType().Name})");
+				outputFile.WriteLine($"assign: {assignStep.Identifier} = ({assignStep.Value.GetType().Name})");
+				PrintAnalysisTypedExpression(outputFile, assignStep.Value, level + 1);
 				break;
 			}
 			case PrintStep printStep:
@@ -511,6 +524,46 @@ public static class Printer
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine($"unknown step: {step.GetType().Name}");
+				break;
+			}
+		}
+	}
+
+	private static void PrintAnalysisTypedExpression(TextWriter outputFile, TypedExpression value, int v)
+	{
+		switch (value)
+		{
+			case IntLiteralExpression intLiteralExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"int: {intLiteralExpression.Value}");
+				break;
+			}
+			case IdentifierExpression identifierExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"identifier: {identifierExpression.Identifier}");
+				break;
+			}
+			case AddExpression addExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"add");
+				PrintAnalysisTypedExpression(outputFile, addExpression.Left, v + 1);
+				PrintAnalysisTypedExpression(outputFile, addExpression.Right, v + 1);
+				break;
+			}
+			case FunctionScopeExpression funcExp:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"func scope");
+				PrintAnalysisScope(outputFile, funcExp.Scope, v + 1);
+				break;
+			}
+			default:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"unknown typed expression: {value.GetType().Name}");
 				break;
 			}
 		}

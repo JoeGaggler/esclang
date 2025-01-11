@@ -23,51 +23,57 @@ public static class Analyzer
 	{
 		foreach (var lineItem in line.Items)
 		{
-			if (lineItem is Parse.DeclareStaticNode declareStaticNode)
+			var step = AnalyzeLineItem(lineItem, scope, queue);
+			scope.Steps.Add(step);
+		}
+	}
+
+	private static Step AnalyzeLineItem(SyntaxNode lineItem, Scope scope, AnalysisQueue queue)
+	{
+		if (lineItem is Parse.DeclareStaticNode declareStaticNode)
+		{
+			if (declareStaticNode.Identifier is not Parse.IdentifierNode { Text: { Length: > 0 } id })
 			{
-				if (declareStaticNode.Identifier is not Parse.IdentifierNode { Text: { Length: > 0 } id })
-				{
-					throw new Exception("Invalid identifier");
-				}
-
-				if (!scope.NameTable.TryAdd(id, null)) // unknown type until right-hand side is analyzed
-				{
-					throw new Exception("Duplicate identifier");
-				}
-
-				var value = AnalyzeExpression(declareStaticNode.Value, scope, queue);
-				scope.NameTable[id] = value.Type;
-				var step = new AssignStep(scope, Identifier: id, Value: value);
-				scope.Steps.Add(step);
+				throw new Exception("Invalid identifier");
 			}
-			else if (lineItem is CallNode callNode)
+
+			if (!scope.NameTable.TryAdd(id, null)) // unknown type until right-hand side is analyzed
 			{
-				if (callNode.Target is not IdentifierNode { Text: { Length: > 0 } targetId })
+				throw new Exception("Duplicate identifier");
+			}
+
+			var value = AnalyzeExpression(declareStaticNode.Value, scope, queue);
+			scope.NameTable[id] = value.Type;
+			var step = new AssignStep(scope, Identifier: id, Value: value);
+			return step;
+		}
+		else if (lineItem is CallNode callNode)
+		{
+			if (callNode.Target is not IdentifierNode { Text: { Length: > 0 } targetId })
+			{
+				throw new NotImplementedException("TODO: call nodes on non-identifiers");
+			}
+
+			if (targetId == "print") // intrisic
+			{
+				if (callNode.Arguments.Count != 1)
 				{
-					throw new NotImplementedException("TODO: call nodes on non-identifiers");
+					throw new Exception("Invalid print call");
 				}
 
-				if (targetId == "print") // intrisic
-				{
-					if (callNode.Arguments.Count != 1)
-					{
-						throw new Exception("Invalid print call");
-					}
-
-					var arg = callNode.Arguments[0];
-					var value = AnalyzeExpression(arg, scope, queue);
-					var step = new PrintStep(scope, Value: value);
-					scope.Steps.Add(step);
-				}
-				else
-				{
-					throw new NotImplementedException($"Invalid call target: {targetId}");
-				}
+				var arg = callNode.Arguments[0];
+				var value = AnalyzeExpression(arg, scope, queue);
+				var step = new PrintStep(scope, Value: value);
+				return step;
 			}
 			else
 			{
-				throw new NotImplementedException($"Invalid line item: {lineItem}");
+				throw new NotImplementedException($"Invalid call target: {targetId}");
 			}
+		}
+		else
+		{
+			throw new NotImplementedException($"Invalid line item: {lineItem}");
 		}
 	}
 
@@ -91,6 +97,11 @@ public static class Analyzer
 					throw new Exception("Unknown identifier type");
 				}
 
+				if (type == typeof(FunctionScopeExpression)) // TODO: analyze return type of function scope
+				{
+					type = typeof(Int32);
+				}
+
 				return new IdentifierExpression(type, Identifier: id);
 			}
 			case { } x when x is PlusNode { Left: { } left, Right: { } right }:
@@ -100,12 +111,23 @@ public static class Analyzer
 
 				if (leftValue.Type != rightValue.Type)
 				{
-					throw new Exception("Type mismatch");
+					throw new Exception($"Type mismatch: left={leftValue.Type}, right={rightValue.Type}");
 				}
 
 				var addType = leftValue.Type; // assuming result is same type as operands
 
 				return new AddExpression(addType, Left: leftValue, Right: rightValue);
+			}
+			case { } x when x is BracesNode { Lines: { } lines }:
+			{
+				// all braces are functions for now
+
+				var innerScope = new Scope() { Parent = scope };
+				foreach (var line in lines)
+				{
+					AnalyzeLine(line, innerScope, queue);
+				}
+				return new FunctionScopeExpression(innerScope);
 			}
 			default:
 			{

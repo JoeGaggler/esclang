@@ -73,8 +73,15 @@ public static class Evaluator
 			IntLiteralExpression intLiteralExpression => new IntExpressionResult(intLiteralExpression.Value),
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
+			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
+	{
+		// TODO: analyze return type of function scope
+		return new IntExpressionResult(1);
 	}
 
 	private static ExpressionResult EvaluateAddExpression(AddExpression addExpression, ValueTable table, StringWriter programOutput)

@@ -1,4 +1,7 @@
+func :: {
+    a :: 1
+}
 a :: 13
-b :: a + a + 5
+b :: a + func + 5
 print a
 print b

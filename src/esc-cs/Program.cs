@@ -20,6 +20,9 @@ class Program
 		}
 		WriteLine(outputPath);
 
+		var outputFilePath = Path.Combine(outputPath, "output.txt");
+		using var outputFile = new StreamWriter(outputFilePath);
+
 		String escSourceCode;
 		try
 		{
@@ -45,6 +48,16 @@ class Program
 		}
 		Measure("Lex", measurements, stopwatch);
 
+		// Debug Lexer
+		outputFile.WriteLine();
+		outputFile.WriteLine("Lex:");
+		int lexemeIndex = 0;
+		foreach (var lexeme in lexemes)
+		{
+			Printer.PrintLexeme(outputFile, lexeme, lexemeIndex);
+			lexemeIndex++;
+		}
+
 		// Parser
 		if (!Parse.Parser.TryParse(lexemes, out var file, out var error))
 		{
@@ -54,9 +67,19 @@ class Program
 		}
 		Measure("Parse", measurements, stopwatch);
 
+		// Debug Parser
+		outputFile.WriteLine();
+		outputFile.WriteLine("Parse:");
+		Printer.PrintSyntax(outputFile, file, lexemes);
+
 		// Analyzer
 		var unit = Analyze.Analyzer.Analyze(file);
 		Measure("Analyze", measurements, stopwatch);
+
+		// Debug Analyzer
+		outputFile.WriteLine();
+		outputFile.WriteLine("Analyze:");
+		Printer.PrintAnalysis(outputFile, unit);
 
 		// Evaluator
 		var programOutput = new StringWriter();
@@ -71,54 +94,21 @@ class Program
 		}
 		Measure("Eval", measurements, stopwatch);
 
+
 		// Print
 		var programOutputString = programOutput.GetStringBuilder().ToString();
 		Console.Write(programOutputString);
 		Measure("Print", measurements, stopwatch);
 
-		// Compiler not yet viable, so currently saving debug information as the output
-		var outputFilePath = Path.Combine(outputPath, "output.txt");
-		try
-		{
-			using (var outputFile = new StreamWriter(outputFilePath))
-			{
-				outputFile.WriteLine("Stats:");
-				Stats(outputFile, measurements);
+		// Debug Output
+		outputFile.WriteLine();
+		outputFile.WriteLine("Output:");
+		outputFile.Write(programOutputString);
 
-				// Debug Lexer
-				outputFile.WriteLine();
-				outputFile.WriteLine("Lex:");
-				int lexemeIndex = 0;
-				foreach (var lexeme in lexemes)
-				{
-					Printer.PrintLexeme(outputFile, lexeme, lexemeIndex);
-					lexemeIndex++;
-				}
-
-				// Debug Parser
-				outputFile.WriteLine();
-				outputFile.WriteLine("Parse:");
-				Printer.PrintSyntax(outputFile, file, lexemes);
-
-				// Debug Analyzer
-				outputFile.WriteLine();
-				outputFile.WriteLine("Analyze:");
-				Printer.PrintAnalysis(outputFile, unit);
-
-				// Debug Output
-				outputFile.WriteLine();
-				outputFile.WriteLine("Output:");
-				outputFile.Write(programOutputString);
-			}
-		}
-		catch (Exception e)
-		{
-			WriteLine($"Unable to write output to path: {outputFilePath}");
-			WriteLine(e.ToString());
-			return 1;
-		}
-
-		Stats(Console.Out, measurements);
+		// Stats
+		outputFile.WriteLine();
+		outputFile.WriteLine("Stats:");
+		Stats(outputFile, measurements);
 		return 0;
 	}
 
