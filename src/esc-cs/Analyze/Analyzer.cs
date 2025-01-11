@@ -30,14 +30,13 @@ public static class Analyzer
 					throw new Exception("Invalid identifier");
 				}
 
-				if (!scope.NameTable.Add(id))
+				if (!scope.NameTable.TryAdd(id, null)) // unknown type until right-hand side is analyzed
 				{
 					throw new Exception("Duplicate identifier");
 				}
 
-				// TODO: type check on "declareStaticNode.Type"
-
 				var value = AnalyzeExpression(declareStaticNode.Value, scope, queue);
+				scope.NameTable[id] = value.Type;
 				var step = new AssignStep(scope, Identifier: id, Value: value);
 				scope.Steps.Add(step);
 			}
@@ -83,12 +82,14 @@ public static class Analyzer
 			}
 			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
 			{
-				if (!scope.NameTable.Contains(id))
+				if (!scope.NameTable.TryGetValue(id, out var type))
 				{
 					throw new Exception("Unknown identifier");
 				}
-
-				var type = typeof(Int32); // TODO: type lookup
+				else if (type is null)
+				{
+					throw new Exception("Unknown identifier type");
+				}
 
 				return new IdentifierExpression(type, Identifier: id);
 			}
@@ -97,9 +98,14 @@ public static class Analyzer
 				var leftValue = AnalyzeExpression(left, scope, queue);
 				var rightValue = AnalyzeExpression(right, scope, queue);
 
-				var type = typeof(Int32); // TODO: type lookup
+				if (leftValue.Type != rightValue.Type)
+				{
+					throw new Exception("Type mismatch");
+				}
 
-				return new AddExpression(type, Left: leftValue, Right: rightValue);
+				var addType = leftValue.Type; // assuming result is same type as operands
+
+				return new AddExpression(addType, Left: leftValue, Right: rightValue);
 			}
 			default:
 			{

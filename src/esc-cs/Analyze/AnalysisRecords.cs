@@ -7,7 +7,7 @@ public record class Analysis(Scope Main)
 public record class Scope()
 {
 	public Scope? Parent;
-	public HashSet<String> NameTable = [];
+	public Dictionary<String, Type?> NameTable = [];
 	public List<Step> Steps = [];
 }
 
