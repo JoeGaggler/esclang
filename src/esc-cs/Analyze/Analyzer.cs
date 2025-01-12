@@ -66,6 +66,18 @@ public static class Analyzer
 				var step = new PrintStep(scope, Value: value);
 				return step;
 			}
+			else if (targetId == "return") // intrinsic
+			{
+				if (callNode.Arguments.Count != 1)
+				{
+					throw new Exception("Invalid return statement");
+				}
+
+				var arg = callNode.Arguments[0];
+				var value = AnalyzeExpression(arg, scope, queue);
+				var step = new ReturnStep(scope, Value: value);
+				return step;
+			}
 			else
 			{
 				throw new NotImplementedException($"Invalid call target: {targetId}");

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using EscLang.Analyze;
 using EscLang.Parse;
 
@@ -43,8 +44,15 @@ public static class Evaluator
 		{
 			AssignStep assignStep => EvaluateAssignStep(assignStep, table, programOutput),
 			PrintStep printStep => EvaluatePrintStep(printStep, table, programOutput),
+			ReturnStep returnStep => EvaluateReturnStep(returnStep, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid step: {step}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateReturnStep(ReturnStep returnStep, ValueTable table, StringWriter programOutput)
+	{
+		var returnValue = EvaluateTypedExpression(returnStep.Value, table, programOutput);
+		return new ReturnExpressionResult(returnValue);
 	}
 
 	private static ExpressionResult EvaluatePrintStep(PrintStep printStep, ValueTable table, StringWriter programOutput)
@@ -80,8 +88,15 @@ public static class Evaluator
 
 	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
 	{
-		// TODO: analyze return type of function scope
-		return new IntExpressionResult(1);
+		foreach (var step in funcScopeExp.Scope.Steps)
+		{
+			var stepNode = EvaluateStep(step, table, programOutput);
+			if (stepNode is ReturnExpressionResult ret)
+			{
+				return ret.Value;
+			}
+		}
+		return new ReturnVoidResult();
 	}
 
 	private static ExpressionResult EvaluateAddExpression(AddExpression addExpression, ValueTable table, StringWriter programOutput)

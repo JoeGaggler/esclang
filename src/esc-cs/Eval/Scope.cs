@@ -78,3 +78,5 @@ public record class ImplicitVoidExpressionResult() : ExpressionResult;
 public record class ObjectExpressionResult(Object Value) : ExpressionResult;
 public record class IntExpressionResult(Int32 Value) : ExpressionResult;
 public record class FunctionDeclarationExpressionResult() : ExpressionResult; // TODO: inputs/outputs
+public record class ReturnVoidResult() : ExpressionResult;
+public record class ReturnExpressionResult(ExpressionResult Value) : ExpressionResult;

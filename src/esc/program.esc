@@ -1,5 +1,7 @@
 func :: {
-    a :: 1
+    a :: 2
+    b :: a + 3
+    return b
 }
 a :: 13
 b :: a + func + 5

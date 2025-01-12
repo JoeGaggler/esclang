@@ -13,41 +13,58 @@ Lex:
 0010: 16 + 1 -- (2, 7) -- Colon -- :
 0011: 17 + 1 -- (2, 8) -- Colon -- :
 0012: 18 + 1 -- (2, 9) -- Spaces -- " "
-0013: 19 + 1 -- (2, 10) -- Number -- 1
+0013: 19 + 1 -- (2, 10) -- Number -- 2
 0014: 20 + 1 -- (2, 11) -- EndOfLine -- \n
-0015: 21 + 1 -- (3, 1) -- BraceClose -- }
-0016: 22 + 1 -- (3, 2) -- EndOfLine -- \n
-0017: 23 + 1 -- (4, 1) -- Identifier -- a
-0018: 24 + 1 -- (4, 2) -- Spaces -- " "
-0019: 25 + 1 -- (4, 3) -- Colon -- :
-0020: 26 + 1 -- (4, 4) -- Colon -- :
-0021: 27 + 1 -- (4, 5) -- Spaces -- " "
-0022: 28 + 2 -- (4, 6) -- Number -- 13
-0023: 30 + 1 -- (4, 8) -- EndOfLine -- \n
-0024: 31 + 1 -- (5, 1) -- Identifier -- b
-0025: 32 + 1 -- (5, 2) -- Spaces -- " "
-0026: 33 + 1 -- (5, 3) -- Colon -- :
-0027: 34 + 1 -- (5, 4) -- Colon -- :
-0028: 35 + 1 -- (5, 5) -- Spaces -- " "
-0029: 36 + 1 -- (5, 6) -- Identifier -- a
-0030: 37 + 1 -- (5, 7) -- Spaces -- " "
-0031: 38 + 1 -- (5, 8) -- Plus -- +
-0032: 39 + 1 -- (5, 9) -- Spaces -- " "
-0033: 40 + 4 -- (5, 10) -- Identifier -- func
-0034: 44 + 1 -- (5, 14) -- Spaces -- " "
-0035: 45 + 1 -- (5, 15) -- Plus -- +
-0036: 46 + 1 -- (5, 16) -- Spaces -- " "
-0037: 47 + 1 -- (5, 17) -- Number -- 5
-0038: 48 + 1 -- (5, 18) -- EndOfLine -- \n
-0039: 49 + 5 -- (6, 1) -- Identifier -- print
-0040: 54 + 1 -- (6, 6) -- Spaces -- " "
-0041: 55 + 1 -- (6, 7) -- Identifier -- a
-0042: 56 + 1 -- (6, 8) -- EndOfLine -- \n
-0043: 57 + 5 -- (7, 1) -- Identifier -- print
-0044: 62 + 1 -- (7, 6) -- Spaces -- " "
-0045: 63 + 1 -- (7, 7) -- Identifier -- b
-0046: 64 + 1 -- (7, 8) -- EndOfLine -- \n
-0047: 65 + 0 -- (8, 1) -- EndOfFile -- <EOF>
+0015: 21 + 4 -- (3, 1) -- Spaces -- "    "
+0016: 25 + 1 -- (3, 5) -- Identifier -- b
+0017: 26 + 1 -- (3, 6) -- Spaces -- " "
+0018: 27 + 1 -- (3, 7) -- Colon -- :
+0019: 28 + 1 -- (3, 8) -- Colon -- :
+0020: 29 + 1 -- (3, 9) -- Spaces -- " "
+0021: 30 + 1 -- (3, 10) -- Identifier -- a
+0022: 31 + 1 -- (3, 11) -- Spaces -- " "
+0023: 32 + 1 -- (3, 12) -- Plus -- +
+0024: 33 + 1 -- (3, 13) -- Spaces -- " "
+0025: 34 + 1 -- (3, 14) -- Number -- 3
+0026: 35 + 1 -- (3, 15) -- EndOfLine -- \n
+0027: 36 + 4 -- (4, 1) -- Spaces -- "    "
+0028: 40 + 6 -- (4, 5) -- Identifier -- return
+0029: 46 + 1 -- (4, 11) -- Spaces -- " "
+0030: 47 + 1 -- (4, 12) -- Identifier -- b
+0031: 48 + 1 -- (4, 13) -- EndOfLine -- \n
+0032: 49 + 1 -- (5, 1) -- BraceClose -- }
+0033: 50 + 1 -- (5, 2) -- EndOfLine -- \n
+0034: 51 + 1 -- (6, 1) -- Identifier -- a
+0035: 52 + 1 -- (6, 2) -- Spaces -- " "
+0036: 53 + 1 -- (6, 3) -- Colon -- :
+0037: 54 + 1 -- (6, 4) -- Colon -- :
+0038: 55 + 1 -- (6, 5) -- Spaces -- " "
+0039: 56 + 2 -- (6, 6) -- Number -- 13
+0040: 58 + 1 -- (6, 8) -- EndOfLine -- \n
+0041: 59 + 1 -- (7, 1) -- Identifier -- b
+0042: 60 + 1 -- (7, 2) -- Spaces -- " "
+0043: 61 + 1 -- (7, 3) -- Colon -- :
+0044: 62 + 1 -- (7, 4) -- Colon -- :
+0045: 63 + 1 -- (7, 5) -- Spaces -- " "
+0046: 64 + 1 -- (7, 6) -- Identifier -- a
+0047: 65 + 1 -- (7, 7) -- Spaces -- " "
+0048: 66 + 1 -- (7, 8) -- Plus -- +
+0049: 67 + 1 -- (7, 9) -- Spaces -- " "
+0050: 68 + 4 -- (7, 10) -- Identifier -- func
+0051: 72 + 1 -- (7, 14) -- Spaces -- " "
+0052: 73 + 1 -- (7, 15) -- Plus -- +
+0053: 74 + 1 -- (7, 16) -- Spaces -- " "
+0054: 75 + 1 -- (7, 17) -- Number -- 5
+0055: 76 + 1 -- (7, 18) -- EndOfLine -- \n
+0056: 77 + 5 -- (8, 1) -- Identifier -- print
+0057: 82 + 1 -- (8, 6) -- Spaces -- " "
+0058: 83 + 1 -- (8, 7) -- Identifier -- a
+0059: 84 + 1 -- (8, 8) -- EndOfLine -- \n
+0060: 85 + 5 -- (9, 1) -- Identifier -- print
+0061: 90 + 1 -- (9, 6) -- Spaces -- " "
+0062: 91 + 1 -- (9, 7) -- Identifier -- b
+0063: 92 + 1 -- (9, 8) -- EndOfLine -- \n
+0064: 93 + 0 -- (10, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -61,7 +78,21 @@ line
             id
               identifier: a
             value
-              1
+              2
+        line
+          declare-static
+            id
+              identifier: b
+            value
+              plus
+                identifier: a
+                3
+        line
+          call
+            target
+              identifier: return
+            arguments
+              identifier: b
 line
   declare-static
     id
@@ -98,7 +129,12 @@ main procedure
       func scope
         scope
           assign: a = (IntLiteralExpression)
-            int: 1
+            int: 2
+          assign: b = (AddExpression)
+            add
+              identifier: a
+              int: 3
+          return: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
     assign: a = (IntLiteralExpression)
       int: 13
     assign: b = (AddExpression)
@@ -112,10 +148,10 @@ main procedure
 
 Output:
 13
-19
+23
 
 Stats:
--    Read: 0.01s
+-    Read: 0.00s
 -     Lex: 0.00s
 -   Parse: 0.00s
 - Analyze: 0.00s

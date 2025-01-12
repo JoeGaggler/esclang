@@ -520,6 +520,12 @@ public static class Printer
 				outputFile.WriteLine($"print: {printStep.Value} ({printStep.Value.GetType().Name})");
 				break;
 			}
+			case ReturnStep returnStep:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"return: {returnStep.Value} ({returnStep.Value.GetType().Name})");
+				break;
+			}
 			default:
 			{
 				outputFile.Indent(level);
