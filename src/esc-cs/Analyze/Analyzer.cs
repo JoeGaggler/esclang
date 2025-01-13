@@ -47,6 +47,23 @@ public static class Analyzer
 			var step = new AssignStep(scope, Identifier: id, Value: value);
 			return step;
 		}
+		else if (lineItem is Parse.DeclareAssignNode declareAssignNode)
+		{
+			if (declareAssignNode.Identifier is not Parse.IdentifierNode { Text: { Length: > 0 } id })
+			{
+				throw new Exception("Invalid identifier");
+			}
+
+			if (!scope.NameTable.TryAdd(id, null)) // unknown type until right-hand side is analyzed
+			{
+				throw new Exception("Duplicate identifier");
+			}
+
+			var value = AnalyzeExpression(declareAssignNode.Value, scope, queue);
+			scope.NameTable[id] = value.Type;
+			var step = new AssignStep(scope, Identifier: id, Value: value);
+			return step;
+		}
 		else if (lineItem is CallNode callNode)
 		{
 			if (callNode.Target is not IdentifierNode { Text: { Length: > 0 } targetId })

@@ -3,7 +3,7 @@ Lex:
 0000: 0 + 5 -- (1, 1) -- Identifier -- func2
 0001: 5 + 1 -- (1, 6) -- Spaces -- " "
 0002: 6 + 1 -- (1, 7) -- Colon -- :
-0003: 7 + 1 -- (1, 8) -- Colon -- :
+0003: 7 + 1 -- (1, 8) -- Equals -- =
 0004: 8 + 1 -- (1, 9) -- Spaces -- " "
 0005: 9 + 1 -- (1, 10) -- BraceOpen -- {
 0006: 10 + 1 -- (1, 11) -- EndOfLine -- \n
@@ -17,7 +17,7 @@ Lex:
 0014: 28 + 4 -- (4, 1) -- Identifier -- func
 0015: 32 + 1 -- (4, 5) -- Spaces -- " "
 0016: 33 + 1 -- (4, 6) -- Colon -- :
-0017: 34 + 1 -- (4, 7) -- Colon -- :
+0017: 34 + 1 -- (4, 7) -- Equals -- =
 0018: 35 + 1 -- (4, 8) -- Spaces -- " "
 0019: 36 + 1 -- (4, 9) -- BraceOpen -- {
 0020: 37 + 1 -- (4, 10) -- EndOfLine -- \n
@@ -25,7 +25,7 @@ Lex:
 0022: 42 + 1 -- (5, 5) -- Identifier -- a
 0023: 43 + 1 -- (5, 6) -- Spaces -- " "
 0024: 44 + 1 -- (5, 7) -- Colon -- :
-0025: 45 + 1 -- (5, 8) -- Colon -- :
+0025: 45 + 1 -- (5, 8) -- Equals -- =
 0026: 46 + 1 -- (5, 9) -- Spaces -- " "
 0027: 47 + 1 -- (5, 10) -- Number -- 2
 0028: 48 + 1 -- (5, 11) -- EndOfLine -- \n
@@ -33,7 +33,7 @@ Lex:
 0030: 53 + 1 -- (6, 5) -- Identifier -- b
 0031: 54 + 1 -- (6, 6) -- Spaces -- " "
 0032: 55 + 1 -- (6, 7) -- Colon -- :
-0033: 56 + 1 -- (6, 8) -- Colon -- :
+0033: 56 + 1 -- (6, 8) -- Equals -- =
 0034: 57 + 1 -- (6, 9) -- Spaces -- " "
 0035: 58 + 1 -- (6, 10) -- Identifier -- a
 0036: 59 + 1 -- (6, 11) -- Spaces -- " "
@@ -51,14 +51,14 @@ Lex:
 0048: 83 + 1 -- (9, 1) -- Identifier -- a
 0049: 84 + 1 -- (9, 2) -- Spaces -- " "
 0050: 85 + 1 -- (9, 3) -- Colon -- :
-0051: 86 + 1 -- (9, 4) -- Colon -- :
+0051: 86 + 1 -- (9, 4) -- Equals -- =
 0052: 87 + 1 -- (9, 5) -- Spaces -- " "
 0053: 88 + 2 -- (9, 6) -- Number -- 13
 0054: 90 + 1 -- (9, 8) -- EndOfLine -- \n
 0055: 91 + 1 -- (10, 1) -- Identifier -- b
 0056: 92 + 1 -- (10, 2) -- Spaces -- " "
 0057: 93 + 1 -- (10, 3) -- Colon -- :
-0058: 94 + 1 -- (10, 4) -- Colon -- :
+0058: 94 + 1 -- (10, 4) -- Equals -- =
 0059: 95 + 1 -- (10, 5) -- Spaces -- " "
 0060: 96 + 1 -- (10, 6) -- Identifier -- a
 0061: 97 + 1 -- (10, 7) -- Spaces -- " "
@@ -82,7 +82,7 @@ Lex:
 
 Parse:
 line
-  declare-static
+  declare-assign
     id
       identifier: func2
     value
@@ -94,19 +94,19 @@ line
             arguments
               100
 line
-  declare-static
+  declare-assign
     id
       identifier: func
     value
       braces
         line
-          declare-static
+          declare-assign
             id
               identifier: a
             value
               2
         line
-          declare-static
+          declare-assign
             id
               identifier: b
             value
@@ -120,13 +120,13 @@ line
             arguments
               identifier: b
 line
-  declare-static
+  declare-assign
     id
       identifier: a
     value
       13
 line
-  declare-static
+  declare-assign
     id
       identifier: b
     value

@@ -1,12 +1,12 @@
-func2 :: {
+func2 := {
     return 100
 }
-func :: {
-    a :: 2
-    b :: a + func2
+func := {
+    a := 2
+    b := a + func2
     return b
 }
-a :: 13
-b :: a + func + 5
+a := 13
+b := a + func + 5
 print a
 print b
