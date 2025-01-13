@@ -83,6 +83,11 @@ public static class Analyzer
 				throw new NotImplementedException($"Invalid call target: {targetId}");
 			}
 		}
+		else if (lineItem is PlusNode)
+		{
+			// Unused result
+			throw new NotImplementedException("Invalid line item: PlusNode");
+		}
 		else
 		{
 			throw new NotImplementedException($"Invalid line item: {lineItem}");
@@ -100,9 +105,9 @@ public static class Analyzer
 			}
 			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
 			{
-				if (!scope.NameTable.TryGetValue(id, out var type))
+				if (!scope.TryGetNameTableValue(id, out var type))
 				{
-					throw new Exception("Unknown identifier");
+					throw new Exception($"Unknown identifier: {id}");
 				}
 				else if (type is null)
 				{

@@ -1,6 +1,9 @@
+func2 :: {
+    return 100
+}
 func :: {
     a :: 2
-    b :: a + 3
+    b :: a + func2
     return b
 }
 a :: 13
