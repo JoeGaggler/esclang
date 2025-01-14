@@ -484,7 +484,7 @@ public static class Printer
 	public static void PrintAnalysis(TextWriter outputFile, Scope scope, int level)
 	{
 		outputFile.Indent(level);
-		PrintAnalysisScope(outputFile, scope, level);		
+		PrintAnalysisScope(outputFile, scope, level);
 	}
 
 	public static void PrintAnalysisScope(TextWriter outputFile, Scope scope, int level)
@@ -517,7 +517,8 @@ public static class Printer
 			case PrintStep printStep:
 			{
 				outputFile.Indent(level);
-				outputFile.WriteLine($"print: {printStep.Value} ({printStep.Value.GetType().Name})");
+				outputFile.WriteLine($"print:");
+				PrintAnalysisTypedExpression(outputFile, printStep.Value, level + 1);
 				break;
 			}
 			case ReturnStep returnStep:
@@ -545,10 +546,16 @@ public static class Printer
 				outputFile.WriteLine($"int: {intLiteralExpression.Value}");
 				break;
 			}
+			case StringLiteralExpression intLiteralExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"string: {intLiteralExpression.Value}");
+				break;
+			}
 			case IdentifierExpression identifierExpression:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine($"identifier: {identifierExpression.Identifier}");
+				outputFile.WriteLine($"identifier: {identifierExpression.Identifier} ({identifierExpression.Type})");
 				break;
 			}
 			case AddExpression addExpression:
@@ -564,6 +571,38 @@ public static class Printer
 				outputFile.Indent(v);
 				outputFile.WriteLine($"func scope");
 				PrintAnalysisScope(outputFile, funcExp.Scope, v + 1);
+				break;
+			}
+			case MemberMethodGroupExpression { Target: TypedExpression target, MethodName: String methodName }:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"member method group");
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"target");
+				PrintAnalysisTypedExpression(outputFile, target, v + 2);
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"method name: {methodName}");
+				break;
+			}
+			case CallExpression { Type: { } type, ReturnType: { } returnType, Target: { } target, Args: { } args, MethodInfo: { } methodInfo }:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"call");
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"method info: {methodInfo}");
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"type: {type.FullName}");
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"return type: {returnType.FullName}");
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"target:");
+				PrintAnalysisTypedExpression(outputFile, target, v + 2);
+				outputFile.Indent(v + 1);
+				outputFile.WriteLine($"args: {args.Length}");
+				foreach (var arg in args)
+				{
+					PrintAnalysisTypedExpression(outputFile, arg, v + 2);
+				}
 				break;
 			}
 			default:

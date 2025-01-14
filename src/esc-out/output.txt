@@ -87,8 +87,10 @@ Lex:
 0084: 142 + 1 -- (13, 18) -- Spaces -- " "
 0085: 143 + 3 -- (13, 19) -- LiteralString -- "C"
 0086: 146 + 1 -- (13, 22) -- ParenClose -- )
-0087: 147 + 1 -- (13, 23) -- EndOfLine -- \n
-0088: 148 + 0 -- (14, 1) -- EndOfFile -- <EOF>
+0087: 147 + 1 -- (13, 23) -- Spaces -- " "
+0088: 148 + 13 -- (13, 24) -- Comment -- // C=currency
+0089: 161 + 1 -- (13, 37) -- EndOfLine -- \n
+0090: 162 + 0 -- (14, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -184,20 +186,30 @@ main procedure
             int: 2
           assign: b = (AddExpression)
             add
-              identifier: a
-              identifier: func2
+              identifier: a (System.Int32)
+              identifier: func2 (System.Int32)
           return: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
     assign: a = (IntLiteralExpression)
       int: 13
     assign: b = (AddExpression)
       add
         add
-          identifier: a
-          identifier: func
+          identifier: a (System.Int32)
+          identifier: func (System.Int32)
         int: 5
-    print: IdentifierExpression { Type = System.Int32, Identifier = a } (IdentifierExpression)
-    print: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
-    print: CallExpression { Type = System.String, ReturnType = System.String, MethodInfo = System.String ToString(System.String), Target = IdentifierExpression { Type = System.Int32, Identifier = b }, Args = EscLang.Analyze.TypedExpression[] } (CallExpression)
+    print:
+      identifier: a (System.Int32)
+    print:
+      identifier: b (System.Int32)
+    print:
+      call
+        method info: System.String ToString(System.String)
+        type: System.String
+        return type: System.String
+        target:
+          identifier: b (System.Int32)
+        args: 1
+          string: C
 
 Output:
 13

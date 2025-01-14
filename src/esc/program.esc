@@ -10,4 +10,4 @@ a := 13
 b := a + func + 5
 print a
 print b
-print (b.ToString "C")
+print (b.ToString "C") // C=currency
