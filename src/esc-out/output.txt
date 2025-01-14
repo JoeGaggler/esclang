@@ -78,7 +78,13 @@ Lex:
 0075: 122 + 1 -- (12, 6) -- Spaces -- " "
 0076: 123 + 1 -- (12, 7) -- Identifier -- b
 0077: 124 + 1 -- (12, 8) -- EndOfLine -- \n
-0078: 125 + 0 -- (13, 1) -- EndOfFile -- <EOF>
+0078: 125 + 5 -- (13, 1) -- Identifier -- print
+0079: 130 + 1 -- (13, 6) -- Spaces -- " "
+0080: 131 + 1 -- (13, 7) -- Identifier -- b
+0081: 132 + 1 -- (13, 8) -- Period -- .
+0082: 133 + 8 -- (13, 9) -- Identifier -- ToString
+0083: 141 + 1 -- (13, 17) -- EndOfLine -- \n
+0084: 142 + 0 -- (14, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -147,6 +153,14 @@ line
       identifier: print
     arguments
       identifier: b
+line
+  call
+    target
+      identifier: print
+    arguments
+      member
+        identifier: b
+        identifier: ToString
 
 Analyze:
 main procedure
@@ -175,9 +189,11 @@ main procedure
         int: 5
     print: IdentifierExpression { Type = System.Int32, Identifier = a } (IdentifierExpression)
     print: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
+    print: MemberExpression { Type = System.Int32, Target = IdentifierExpression { Type = System.Int32, Identifier = b }, Member = ToString } (MemberExpression)
 
 Output:
 13
+120
 120
 
 Stats:

@@ -35,3 +35,4 @@ public record class IntLiteralExpression(Int32 Value) : TypedExpression(typeof(I
 public record class IdentifierExpression(Type Type, String Identifier) : TypedExpression(Type);
 public record class AddExpression(Type Type, TypedExpression Left, TypedExpression Right) : TypedExpression(Type);
 public record class FunctionScopeExpression(Scope Scope) : TypedExpression(typeof(FunctionScopeExpression));
+public record class MemberExpression(Type Type, TypedExpression Target, String Member) : TypedExpression(Type);

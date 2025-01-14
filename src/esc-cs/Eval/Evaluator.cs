@@ -61,6 +61,7 @@ public static class Evaluator
 		var val = rhs switch
 		{
 			IntExpressionResult intExpressionResult => intExpressionResult.Value.ToString(),
+			StringExpressionResult stringExpressionResult => stringExpressionResult.Value,
 			_ => throw new NotImplementedException($"Invalid print value: {rhs}"),
 		};
 		programOutput.WriteLine(val);
@@ -82,8 +83,21 @@ public static class Evaluator
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput),
+			MemberExpression memberExpression => EvaluateMemberExpression(memberExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateMemberExpression(MemberExpression memberExpression, ValueTable table, StringWriter programOutput)
+	{
+		var target = EvaluateTypedExpression(memberExpression.Target, table, programOutput);
+
+		// TODO: lookup actual member
+		switch (memberExpression.Member)
+		{
+			case "ToString": return new StringExpressionResult(((IntExpressionResult)target).Value.ToString());
+			default: throw new NotImplementedException($"MemberExpression not implemented: {memberExpression} on {target}");
+		}
 	}
 
 	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)

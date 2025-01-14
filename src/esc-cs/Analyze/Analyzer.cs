@@ -163,6 +163,19 @@ public static class Analyzer
 				}
 				return new FunctionScopeExpression(innerScope);
 			}
+			case { } x when x is MemberNode { Target: { } target, Member: { } member }:
+			{
+				var targetExpression = AnalyzeExpression(target, scope, queue);
+
+				if (member is not IdentifierNode { Text: { Length: > 0 } memberId })
+				{
+					throw new Exception("Invalid member identifier");
+				}
+
+				var memberType = typeof(Int32); // TODO: resolve member type
+
+				return new MemberExpression(memberType, Target: targetExpression, Member: memberId);
+			}
 			default:
 			{
 				throw new NotImplementedException($"Invalid SyntaxNode for expression: {node}");
