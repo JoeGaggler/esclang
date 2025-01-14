@@ -46,8 +46,29 @@ public static class Evaluator
 			PrintStep printStep => EvaluatePrintStep(printStep, table, programOutput),
 			ReturnStep returnStep => EvaluateReturnStep(returnStep, table, programOutput),
 			ExpressionStep expressionStep => EvaluateExpressionStep(expressionStep.Value, table, programOutput),
+			IfStep ifStep => EvaluateIfStep(ifStep, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid step: {step}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateIfStep(IfStep ifStep, ValueTable table, StringWriter programOutput)
+	{
+		var condition = EvaluateTypedExpression(ifStep.Condition, table, programOutput);
+		// IfStep { Parent = Scope { Parent = Scope { Parent = , NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, Condition = BooleanLiteralExpression { Type = System.Boolean, Value = False }, IfBlock = FunctionScopeExpression { Type = EscLang.Analyze.FunctionScopeExpression, Scope = Scope { Parent = Scope { Parent = Scope { Parent = , NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] } } }
+		// BooleanExpressionResult { Value = False }
+		if (condition is not BooleanExpressionResult booleanExpressionResult)
+		{
+			throw new NotImplementedException($"Invalid if condition: {condition}");
+		}
+		if (!booleanExpressionResult.Value)
+		{
+			return new ImplicitVoidExpressionResult();
+		}
+		if (ifStep.IfBlock is not FunctionScopeExpression functionScopeExpression)
+		{
+			throw new NotImplementedException($"Invalid if block: {ifStep.IfBlock}");
+		}
+		return EvaluateSharedScopeExpression(functionScopeExpression, table, programOutput);
 	}
 
 	private static ExpressionResult EvaluateExpressionStep(TypedExpression value, ValueTable table, StringWriter programOutput)
@@ -108,9 +129,10 @@ public static class Evaluator
 		{
 			IntLiteralExpression intLiteralExpression => new IntExpressionResult(intLiteralExpression.Value),
 			StringLiteralExpression stringLiteralExpression => new StringExpressionResult(stringLiteralExpression.Value),
+			BooleanLiteralExpression booleanLiteralExpression => new BooleanExpressionResult(booleanLiteralExpression.Value),
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
-			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput),
+			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
 			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
@@ -157,6 +179,19 @@ public static class Evaluator
 		return returnExpression;
 	}
 
+	private static ExpressionResult EvaluateSharedScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
+	{
+		foreach (var step in funcScopeExp.Scope.Steps)
+		{
+			var stepNode = EvaluateStep(step, table, programOutput);
+			if (stepNode is ReturnExpressionResult ret)
+			{
+				return ret; // pass return result to parent scope until a function scope is reached
+			}
+		}
+		return new ReturnVoidResult();
+	}
+
 	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
 	{
 		var innerValueTable = new ValueTable(table);
@@ -165,7 +200,7 @@ public static class Evaluator
 			var stepNode = EvaluateStep(step, innerValueTable, programOutput);
 			if (stepNode is ReturnExpressionResult ret)
 			{
-				return ret.Value;
+				return ret.Value; // unwrap return result, returns do not propagate outside of current function
 			}
 		}
 		return new ReturnVoidResult();

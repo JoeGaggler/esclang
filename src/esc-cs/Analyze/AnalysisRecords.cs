@@ -30,14 +30,17 @@ public record class DeclareStep(Scope Parent, String Identifier, TypedExpression
 public record class PrintStep(Scope Parent, TypedExpression Value) : Step;
 public record class ReturnStep(Scope Parent, TypedExpression Value) : Step;
 public record class ExpressionStep(Scope Parent, TypedExpression Value) : Step;
+public record class IfStep(Scope Parent, TypedExpression Condition, TypedExpression IfBlock) : Step;
 
 public abstract record class TypedExpression(Type Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(typeof(void));
 public record class IntLiteralExpression(Int32 Value) : TypedExpression(typeof(Int32));
 public record class StringLiteralExpression(String Value) : TypedExpression(typeof(String));
+public record class BooleanLiteralExpression(Boolean Value) : TypedExpression(typeof(Boolean));
 public record class IdentifierExpression(Type Type, String Identifier) : TypedExpression(Type);
 public record class AddExpression(Type Type, TypedExpression Left, TypedExpression Right) : TypedExpression(Type);
 public record class FunctionScopeExpression(Scope Scope) : TypedExpression(typeof(FunctionScopeExpression));
+public record class InlineScopeExpression(Scope Scope) : TypedExpression(typeof(InlineScopeExpression)); // TODO: produce this
 public record class MemberMethodGroupExpression(TypedExpression Target, String MethodName) : TypedExpression(typeof(void)); // actual type depends on method selection
 public record class CallExpression(Type ReturnType, System.Reflection.MethodInfo MethodInfo, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
 public record class AssignExpression(Type Type, TypedExpression Target, TypedExpression Value) : TypedExpression(Type);

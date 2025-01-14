@@ -96,6 +96,17 @@ public static class Analyzer
 					var step = new PrintStep(scope, Value: argumentExpression);
 					return step;
 				}
+				if (keyword == "if")
+				{
+					if (callNode.Arguments.Count != 2)
+					{
+						throw new Exception("Invalid if call");
+					}
+					var conditionExpression = AnalyzeExpression(callNode.Arguments[0], scope, queue);
+					var scopeExpression = AnalyzeExpression(callNode.Arguments[1], scope, queue);
+					var step = new IfStep(scope, Condition: conditionExpression, IfBlock: scopeExpression);
+					return step;
+				}
 				throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
 			}
 			throw new NotImplementedException($"TODO CALLNODE RESULT: {targetResult}");
@@ -160,13 +171,17 @@ public static class Analyzer
 			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
 			{
 				// intrinsic identifiers
-				if (id == "return")
+				if (id is "return" or "print" or "if")
 				{
 					return new KeywordExpression(Keyword: id);
 				}
-				if (id == "print")
+				if (id is "true")
 				{
-					return new KeywordExpression(Keyword: id);
+					return new BooleanLiteralExpression(Value: true);
+				}
+				if (id is "false")
+				{
+					return new BooleanLiteralExpression(Value: false);
 				}
 
 				// scoped identifiers
@@ -202,7 +217,7 @@ public static class Analyzer
 			}
 			case { } x when x is BracesNode { Lines: { } lines }:
 			{
-				// all braces are functions for now
+				// TODO: all braces are functions for now, future: InlineScopeExpression
 
 				var innerScope = new Scope() { Parent = scope };
 				foreach (var line in lines)

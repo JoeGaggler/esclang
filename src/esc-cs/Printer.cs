@@ -534,6 +534,18 @@ public static class Printer
 				PrintAnalysisTypedExpression(outputFile, expressionStep.Value, level + 1);
 				break;
 			}
+			case IfStep ifStep:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"if");
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine($"condition");
+				PrintAnalysisTypedExpression(outputFile, ifStep.Condition, level + 2);
+				outputFile.Indent(level + 1);
+				outputFile.WriteLine($"block");
+				PrintAnalysisTypedExpression(outputFile, ifStep.IfBlock, level + 2);
+				break;
+			}
 			default:
 			{
 				outputFile.Indent(level);
@@ -557,6 +569,12 @@ public static class Printer
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine($"string: {intLiteralExpression.Value}");
+				break;
+			}
+			case BooleanLiteralExpression intLiteralExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"bool: {intLiteralExpression.Value}");
 				break;
 			}
 			case IdentifierExpression identifierExpression:

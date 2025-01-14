@@ -8,95 +8,127 @@ Lex:
 0005: 9 + 1 -- (1, 10) -- BraceOpen -- {
 0006: 10 + 1 -- (1, 11) -- EndOfLine -- \n
 0007: 11 + 4 -- (2, 1) -- Spaces -- "    "
-0008: 15 + 6 -- (2, 5) -- Identifier -- return
-0009: 21 + 1 -- (2, 11) -- Spaces -- " "
-0010: 22 + 3 -- (2, 12) -- Number -- 100
-0011: 25 + 1 -- (2, 15) -- EndOfLine -- \n
-0012: 26 + 1 -- (3, 1) -- BraceClose -- }
-0013: 27 + 1 -- (3, 2) -- EndOfLine -- \n
-0014: 28 + 4 -- (4, 1) -- Identifier -- func
-0015: 32 + 1 -- (4, 5) -- Spaces -- " "
-0016: 33 + 1 -- (4, 6) -- Colon -- :
-0017: 34 + 1 -- (4, 7) -- Equals -- =
-0018: 35 + 1 -- (4, 8) -- Spaces -- " "
-0019: 36 + 1 -- (4, 9) -- BraceOpen -- {
-0020: 37 + 1 -- (4, 10) -- EndOfLine -- \n
-0021: 38 + 4 -- (5, 1) -- Spaces -- "    "
-0022: 42 + 1 -- (5, 5) -- Identifier -- a
-0023: 43 + 1 -- (5, 6) -- Spaces -- " "
-0024: 44 + 1 -- (5, 7) -- Colon -- :
-0025: 45 + 1 -- (5, 8) -- Equals -- =
-0026: 46 + 1 -- (5, 9) -- Spaces -- " "
-0027: 47 + 1 -- (5, 10) -- Number -- 2
-0028: 48 + 1 -- (5, 11) -- EndOfLine -- \n
-0029: 49 + 4 -- (6, 1) -- Spaces -- "    "
-0030: 53 + 1 -- (6, 5) -- Identifier -- b
-0031: 54 + 1 -- (6, 6) -- Spaces -- " "
-0032: 55 + 1 -- (6, 7) -- Colon -- :
-0033: 56 + 1 -- (6, 8) -- Equals -- =
-0034: 57 + 1 -- (6, 9) -- Spaces -- " "
-0035: 58 + 1 -- (6, 10) -- Identifier -- a
-0036: 59 + 1 -- (6, 11) -- Spaces -- " "
-0037: 60 + 1 -- (6, 12) -- Plus -- +
-0038: 61 + 1 -- (6, 13) -- Spaces -- " "
-0039: 62 + 5 -- (6, 14) -- Identifier -- func2
-0040: 67 + 1 -- (6, 19) -- EndOfLine -- \n
-0041: 68 + 4 -- (7, 1) -- Spaces -- "    "
-0042: 72 + 6 -- (7, 5) -- Identifier -- return
-0043: 78 + 1 -- (7, 11) -- Spaces -- " "
-0044: 79 + 1 -- (7, 12) -- Identifier -- b
-0045: 80 + 1 -- (7, 13) -- EndOfLine -- \n
-0046: 81 + 1 -- (8, 1) -- BraceClose -- }
-0047: 82 + 1 -- (8, 2) -- EndOfLine -- \n
-0048: 83 + 1 -- (9, 1) -- Identifier -- a
-0049: 84 + 1 -- (9, 2) -- Spaces -- " "
-0050: 85 + 1 -- (9, 3) -- Colon -- :
-0051: 86 + 1 -- (9, 4) -- Equals -- =
-0052: 87 + 1 -- (9, 5) -- Spaces -- " "
-0053: 88 + 2 -- (9, 6) -- Number -- 13
-0054: 90 + 1 -- (9, 8) -- EndOfLine -- \n
-0055: 91 + 1 -- (10, 1) -- Identifier -- a
-0056: 92 + 1 -- (10, 2) -- Spaces -- " "
-0057: 93 + 1 -- (10, 3) -- Equals -- =
-0058: 94 + 1 -- (10, 4) -- Spaces -- " "
-0059: 95 + 2 -- (10, 5) -- Number -- 39
-0060: 97 + 1 -- (10, 7) -- EndOfLine -- \n
-0061: 98 + 1 -- (11, 1) -- Identifier -- b
-0062: 99 + 1 -- (11, 2) -- Spaces -- " "
-0063: 100 + 1 -- (11, 3) -- Colon -- :
-0064: 101 + 1 -- (11, 4) -- Equals -- =
-0065: 102 + 1 -- (11, 5) -- Spaces -- " "
-0066: 103 + 1 -- (11, 6) -- Identifier -- a
-0067: 104 + 1 -- (11, 7) -- Spaces -- " "
-0068: 105 + 1 -- (11, 8) -- Plus -- +
-0069: 106 + 1 -- (11, 9) -- Spaces -- " "
-0070: 107 + 4 -- (11, 10) -- Identifier -- func
-0071: 111 + 1 -- (11, 14) -- Spaces -- " "
-0072: 112 + 1 -- (11, 15) -- Plus -- +
-0073: 113 + 1 -- (11, 16) -- Spaces -- " "
-0074: 114 + 1 -- (11, 17) -- Number -- 5
-0075: 115 + 1 -- (11, 18) -- EndOfLine -- \n
-0076: 116 + 5 -- (12, 1) -- Identifier -- print
-0077: 121 + 1 -- (12, 6) -- Spaces -- " "
-0078: 122 + 1 -- (12, 7) -- Identifier -- a
-0079: 123 + 1 -- (12, 8) -- EndOfLine -- \n
-0080: 124 + 5 -- (13, 1) -- Identifier -- print
-0081: 129 + 1 -- (13, 6) -- Spaces -- " "
-0082: 130 + 1 -- (13, 7) -- Identifier -- b
-0083: 131 + 1 -- (13, 8) -- EndOfLine -- \n
-0084: 132 + 5 -- (14, 1) -- Identifier -- print
-0085: 137 + 1 -- (14, 6) -- Spaces -- " "
-0086: 138 + 1 -- (14, 7) -- ParenOpen -- (
-0087: 139 + 1 -- (14, 8) -- Identifier -- b
-0088: 140 + 1 -- (14, 9) -- Period -- .
-0089: 141 + 8 -- (14, 10) -- Identifier -- ToString
-0090: 149 + 1 -- (14, 18) -- Spaces -- " "
-0091: 150 + 3 -- (14, 19) -- LiteralString -- "C"
-0092: 153 + 1 -- (14, 22) -- ParenClose -- )
-0093: 154 + 1 -- (14, 23) -- Spaces -- " "
-0094: 155 + 13 -- (14, 24) -- Comment -- // C=currency
-0095: 168 + 1 -- (14, 37) -- EndOfLine -- \n
-0096: 169 + 0 -- (15, 1) -- EndOfFile -- <EOF>
+0008: 15 + 2 -- (2, 5) -- Identifier -- if
+0009: 17 + 1 -- (2, 7) -- Spaces -- " "
+0010: 18 + 5 -- (2, 8) -- Identifier -- false
+0011: 23 + 1 -- (2, 13) -- Spaces -- " "
+0012: 24 + 1 -- (2, 14) -- BraceOpen -- {
+0013: 25 + 1 -- (2, 15) -- EndOfLine -- \n
+0014: 26 + 8 -- (3, 1) -- Spaces -- "        "
+0015: 34 + 6 -- (3, 9) -- Identifier -- return
+0016: 40 + 1 -- (3, 15) -- Spaces -- " "
+0017: 41 + 1 -- (3, 16) -- Number -- 0
+0018: 42 + 1 -- (3, 17) -- EndOfLine -- \n
+0019: 43 + 4 -- (4, 1) -- Spaces -- "    "
+0020: 47 + 1 -- (4, 5) -- BraceClose -- }
+0021: 48 + 1 -- (4, 6) -- EndOfLine -- \n
+0022: 49 + 4 -- (5, 1) -- Spaces -- "    "
+0023: 53 + 2 -- (5, 5) -- Identifier -- if
+0024: 55 + 1 -- (5, 7) -- Spaces -- " "
+0025: 56 + 4 -- (5, 8) -- Identifier -- true
+0026: 60 + 1 -- (5, 12) -- Spaces -- " "
+0027: 61 + 1 -- (5, 13) -- BraceOpen -- {
+0028: 62 + 1 -- (5, 14) -- EndOfLine -- \n
+0029: 63 + 8 -- (6, 1) -- Spaces -- "        "
+0030: 71 + 6 -- (6, 9) -- Identifier -- return
+0031: 77 + 1 -- (6, 15) -- Spaces -- " "
+0032: 78 + 3 -- (6, 16) -- Number -- 100
+0033: 81 + 1 -- (6, 19) -- EndOfLine -- \n
+0034: 82 + 4 -- (7, 1) -- Spaces -- "    "
+0035: 86 + 1 -- (7, 5) -- BraceClose -- }
+0036: 87 + 1 -- (7, 6) -- EndOfLine -- \n
+0037: 88 + 4 -- (8, 1) -- Spaces -- "    "
+0038: 92 + 6 -- (8, 5) -- Identifier -- return
+0039: 98 + 1 -- (8, 11) -- Spaces -- " "
+0040: 99 + 4 -- (8, 12) -- Number -- 9999
+0041: 103 + 1 -- (8, 16) -- Spaces -- " "
+0042: 104 + 14 -- (8, 17) -- Comment -- // unreachable
+0043: 118 + 1 -- (8, 31) -- EndOfLine -- \n
+0044: 119 + 1 -- (9, 1) -- BraceClose -- }
+0045: 120 + 1 -- (9, 2) -- EndOfLine -- \n
+0046: 121 + 4 -- (10, 1) -- Identifier -- func
+0047: 125 + 1 -- (10, 5) -- Spaces -- " "
+0048: 126 + 1 -- (10, 6) -- Colon -- :
+0049: 127 + 1 -- (10, 7) -- Equals -- =
+0050: 128 + 1 -- (10, 8) -- Spaces -- " "
+0051: 129 + 1 -- (10, 9) -- BraceOpen -- {
+0052: 130 + 1 -- (10, 10) -- EndOfLine -- \n
+0053: 131 + 4 -- (11, 1) -- Spaces -- "    "
+0054: 135 + 1 -- (11, 5) -- Identifier -- a
+0055: 136 + 1 -- (11, 6) -- Spaces -- " "
+0056: 137 + 1 -- (11, 7) -- Colon -- :
+0057: 138 + 1 -- (11, 8) -- Equals -- =
+0058: 139 + 1 -- (11, 9) -- Spaces -- " "
+0059: 140 + 1 -- (11, 10) -- Number -- 2
+0060: 141 + 1 -- (11, 11) -- EndOfLine -- \n
+0061: 142 + 4 -- (12, 1) -- Spaces -- "    "
+0062: 146 + 1 -- (12, 5) -- Identifier -- b
+0063: 147 + 1 -- (12, 6) -- Spaces -- " "
+0064: 148 + 1 -- (12, 7) -- Colon -- :
+0065: 149 + 1 -- (12, 8) -- Equals -- =
+0066: 150 + 1 -- (12, 9) -- Spaces -- " "
+0067: 151 + 1 -- (12, 10) -- Identifier -- a
+0068: 152 + 1 -- (12, 11) -- Spaces -- " "
+0069: 153 + 1 -- (12, 12) -- Plus -- +
+0070: 154 + 1 -- (12, 13) -- Spaces -- " "
+0071: 155 + 5 -- (12, 14) -- Identifier -- func2
+0072: 160 + 1 -- (12, 19) -- EndOfLine -- \n
+0073: 161 + 4 -- (13, 1) -- Spaces -- "    "
+0074: 165 + 6 -- (13, 5) -- Identifier -- return
+0075: 171 + 1 -- (13, 11) -- Spaces -- " "
+0076: 172 + 1 -- (13, 12) -- Identifier -- b
+0077: 173 + 1 -- (13, 13) -- EndOfLine -- \n
+0078: 174 + 1 -- (14, 1) -- BraceClose -- }
+0079: 175 + 1 -- (14, 2) -- EndOfLine -- \n
+0080: 176 + 1 -- (15, 1) -- Identifier -- a
+0081: 177 + 1 -- (15, 2) -- Spaces -- " "
+0082: 178 + 1 -- (15, 3) -- Colon -- :
+0083: 179 + 1 -- (15, 4) -- Equals -- =
+0084: 180 + 1 -- (15, 5) -- Spaces -- " "
+0085: 181 + 2 -- (15, 6) -- Number -- 13
+0086: 183 + 1 -- (15, 8) -- EndOfLine -- \n
+0087: 184 + 1 -- (16, 1) -- Identifier -- a
+0088: 185 + 1 -- (16, 2) -- Spaces -- " "
+0089: 186 + 1 -- (16, 3) -- Equals -- =
+0090: 187 + 1 -- (16, 4) -- Spaces -- " "
+0091: 188 + 2 -- (16, 5) -- Number -- 39
+0092: 190 + 1 -- (16, 7) -- EndOfLine -- \n
+0093: 191 + 1 -- (17, 1) -- Identifier -- b
+0094: 192 + 1 -- (17, 2) -- Spaces -- " "
+0095: 193 + 1 -- (17, 3) -- Colon -- :
+0096: 194 + 1 -- (17, 4) -- Equals -- =
+0097: 195 + 1 -- (17, 5) -- Spaces -- " "
+0098: 196 + 1 -- (17, 6) -- Identifier -- a
+0099: 197 + 1 -- (17, 7) -- Spaces -- " "
+0100: 198 + 1 -- (17, 8) -- Plus -- +
+0101: 199 + 1 -- (17, 9) -- Spaces -- " "
+0102: 200 + 4 -- (17, 10) -- Identifier -- func
+0103: 204 + 1 -- (17, 14) -- Spaces -- " "
+0104: 205 + 1 -- (17, 15) -- Plus -- +
+0105: 206 + 1 -- (17, 16) -- Spaces -- " "
+0106: 207 + 1 -- (17, 17) -- Number -- 5
+0107: 208 + 1 -- (17, 18) -- EndOfLine -- \n
+0108: 209 + 5 -- (18, 1) -- Identifier -- print
+0109: 214 + 1 -- (18, 6) -- Spaces -- " "
+0110: 215 + 1 -- (18, 7) -- Identifier -- a
+0111: 216 + 1 -- (18, 8) -- EndOfLine -- \n
+0112: 217 + 5 -- (19, 1) -- Identifier -- print
+0113: 222 + 1 -- (19, 6) -- Spaces -- " "
+0114: 223 + 1 -- (19, 7) -- Identifier -- b
+0115: 224 + 1 -- (19, 8) -- EndOfLine -- \n
+0116: 225 + 5 -- (20, 1) -- Identifier -- print
+0117: 230 + 1 -- (20, 6) -- Spaces -- " "
+0118: 231 + 1 -- (20, 7) -- ParenOpen -- (
+0119: 232 + 1 -- (20, 8) -- Identifier -- b
+0120: 233 + 1 -- (20, 9) -- Period -- .
+0121: 234 + 8 -- (20, 10) -- Identifier -- ToString
+0122: 242 + 1 -- (20, 18) -- Spaces -- " "
+0123: 243 + 3 -- (20, 19) -- LiteralString -- "C"
+0124: 246 + 1 -- (20, 22) -- ParenClose -- )
+0125: 247 + 1 -- (20, 23) -- Spaces -- " "
+0126: 248 + 13 -- (20, 24) -- Comment -- // C=currency
+0127: 261 + 1 -- (20, 37) -- EndOfLine -- \n
+0128: 262 + 0 -- (21, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -108,9 +140,35 @@ line
         line
           call
             target
+              identifier: if
+            arguments
+              identifier: false
+              braces
+                line
+                  call
+                    target
+                      identifier: return
+                    arguments
+                      0
+        line
+          call
+            target
+              identifier: if
+            arguments
+              identifier: true
+              braces
+                line
+                  call
+                    target
+                      identifier: return
+                    arguments
+                      100
+        line
+          call
+            target
               identifier: return
             arguments
-              100
+              9999
 line
   declare-assign
     id
@@ -188,7 +246,21 @@ main procedure
     declare: func2 = (FunctionScopeExpression)
       func scope
         scope
-          return: IntLiteralExpression { Type = System.Int32, Value = 100 } (IntLiteralExpression)
+          if
+            condition
+              bool: False
+            block
+              func scope
+                scope
+                  return: IntLiteralExpression { Type = System.Int32, Value = 0 } (IntLiteralExpression)
+          if
+            condition
+              bool: True
+            block
+              func scope
+                scope
+                  return: IntLiteralExpression { Type = System.Int32, Value = 100 } (IntLiteralExpression)
+          return: IntLiteralExpression { Type = System.Int32, Value = 9999 } (IntLiteralExpression)
     declare: func = (FunctionScopeExpression)
       func scope
         scope

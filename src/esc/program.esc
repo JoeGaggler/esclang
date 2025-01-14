@@ -1,5 +1,11 @@
 func2 := {
-    return 100
+    if false {
+        return 0
+    }
+    if true {
+        return 100
+    }
+    return 9999 // unreachable
 }
 func := {
     a := 2
