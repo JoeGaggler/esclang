@@ -222,6 +222,7 @@ public static partial class Parser
 				LexemeType.Number => prec_call,
 				LexemeType.BraceOpen => prec_call,
 				LexemeType.ParenOpen => prec_call,
+				LexemeType.Exclamation => prec_call, // logical not (unless a digram?)
 
 				< 0 or > LexemeType.EndOfFile => throw new NotImplementedException($"unexpected token in expression at {position}: {peek.Type}"),
 
@@ -272,6 +273,7 @@ public static partial class Parser
 				LexemeType.Number => Parse_Call(leftResult.Value, input, ref position),
 				LexemeType.BraceOpen => Parse_Call(leftResult.Value, input, ref position),
 				LexemeType.ParenOpen => Parse_Call(leftResult.Value, input, ref position),
+				LexemeType.Exclamation => Parse_Call(leftResult.Value, input, ref position), // logical not (unless a digram?)
 
 				_ => throw new NotImplementedException($"binary expression {peek.Type} {position}")
 				// _ => Parse_Expression(input, ref position, prec)

@@ -2,8 +2,7 @@ func2 := {
     if false {
         return 0
     }
-    cond :: !false
-    if cond {
+    if !false {
         return 100
     }
     return 9999 // unreachable
