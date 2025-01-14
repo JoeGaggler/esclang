@@ -638,6 +638,13 @@ public static class Printer
 				PrintAnalysisTypedExpression(outputFile, assignExpression.Value, v + 1);
 				break;
 			}
+			case LogicalNegationExpression logicalNegationExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"not");
+				PrintAnalysisTypedExpression(outputFile, logicalNegationExpression.Node, v + 1);
+				break;
+			}
 			default:
 			{
 				outputFile.Indent(v);

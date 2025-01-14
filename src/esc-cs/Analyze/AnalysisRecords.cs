@@ -44,3 +44,4 @@ public record class InlineScopeExpression(Scope Scope) : TypedExpression(typeof(
 public record class MemberMethodGroupExpression(TypedExpression Target, String MethodName) : TypedExpression(typeof(void)); // actual type depends on method selection
 public record class CallExpression(Type ReturnType, System.Reflection.MethodInfo MethodInfo, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
 public record class AssignExpression(Type Type, TypedExpression Target, TypedExpression Value) : TypedExpression(Type);
+public record class LogicalNegationExpression(TypedExpression Node) : TypedExpression(typeof(Boolean));

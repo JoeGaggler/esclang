@@ -135,8 +135,19 @@ public static class Evaluator
 			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
 			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
+			LogicalNegationExpression logicalNegationExpression => EvaluateLogicalNegationExpression(logicalNegationExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateLogicalNegationExpression(LogicalNegationExpression logicalNegationExpression, ValueTable table, StringWriter programOutput)
+	{
+		var node = EvaluateTypedExpression(logicalNegationExpression.Node, table, programOutput);
+		if (node is not BooleanExpressionResult booleanExpressionResult)
+		{
+			throw new NotImplementedException($"Invalid logical negation expression: {node}");
+		}
+		return new BooleanExpressionResult(!booleanExpressionResult.Value);
 	}
 
 	private static ExpressionResult EvaluateAssignExpression(AssignExpression assignExpression, ValueTable table, StringWriter programOutput)

@@ -104,6 +104,7 @@ public static partial class Parser
 			case LexemeType.LiteralString: { return new(new LiteralStringNode(EscLang.Lex.Lexer.UnwrapString(token))); }
 			case LexemeType.LiteralChar: { return new(new LiteralCharNode(EscLang.Lex.Lexer.UnwrapString(token))); }
 			case LexemeType.Identifier: { return new(new IdentifierNode(token.Text)); }
+			case LexemeType.Exclamation: { return new(new LogicalNegationNode(Parse_Leaf(input, ref start))); }
 			case LexemeType.ParenOpen:
 			{
 				var (peek, next) = input.PeekThroughNewline(start);

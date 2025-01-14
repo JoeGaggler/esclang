@@ -281,6 +281,15 @@ public static class Analyzer
 				// TODO: TYPE-CHECK
 				return new AssignExpression(Type: targetExpression.Type, Target: targetExpression, Value: valueExpression);
 			}
+			case { } x when x is LogicalNegationNode { Node: { } innerNode }:
+			{
+				var nodeValue = AnalyzeExpression(innerNode, scope, queue);
+				if (nodeValue.Type != typeof(Boolean))
+				{
+					throw new Exception("Invalid logical negation");
+				}
+				return new LogicalNegationExpression(nodeValue);
+			}
 			default:
 			{
 				throw new NotImplementedException($"Invalid SyntaxNode for expression: {node}");
