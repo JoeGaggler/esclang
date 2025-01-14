@@ -42,11 +42,17 @@ public static class Evaluator
 	{
 		return step switch
 		{
-			AssignStep assignStep => EvaluateAssignStep(assignStep, table, programOutput),
+			DeclareStep declareStep => EvaluateDeclareStep(declareStep, table, programOutput),
 			PrintStep printStep => EvaluatePrintStep(printStep, table, programOutput),
 			ReturnStep returnStep => EvaluateReturnStep(returnStep, table, programOutput),
+			ExpressionStep expressionStep => EvaluateExpressionStep(expressionStep.Value, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid step: {step}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateExpressionStep(TypedExpression value, ValueTable table, StringWriter programOutput)
+	{
+		return EvaluateTypedExpression(value, table, programOutput);
 	}
 
 	private static ExpressionResult EvaluateReturnStep(ReturnStep returnStep, ValueTable table, StringWriter programOutput)
@@ -68,10 +74,10 @@ public static class Evaluator
 		return rhs;
 	}
 
-	private static ExpressionResult EvaluateAssignStep(AssignStep assignStep, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult EvaluateDeclareStep(DeclareStep assignStep, ValueTable table, StringWriter programOutput)
 	{
 		var rhs = EvaluateTypedExpression(assignStep.Value, table, programOutput);
-		table.Set(assignStep.Identifier, rhs);
+		table.Add(assignStep.Identifier, rhs);
 		return rhs; // TODO: return l-value?
 	}
 
@@ -105,10 +111,23 @@ public static class Evaluator
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput),
-			// MemberExpression memberExpression => EvaluateMemberExpression(memberExpression, table, programOutput),
 			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
+			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateAssignExpression(AssignExpression assignExpression, ValueTable table, StringWriter programOutput)
+	{
+		// the only l-value we support is an identifier
+		if (assignExpression.Target is not IdentifierExpression identifierExpression)
+		{
+			throw new NotImplementedException($"Invalid assign expression target: {assignExpression.Target}");
+		}
+
+		var rhs = EvaluateTypedExpression(assignExpression.Value, table, programOutput);
+		table.Set(identifierExpression.Identifier, rhs);
+		return rhs; // TODO: return l-value?
 	}
 
 	private static ExpressionResult EvaluateCallExpression(CallExpression callExpression, ValueTable table, StringWriter programOutput)
@@ -140,9 +159,10 @@ public static class Evaluator
 
 	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
 	{
+		var innerValueTable = new ValueTable(table);
 		foreach (var step in funcScopeExp.Scope.Steps)
 		{
-			var stepNode = EvaluateStep(step, table, programOutput);
+			var stepNode = EvaluateStep(step, innerValueTable, programOutput);
 			if (stepNode is ReturnExpressionResult ret)
 			{
 				return ret.Value;

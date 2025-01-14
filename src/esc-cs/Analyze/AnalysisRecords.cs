@@ -26,9 +26,10 @@ public record class Scope()
 }
 
 public abstract record class Step;
-public record class AssignStep(Scope Parent, String Identifier, TypedExpression Value) : Step;
+public record class DeclareStep(Scope Parent, String Identifier, TypedExpression Value, Boolean IsStatic) : Step;
 public record class PrintStep(Scope Parent, TypedExpression Value) : Step;
 public record class ReturnStep(Scope Parent, TypedExpression Value) : Step;
+public record class ExpressionStep(Scope Parent, TypedExpression Value) : Step;
 
 public abstract record class TypedExpression(Type Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(typeof(void));
@@ -39,3 +40,4 @@ public record class AddExpression(Type Type, TypedExpression Left, TypedExpressi
 public record class FunctionScopeExpression(Scope Scope) : TypedExpression(typeof(FunctionScopeExpression));
 public record class MemberMethodGroupExpression(TypedExpression Target, String MethodName) : TypedExpression(typeof(void)); // actual type depends on method selection
 public record class CallExpression(Type ReturnType, System.Reflection.MethodInfo MethodInfo, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
+public record class AssignExpression(Type Type, TypedExpression Target, TypedExpression Value) : TypedExpression(Type);

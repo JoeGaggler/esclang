@@ -45,7 +45,7 @@ public static class Analyzer
 
 			var value = AnalyzeExpression(declareStaticNode.Value, scope, queue);
 			scope.NameTable[id] = value.Type;
-			var step = new AssignStep(scope, Identifier: id, Value: value);
+			var step = new DeclareStep(scope, Identifier: id, Value: value, IsStatic: true);
 			return step;
 		}
 		else if (lineItem is Parse.DeclareAssignNode declareAssignNode)
@@ -62,8 +62,13 @@ public static class Analyzer
 
 			var value = AnalyzeExpression(declareAssignNode.Value, scope, queue);
 			scope.NameTable[id] = value.Type;
-			var step = new AssignStep(scope, Identifier: id, Value: value);
+			var step = new DeclareStep(scope, Identifier: id, Value: value, IsStatic: true);
 			return step;
+		}
+		else if (lineItem is AssignNode assignNode)
+		{
+			var targetResult = AnalyzeExpression(assignNode, scope, queue);
+			return new ExpressionStep(scope, Value: targetResult);
 		}
 		else if (lineItem is CallNode callNode)
 		{
@@ -239,6 +244,7 @@ public static class Analyzer
 						{
 							continue;
 						}
+
 						found = methodInfo;
 						break;
 					}
@@ -252,6 +258,13 @@ public static class Analyzer
 				}
 
 				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");
+			}
+			case { } x when x is AssignNode { Target: { } target, Value: { } value }:
+			{
+				var targetExpression = AnalyzeExpression(target, scope, queue);
+				var valueExpression = AnalyzeExpression(value, scope, queue);
+				// TODO: TYPE-CHECK
+				return new AssignExpression(Type: targetExpression.Type, Target: targetExpression, Value: valueExpression);
 			}
 			default:
 			{

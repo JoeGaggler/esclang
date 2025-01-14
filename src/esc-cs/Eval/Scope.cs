@@ -67,9 +67,29 @@ public class ValueTable
 		}
 	}
 
+	public void Add(String identifier, ExpressionResult value)
+	{
+		if (this.Store.ContainsKey(identifier))
+		{
+			throw new Exception($"Duplicate identifier: {identifier}");
+		}
+		this.Store.Add(identifier, value);
+	}
+
 	public void Set(String identifier, ExpressionResult value)
 	{
-		this.Store[identifier] = value;
+		if (this.Store.ContainsKey(identifier))
+		{
+			this.Store[identifier] = value;
+		}
+		else if (this.Parent is not null)
+		{
+			this.Parent.Set(identifier, value);
+		}
+		else
+		{
+			throw new Exception($"Undefined variable: {identifier}");
+		}
 	}
 }
 

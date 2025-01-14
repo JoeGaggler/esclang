@@ -374,7 +374,7 @@ public static class Printer
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine("assign");
-				PrintSyntax(outputFile, node.Assignee, lexemes, level + 1);
+				PrintSyntax(outputFile, node.Target, lexemes, level + 1);
 				PrintSyntax(outputFile, node.Value, lexemes, level + 1);
 				break;
 			}
@@ -507,10 +507,10 @@ public static class Printer
 	{
 		switch (step)
 		{
-			case AssignStep assignStep:
+			case DeclareStep assignStep:
 			{
 				outputFile.Indent(level);
-				outputFile.WriteLine($"assign: {assignStep.Identifier} = ({assignStep.Value.GetType().Name})");
+				outputFile.WriteLine($"declare: {assignStep.Identifier} = ({assignStep.Value.GetType().Name})");
 				PrintAnalysisTypedExpression(outputFile, assignStep.Value, level + 1);
 				break;
 			}
@@ -525,6 +525,13 @@ public static class Printer
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine($"return: {returnStep.Value} ({returnStep.Value.GetType().Name})");
+				break;
+			}
+			case ExpressionStep expressionStep:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"expression");
+				PrintAnalysisTypedExpression(outputFile, expressionStep.Value, level + 1);
 				break;
 			}
 			default:
@@ -603,6 +610,14 @@ public static class Printer
 				{
 					PrintAnalysisTypedExpression(outputFile, arg, v + 2);
 				}
+				break;
+			}
+			case AssignExpression assignExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"assign");
+				PrintAnalysisTypedExpression(outputFile, assignExpression.Target, v + 1);
+				PrintAnalysisTypedExpression(outputFile, assignExpression.Value, v + 1);
 				break;
 			}
 			default:

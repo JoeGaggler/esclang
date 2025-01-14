@@ -55,42 +55,48 @@ Lex:
 0052: 87 + 1 -- (9, 5) -- Spaces -- " "
 0053: 88 + 2 -- (9, 6) -- Number -- 13
 0054: 90 + 1 -- (9, 8) -- EndOfLine -- \n
-0055: 91 + 1 -- (10, 1) -- Identifier -- b
+0055: 91 + 1 -- (10, 1) -- Identifier -- a
 0056: 92 + 1 -- (10, 2) -- Spaces -- " "
-0057: 93 + 1 -- (10, 3) -- Colon -- :
-0058: 94 + 1 -- (10, 4) -- Equals -- =
-0059: 95 + 1 -- (10, 5) -- Spaces -- " "
-0060: 96 + 1 -- (10, 6) -- Identifier -- a
-0061: 97 + 1 -- (10, 7) -- Spaces -- " "
-0062: 98 + 1 -- (10, 8) -- Plus -- +
-0063: 99 + 1 -- (10, 9) -- Spaces -- " "
-0064: 100 + 4 -- (10, 10) -- Identifier -- func
-0065: 104 + 1 -- (10, 14) -- Spaces -- " "
-0066: 105 + 1 -- (10, 15) -- Plus -- +
-0067: 106 + 1 -- (10, 16) -- Spaces -- " "
-0068: 107 + 1 -- (10, 17) -- Number -- 5
-0069: 108 + 1 -- (10, 18) -- EndOfLine -- \n
-0070: 109 + 5 -- (11, 1) -- Identifier -- print
-0071: 114 + 1 -- (11, 6) -- Spaces -- " "
-0072: 115 + 1 -- (11, 7) -- Identifier -- a
-0073: 116 + 1 -- (11, 8) -- EndOfLine -- \n
-0074: 117 + 5 -- (12, 1) -- Identifier -- print
-0075: 122 + 1 -- (12, 6) -- Spaces -- " "
-0076: 123 + 1 -- (12, 7) -- Identifier -- b
-0077: 124 + 1 -- (12, 8) -- EndOfLine -- \n
-0078: 125 + 5 -- (13, 1) -- Identifier -- print
-0079: 130 + 1 -- (13, 6) -- Spaces -- " "
-0080: 131 + 1 -- (13, 7) -- ParenOpen -- (
-0081: 132 + 1 -- (13, 8) -- Identifier -- b
-0082: 133 + 1 -- (13, 9) -- Period -- .
-0083: 134 + 8 -- (13, 10) -- Identifier -- ToString
-0084: 142 + 1 -- (13, 18) -- Spaces -- " "
-0085: 143 + 3 -- (13, 19) -- LiteralString -- "C"
-0086: 146 + 1 -- (13, 22) -- ParenClose -- )
-0087: 147 + 1 -- (13, 23) -- Spaces -- " "
-0088: 148 + 13 -- (13, 24) -- Comment -- // C=currency
-0089: 161 + 1 -- (13, 37) -- EndOfLine -- \n
-0090: 162 + 0 -- (14, 1) -- EndOfFile -- <EOF>
+0057: 93 + 1 -- (10, 3) -- Equals -- =
+0058: 94 + 1 -- (10, 4) -- Spaces -- " "
+0059: 95 + 2 -- (10, 5) -- Number -- 39
+0060: 97 + 1 -- (10, 7) -- EndOfLine -- \n
+0061: 98 + 1 -- (11, 1) -- Identifier -- b
+0062: 99 + 1 -- (11, 2) -- Spaces -- " "
+0063: 100 + 1 -- (11, 3) -- Colon -- :
+0064: 101 + 1 -- (11, 4) -- Equals -- =
+0065: 102 + 1 -- (11, 5) -- Spaces -- " "
+0066: 103 + 1 -- (11, 6) -- Identifier -- a
+0067: 104 + 1 -- (11, 7) -- Spaces -- " "
+0068: 105 + 1 -- (11, 8) -- Plus -- +
+0069: 106 + 1 -- (11, 9) -- Spaces -- " "
+0070: 107 + 4 -- (11, 10) -- Identifier -- func
+0071: 111 + 1 -- (11, 14) -- Spaces -- " "
+0072: 112 + 1 -- (11, 15) -- Plus -- +
+0073: 113 + 1 -- (11, 16) -- Spaces -- " "
+0074: 114 + 1 -- (11, 17) -- Number -- 5
+0075: 115 + 1 -- (11, 18) -- EndOfLine -- \n
+0076: 116 + 5 -- (12, 1) -- Identifier -- print
+0077: 121 + 1 -- (12, 6) -- Spaces -- " "
+0078: 122 + 1 -- (12, 7) -- Identifier -- a
+0079: 123 + 1 -- (12, 8) -- EndOfLine -- \n
+0080: 124 + 5 -- (13, 1) -- Identifier -- print
+0081: 129 + 1 -- (13, 6) -- Spaces -- " "
+0082: 130 + 1 -- (13, 7) -- Identifier -- b
+0083: 131 + 1 -- (13, 8) -- EndOfLine -- \n
+0084: 132 + 5 -- (14, 1) -- Identifier -- print
+0085: 137 + 1 -- (14, 6) -- Spaces -- " "
+0086: 138 + 1 -- (14, 7) -- ParenOpen -- (
+0087: 139 + 1 -- (14, 8) -- Identifier -- b
+0088: 140 + 1 -- (14, 9) -- Period -- .
+0089: 141 + 8 -- (14, 10) -- Identifier -- ToString
+0090: 149 + 1 -- (14, 18) -- Spaces -- " "
+0091: 150 + 3 -- (14, 19) -- LiteralString -- "C"
+0092: 153 + 1 -- (14, 22) -- ParenClose -- )
+0093: 154 + 1 -- (14, 23) -- Spaces -- " "
+0094: 155 + 13 -- (14, 24) -- Comment -- // C=currency
+0095: 168 + 1 -- (14, 37) -- EndOfLine -- \n
+0096: 169 + 0 -- (15, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -138,6 +144,10 @@ line
     value
       13
 line
+  assign
+    identifier: a
+    39
+line
   declare-assign
     id
       identifier: b
@@ -175,23 +185,27 @@ line
 Analyze:
 main procedure
     scope
-    assign: func2 = (FunctionScopeExpression)
+    declare: func2 = (FunctionScopeExpression)
       func scope
         scope
           return: IntLiteralExpression { Type = System.Int32, Value = 100 } (IntLiteralExpression)
-    assign: func = (FunctionScopeExpression)
+    declare: func = (FunctionScopeExpression)
       func scope
         scope
-          assign: a = (IntLiteralExpression)
+          declare: a = (IntLiteralExpression)
             int: 2
-          assign: b = (AddExpression)
+          declare: b = (AddExpression)
             add
               identifier: a (System.Int32)
               identifier: func2 (System.Int32)
           return: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
-    assign: a = (IntLiteralExpression)
+    declare: a = (IntLiteralExpression)
       int: 13
-    assign: b = (AddExpression)
+    expression
+      assign
+        identifier: a (System.Int32)
+        int: 39
+    declare: b = (AddExpression)
       add
         add
           identifier: a (System.Int32)
@@ -212,9 +226,9 @@ main procedure
           string: C
 
 Output:
-13
-120
-$120.00
+39
+146
+$146.00
 
 Stats:
 -    Read: 0.00s
