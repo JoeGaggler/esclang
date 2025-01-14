@@ -75,29 +75,67 @@ public static class Evaluator
 		return rhs; // TODO: return l-value?
 	}
 
+	private static ExpressionResult CreateExpressionResult(Type type, Object? value)
+	{
+		// TODO: handle null
+		return type.Name switch
+		{
+			"Int32" => new IntExpressionResult((Int32)value),
+			"String" => new StringExpressionResult((String)value),
+			_ => throw new NotImplementedException($"Invalid expression result type: {type}"),
+		};
+	}
+
+	private static Object EvaluateExpressionResult(ExpressionResult value)
+	{
+		return value switch
+		{
+			IntExpressionResult intExpressionResult => intExpressionResult.Value,
+			StringExpressionResult stringExpressionResult => stringExpressionResult.Value,
+			_ => throw new NotImplementedException($"Invalid expression result: {value}"),
+		};
+	}
+
 	private static ExpressionResult EvaluateTypedExpression(TypedExpression value, ValueTable table, StringWriter programOutput)
 	{
 		return value switch
 		{
 			IntLiteralExpression intLiteralExpression => new IntExpressionResult(intLiteralExpression.Value),
+			StringLiteralExpression stringLiteralExpression => new StringExpressionResult(stringLiteralExpression.Value),
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput),
-			MemberExpression memberExpression => EvaluateMemberExpression(memberExpression, table, programOutput),
+			// MemberExpression memberExpression => EvaluateMemberExpression(memberExpression, table, programOutput),
+			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
 	}
 
-	private static ExpressionResult EvaluateMemberExpression(MemberExpression memberExpression, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult EvaluateCallExpression(CallExpression callExpression, ValueTable table, StringWriter programOutput)
 	{
-		var target = EvaluateTypedExpression(memberExpression.Target, table, programOutput);
-
-		// TODO: lookup actual member
-		switch (memberExpression.Member)
+		// CallExpression { 
+		//	Type = System.String, 
+		// 	ReturnType = System.String, 
+		// 	MethodInfo = System.String ToString(System.String, System.IFormatProvider)
+		//	Target = IdentifierExpression { Type = System.Int32, Identifier = b }, 
+		//	Args = EscLang.Analyze.TypedExpression[] 
+		// }
+		if (callExpression is not { Type: { } returnType, MethodInfo: { } methodInfo, Target: { } methodTarget })
 		{
-			case "ToString": return new StringExpressionResult(((IntExpressionResult)target).Value.ToString());
-			default: throw new NotImplementedException($"MemberExpression not implemented: {memberExpression} on {target}");
+			throw new NotImplementedException($"Invalid call expression: {callExpression}");
 		}
+		var args = new Object[callExpression.Args.Length];
+		foreach (var (i, arg) in callExpression.Args.Index())
+		{
+			var argExp = EvaluateTypedExpression(arg, table, programOutput);
+			var argObj = EvaluateExpressionResult(argExp);
+			args[i] = argObj;
+		}
+		var targetExpression = EvaluateTypedExpression(methodTarget, table, programOutput);
+		var targetObject = EvaluateExpressionResult(targetExpression);
+		var returnValue = methodInfo.Invoke(targetObject, args);
+		var returnExpression = CreateExpressionResult(returnType, returnValue);
+		return returnExpression;
 	}
 
 	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)

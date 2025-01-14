@@ -80,11 +80,15 @@ Lex:
 0077: 124 + 1 -- (12, 8) -- EndOfLine -- \n
 0078: 125 + 5 -- (13, 1) -- Identifier -- print
 0079: 130 + 1 -- (13, 6) -- Spaces -- " "
-0080: 131 + 1 -- (13, 7) -- Identifier -- b
-0081: 132 + 1 -- (13, 8) -- Period -- .
-0082: 133 + 8 -- (13, 9) -- Identifier -- ToString
-0083: 141 + 1 -- (13, 17) -- EndOfLine -- \n
-0084: 142 + 0 -- (14, 1) -- EndOfFile -- <EOF>
+0080: 131 + 1 -- (13, 7) -- ParenOpen -- (
+0081: 132 + 1 -- (13, 8) -- Identifier -- b
+0082: 133 + 1 -- (13, 9) -- Period -- .
+0083: 134 + 8 -- (13, 10) -- Identifier -- ToString
+0084: 142 + 1 -- (13, 18) -- Spaces -- " "
+0085: 143 + 3 -- (13, 19) -- LiteralString -- "C"
+0086: 146 + 1 -- (13, 22) -- ParenClose -- )
+0087: 147 + 1 -- (13, 23) -- EndOfLine -- \n
+0088: 148 + 0 -- (14, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -158,9 +162,13 @@ line
     target
       identifier: print
     arguments
-      member
-        identifier: b
-        identifier: ToString
+      call
+        target
+          member
+            identifier: b
+            identifier: ToString
+        arguments
+          "C"
 
 Analyze:
 main procedure
@@ -189,12 +197,12 @@ main procedure
         int: 5
     print: IdentifierExpression { Type = System.Int32, Identifier = a } (IdentifierExpression)
     print: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
-    print: MemberExpression { Type = System.Int32, Target = IdentifierExpression { Type = System.Int32, Identifier = b }, Member = ToString } (MemberExpression)
+    print: CallExpression { Type = System.String, ReturnType = System.String, MethodInfo = System.String ToString(System.String), Target = IdentifierExpression { Type = System.Int32, Identifier = b }, Args = EscLang.Analyze.TypedExpression[] } (CallExpression)
 
 Output:
 13
 120
-120
+$120.00
 
 Stats:
 -    Read: 0.00s

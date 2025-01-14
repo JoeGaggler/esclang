@@ -1,5 +1,6 @@
 namespace EscLang.Analyze;
 
+using System.Reflection;
 using EscLang.Parse;
 using AnalysisQueue = Queue<Object>; // TODO: strong type
 
@@ -66,6 +67,33 @@ public static class Analyzer
 		}
 		else if (lineItem is CallNode callNode)
 		{
+			var targetResult = AnalyzeExpression(callNode.Target, scope, queue);
+			if (targetResult is KeywordExpression keywordExpression)
+			{
+				var keyword = keywordExpression.Keyword;
+				if (keyword == "return")
+				{
+					if (callNode.Arguments.Count != 1)
+					{
+						throw new Exception("Invalid return statement");
+					}
+					var argumentExpression = AnalyzeExpression(callNode.Arguments[0], scope, queue);
+					var step = new ReturnStep(scope, Value: argumentExpression);
+					return step;
+				}
+				if (keyword == "print")
+				{
+					if (callNode.Arguments.Count != 1)
+					{
+						throw new Exception("Invalid print call");
+					}
+					var argumentExpression = AnalyzeExpression(callNode.Arguments[0], scope, queue);
+					var step = new PrintStep(scope, Value: argumentExpression);
+					return step;
+				}
+				throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
+			}
+			throw new NotImplementedException($"TODO CALLNODE RESULT: {targetResult}");
 			if (callNode.Target is not IdentifierNode { Text: { Length: > 0 } targetId })
 			{
 				throw new NotImplementedException("TODO: call nodes on non-identifiers");
@@ -120,8 +148,23 @@ public static class Analyzer
 				var intVal = Int32.Parse(numberLiteral);
 				return new IntLiteralExpression(intVal);
 			}
+			case { } x when x is LiteralStringNode { Text: { Length: > 0 } stringLiteral }:
+			{
+				return new StringLiteralExpression(stringLiteral);
+			}
 			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
 			{
+				// intrinsic identifiers
+				if (id == "return")
+				{
+					return new KeywordExpression(Keyword: id);
+				}
+				if (id == "print")
+				{
+					return new KeywordExpression(Keyword: id);
+				}
+
+				// scoped identifiers
 				if (!scope.TryGetNameTableValue(id, out var type))
 				{
 					throw new Exception($"Unknown identifier: {id}");
@@ -172,9 +215,43 @@ public static class Analyzer
 					throw new Exception("Invalid member identifier");
 				}
 
-				var memberType = typeof(Int32); // TODO: resolve member type
+				// Assuming member is method for now
+				return new MemberMethodGroupExpression(Target: targetExpression, MethodName: memberId);
+			}
+			case { } x when x is CallNode { Target: { } target, Arguments: { } arguments }:
+			{
+				var targetExpression = AnalyzeExpression(target, scope, queue);
 
-				return new MemberExpression(memberType, Target: targetExpression, Member: memberId);
+				var argumentExpressions = new List<TypedExpression>();
+				foreach (var arg in arguments)
+				{
+					var argValue = AnalyzeExpression(arg, scope, queue);
+					argumentExpressions.Add(argValue);
+				}
+
+				if (targetExpression is MemberMethodGroupExpression { MethodName: { } methodName, Target: { } methodTarget })
+				{
+					MethodInfo? found = null;
+					foreach (var methodInfo in methodTarget.Type.GetMethods().Where(m => m.Name == methodName))
+					{
+						// TODO: check argument types
+						if (methodInfo.GetParameters().Length != argumentExpressions.Count)
+						{
+							continue;
+						}
+						found = methodInfo;
+						break;
+					}
+
+					if (found is null)
+					{
+						throw new Exception($"Method not found: {methodName}");
+					}
+
+					return new CallExpression(ReturnType: found.ReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
+				}
+
+				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");
 			}
 			default:
 			{
