@@ -1,20 +1,21 @@
 func2 := {
+    cond : bool : <>
     if false {
         return 0
     }
-    if !false {
+    if cond {
         return 100
     }
     return 9999 // unreachable
 }
-func := {
+func1 := {
     a := 2
-    b := a + func2 true // TODO: next step is to apply parameter to call
+    b := a + func2 true
     return b
 }
 a := 13
 a = 39
-b := a + func + 5
+b := a + func1 + 5
 print a
 print b
 print (b.ToString "C") // C=currency

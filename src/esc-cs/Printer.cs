@@ -591,10 +591,10 @@ public static class Printer
 				PrintAnalysisTypedExpression(outputFile, addExpression.Right, v + 1);
 				break;
 			}
-			case FunctionScopeExpression funcExp:
+			case FunctionExpression funcExp:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine($"func scope");
+				outputFile.WriteLine($"func");
 				PrintAnalysisScope(outputFile, funcExp.Scope, v + 1);
 				break;
 			}
@@ -654,6 +654,12 @@ public static class Printer
 				{
 					PrintAnalysisTypedExpression(outputFile, arg, v + 1);
 				}
+				break;
+			}
+			case ParameterExpression parameterExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"parameter: {parameterExpression.Type}");
 				break;
 			}
 			default:

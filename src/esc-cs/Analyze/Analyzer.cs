@@ -4,6 +4,8 @@ using System.Reflection;
 using EscLang.Parse;
 using AnalysisQueue = Queue<Object>; // TODO: strong type
 
+// TODO: combine call node handling across step/non-step methods
+
 public static class Analyzer
 {
 	public static Analysis Analyze(Parse.EscFile file)
@@ -161,7 +163,7 @@ public static class Analyzer
 					throw new Exception("Unknown identifier type");
 				}
 
-				if (type == typeof(FunctionScopeExpression))
+				if (type == typeof(FunctionExpression))
 				{
 					// TODO: analyze return type of function scope
 					type = typeof(Int32);
@@ -192,7 +194,7 @@ public static class Analyzer
 				{
 					AnalyzeLine(line, innerScope, queue);
 				}
-				return new FunctionScopeExpression(innerScope);
+				return new FunctionExpression(innerScope);
 			}
 			case { } x when x is MemberNode { Target: { } target, Member: { } member }:
 			{
@@ -246,7 +248,7 @@ public static class Analyzer
 					{
 						throw new Exception($"Unknown identifier: {identifier}");
 					}
-					if (targetType != typeof(FunctionScopeExpression))
+					if (targetType != typeof(FunctionExpression))
 					{
 						throw new Exception($"Invalid identifier type: {targetType}");
 					}

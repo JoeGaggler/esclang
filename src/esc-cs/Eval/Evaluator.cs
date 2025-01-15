@@ -4,6 +4,9 @@ using EscLang.Parse;
 
 namespace EscLang.Eval;
 
+// TODO: does early return still work without the special nodes?
+// TODO: programOutput is only needed for print statements, should be removed from method signatures
+
 public static class Evaluator
 {
 	// HACK: special nodes only needed for the evaluator that signals to stop evaluation in the current scope
@@ -64,7 +67,7 @@ public static class Evaluator
 		{
 			return new ImplicitVoidExpressionResult();
 		}
-		if (ifStep.IfBlock is not FunctionScopeExpression functionScopeExpression)
+		if (ifStep.IfBlock is not FunctionExpression functionScopeExpression)
 		{
 			throw new NotImplementedException($"Invalid if block: {ifStep.IfBlock}");
 		}
@@ -127,9 +130,10 @@ public static class Evaluator
 	private static ExpressionResult EvaluateTypedExpressionAndCall(TypedExpression value, ValueTable table, StringWriter programOutput)
 	{
 		var result = EvaluateTypedExpression(value, table, programOutput);
-		if (result is FunctionScopeExpressionResult { Func: { } func })
+		if (result is FunctionExpressionResult { Func: { } func })
 		{
-			return CallFunctionScopeExpression(func, table, programOutput);
+			// bare function expression becomes a function call with no arguments
+			return CallFunctionExpression(func, [], table, programOutput);
 		}
 		return result;
 	}
@@ -144,7 +148,7 @@ public static class Evaluator
 			BooleanLiteralExpression booleanLiteralExpression => new BooleanExpressionResult(booleanLiteralExpression.Value),
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
-			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
+			FunctionExpression funcScopeExp => EvaluateFunctionExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
 			CallDotnetMethodExpression callExpression => EvaluateCallDotnetMethodExpression(callExpression, table, programOutput),
 			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
@@ -196,20 +200,19 @@ public static class Evaluator
 		{
 			throw new NotImplementedException($"Invalid call expression: {callExpression}");
 		}
-		var args = new Object[callExpression.Args.Length];
+		var args = new ExpressionResult[callExpression.Args.Length];
 		foreach (var (i, arg) in callExpression.Args.Index())
 		{
 			var argExp = EvaluateTypedExpression(arg, table, programOutput);
-			var argObj = EvaluateExpressionResult(argExp);
-			args[i] = argObj;
+			args[i] = argExp;
 		}
 		var targetExpression = EvaluateTypedExpression(methodTarget, table, programOutput);
-		if (targetExpression is not FunctionScopeExpressionResult { Func: { } func })
+		if (targetExpression is not FunctionExpressionResult { Func: { } func })
 		{
 			throw new NotImplementedException($"Invalid call target: {methodTarget}");
 		}
 		// TODO: parameters
-		var returnExpression = CallFunctionScopeExpression(func, table, programOutput);
+		var returnExpression = CallFunctionExpression(func, args, table, programOutput);
 		return returnExpression;
 	}
 
@@ -240,7 +243,7 @@ public static class Evaluator
 		return returnExpression;
 	}
 
-	private static ExpressionResult EvaluateSharedScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult EvaluateSharedScopeExpression(FunctionExpression funcScopeExp, ValueTable table, StringWriter programOutput)
 	{
 		foreach (var step in funcScopeExp.Scope.Steps)
 		{
@@ -253,15 +256,16 @@ public static class Evaluator
 		return new ReturnVoidResult();
 	}
 
-	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult EvaluateFunctionExpression(FunctionExpression functionExpression, ValueTable table, StringWriter programOutput)
 	{
-		return new FunctionScopeExpressionResult(funcScopeExp);
+		return new FunctionExpressionResult(functionExpression);
 	}
 
-	private static ExpressionResult CallFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult CallFunctionExpression(FunctionExpression functionExpression, ExpressionResult[] args, ValueTable table, StringWriter programOutput)
 	{
 		var innerValueTable = new ValueTable(table);
-		foreach (var step in funcScopeExp.Scope.Steps)
+		innerValueTable.SetArguments(args.ToList());
+		foreach (var step in functionExpression.Scope.Steps)
 		{
 			var stepNode = EvaluateStep(step, innerValueTable, programOutput);
 			if (stepNode is ReturnExpressionResult ret)

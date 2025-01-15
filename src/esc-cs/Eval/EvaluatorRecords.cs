@@ -51,15 +51,21 @@ public class ValueTable
 		this.Parent = parent;
 	}
 
-	private Int32 NextParameterIndex = 0;
-	public List<ExpressionResult> Parameters { get; } = new();
+	private Int32 NextArgumentIndex = 0;
+	public List<ExpressionResult> Arguments { get; } = new();
+	public void SetArguments(List<ExpressionResult> parameters)
+	{
+		this.Arguments.Clear();
+		this.Arguments.AddRange(parameters);
+		this.NextArgumentIndex = 0;
+	}
 	public ExpressionResult GetNextParameter()
 	{
-		if (NextParameterIndex >= this.Parameters.Count)
+		if (NextArgumentIndex >= this.Arguments.Count)
 		{
-			throw new Exception("Too many parameters");
+			throw new Exception($"Function defines more parameters than arguments ({this.Arguments.Count})");
 		}
-		return this.Parameters[NextParameterIndex++];
+		return this.Arguments[NextArgumentIndex++];
 	}
 
 	public ExpressionResult? Get(String identifier)
@@ -113,4 +119,4 @@ public record class BooleanExpressionResult(Boolean Value) : ExpressionResult;
 public record class FunctionDeclarationExpressionResult() : ExpressionResult; // TODO: inputs/outputs
 public record class ReturnVoidResult() : ExpressionResult;
 public record class ReturnExpressionResult(ExpressionResult Value) : ExpressionResult;
-public record class FunctionScopeExpressionResult(Analyze.FunctionScopeExpression Func) : ExpressionResult; // TODO: better member type?
+public record class FunctionExpressionResult(Analyze.FunctionExpression Func) : ExpressionResult;
