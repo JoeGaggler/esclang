@@ -113,3 +113,4 @@ public record class BooleanExpressionResult(Boolean Value) : ExpressionResult;
 public record class FunctionDeclarationExpressionResult() : ExpressionResult; // TODO: inputs/outputs
 public record class ReturnVoidResult() : ExpressionResult;
 public record class ReturnExpressionResult(ExpressionResult Value) : ExpressionResult;
+public record class FunctionScopeExpressionResult(Analyze.FunctionScopeExpression Func) : ExpressionResult; // TODO: better member type?

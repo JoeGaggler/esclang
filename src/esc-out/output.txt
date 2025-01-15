@@ -73,63 +73,67 @@ Lex:
 0070: 155 + 1 -- (12, 12) -- Plus -- +
 0071: 156 + 1 -- (12, 13) -- Spaces -- " "
 0072: 157 + 5 -- (12, 14) -- Identifier -- func2
-0073: 162 + 1 -- (12, 19) -- EndOfLine -- \n
-0074: 163 + 4 -- (13, 1) -- Spaces -- "    "
-0075: 167 + 6 -- (13, 5) -- Identifier -- return
-0076: 173 + 1 -- (13, 11) -- Spaces -- " "
-0077: 174 + 1 -- (13, 12) -- Identifier -- b
-0078: 175 + 1 -- (13, 13) -- EndOfLine -- \n
-0079: 176 + 1 -- (14, 1) -- BraceClose -- }
-0080: 177 + 1 -- (14, 2) -- EndOfLine -- \n
-0081: 178 + 1 -- (15, 1) -- Identifier -- a
-0082: 179 + 1 -- (15, 2) -- Spaces -- " "
-0083: 180 + 1 -- (15, 3) -- Colon -- :
-0084: 181 + 1 -- (15, 4) -- Equals -- =
-0085: 182 + 1 -- (15, 5) -- Spaces -- " "
-0086: 183 + 2 -- (15, 6) -- Number -- 13
-0087: 185 + 1 -- (15, 8) -- EndOfLine -- \n
-0088: 186 + 1 -- (16, 1) -- Identifier -- a
-0089: 187 + 1 -- (16, 2) -- Spaces -- " "
-0090: 188 + 1 -- (16, 3) -- Equals -- =
-0091: 189 + 1 -- (16, 4) -- Spaces -- " "
-0092: 190 + 2 -- (16, 5) -- Number -- 39
-0093: 192 + 1 -- (16, 7) -- EndOfLine -- \n
-0094: 193 + 1 -- (17, 1) -- Identifier -- b
-0095: 194 + 1 -- (17, 2) -- Spaces -- " "
-0096: 195 + 1 -- (17, 3) -- Colon -- :
-0097: 196 + 1 -- (17, 4) -- Equals -- =
-0098: 197 + 1 -- (17, 5) -- Spaces -- " "
-0099: 198 + 1 -- (17, 6) -- Identifier -- a
-0100: 199 + 1 -- (17, 7) -- Spaces -- " "
-0101: 200 + 1 -- (17, 8) -- Plus -- +
-0102: 201 + 1 -- (17, 9) -- Spaces -- " "
-0103: 202 + 4 -- (17, 10) -- Identifier -- func
-0104: 206 + 1 -- (17, 14) -- Spaces -- " "
-0105: 207 + 1 -- (17, 15) -- Plus -- +
-0106: 208 + 1 -- (17, 16) -- Spaces -- " "
-0107: 209 + 1 -- (17, 17) -- Number -- 5
-0108: 210 + 1 -- (17, 18) -- EndOfLine -- \n
-0109: 211 + 5 -- (18, 1) -- Identifier -- print
-0110: 216 + 1 -- (18, 6) -- Spaces -- " "
-0111: 217 + 1 -- (18, 7) -- Identifier -- a
-0112: 218 + 1 -- (18, 8) -- EndOfLine -- \n
-0113: 219 + 5 -- (19, 1) -- Identifier -- print
-0114: 224 + 1 -- (19, 6) -- Spaces -- " "
-0115: 225 + 1 -- (19, 7) -- Identifier -- b
-0116: 226 + 1 -- (19, 8) -- EndOfLine -- \n
-0117: 227 + 5 -- (20, 1) -- Identifier -- print
-0118: 232 + 1 -- (20, 6) -- Spaces -- " "
-0119: 233 + 1 -- (20, 7) -- ParenOpen -- (
-0120: 234 + 1 -- (20, 8) -- Identifier -- b
-0121: 235 + 1 -- (20, 9) -- Period -- .
-0122: 236 + 8 -- (20, 10) -- Identifier -- ToString
-0123: 244 + 1 -- (20, 18) -- Spaces -- " "
-0124: 245 + 3 -- (20, 19) -- LiteralString -- "C"
-0125: 248 + 1 -- (20, 22) -- ParenClose -- )
-0126: 249 + 1 -- (20, 23) -- Spaces -- " "
-0127: 250 + 13 -- (20, 24) -- Comment -- // C=currency
-0128: 263 + 1 -- (20, 37) -- EndOfLine -- \n
-0129: 264 + 0 -- (21, 1) -- EndOfFile -- <EOF>
+0073: 162 + 1 -- (12, 19) -- Spaces -- " "
+0074: 163 + 4 -- (12, 20) -- Identifier -- true
+0075: 167 + 1 -- (12, 24) -- Spaces -- " "
+0076: 168 + 48 -- (12, 25) -- Comment -- // TODO: next step is to apply parameter to call
+0077: 216 + 1 -- (12, 73) -- EndOfLine -- \n
+0078: 217 + 4 -- (13, 1) -- Spaces -- "    "
+0079: 221 + 6 -- (13, 5) -- Identifier -- return
+0080: 227 + 1 -- (13, 11) -- Spaces -- " "
+0081: 228 + 1 -- (13, 12) -- Identifier -- b
+0082: 229 + 1 -- (13, 13) -- EndOfLine -- \n
+0083: 230 + 1 -- (14, 1) -- BraceClose -- }
+0084: 231 + 1 -- (14, 2) -- EndOfLine -- \n
+0085: 232 + 1 -- (15, 1) -- Identifier -- a
+0086: 233 + 1 -- (15, 2) -- Spaces -- " "
+0087: 234 + 1 -- (15, 3) -- Colon -- :
+0088: 235 + 1 -- (15, 4) -- Equals -- =
+0089: 236 + 1 -- (15, 5) -- Spaces -- " "
+0090: 237 + 2 -- (15, 6) -- Number -- 13
+0091: 239 + 1 -- (15, 8) -- EndOfLine -- \n
+0092: 240 + 1 -- (16, 1) -- Identifier -- a
+0093: 241 + 1 -- (16, 2) -- Spaces -- " "
+0094: 242 + 1 -- (16, 3) -- Equals -- =
+0095: 243 + 1 -- (16, 4) -- Spaces -- " "
+0096: 244 + 2 -- (16, 5) -- Number -- 39
+0097: 246 + 1 -- (16, 7) -- EndOfLine -- \n
+0098: 247 + 1 -- (17, 1) -- Identifier -- b
+0099: 248 + 1 -- (17, 2) -- Spaces -- " "
+0100: 249 + 1 -- (17, 3) -- Colon -- :
+0101: 250 + 1 -- (17, 4) -- Equals -- =
+0102: 251 + 1 -- (17, 5) -- Spaces -- " "
+0103: 252 + 1 -- (17, 6) -- Identifier -- a
+0104: 253 + 1 -- (17, 7) -- Spaces -- " "
+0105: 254 + 1 -- (17, 8) -- Plus -- +
+0106: 255 + 1 -- (17, 9) -- Spaces -- " "
+0107: 256 + 4 -- (17, 10) -- Identifier -- func
+0108: 260 + 1 -- (17, 14) -- Spaces -- " "
+0109: 261 + 1 -- (17, 15) -- Plus -- +
+0110: 262 + 1 -- (17, 16) -- Spaces -- " "
+0111: 263 + 1 -- (17, 17) -- Number -- 5
+0112: 264 + 1 -- (17, 18) -- EndOfLine -- \n
+0113: 265 + 5 -- (18, 1) -- Identifier -- print
+0114: 270 + 1 -- (18, 6) -- Spaces -- " "
+0115: 271 + 1 -- (18, 7) -- Identifier -- a
+0116: 272 + 1 -- (18, 8) -- EndOfLine -- \n
+0117: 273 + 5 -- (19, 1) -- Identifier -- print
+0118: 278 + 1 -- (19, 6) -- Spaces -- " "
+0119: 279 + 1 -- (19, 7) -- Identifier -- b
+0120: 280 + 1 -- (19, 8) -- EndOfLine -- \n
+0121: 281 + 5 -- (20, 1) -- Identifier -- print
+0122: 286 + 1 -- (20, 6) -- Spaces -- " "
+0123: 287 + 1 -- (20, 7) -- ParenOpen -- (
+0124: 288 + 1 -- (20, 8) -- Identifier -- b
+0125: 289 + 1 -- (20, 9) -- Period -- .
+0126: 290 + 8 -- (20, 10) -- Identifier -- ToString
+0127: 298 + 1 -- (20, 18) -- Spaces -- " "
+0128: 299 + 3 -- (20, 19) -- LiteralString -- "C"
+0129: 302 + 1 -- (20, 22) -- ParenClose -- )
+0130: 303 + 1 -- (20, 23) -- Spaces -- " "
+0131: 304 + 13 -- (20, 24) -- Comment -- // C=currency
+0132: 317 + 1 -- (20, 37) -- EndOfLine -- \n
+0133: 318 + 0 -- (21, 1) -- EndOfFile -- <EOF>
 
 Parse:
 line
@@ -190,7 +194,11 @@ line
             value
               plus
                 identifier: a
-                identifier: func2
+                call
+                  target
+                    identifier: func2
+                  arguments
+                    identifier: true
         line
           call
             target
@@ -272,7 +280,9 @@ main procedure
           declare: b = (AddExpression)
             add
               identifier: a (System.Int32)
-              identifier: func2 (System.Int32)
+              call
+                identifier: func2 (System.Int32)
+                bool: True
           return: IdentifierExpression { Type = System.Int32, Identifier = b } (IdentifierExpression)
     declare: a = (IntLiteralExpression)
       int: 13

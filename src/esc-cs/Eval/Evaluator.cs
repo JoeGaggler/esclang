@@ -119,9 +119,21 @@ public static class Evaluator
 		{
 			IntExpressionResult intExpressionResult => intExpressionResult.Value,
 			StringExpressionResult stringExpressionResult => stringExpressionResult.Value,
+			BooleanExpressionResult booleanExpressionResult => booleanExpressionResult.Value,
 			_ => throw new NotImplementedException($"Invalid expression result: {value}"),
 		};
 	}
+
+	private static ExpressionResult EvaluateTypedExpressionAndCall(TypedExpression value, ValueTable table, StringWriter programOutput)
+	{
+		var result = EvaluateTypedExpression(value, table, programOutput);
+		if (result is FunctionScopeExpressionResult { Func: { } func })
+		{
+			return CallFunctionScopeExpression(func, table, programOutput);
+		}
+		return result;
+	}
+
 
 	private static ExpressionResult EvaluateTypedExpression(TypedExpression value, ValueTable table, StringWriter programOutput)
 	{
@@ -134,6 +146,7 @@ public static class Evaluator
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
 			CallDotnetMethodExpression callExpression => EvaluateCallDotnetMethodExpression(callExpression, table, programOutput),
+			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
 			LogicalNegationExpression logicalNegationExpression => EvaluateLogicalNegationExpression(logicalNegationExpression, table, programOutput),
 			ParameterExpression parameterExpression => EvaluateParameterExpression(parameterExpression, table, programOutput),
@@ -168,6 +181,36 @@ public static class Evaluator
 		var rhs = EvaluateTypedExpression(assignExpression.Value, table, programOutput);
 		table.Set(identifierExpression.Identifier, rhs);
 		return rhs; // TODO: return l-value?
+	}
+
+	private static ExpressionResult EvaluateCallExpression(CallExpression callExpression, ValueTable table, StringWriter programOutput)
+	{
+		// CallExpression { 
+		//	Type = System.String, 
+		// 	ReturnType = System.String, 
+		// 	MethodInfo = System.String ToString(System.String, System.IFormatProvider)
+		//	Target = IdentifierExpression { Type = System.Int32, Identifier = b }, 
+		//	Args = EscLang.Analyze.TypedExpression[] 
+		// }
+		if (callExpression is not { Type: { } returnType, Target: { } methodTarget })
+		{
+			throw new NotImplementedException($"Invalid call expression: {callExpression}");
+		}
+		var args = new Object[callExpression.Args.Length];
+		foreach (var (i, arg) in callExpression.Args.Index())
+		{
+			var argExp = EvaluateTypedExpression(arg, table, programOutput);
+			var argObj = EvaluateExpressionResult(argExp);
+			args[i] = argObj;
+		}
+		var targetExpression = EvaluateTypedExpression(methodTarget, table, programOutput);
+		if (targetExpression is not FunctionScopeExpressionResult { Func: { } func })
+		{
+			throw new NotImplementedException($"Invalid call target: {methodTarget}");
+		}
+		// TODO: parameters
+		var returnExpression = CallFunctionScopeExpression(func, table, programOutput);
+		return returnExpression;
 	}
 
 	private static ExpressionResult EvaluateCallDotnetMethodExpression(CallDotnetMethodExpression callExpression, ValueTable table, StringWriter programOutput)
@@ -212,6 +255,11 @@ public static class Evaluator
 
 	private static ExpressionResult EvaluateFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
 	{
+		return new FunctionScopeExpressionResult(funcScopeExp);
+	}
+
+	private static ExpressionResult CallFunctionScopeExpression(FunctionScopeExpression funcScopeExp, ValueTable table, StringWriter programOutput)
+	{
 		var innerValueTable = new ValueTable(table);
 		foreach (var step in funcScopeExp.Scope.Steps)
 		{
@@ -226,22 +274,25 @@ public static class Evaluator
 
 	private static ExpressionResult EvaluateAddExpression(AddExpression addExpression, ValueTable table, StringWriter programOutput)
 	{
-		var left = EvaluateTypedExpression(addExpression.Left, table, programOutput);
-		var right = EvaluateTypedExpression(addExpression.Right, table, programOutput);
+		var left = EvaluateTypedExpressionAndCall(addExpression.Left, table, programOutput);
+		var right = EvaluateTypedExpressionAndCall(addExpression.Right, table, programOutput);
+
+		var leftObj = EvaluateExpressionResult(left);
+		var rightObj = EvaluateExpressionResult(right);
 
 		if (addExpression.Type != typeof(Int32))
 		{
 			throw new NotImplementedException($"Invalid add expression type: {addExpression.Type}");
 		}
-		if (left is not IntExpressionResult leftIntExpressionResult)
+		if (leftObj is not Int32 leftInt)
 		{
 			throw new NotImplementedException($"Invalid add expression left: {left}");
 		}
-		if (right is not IntExpressionResult rightIntExpressionResult)
+		if (rightObj is not Int32 rightInt)
 		{
-			throw new NotImplementedException($"Invalid add expression right: {right}");
+			throw new NotImplementedException($"Invalid add expression right: \n{right}\n{rightObj}");
 		}
-		var sum = leftIntExpressionResult.Value + rightIntExpressionResult.Value;
+		var sum = leftInt + rightInt;
 		return new IntExpressionResult(sum);
 	}
 

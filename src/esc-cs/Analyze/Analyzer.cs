@@ -161,8 +161,9 @@ public static class Analyzer
 					throw new Exception("Unknown identifier type");
 				}
 
-				if (type == typeof(FunctionScopeExpression)) // TODO: analyze return type of function scope
+				if (type == typeof(FunctionScopeExpression))
 				{
+					// TODO: analyze return type of function scope
 					type = typeof(Int32);
 				}
 
@@ -237,6 +238,22 @@ public static class Analyzer
 					}
 
 					return new CallDotnetMethodExpression(ReturnType: found.ReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
+				}
+
+				if (targetExpression is IdentifierExpression { Identifier: { } identifier, Type: { } type })
+				{
+					if (!scope.TryGetNameTableValue(identifier, out var targetType))
+					{
+						throw new Exception($"Unknown identifier: {identifier}");
+					}
+					if (targetType != typeof(FunctionScopeExpression))
+					{
+						throw new Exception($"Invalid identifier type: {targetType}");
+					}
+
+					var returnType = typeof(Int32); // TODO: analyze return type of function scope
+
+					return new CallExpression(ReturnType: returnType, Target: targetExpression, Args: [.. argumentExpressions]);
 				}
 
 				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");

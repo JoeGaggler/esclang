@@ -645,6 +645,17 @@ public static class Printer
 				PrintAnalysisTypedExpression(outputFile, logicalNegationExpression.Node, v + 1);
 				break;
 			}
+			case CallExpression callExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"call");
+				PrintAnalysisTypedExpression(outputFile, callExpression.Target, v + 1);
+				foreach (var arg in callExpression.Args)
+				{
+					PrintAnalysisTypedExpression(outputFile, arg, v + 1);
+				}
+				break;
+			}
 			default:
 			{
 				outputFile.Indent(v);

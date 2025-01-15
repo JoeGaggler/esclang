@@ -9,7 +9,7 @@ func2 := {
 }
 func := {
     a := 2
-    b := a + func2
+    b := a + func2 true // TODO: next step is to apply parameter to call
     return b
 }
 a := 13
