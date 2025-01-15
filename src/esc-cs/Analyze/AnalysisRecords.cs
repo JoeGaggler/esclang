@@ -42,6 +42,8 @@ public record class AddExpression(Type Type, TypedExpression Left, TypedExpressi
 public record class FunctionScopeExpression(Scope Scope) : TypedExpression(typeof(FunctionScopeExpression));
 public record class InlineScopeExpression(Scope Scope) : TypedExpression(typeof(InlineScopeExpression)); // TODO: produce this
 public record class MemberMethodGroupExpression(TypedExpression Target, String MethodName) : TypedExpression(typeof(void)); // actual type depends on method selection
-public record class CallExpression(Type ReturnType, System.Reflection.MethodInfo MethodInfo, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
+public record class CallDotnetMethodExpression(Type ReturnType, System.Reflection.MethodInfo MethodInfo, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
+public record class CallExpression(Type ReturnType, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
+public record class ParameterExpression() : TypedExpression(Type: typeof(void)); // depends on usage
 public record class AssignExpression(Type Type, TypedExpression Target, TypedExpression Value) : TypedExpression(Type);
 public record class LogicalNegationExpression(TypedExpression Node) : TypedExpression(typeof(Boolean));

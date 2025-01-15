@@ -95,10 +95,10 @@ public static class Evaluator
 		return rhs;
 	}
 
-	private static ExpressionResult EvaluateDeclareStep(DeclareStep assignStep, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult EvaluateDeclareStep(DeclareStep declareStep, ValueTable table, StringWriter programOutput)
 	{
-		var rhs = EvaluateTypedExpression(assignStep.Value, table, programOutput);
-		table.Add(assignStep.Identifier, rhs);
+		var rhs = EvaluateTypedExpression(declareStep.Value, table, programOutput);
+		table.Add(declareStep.Identifier, rhs);
 		return rhs; // TODO: return l-value?
 	}
 
@@ -133,11 +133,18 @@ public static class Evaluator
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			FunctionScopeExpression funcScopeExp => EvaluateFunctionScopeExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
-			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
+			CallDotnetMethodExpression callExpression => EvaluateCallDotnetMethodExpression(callExpression, table, programOutput),
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
 			LogicalNegationExpression logicalNegationExpression => EvaluateLogicalNegationExpression(logicalNegationExpression, table, programOutput),
+			ParameterExpression parameterExpression => EvaluateParameterExpression(parameterExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateParameterExpression(ParameterExpression parameterExpression, ValueTable table, StringWriter programOutput)
+	{
+		var parameter = table.GetNextParameter();
+		return parameter;
 	}
 
 	private static ExpressionResult EvaluateLogicalNegationExpression(LogicalNegationExpression logicalNegationExpression, ValueTable table, StringWriter programOutput)
@@ -163,7 +170,7 @@ public static class Evaluator
 		return rhs; // TODO: return l-value?
 	}
 
-	private static ExpressionResult EvaluateCallExpression(CallExpression callExpression, ValueTable table, StringWriter programOutput)
+	private static ExpressionResult EvaluateCallDotnetMethodExpression(CallDotnetMethodExpression callExpression, ValueTable table, StringWriter programOutput)
 	{
 		// CallExpression { 
 		//	Type = System.String, 

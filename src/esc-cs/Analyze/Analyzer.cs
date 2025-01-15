@@ -110,39 +110,6 @@ public static class Analyzer
 				throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
 			}
 			throw new NotImplementedException($"TODO CALLNODE RESULT: {targetResult}");
-			if (callNode.Target is not IdentifierNode { Text: { Length: > 0 } targetId })
-			{
-				throw new NotImplementedException("TODO: call nodes on non-identifiers");
-			}
-
-			if (targetId == "print") // intrisic
-			{
-				if (callNode.Arguments.Count != 1)
-				{
-					throw new Exception("Invalid print call");
-				}
-
-				var arg = callNode.Arguments[0];
-				var value = AnalyzeExpression(arg, scope, queue);
-				var step = new PrintStep(scope, Value: value);
-				return step;
-			}
-			else if (targetId == "return") // intrinsic
-			{
-				if (callNode.Arguments.Count != 1)
-				{
-					throw new Exception("Invalid return statement");
-				}
-
-				var arg = callNode.Arguments[0];
-				var value = AnalyzeExpression(arg, scope, queue);
-				var step = new ReturnStep(scope, Value: value);
-				return step;
-			}
-			else
-			{
-				throw new NotImplementedException($"Invalid call target: {targetId}");
-			}
 		}
 		else if (lineItem is PlusNode)
 		{
@@ -269,7 +236,7 @@ public static class Analyzer
 						throw new Exception($"Method not found: {methodName}");
 					}
 
-					return new CallExpression(ReturnType: found.ReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
+					return new CallDotnetMethodExpression(ReturnType: found.ReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
 				}
 
 				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");
@@ -289,6 +256,10 @@ public static class Analyzer
 					throw new Exception("Invalid logical negation");
 				}
 				return new LogicalNegationExpression(nodeValue);
+			}
+			case { } x when x is ParameterNode:
+			{
+				return new ParameterExpression();
 			}
 			default:
 			{

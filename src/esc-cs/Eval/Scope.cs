@@ -51,6 +51,17 @@ public class ValueTable
 		this.Parent = parent;
 	}
 
+	private Int32 NextParameterIndex = 0;
+	public List<ExpressionResult> Parameters { get; } = new();
+	public ExpressionResult GetNextParameter()
+	{
+		if (NextParameterIndex >= this.Parameters.Count)
+		{
+			throw new Exception("Too many parameters");
+		}
+		return this.Parameters[NextParameterIndex++];
+	}
+
 	public ExpressionResult? Get(String identifier)
 	{
 		if (this.Store.TryGetValue(identifier, out var value))

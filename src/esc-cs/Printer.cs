@@ -609,7 +609,7 @@ public static class Printer
 				outputFile.WriteLine($"method name: {methodName}");
 				break;
 			}
-			case CallExpression { Type: { } type, ReturnType: { } returnType, Target: { } target, Args: { } args, MethodInfo: { } methodInfo }:
+			case CallDotnetMethodExpression { Type: { } type, ReturnType: { } returnType, Target: { } target, Args: { } args, MethodInfo: { } methodInfo }:
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine($"call");
