@@ -105,8 +105,13 @@ public static class Evaluator
 		return rhs; // TODO: return l-value?
 	}
 
-	private static ExpressionResult CreateExpressionResult(Type type, Object? value)
+	private static ExpressionResult CreateExpressionResult(AnalysisType analysisType, Object? value)
 	{
+		if (analysisType is not DotnetAnalysisType { Type: { } type })
+		{
+			throw new NotImplementedException($"Invalid analysis type: {analysisType}");
+		}
+		
 		// TODO: handle null
 		return type.Name switch
 		{
@@ -284,7 +289,7 @@ public static class Evaluator
 		var leftObj = EvaluateExpressionResult(left);
 		var rightObj = EvaluateExpressionResult(right);
 
-		if (addExpression.Type != typeof(Int32))
+		if (addExpression.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Int32))
 		{
 			throw new NotImplementedException($"Invalid add expression type: {addExpression.Type}");
 		}

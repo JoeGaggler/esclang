@@ -125,14 +125,14 @@ public static class Analyzer
 		}
 	}
 
-	private static Type? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
+	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
 	{
 		if (node is null) { return null; }
-		if (node is IdentifierNode { Text: { } id})
+		if (node is IdentifierNode { Text: { } id })
 		{
-			if (id == "bool") { return typeof(Boolean); }
-			if (id == "int") { return typeof(Int32); }
-			if (id == "string") { return typeof(String); }
+			if (id == "bool") { return new DotnetAnalysisType(typeof(Boolean)); }
+			if (id == "int") { return new DotnetAnalysisType(typeof(Int32)); }
+			if (id == "string") { return new DotnetAnalysisType(typeof(String)); }
 		}
 		return null;
 	}
@@ -176,10 +176,9 @@ public static class Analyzer
 					throw new Exception("Unknown identifier type");
 				}
 
-				if (type == typeof(FunctionExpression))
+				if (type is FunctionAnalysisType { ReturnType: { } returnType })
 				{
-					// TODO: analyze return type of function scope
-					type = typeof(Int32);
+					type = returnType;
 				}
 
 				return new IdentifierExpression(type, Identifier: id);
@@ -207,7 +206,10 @@ public static class Analyzer
 				{
 					AnalyzeLine(line, innerScope, queue);
 				}
-				return new FunctionExpression(innerScope);
+
+				// TODO: analyze return type of function scope
+				var returnType = new DotnetAnalysisType(typeof(int));
+				return new FunctionExpression(innerScope, returnType);
 			}
 			case { } x when x is MemberNode { Target: { } target, Member: { } member }:
 			{
@@ -234,8 +236,13 @@ public static class Analyzer
 
 				if (targetExpression is MemberMethodGroupExpression { MethodName: { } methodName, Target: { } methodTarget })
 				{
+					if (methodTarget.Type is not DotnetAnalysisType { Type: { } targetType })
+					{
+						throw new Exception("Invalid member target type");
+					}
+
 					MethodInfo? found = null;
-					foreach (var methodInfo in methodTarget.Type.GetMethods().Where(m => m.Name == methodName))
+					foreach (var methodInfo in targetType.GetMethods().Where(m => m.Name == methodName))
 					{
 						// TODO: check argument types
 						if (methodInfo.GetParameters().Length != argumentExpressions.Count)
@@ -252,7 +259,8 @@ public static class Analyzer
 						throw new Exception($"Method not found: {methodName}");
 					}
 
-					return new CallDotnetMethodExpression(ReturnType: found.ReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
+					var foundReturnType = new DotnetAnalysisType(found.ReturnType);
+					return new CallDotnetMethodExpression(ReturnType: foundReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
 				}
 
 				if (targetExpression is IdentifierExpression { Identifier: { } identifier, Type: { } type })
@@ -261,14 +269,14 @@ public static class Analyzer
 					{
 						throw new Exception($"Unknown identifier: {identifier}");
 					}
-					if (targetType != typeof(FunctionExpression))
+					if (targetType is FunctionAnalysisType { ReturnType: { } returnType })
+					{
+						return new CallExpression(ReturnType: returnType, Target: targetExpression, Args: [.. argumentExpressions]);
+					}
+					else
 					{
 						throw new Exception($"Invalid identifier type: {targetType}");
 					}
-
-					var returnType = typeof(Int32); // TODO: analyze return type of function scope
-
-					return new CallExpression(ReturnType: returnType, Target: targetExpression, Args: [.. argumentExpressions]);
 				}
 
 				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");
@@ -283,7 +291,7 @@ public static class Analyzer
 			case { } x when x is LogicalNegationNode { Node: { } innerNode }:
 			{
 				var nodeValue = AnalyzeExpression(innerNode, scope, queue);
-				if (nodeValue.Type != typeof(Boolean))
+				if (nodeValue.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
 				{
 					throw new Exception("Invalid logical negation");
 				}
