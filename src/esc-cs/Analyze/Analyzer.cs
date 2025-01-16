@@ -45,8 +45,9 @@ public static class Analyzer
 				throw new Exception("Duplicate identifier");
 			}
 
+			var declType = AnalyzeTypeExpression(declareStaticNode.Type, scope, queue);
 			var value = AnalyzeExpression(declareStaticNode.Value, scope, queue);
-			scope.NameTable[id] = value.Type;
+			scope.NameTable[id] = declType ?? value.Type;
 			var step = new DeclareStep(scope, Identifier: id, Value: value, IsStatic: true);
 			return step;
 		}
@@ -124,6 +125,18 @@ public static class Analyzer
 		}
 	}
 
+	private static Type? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
+	{
+		if (node is null) { return null; }
+		if (node is IdentifierNode { Text: { } id})
+		{
+			if (id == "bool") { return typeof(Boolean); }
+			if (id == "int") { return typeof(Int32); }
+			if (id == "string") { return typeof(String); }
+		}
+		return null;
+	}
+
 	private static TypedExpression AnalyzeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
 	{
 		switch (node)
@@ -140,7 +153,7 @@ public static class Analyzer
 			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
 			{
 				// intrinsic identifiers
-				if (id is "return" or "print" or "if")
+				if (id is "return" or "print" or "if" or "bool" or "int" or "string")
 				{
 					return new KeywordExpression(Keyword: id);
 				}

@@ -3,14 +3,14 @@ func2 := {
     if false {
         return 0
     }
-    if cond {
+    if !cond {
         return 100
     }
     return 9999 // unreachable
 }
 func1 := {
     a := 2
-    b := a + func2 true
+    b := a + func2 false
     return b
 }
 a := 13
