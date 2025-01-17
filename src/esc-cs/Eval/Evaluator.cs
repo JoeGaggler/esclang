@@ -1,19 +1,11 @@
-using System.ComponentModel;
 using EscLang.Analyze;
-using EscLang.Parse;
 
 namespace EscLang.Eval;
 
-// TODO: does early return still work without the special nodes?
 // TODO: programOutput is only needed for print statements, should be removed from method signatures
 
 public static class Evaluator
 {
-	// HACK: special nodes only needed for the evaluator that signals to stop evaluation in the current scope
-	public record ReturningNodeNode(SyntaxNode Node) : SyntaxNode { }
-	public record ReturningVoidNode() : SyntaxNode { }
-	public record ImplicitVoidNode() : SyntaxNode { }
-
 	public static ExpressionResult Evaluate(Analyze.Analysis file, StringWriter programOutput)
 	{
 		var environment = new Environment(programOutput);
