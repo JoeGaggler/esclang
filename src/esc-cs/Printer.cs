@@ -114,77 +114,10 @@ public static class Printer
 	{
 		switch (syntaxNode)
 		{
-			case PrintNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"print");
-				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
-				break;
-			}
-
 			case LiteralStringNode node: { outputFile.Indent(level); outputFile.WriteLine($"\"{node.Text}\""); break; }
 			case LiteralNumberNode node: { outputFile.Indent(level); outputFile.WriteLine($"{node.Text}"); break; }
 			case LiteralCharNode node: { outputFile.Indent(level); outputFile.WriteLine($"\"{node.Text}\""); break; }
 			case IdentifierNode node: { outputFile.Indent(level); outputFile.WriteLine($"identifier: {node.Text}"); break; }
-
-			case BinaryOperatorNode node:
-			{
-				String op = node.Operator switch
-				{
-					BinaryOperator.Plus => "add",
-					BinaryOperator.Multiply => "multiply",
-					BinaryOperator.Minus => "subtract",
-					BinaryOperator.Divide => "divide",
-					BinaryOperator.EqualTo => "equals",
-					BinaryOperator.NotEqualTo => "not equals",
-					BinaryOperator.MoreThan => "more than",
-					BinaryOperator.LessThan => "less than",
-					BinaryOperator.MoreThanOrEqualTo => "more than or equal to",
-					BinaryOperator.LessThanOrEqualTo => "less than or equal to",
-					BinaryOperator.MemberAccess => "member access",
-					_ => "unknown binary operator: " + node.Operator.ToString()
-				};
-				outputFile.Indent(level);
-				outputFile.WriteLine(op);
-				PrintSyntax(outputFile, node.Left, lexemes, level + 1);
-				PrintSyntax(outputFile, node.Right, lexemes, level + 1);
-				break;
-			}
-
-			case IfNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("if");
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("condition");
-				PrintSyntax(outputFile, node.Condition, lexemes, level + 2);
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("block");
-				PrintSyntax(outputFile, node.Block, lexemes, level + 2);
-
-				if (node.ElseBlock is { } elseBlock)
-				{
-					outputFile.Indent(level);
-					outputFile.WriteLine("else");
-
-					outputFile.Indent(level + 1);
-					outputFile.WriteLine("block");
-					PrintSyntax(outputFile, elseBlock, lexemes, level + 2);
-				}
-
-				break;
-			}
-
-			case Block node:
-			{
-				foreach (var statement in node.Statements)
-				{
-					PrintSyntax(outputFile, statement, lexemes, level);
-				}
-				break;
-			}
 
 			case ParensNode node:
 			{
@@ -194,44 +127,6 @@ public static class Printer
 				{
 					PrintSyntax(outputFile, child, lexemes, level + 1);
 				}
-				break;
-			}
-
-			case CommaNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("comma");
-
-				foreach (var statement in node.Items)
-				{
-					PrintSyntax(outputFile, statement, lexemes, level + 1);
-				}
-				break;
-			}
-
-			case FunctionNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("function");
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("parameters");
-				foreach (var p in node.Parameters)
-				{
-					PrintSyntax(outputFile, p, lexemes, level + 2);
-				}
-
-				// if (node.ReturnType is SyntaxNode returnType)
-				// {
-				// 	outputFile.Indent(level + 1);
-				// 	outputFile.WriteLine("return type");
-				// 	PrintSyntax(outputFile, returnType, lexemes, level + 2);
-				// }
-
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine("body");
-				PrintSyntax(outputFile, node.Body, lexemes, level + 2);
-
 				break;
 			}
 
@@ -247,14 +142,6 @@ public static class Printer
 				break;
 			}
 
-			case ReturnNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("return");
-				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
-				break;
-			}
-
 			case LogicalNegationNode node:
 			{
 				outputFile.Indent(level);
@@ -262,24 +149,6 @@ public static class Printer
 				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
 				break;
 			}
-
-			case FunctionDeclarationNode node:
-			{
-				outputFile.Indent(level);
-				if (node.ReturnType is { } ret)
-				{
-					outputFile.WriteLine("function declaration");
-					PrintSyntax(outputFile, ret, lexemes, level + 1);
-				}
-				else
-				{
-					outputFile.WriteLine("procedure declaration");
-					break;
-				}
-				break;
-			}
-
-			////////// TODO: Migrate cases above
 
 			case LineNode node:
 			{
