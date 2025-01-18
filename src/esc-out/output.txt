@@ -270,82 +270,69 @@ line
 
 Analyze:
 main procedure
-    scope
-    expression
-      static: func2 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
-        func
-          scope
-            expression
-              static: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
-                parameter: UnknownAnalysisType { FullName = Unknown }
-            expression
+  scope
+    static: func2 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
+      func
+        scope
+          static: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
+            parameter: UnknownAnalysisType { FullName = Unknown }
+          call
+            intrinsic: if
+            bool: False
+            func
+              scope
+                return
+                  int: 0
+          call
+            intrinsic: if
+            not
+              identifier: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
+            func
+              scope
+                return
+                  int: 100
+          return
+            int: 9999
+    static: func1 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
+      func
+        scope
+          static: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+            int: 2
+          static: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+            add
+              identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
               call
-                intrinsic: if
+                identifier: func2 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
                 bool: False
-                func
-                  scope
-                    expression
-                      return
-                        int: 0
-            expression
-              call
-                intrinsic: if
-                not
-                  identifier: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
-                func
-                  scope
-                    expression
-                      return
-                        int: 100
-            expression
-              return
-                int: 9999
-    expression
-      static: func1 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
-        func
-          scope
-            declare: a = (IntLiteralExpression)
-              int: 2
-            declare: b = (AddExpression)
-              add
-                identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-                call
-                  identifier: func2 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-                  bool: False
-            expression
-              return
-                identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    declare: a = (IntLiteralExpression)
+          return
+            identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+    static: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
       int: 13
-    expression
-      assign
-        identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-        int: 39
-    declare: b = (AddExpression)
+    assign
+      identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+      int: 39
+    static: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
       add
         add
           identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
           identifier: func1 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
         int: 5
-    expression
+    call
+      intrinsic: print
+      identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+    call
+      intrinsic: print
+      identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+    call
+      intrinsic: print
       call
-        intrinsic: print
-        identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    expression
-      call
-        intrinsic: print
-        identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    expression
-      call
-        intrinsic: print
-        call
-          method info: System.String ToString(System.String)
-          type: Dotnet::System.String
-          return type: Dotnet::System.String
-          target:
-            identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-          args: 1
-            string: C
+        method info: System.String ToString(System.String)
+        type: Dotnet::System.String
+        return type: Dotnet::System.String
+        target:
+          identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+        args: 1
+          string: C
 
 Output:
 39

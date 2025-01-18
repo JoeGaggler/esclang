@@ -17,42 +17,12 @@ public static class Evaluator
 	private static ExpressionResult EvaluateScope(Analyze.Scope scope, ValueTable parentTable, StringWriter programOutput)
 	{
 		var table = new ValueTable(parentTable);
-		foreach (var step in scope.Steps)
+		foreach (var step in scope.Expressions)
 		{
-			var stepNode = EvaluateStep(step, table, programOutput);
-			// if (stepNode is ReturningNodeNode returningNodeNode)
-			// {
-			// 	return returningNodeNode.Node;
-			// }
-			// else if (stepNode is ReturningVoidNode)
-			// {
-			// 	return stepNode;
-			// }
+			_ = EvaluateTypedExpression(step, table, programOutput);
 		}
 
 		return new ImplicitVoidExpressionResult();
-	}
-
-	private static ExpressionResult EvaluateStep(Analyze.Step step, ValueTable table, StringWriter programOutput)
-	{
-		return step switch
-		{
-			DeclareStep declareStep => EvaluateDeclareStep(declareStep, table, programOutput),
-			ExpressionStep expressionStep => EvaluateExpressionStep(expressionStep.Value, table, programOutput),
-			_ => throw new NotImplementedException($"Invalid step: {step}"),
-		};
-	}
-
-	private static ExpressionResult EvaluateExpressionStep(TypedExpression value, ValueTable table, StringWriter programOutput)
-	{
-		return EvaluateTypedExpression(value, table, programOutput);
-	}
-
-	private static ExpressionResult EvaluateDeclareStep(DeclareStep declareStep, ValueTable table, StringWriter programOutput)
-	{
-		var rhs = EvaluateTypedExpression(declareStep.Value, table, programOutput);
-		table.Add(declareStep.Identifier, rhs);
-		return rhs; // TODO: return l-value?
 	}
 
 	private static ExpressionResult CreateExpressionResult(AnalysisType analysisType, Object? value)
@@ -263,9 +233,9 @@ public static class Evaluator
 
 	private static ExpressionResult EvaluateSharedScopeExpression(FunctionExpression funcScopeExp, ValueTable table, StringWriter programOutput)
 	{
-		foreach (var step in funcScopeExp.Scope.Steps)
+		foreach (var step in funcScopeExp.Scope.Expressions)
 		{
-			var stepNode = EvaluateStep(step, table, programOutput);
+			var stepNode = EvaluateTypedExpression(step, table, programOutput);
 			if (stepNode is ReturnExpressionResult ret)
 			{
 				return ret; // pass return result to parent scope until a function scope is reached
@@ -283,9 +253,9 @@ public static class Evaluator
 	{
 		var innerValueTable = new ValueTable(table);
 		innerValueTable.SetArguments(args.ToList());
-		foreach (var step in functionExpression.Scope.Steps)
+		foreach (var step in functionExpression.Scope.Expressions)
 		{
-			var stepNode = EvaluateStep(step, innerValueTable, programOutput);
+			var stepNode = EvaluateTypedExpression(step, innerValueTable, programOutput);
 			if (stepNode is ReturnExpressionResult ret)
 			{
 				return ret.Value; // unwrap return result, returns do not propagate outside of current function

@@ -347,13 +347,7 @@ public static class Printer
 	public static void PrintAnalysis(TextWriter outputFile, Analysis analysis)
 	{
 		outputFile.WriteLine($"main procedure");
-		PrintAnalysis(outputFile, analysis.Main, 1);
-	}
-
-	public static void PrintAnalysis(TextWriter outputFile, Scope scope, int level)
-	{
-		outputFile.Indent(level);
-		PrintAnalysisScope(outputFile, scope, level);
+		PrintAnalysisScope(outputFile, analysis.Main, 1);
 	}
 
 	public static void PrintAnalysisScope(TextWriter outputFile, Scope scope, int level)
@@ -366,36 +360,9 @@ public static class Printer
 		// 	outputFile.WriteLine($"name: {key} ({value})");
 		// }
 
-		foreach (var step in scope.Steps)
+		foreach (var step in scope.Expressions)
 		{
-			PrintAnalysisStep(outputFile, step, level + 1);
-		}
-	}
-
-	public static void PrintAnalysisStep(TextWriter outputFile, Step step, int level)
-	{
-		switch (step)
-		{
-			case DeclareStep assignStep:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"declare: {assignStep.Identifier} = ({assignStep.Value.GetType().Name})");
-				PrintAnalysisTypedExpression(outputFile, assignStep.Value, level + 1);
-				break;
-			}
-			case ExpressionStep expressionStep:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"expression");
-				PrintAnalysisTypedExpression(outputFile, expressionStep.Value, level + 1);
-				break;
-			}
-			default:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"unknown step: {step.GetType().Name}");
-				break;
-			}
+			PrintAnalysisTypedExpression(outputFile, step, level + 1);
 		}
 	}
 

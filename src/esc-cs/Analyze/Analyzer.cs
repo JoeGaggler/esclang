@@ -28,48 +28,8 @@ public static class Analyzer
 	{
 		foreach (var lineItem in line.Items)
 		{
-			var step = AnalyzeLineItem(lineItem, scope, queue);
-			scope.Steps.Add(step);
-		}
-	}
-
-	private static Step AnalyzeLineItem(SyntaxNode lineItem, Scope scope, AnalysisQueue queue)
-	{
-		if (lineItem is Parse.DeclareStaticNode declareStaticNode)
-		{
-			var targetResult = AnalyzeExpression(declareStaticNode, scope, queue);
-			return new ExpressionStep(scope, Value: targetResult);
-		}
-		else if (lineItem is Parse.DeclareAssignNode declareAssignNode)
-		{
-			if (declareAssignNode.Identifier is not Parse.IdentifierNode { Text: { Length: > 0 } id })
-			{
-				throw new Exception("Invalid identifier");
-			}
-
-			if (!scope.NameTable.TryAdd(id, null)) // unknown type until right-hand side is analyzed
-			{
-				throw new Exception("Duplicate identifier");
-			}
-
-			var value = AnalyzeExpression(declareAssignNode.Value, scope, queue);
-			scope.NameTable[id] = value.Type;
-			var step = new DeclareStep(scope, Identifier: id, Value: value, IsStatic: true);
-			return step;
-		}
-		else if (lineItem is AssignNode assignNode)
-		{
-			var targetResult = AnalyzeExpression(assignNode, scope, queue);
-			return new ExpressionStep(scope, Value: targetResult);
-		}
-		else if (lineItem is CallNode callNode)
-		{
-			var targetResult = AnalyzeExpression(callNode, scope, queue);
-			return new ExpressionStep(scope, Value: targetResult);
-		}
-		else
-		{
-			throw new NotImplementedException($"Invalid line item: {lineItem}");
+			var targetResult = AnalyzeExpression(lineItem, scope, queue);
+			scope.Expressions.Add(targetResult);
 		}
 	}
 
@@ -280,6 +240,24 @@ public static class Analyzer
 				return new ParameterExpression();
 			}
 			case { } x when x is DeclareStaticNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
+			{
+				if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
+				{
+					throw new Exception("Invalid identifier");
+				}
+
+				if (!scope.NameTable.TryAdd(id, null)) // unknown type until right-hand side is analyzed
+				{
+					throw new Exception("Duplicate identifier");
+				}
+
+				var declType = AnalyzeTypeExpression(typeNode, scope, queue);
+				var value = AnalyzeExpression(valueNode, scope, queue);
+				var actualType = declType ?? value.Type;
+				scope.NameTable[id] = actualType;
+				return new DeclarationExpression(actualType, id, value, true);
+			}
+			case { } x when x is DeclareAssignNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
 			{
 				if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
 				{

@@ -10,7 +10,7 @@ public record class Scope()
 {
 	public Scope? Parent;
 	public Dictionary<String, AnalysisType?> NameTable = [];
-	public List<Step> Steps = [];
+	public List<TypedExpression> Expressions = [];
 	public Boolean TryGetNameTableValue(String Identifier, [MaybeNullWhen(false)] out AnalysisType? Value)
 	{
 		if (NameTable.TryGetValue(Identifier, out Value))
@@ -44,9 +44,6 @@ public record class DotnetAnalysisType(Type Type) : AnalysisType
 	public override String FullName => $"Dotnet::{Type.FullName}";
 }
 
-public abstract record class Step;
-public record class DeclareStep(Scope Parent, String Identifier, TypedExpression Value, Boolean IsStatic) : Step;
-public record class ExpressionStep(Scope Parent, TypedExpression Value) : Step;
 
 public abstract record class TypedExpression(AnalysisType Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(UnknownAnalysisType.Instance);
