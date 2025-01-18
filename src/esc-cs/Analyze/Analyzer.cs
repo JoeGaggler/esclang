@@ -25,19 +25,16 @@ public static class Analyzer
 	}
 
 	// TODO: combine this with other scope processing?
-	public static void AnalyzeLine(Parse.LineNode line, Scope scope, AnalysisQueue queue)
+	public static void AnalyzeLine(Parse.SyntaxNode lineItem, Scope scope, AnalysisQueue queue)
 	{
-		foreach (var lineItem in line.Items)
+		var targetResult = AnalyzeExpression(lineItem, scope, queue);
+		if (targetResult is KeywordExpression { Keyword: "return" })
 		{
-			var targetResult = AnalyzeExpression(lineItem, scope, queue);
-			if (targetResult is KeywordExpression { Keyword: "return" })
-			{
-				scope.Expressions.Add(new ReturnVoidExpression());
-			}
-			else
-			{
-				scope.Expressions.Add(targetResult);
-			}
+			scope.Expressions.Add(new ReturnVoidExpression());
+		}
+		else
+		{
+			scope.Expressions.Add(targetResult);
 		}
 	}
 

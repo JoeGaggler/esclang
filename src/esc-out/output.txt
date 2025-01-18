@@ -150,129 +150,111 @@ Lex:
 0147: 323 + 0 -- (23, 1) -- EndOfFile -- <EOF>
 
 Parse:
-line
-  declare-static
-    id
-      identifier: func2
-    value
-      braces
-        line
-          declare-static
-            id
-              identifier: cond
-            type
-              identifier: bool
-            value
-              parameter
-        line
-          call
-            target
-              identifier: if
-            arguments
-              identifier: false
-              braces
-                line
-                  call
-                    target
-                      identifier: return
-                    arguments
-                      0
-        line
-          call
-            target
-              identifier: if
-            arguments
-              not
-                identifier: cond
-              braces
-                line
-                  call
-                    target
-                      identifier: return
-                    arguments
-                      100
-        line
-          call
-            target
-              identifier: return
-            arguments
-              9999
-line
-  declare-static
-    id
-      identifier: func1
-    value
-      braces
-        line
-          declare-assign
-            id
-              identifier: a
-            value
-              2
-        line
-          declare-assign
-            id
-              identifier: b
-            value
-              plus
-                identifier: a
-                call
-                  target
-                    identifier: func2
-                  arguments
-                    identifier: false
-        line
-          call
-            target
-              identifier: return
-            arguments
-              identifier: b
-line
-  declare-assign
-    id
-      identifier: a
-    value
-      13
-line
-  assign
-    identifier: a
-    39
-line
-  declare-assign
-    id
-      identifier: b
-    value
-      plus
-        plus
-          identifier: a
-          identifier: func1
-        5
-line
-  call
-    target
-      identifier: print
-    arguments
-      identifier: a
-line
-  call
-    target
-      identifier: print
-    arguments
-      identifier: b
-line
-  identifier: return
-line
-  call
-    target
-      identifier: print
-    arguments
+declare-static
+  id
+    identifier: func2
+  value
+    braces
+      declare-static
+        id
+          identifier: cond
+        type
+          identifier: bool
+        value
+          parameter
       call
         target
-          member
-            identifier: b
-            identifier: ToString
+          identifier: if
         arguments
-          "C"
+          identifier: false
+          braces
+            call
+              target
+                identifier: return
+              arguments
+                0
+      call
+        target
+          identifier: if
+        arguments
+          not
+            identifier: cond
+          braces
+            call
+              target
+                identifier: return
+              arguments
+                100
+      call
+        target
+          identifier: return
+        arguments
+          9999
+declare-static
+  id
+    identifier: func1
+  value
+    braces
+      declare-assign
+        id
+          identifier: a
+        value
+          2
+      declare-assign
+        id
+          identifier: b
+        value
+          plus
+            identifier: a
+            call
+              target
+                identifier: func2
+              arguments
+                identifier: false
+      call
+        target
+          identifier: return
+        arguments
+          identifier: b
+declare-assign
+  id
+    identifier: a
+  value
+    13
+assign
+  identifier: a
+  39
+declare-assign
+  id
+    identifier: b
+  value
+    plus
+      plus
+        identifier: a
+        identifier: func1
+      5
+call
+  target
+    identifier: print
+  arguments
+    identifier: a
+call
+  target
+    identifier: print
+  arguments
+    identifier: b
+identifier: return
+call
+  target
+    identifier: print
+  arguments
+    call
+      target
+        member
+          identifier: b
+          identifier: ToString
+      arguments
+        "C"
 
 Analyze:
 main procedure

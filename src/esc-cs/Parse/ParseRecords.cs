@@ -1,12 +1,10 @@
 namespace EscLang.Parse;
 
-public record EscFile(List<LineNode> Lines) { }
+public record EscFile(List<SyntaxNode> Lines) { }
 
 public abstract record SyntaxNode { }
 
-public record LineNode(List<SyntaxNode> Items) : SyntaxNode { }
-
-public record BracesNode(List<LineNode> Lines) : SyntaxNode { }
+public record BracesNode(List<SyntaxNode> Lines) : SyntaxNode { }
 
 public record DotNode(SyntaxNode Left, SyntaxNode Right) : SyntaxNode { }
 

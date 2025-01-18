@@ -34,7 +34,7 @@ public static partial class Parser
 	private static ParseResult<EscFile> Parse_File(ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
 		var position = start;
-		var nodes = new List<LineNode>();
+		var nodes = new List<SyntaxNode>();
 		while (true)
 		{
 			var (peek, next) = input.Peek(position);
@@ -63,30 +63,26 @@ public static partial class Parser
 		}
 	}
 
-	private static ParseResult<LineNode> Parse_Line(ReadOnlySpan<Lexeme> input, ref Int32 start)
+	private static ParseResult<SyntaxNode> Parse_Line(ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
-		var nodes = new List<SyntaxNode>();
-		var line = new LineNode(nodes);
-
 		// TODO: check for valid start of line tokens
 		var (peek, next) = input.Peek(start);
 
 		// First expression
 		var first = Parse_Expression(input, ref start, 0);
 		if (!first) { return new(input[start], Error.Message("failed to parse line expression"), first.Error); }
-		nodes.Add(first);
 
 		// Line terminator
 		(peek, next) = input.Peek(start);
 		if (peek.Type is LexemeType.EndOfFile)
 		{
 			start = next;
-			return new(line);
+			return new(first);
 		}
 		else if (peek.Type is LexemeType.EndOfLine)
 		{
 			start = next;
-			return new(line);
+			return new(first);
 		}
 		else
 		{
@@ -428,7 +424,7 @@ public static partial class Parser
 
 	private static ParseResult<BracesNode> Parse_Braces(ReadOnlySpan<Lexeme> input, ref Int32 start)
 	{
-		var lines = new List<LineNode>();
+		var lines = new List<SyntaxNode>();
 
 		while (true)
 		{

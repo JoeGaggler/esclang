@@ -150,17 +150,6 @@ public static class Printer
 				break;
 			}
 
-			case LineNode node:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine("line");
-				foreach (var child in node.Items)
-				{
-					PrintSyntax(outputFile, child, lexemes, level + 1);
-				}
-				break;
-			}
-
 			case DeclareNode node:
 			{
 				outputFile.Indent(level);
