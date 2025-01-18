@@ -8,7 +8,6 @@ public static class Evaluator
 {
 	public static ExpressionResult Evaluate(Analyze.Analysis file, StringWriter programOutput)
 	{
-		var environment = new Environment(programOutput);
 		var globalTable = new ValueTable();
 
 		return EvaluateScope(file.Main, globalTable, programOutput);
@@ -206,13 +205,6 @@ public static class Evaluator
 
 	private static ExpressionResult EvaluateCallDotnetMethodExpression(CallDotnetMethodExpression callExpression, ValueTable table, StringWriter programOutput)
 	{
-		// CallExpression { 
-		//	Type = System.String, 
-		// 	ReturnType = System.String, 
-		// 	MethodInfo = System.String ToString(System.String, System.IFormatProvider)
-		//	Target = IdentifierExpression { Type = System.Int32, Identifier = b }, 
-		//	Args = EscLang.Analyze.TypedExpression[] 
-		// }
 		if (callExpression is not { Type: { } returnType, MethodInfo: { } methodInfo, Target: { } methodTarget })
 		{
 			throw new NotImplementedException($"Invalid call expression: {callExpression}");
@@ -236,9 +228,9 @@ public static class Evaluator
 		foreach (var step in funcScopeExp.Scope.Expressions)
 		{
 			var stepNode = EvaluateTypedExpression(step, table, programOutput);
-			if (stepNode is ReturnExpressionResult ret)
+			if (stepNode is ReturnExpressionResult or ReturnVoidResult)
 			{
-				return ret; // pass return result to parent scope until a function scope is reached
+				return stepNode; // pass return result to parent scope until a function scope is reached
 			}
 		}
 		return new ReturnVoidResult();
@@ -259,6 +251,10 @@ public static class Evaluator
 			if (stepNode is ReturnExpressionResult ret)
 			{
 				return ret.Value; // unwrap return result, returns do not propagate outside of current function
+			}
+			if (stepNode is ReturnVoidResult)
+			{
+				return new ImplicitVoidExpressionResult(); // return void, returns do not propagate outside of current function
 			}
 		}
 		return new ReturnVoidResult();
