@@ -383,36 +383,11 @@ public static class Printer
 				PrintAnalysisTypedExpression(outputFile, assignStep.Value, level + 1);
 				break;
 			}
-			case PrintStep printStep:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"print:");
-				PrintAnalysisTypedExpression(outputFile, printStep.Value, level + 1);
-				break;
-			}
-			case ReturnStep returnStep:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"return: {returnStep.Value} ({returnStep.Value.GetType().Name})");
-				break;
-			}
 			case ExpressionStep expressionStep:
 			{
 				outputFile.Indent(level);
 				outputFile.WriteLine($"expression");
 				PrintAnalysisTypedExpression(outputFile, expressionStep.Value, level + 1);
-				break;
-			}
-			case IfStep ifStep:
-			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"if");
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine($"condition");
-				PrintAnalysisTypedExpression(outputFile, ifStep.Condition, level + 2);
-				outputFile.Indent(level + 1);
-				outputFile.WriteLine($"block");
-				PrintAnalysisTypedExpression(outputFile, ifStep.IfBlock, level + 2);
 				break;
 			}
 			default:
@@ -529,6 +504,19 @@ public static class Printer
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine($"parameter: {parameterExpression.Type}");
+				break;
+			}
+			case IntrinsicFunctionExpression { Name: String name, Type: { } type }:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"intrinsic: {name}");
+				break;
+			}
+			case ReturnExpression { ReturnValue: { } returnValue, Type: { } returnType }:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine("return");
+				PrintAnalysisTypedExpression(outputFile, returnValue, v + 1);
 				break;
 			}
 			default:

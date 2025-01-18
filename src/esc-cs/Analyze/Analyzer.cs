@@ -4,6 +4,8 @@ using System.Reflection;
 using EscLang.Parse;
 using AnalysisQueue = Queue<Object>; // TODO: strong type
 
+// TODO: constant enforcement
+// TODO: collect declarations before analyzing possible references
 // TODO: combine call node handling across step/non-step methods
 
 public static class Analyzer
@@ -75,49 +77,8 @@ public static class Analyzer
 		}
 		else if (lineItem is CallNode callNode)
 		{
-			var targetResult = AnalyzeExpression(callNode.Target, scope, queue);
-			if (targetResult is KeywordExpression keywordExpression)
-			{
-				var keyword = keywordExpression.Keyword;
-				if (keyword == "return")
-				{
-					if (callNode.Arguments.Count != 1)
-					{
-						throw new Exception("Invalid return statement");
-					}
-					var argumentExpression = AnalyzeExpression(callNode.Arguments[0], scope, queue);
-					var step = new ReturnStep(scope, Value: argumentExpression);
-					return step;
-				}
-				if (keyword == "print")
-				{
-					if (callNode.Arguments.Count != 1)
-					{
-						throw new Exception("Invalid print call");
-					}
-					var argumentExpression = AnalyzeExpression(callNode.Arguments[0], scope, queue);
-					var step = new PrintStep(scope, Value: argumentExpression);
-					return step;
-				}
-				if (keyword == "if")
-				{
-					if (callNode.Arguments.Count != 2)
-					{
-						throw new Exception("Invalid if call");
-					}
-					var conditionExpression = AnalyzeExpression(callNode.Arguments[0], scope, queue);
-					var scopeExpression = AnalyzeExpression(callNode.Arguments[1], scope, queue);
-					var step = new IfStep(scope, Condition: conditionExpression, IfBlock: scopeExpression);
-					return step;
-				}
-				throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
-			}
-			throw new NotImplementedException($"TODO CALLNODE RESULT: {targetResult}");
-		}
-		else if (lineItem is PlusNode)
-		{
-			// Unused result
-			throw new NotImplementedException("Invalid line item: PlusNode");
+			var targetResult = AnalyzeExpression(callNode, scope, queue);
+			return new ExpressionStep(scope, Value: targetResult);
 		}
 		else
 		{
@@ -232,6 +193,36 @@ public static class Analyzer
 				{
 					var argValue = AnalyzeExpression(arg, scope, queue);
 					argumentExpressions.Add(argValue);
+				}
+
+				if (targetExpression is KeywordExpression keywordExpression)
+				{
+					var keyword = keywordExpression.Keyword;
+					if (keyword == "return")
+					{
+						if (argumentExpressions.Count != 1)
+						{
+							throw new Exception("Invalid return statement");
+						}
+						return new ReturnExpression(argumentExpressions[0]);
+					}
+					if (keyword == "print")
+					{
+						if (argumentExpressions.Count != 1)
+						{
+							throw new Exception("Invalid print call");
+						}
+						return new CallExpression(UnknownAnalysisType.Instance, Target: new IntrinsicFunctionExpression("print", UnknownAnalysisType.Instance), Args: [argumentExpressions[0]]);
+					}
+					if (keyword == "if")
+					{
+						if (argumentExpressions.Count != 2)
+						{
+							throw new Exception("Invalid if call");
+						}
+						return new CallExpression(UnknownAnalysisType.Instance, Target: new IntrinsicFunctionExpression("if", UnknownAnalysisType.Instance), Args: [argumentExpressions[0], argumentExpressions[1]]);
+					}
+					throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
 				}
 
 				if (targetExpression is MemberMethodGroupExpression { MethodName: { } methodName, Target: { } methodTarget })

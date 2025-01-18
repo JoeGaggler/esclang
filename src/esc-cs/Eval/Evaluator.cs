@@ -38,56 +38,14 @@ public static class Evaluator
 		return step switch
 		{
 			DeclareStep declareStep => EvaluateDeclareStep(declareStep, table, programOutput),
-			PrintStep printStep => EvaluatePrintStep(printStep, table, programOutput),
-			ReturnStep returnStep => EvaluateReturnStep(returnStep, table, programOutput),
 			ExpressionStep expressionStep => EvaluateExpressionStep(expressionStep.Value, table, programOutput),
-			IfStep ifStep => EvaluateIfStep(ifStep, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid step: {step}"),
 		};
-	}
-
-	private static ExpressionResult EvaluateIfStep(IfStep ifStep, ValueTable table, StringWriter programOutput)
-	{
-		var condition = EvaluateTypedExpression(ifStep.Condition, table, programOutput);
-		// IfStep { Parent = Scope { Parent = Scope { Parent = , NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, Condition = BooleanLiteralExpression { Type = System.Boolean, Value = False }, IfBlock = FunctionScopeExpression { Type = EscLang.Analyze.FunctionScopeExpression, Scope = Scope { Parent = Scope { Parent = Scope { Parent = , NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] }, NameTable = System.Collections.Generic.Dictionary`2[System.String, System.Type], Steps = System.Collections.Generic.List`1[EscLang.Analyze.Step] } } }
-		// BooleanExpressionResult { Value = False }
-		if (condition is not BooleanExpressionResult booleanExpressionResult)
-		{
-			throw new NotImplementedException($"Invalid if condition: {condition}");
-		}
-		if (!booleanExpressionResult.Value)
-		{
-			return new ImplicitVoidExpressionResult();
-		}
-		if (ifStep.IfBlock is not FunctionExpression functionScopeExpression)
-		{
-			throw new NotImplementedException($"Invalid if block: {ifStep.IfBlock}");
-		}
-		return EvaluateSharedScopeExpression(functionScopeExpression, table, programOutput);
 	}
 
 	private static ExpressionResult EvaluateExpressionStep(TypedExpression value, ValueTable table, StringWriter programOutput)
 	{
 		return EvaluateTypedExpression(value, table, programOutput);
-	}
-
-	private static ExpressionResult EvaluateReturnStep(ReturnStep returnStep, ValueTable table, StringWriter programOutput)
-	{
-		var returnValue = EvaluateTypedExpression(returnStep.Value, table, programOutput);
-		return new ReturnExpressionResult(returnValue);
-	}
-
-	private static ExpressionResult EvaluatePrintStep(PrintStep printStep, ValueTable table, StringWriter programOutput)
-	{
-		var rhs = EvaluateTypedExpression(printStep.Value, table, programOutput);
-		var val = rhs switch
-		{
-			IntExpressionResult intExpressionResult => intExpressionResult.Value.ToString(),
-			StringExpressionResult stringExpressionResult => stringExpressionResult.Value,
-			_ => throw new NotImplementedException($"Invalid print value: {rhs}"),
-		};
-		programOutput.WriteLine(val);
-		return rhs;
 	}
 
 	private static ExpressionResult EvaluateDeclareStep(DeclareStep declareStep, ValueTable table, StringWriter programOutput)
@@ -103,7 +61,7 @@ public static class Evaluator
 		{
 			throw new NotImplementedException($"Invalid analysis type: {analysisType}");
 		}
-		
+
 		// TODO: handle null
 		return type.Name switch
 		{
@@ -151,8 +109,20 @@ public static class Evaluator
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
 			LogicalNegationExpression logicalNegationExpression => EvaluateLogicalNegationExpression(logicalNegationExpression, table, programOutput),
 			ParameterExpression parameterExpression => EvaluateParameterExpression(parameterExpression, table, programOutput),
+			IntrinsicFunctionExpression intrinsicFunctionExpression => EvaluateIntrinsicFunctionExpression(intrinsicFunctionExpression, table, programOutput),
+			ReturnExpression returnExpression => EvaluateReturnExpression(returnExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateReturnExpression(ReturnExpression returnExpression, ValueTable table, StringWriter programOutput)
+	{
+		return new ReturnExpressionResult(EvaluateTypedExpression(returnExpression.ReturnValue, table, programOutput));
+	}
+
+	private static ExpressionResult EvaluateIntrinsicFunctionExpression(IntrinsicFunctionExpression intrinsicFunctionExpression, ValueTable table, StringWriter programOutput)
+	{
+		return new IntrinsicFunctionExpressionResult(intrinsicFunctionExpression.Name);
 	}
 
 	private static ExpressionResult EvaluateParameterExpression(ParameterExpression parameterExpression, ValueTable table, StringWriter programOutput)
@@ -204,13 +174,56 @@ public static class Evaluator
 			args[i] = argExp;
 		}
 		var targetExpression = EvaluateTypedExpression(methodTarget, table, programOutput);
-		if (targetExpression is not FunctionExpressionResult { Func: { } func })
+		if (targetExpression is IntrinsicFunctionExpressionResult { Name: { } intrinsic })
+		{
+			switch (intrinsic)
+			{
+				case "print":
+				{
+					var rhs = args[0];
+					var val = rhs switch
+					{
+						IntExpressionResult intExpressionResult => intExpressionResult.Value.ToString(),
+						StringExpressionResult stringExpressionResult => stringExpressionResult.Value,
+						_ => throw new NotImplementedException($"Invalid print value: {rhs}"),
+					};
+					programOutput.WriteLine(val);
+					return rhs;
+				}
+				case "if":
+				{
+					var condition = args[0];
+					var ifBlock = callExpression.Args[1];
+					if (condition is not BooleanExpressionResult booleanExpressionResult)
+					{
+						throw new NotImplementedException($"Invalid if condition: {condition}");
+					}
+					if (!booleanExpressionResult.Value)
+					{
+						return new ImplicitVoidExpressionResult();
+					}
+					if (ifBlock is not FunctionExpression functionScopeExpression)
+					{
+						throw new NotImplementedException($"Invalid if block: {ifBlock}");
+					}
+					return EvaluateSharedScopeExpression(functionScopeExpression, table, programOutput);
+				}
+				default:
+				{
+					throw new NotImplementedException($"Invalid intrinsic function: {intrinsic}");
+				}
+			}
+		}
+		else if (targetExpression is FunctionExpressionResult { Func: { } func })
+		{
+			// TODO: parameters
+			var returnExpression = CallFunctionExpression(func, args, table, programOutput);
+			return returnExpression;
+		}
+		else
 		{
 			throw new NotImplementedException($"Invalid call target: {methodTarget}");
 		}
-		// TODO: parameters
-		var returnExpression = CallFunctionExpression(func, args, table, programOutput);
-		return returnExpression;
 	}
 
 	private static ExpressionResult EvaluateCallDotnetMethodExpression(CallDotnetMethodExpression callExpression, ValueTable table, StringWriter programOutput)

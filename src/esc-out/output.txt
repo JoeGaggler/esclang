@@ -276,22 +276,28 @@ main procedure
         scope
           declare: cond = (ParameterExpression)
             parameter: UnknownAnalysisType { FullName = Unknown }
-          if
-            condition
+          expression
+            call
+              intrinsic: if
               bool: False
-            block
               func
                 scope
-                  return: IntLiteralExpression { Type = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }, Value = 0 } (IntLiteralExpression)
-          if
-            condition
+                  expression
+                    return
+                      int: 0
+          expression
+            call
+              intrinsic: if
               not
                 identifier: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
-            block
               func
                 scope
-                  return: IntLiteralExpression { Type = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }, Value = 100 } (IntLiteralExpression)
-          return: IntLiteralExpression { Type = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }, Value = 9999 } (IntLiteralExpression)
+                  expression
+                    return
+                      int: 100
+          expression
+            return
+              int: 9999
     declare: func1 = (FunctionExpression)
       func
         scope
@@ -303,7 +309,9 @@ main procedure
               call
                 identifier: func2 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
                 bool: False
-          return: IdentifierExpression { Type = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }, Identifier = b } (IdentifierExpression)
+          expression
+            return
+              identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
     declare: a = (IntLiteralExpression)
       int: 13
     expression
@@ -316,19 +324,25 @@ main procedure
           identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
           identifier: func1 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
         int: 5
-    print:
-      identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    print:
-      identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    print:
+    expression
       call
-        method info: System.String ToString(System.String)
-        type: Dotnet::System.String
-        return type: Dotnet::System.String
-        target:
-          identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-        args: 1
-          string: C
+        intrinsic: print
+        identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+    expression
+      call
+        intrinsic: print
+        identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+    expression
+      call
+        intrinsic: print
+        call
+          method info: System.String ToString(System.String)
+          type: Dotnet::System.String
+          return type: Dotnet::System.String
+          target:
+            identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+          args: 1
+            string: C
 
 Output:
 39
