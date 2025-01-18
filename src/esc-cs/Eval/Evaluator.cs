@@ -2,7 +2,6 @@ using EscLang.Analyze;
 
 namespace EscLang.Eval;
 
-// TODO: combine scope evaluation functions
 // TODO: programOutput is only needed for print statements, should be removed from method signatures
 
 public static class Evaluator
@@ -13,16 +12,7 @@ public static class Evaluator
 
 		var scope = file.Main;
 		var table = new ValueTable(globalTable);
-		foreach (var step in scope.Expressions)
-		{
-			var result = EvaluateTypedExpression(step, table, programOutput);
-			if (result is ReturnValueEvaluation ret)
-			{
-				return ret.Value;
-			}
-		}
-
-		return VoidEvaluation.Instance;
+		return EvaluateFunctionScopeExpression(scope, programOutput, table);
 	}
 
 	private static Evaluation CreateExpressionResult(AnalysisType analysisType, Object? value)
@@ -190,7 +180,7 @@ public static class Evaluator
 					{
 						throw new NotImplementedException($"Invalid if block: {ifBlock}");
 					}
-					return EvaluateSharedScopeExpression(functionScopeExpression, table, programOutput);
+					return EvaluateSharedScopeExpression(functionScopeExpression.Scope, table, programOutput);
 				}
 				default:
 				{
@@ -230,19 +220,6 @@ public static class Evaluator
 		return returnExpression;
 	}
 
-	private static Evaluation EvaluateSharedScopeExpression(FunctionExpression funcScopeExp, ValueTable table, StringWriter programOutput)
-	{
-		foreach (var step in funcScopeExp.Scope.Expressions)
-		{
-			var stepNode = EvaluateTypedExpression(step, table, programOutput);
-			if (stepNode is ReturnValueEvaluation or ReturnVoidEvaluation)
-			{
-				return stepNode; // pass return result to parent scope until a function scope is reached
-			}
-		}
-		return new ReturnVoidEvaluation();
-	}
-
 	private static Evaluation EvaluateFunctionExpression(FunctionExpression functionExpression, ValueTable table, StringWriter programOutput)
 	{
 		return new FunctionExpressionEvaluation(functionExpression);
@@ -252,7 +229,12 @@ public static class Evaluator
 	{
 		var innerValueTable = new ValueTable(table);
 		innerValueTable.SetArguments(args.ToList());
-		foreach (var step in functionExpression.Scope.Expressions)
+		return EvaluateFunctionScopeExpression(functionExpression.Scope, programOutput, innerValueTable);
+	}
+
+	private static Evaluation EvaluateFunctionScopeExpression(Analyze.Scope scope, StringWriter programOutput, ValueTable innerValueTable)
+	{
+		foreach (var step in scope.Expressions)
 		{
 			var stepNode = EvaluateTypedExpression(step, innerValueTable, programOutput);
 			if (stepNode is ReturnValueEvaluation ret)
@@ -262,6 +244,19 @@ public static class Evaluator
 			if (stepNode is ReturnVoidEvaluation)
 			{
 				return VoidEvaluation.Instance; // return void, returns do not propagate outside of current function
+			}
+		}
+		return new ReturnVoidEvaluation();
+	}
+
+	private static Evaluation EvaluateSharedScopeExpression(Analyze.Scope scope, ValueTable table, StringWriter programOutput)
+	{
+		foreach (var step in scope.Expressions)
+		{
+			var stepNode = EvaluateTypedExpression(step, table, programOutput);
+			if (stepNode is ReturnValueEvaluation or ReturnVoidEvaluation)
+			{
+				return stepNode; // pass return result to parent scope until a function scope is reached
 			}
 		}
 		return new ReturnVoidEvaluation();
