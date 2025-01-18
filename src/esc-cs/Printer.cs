@@ -519,6 +519,13 @@ public static class Printer
 				PrintAnalysisTypedExpression(outputFile, returnValue, v + 1);
 				break;
 			}
+			case DeclarationExpression declarationExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"{(declarationExpression.IsStatic ? "static" : "declare")}: {declarationExpression.Identifier} ({declarationExpression.Type})");
+				PrintAnalysisTypedExpression(outputFile, declarationExpression.Value, v + 1);
+				break;
+			}
 			default:
 			{
 				outputFile.Indent(v);

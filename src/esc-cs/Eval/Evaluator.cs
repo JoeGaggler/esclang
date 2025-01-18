@@ -111,8 +111,16 @@ public static class Evaluator
 			ParameterExpression parameterExpression => EvaluateParameterExpression(parameterExpression, table, programOutput),
 			IntrinsicFunctionExpression intrinsicFunctionExpression => EvaluateIntrinsicFunctionExpression(intrinsicFunctionExpression, table, programOutput),
 			ReturnExpression returnExpression => EvaluateReturnExpression(returnExpression, table, programOutput),
+			DeclarationExpression declarationExpression => EvaluateDeclarationExpression(declarationExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
+	}
+
+	private static ExpressionResult EvaluateDeclarationExpression(DeclarationExpression declarationExpression, ValueTable table, StringWriter programOutput)
+	{
+		var rhs = EvaluateTypedExpression(declarationExpression.Value, table, programOutput);
+		table.Add(declarationExpression.Identifier, rhs);
+		return rhs; // TODO: return l-value?
 	}
 
 	private static ExpressionResult EvaluateReturnExpression(ReturnExpression returnExpression, ValueTable table, StringWriter programOutput)
@@ -319,7 +327,7 @@ public static class Evaluator
 		}
 		else
 		{
-			throw new Exception("Unknown identifier");
+			throw new Exception($"Unknown identifier: {id}");
 		}
 	}
 }

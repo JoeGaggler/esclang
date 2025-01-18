@@ -1,4 +1,4 @@
-func2 := {
+func2 :: {
     cond : bool : <>
     if false {
         return 0
@@ -8,7 +8,7 @@ func2 := {
     }
     return 9999 // unreachable
 }
-func1 := {
+func1 :: {
     a := 2
     b := a + func2 false
     return b

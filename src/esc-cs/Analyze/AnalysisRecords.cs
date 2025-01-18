@@ -56,6 +56,7 @@ public record class IntLiteralExpression(Int32 Value) : TypedExpression(new Dotn
 public record class StringLiteralExpression(String Value) : TypedExpression(new DotnetAnalysisType(typeof(String)));
 public record class BooleanLiteralExpression(Boolean Value) : TypedExpression(new DotnetAnalysisType(typeof(Boolean)));
 public record class IdentifierExpression(AnalysisType Type, String Identifier) : TypedExpression(Type);
+public record class DeclarationExpression(AnalysisType Type, String Identifier, TypedExpression Value, Boolean IsStatic) : TypedExpression(Type);
 public record class AddExpression(AnalysisType Type, TypedExpression Left, TypedExpression Right) : TypedExpression(Type);
 public record class FunctionExpression(Scope Scope, AnalysisType ReturnType) : TypedExpression(new FunctionAnalysisType(ReturnType));
 public record class MemberMethodGroupExpression(TypedExpression Target, String MethodName) : TypedExpression(UnknownAnalysisType.Instance); // actual type depends on method selection
