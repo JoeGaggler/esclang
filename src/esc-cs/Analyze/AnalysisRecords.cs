@@ -48,7 +48,8 @@ public record class DotnetAnalysisType(Type Type) : AnalysisType
 public abstract record class TypedExpression(AnalysisType Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(UnknownAnalysisType.Instance);
 public record class IntrinsicFunctionExpression(String Name, AnalysisType Type) : TypedExpression(Type);
-public record class ReturnExpression(TypedExpression ReturnValue) : TypedExpression(ReturnValue.Type);
+public record class ReturnVoidExpression() : TypedExpression(UnknownAnalysisType.Instance);
+public record class ReturnValueExpression(TypedExpression ReturnValue) : TypedExpression(ReturnValue.Type);
 public record class IntLiteralExpression(Int32 Value) : TypedExpression(new DotnetAnalysisType(typeof(Int32)));
 public record class StringLiteralExpression(String Value) : TypedExpression(new DotnetAnalysisType(typeof(String)));
 public record class BooleanLiteralExpression(Boolean Value) : TypedExpression(new DotnetAnalysisType(typeof(Boolean)));

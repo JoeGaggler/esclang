@@ -18,4 +18,5 @@ a = 39
 b := a + func1 + 5
 print a
 print b
+return // testing early return
 print (b.ToString "C") // C=currency

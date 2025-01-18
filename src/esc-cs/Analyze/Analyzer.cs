@@ -24,12 +24,20 @@ public static class Analyzer
 		return analysis;
 	}
 
+	// TODO: combine this with other scope processing?
 	public static void AnalyzeLine(Parse.LineNode line, Scope scope, AnalysisQueue queue)
 	{
 		foreach (var lineItem in line.Items)
 		{
 			var targetResult = AnalyzeExpression(lineItem, scope, queue);
-			scope.Expressions.Add(targetResult);
+			if (targetResult is KeywordExpression { Keyword: "return" })
+			{
+				scope.Expressions.Add(new ReturnVoidExpression());
+			}
+			else
+			{
+				scope.Expressions.Add(targetResult);
+			}
 		}
 	}
 
@@ -151,7 +159,7 @@ public static class Analyzer
 						{
 							throw new Exception("Invalid return statement");
 						}
-						return new ReturnExpression(argumentExpressions[0]);
+						return new ReturnValueExpression(argumentExpressions[0]);
 					}
 					if (keyword == "print")
 					{

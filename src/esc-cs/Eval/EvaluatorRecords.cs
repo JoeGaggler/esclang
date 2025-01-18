@@ -39,7 +39,7 @@ public class ValueTable
 {
 	public ValueTable? Parent { get; }
 
-	public Dictionary<String, ExpressionResult> Store { get; } = new();
+	public Dictionary<String, Evaluation> Store { get; } = new();
 
 	public ValueTable()
 	{
@@ -52,14 +52,14 @@ public class ValueTable
 	}
 
 	private Int32 NextArgumentIndex = 0;
-	public List<ExpressionResult> Arguments { get; } = new();
-	public void SetArguments(List<ExpressionResult> parameters)
+	public List<Evaluation> Arguments { get; } = new();
+	public void SetArguments(List<Evaluation> parameters)
 	{
 		this.Arguments.Clear();
 		this.Arguments.AddRange(parameters);
 		this.NextArgumentIndex = 0;
 	}
-	public ExpressionResult GetNextParameter()
+	public Evaluation GetNextParameter()
 	{
 		if (NextArgumentIndex >= this.Arguments.Count)
 		{
@@ -68,7 +68,7 @@ public class ValueTable
 		return this.Arguments[NextArgumentIndex++];
 	}
 
-	public ExpressionResult? Get(String identifier)
+	public Evaluation? Get(String identifier)
 	{
 		if (this.Store.TryGetValue(identifier, out var value))
 		{
@@ -84,7 +84,7 @@ public class ValueTable
 		}
 	}
 
-	public void Add(String identifier, ExpressionResult value)
+	public void Add(String identifier, Evaluation value)
 	{
 		if (this.Store.ContainsKey(identifier))
 		{
@@ -93,7 +93,7 @@ public class ValueTable
 		this.Store.Add(identifier, value);
 	}
 
-	public void Set(String identifier, ExpressionResult value)
+	public void Set(String identifier, Evaluation value)
 	{
 		if (this.Store.ContainsKey(identifier))
 		{
@@ -110,14 +110,14 @@ public class ValueTable
 	}
 }
 
-public abstract record class ExpressionResult;
-public record class IntrinsicFunctionExpressionResult(String Name) : ExpressionResult;
-public record class ImplicitVoidExpressionResult() : ExpressionResult;
-public record class ObjectExpressionResult(Object Value) : ExpressionResult;
-public record class IntExpressionResult(Int32 Value) : ExpressionResult;
-public record class StringExpressionResult(String Value) : ExpressionResult;
-public record class BooleanExpressionResult(Boolean Value) : ExpressionResult;
-public record class FunctionDeclarationExpressionResult() : ExpressionResult; // TODO: inputs/outputs
-public record class ReturnVoidResult() : ExpressionResult;
-public record class ReturnExpressionResult(ExpressionResult Value) : ExpressionResult;
-public record class FunctionExpressionResult(Analyze.FunctionExpression Func) : ExpressionResult;
+public abstract record class Evaluation;
+public record class IntrinsicFunctionEvaluation(String Name) : Evaluation;
+public record class VoidEvaluation() : Evaluation { public static readonly VoidEvaluation Instance = new(); };
+public record class ObjectEvaluation(Object Value) : Evaluation;
+public record class IntEvaluation(Int32 Value) : Evaluation;
+public record class StringEvaluation(String Value) : Evaluation;
+public record class BooleanEvaluation(Boolean Value) : Evaluation;
+public record class FunctionDeclarationEvaluation() : Evaluation; // TODO: inputs/outputs
+public record class ReturnVoidEvaluation() : Evaluation;
+public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
+public record class FunctionExpressionEvaluation(Analyze.FunctionExpression Func) : Evaluation;

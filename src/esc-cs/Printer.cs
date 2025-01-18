@@ -479,7 +479,7 @@ public static class Printer
 				outputFile.WriteLine($"intrinsic: {name}");
 				break;
 			}
-			case ReturnExpression { ReturnValue: { } returnValue, Type: { } returnType }:
+			case ReturnValueExpression { ReturnValue: { } returnValue, Type: { } returnType }:
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine("return");
@@ -491,6 +491,18 @@ public static class Printer
 				outputFile.Indent(v);
 				outputFile.WriteLine($"{(declarationExpression.IsStatic ? "static" : "declare")}: {declarationExpression.Identifier} ({declarationExpression.Type})");
 				PrintAnalysisTypedExpression(outputFile, declarationExpression.Value, v + 1);
+				break;
+			}
+			case KeywordExpression { Keyword: String keyword, Type: { } type }:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine($"keyword: {keyword} ({type})");
+				break;
+			}
+			case ReturnVoidExpression:
+			{
+				outputFile.Indent(v);
+				outputFile.WriteLine("return void");
 				break;
 			}
 			default:
