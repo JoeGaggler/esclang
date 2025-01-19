@@ -3,9 +3,9 @@
 WriteLine(Environment.CurrentDirectory);
 
 Run("cases/first.esc", NoResult());
-Run("cases/simple-reassignment.esc", Number(2));
+Run("cases/simple-reassignment.esc", Number(4));
 
-static void Run(String testCasePath, EscLang.Parse.SyntaxNode expected)
+static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 {
     var escSourceCode = File.ReadAllText(testCasePath);
     var lexemes = EscLang.Lex.Lexer.GetLexemes(escSourceCode).ToArray().AsSpan();
@@ -17,11 +17,22 @@ static void Run(String testCasePath, EscLang.Parse.SyntaxNode expected)
         return;
     }
 
+	EscLang.Analyze.Analysis analysis;
+	try
+	{
+		analysis = EscLang.Analyze.Analyzer.Analyze(file);
+	}
+	catch (Exception e)
+	{
+		WriteLine("Failed: Analysis - " + e.ToString());
+		return;
+	}
+
     var programOutput = new StringWriter();
-    EscLang.Parse.SyntaxNode actual;
+    EscLang.Eval.Evaluation actual;
     try
     {
-        actual = EscLang.Eval.Evaluator.Evaluate(file, programOutput);
+        actual = EscLang.Eval.Evaluator.Evaluate(analysis, programOutput);
     }
     catch (Exception e)
     {
@@ -40,5 +51,5 @@ static void Run(String testCasePath, EscLang.Parse.SyntaxNode expected)
     WriteLine("Passed: " + testCasePath);
 }
 
-static EscLang.Parse.SyntaxNode NoResult() => new EscLang.Eval.Evaluator.ReturningVoidNode();
-static EscLang.Parse.SyntaxNode Number(int value) => new EscLang.Parse.LiteralNumberNode(value.ToString());
+static EscLang.Eval.Evaluation NoResult() => EscLang.Eval.VoidEvaluation.Instance;
+static EscLang.Eval.Evaluation Number(int value) => new EscLang.Eval.IntEvaluation(value);

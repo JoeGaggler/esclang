@@ -239,7 +239,7 @@ public static class Evaluator
 				return VoidEvaluation.Instance; // return void, returns do not propagate outside of current function
 			}
 		}
-		return new ReturnVoidEvaluation();
+		return new VoidEvaluation();
 	}
 
 	private static Evaluation EvaluateSharedScope(Analyze.Scope scope, ValueTable table, StringWriter programOutput)

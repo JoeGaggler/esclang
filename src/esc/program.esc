@@ -18,5 +18,5 @@ a = 39
 b := a + func1 + 5
 print a
 print b
-return // TODO: this is analyzed as "identifier" instead of "return"
+return // early return
 print (b.ToString "C") // C=currency
