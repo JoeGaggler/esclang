@@ -1,0 +1,5 @@
+func :: {
+    a : int : <>
+    return (a + 1)
+}
+return (func 12)

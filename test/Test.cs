@@ -5,6 +5,7 @@ WriteLine(Environment.CurrentDirectory);
 Run("cases/first.esc", NoResult());
 Run("cases/first-print-return.esc", Text("hello, world"));
 Run("cases/simple-reassignment.esc", Number(4));
+Run("cases/func-params.esc", Number(13));
 Run("cases/two-func-calls.esc", Number(999));
 Run("cases/two-func-calls-reverse-declaration.esc", Number(999)); // TODO: out of order declarations
 
@@ -16,9 +17,9 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
     if (!EscLang.Parse.Parser.TryParse(lexemes, out var file, out var error))
     {
         var errorMessage = EscLang.Printer.PrintParseError(lexemes, error);
-        WriteLine("Failed: Syntax - " + errorMessage);
-        return;
-    }
+		WriteLine($"Failed: {testCasePath} --" + " Syntax - " + errorMessage);
+		return;
+	}
 
 	EscLang.Analyze.Analysis analysis;
 	try
@@ -27,7 +28,7 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 	}
 	catch (Exception e)
 	{
-		WriteLine("Failed: Analysis - " + e.ToString());
+		WriteLine($"Failed: {testCasePath} --" + " Analysis - " + e.ToString());
 		return;
 	}
 
@@ -41,13 +42,14 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
     {
         programOutput.WriteLine("*** CRASH! ***");
         programOutput.WriteLine(e.ToString());
-        WriteLine("Failed: Crash - " + e.ToString());
-        return;
-    }
+        WriteLine($"Failed: Crash - " + e.ToString());
+		WriteLine($"Failed: {testCasePath} --" + " Crash - " + e.ToString());
+		return;
+	}
 
     if (actual != expected)
     {
-        WriteLine("Failed: " + testCasePath + " - Expected: " + expected + ", Actual: " + actual);
+        WriteLine($"Failed: {testCasePath} --" + " Expected: " + expected + ", Actual: " + actual);
         return;
     }
 
