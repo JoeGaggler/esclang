@@ -7,7 +7,6 @@ class Program
 	static int Main(string[] args)
 	{
 		var measurements = new List<(String, String)>();
-		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 		if (args.Length <= 0 || args[0] is not String filePath)
 		{
 			WriteLine("Must provide source file as the parameter.");
@@ -22,6 +21,8 @@ class Program
 
 		var outputFilePath = Path.Combine(outputPath, "output.txt");
 		using var outputFile = new StreamWriter(outputFilePath);
+		
+		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
 		String escSourceCode;
 		try
