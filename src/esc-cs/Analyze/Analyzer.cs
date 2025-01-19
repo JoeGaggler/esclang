@@ -54,16 +54,16 @@ public static class Analyzer
 	{
 		switch (node)
 		{
-			case { } x when x is LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
+			case LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
 			{
 				var intVal = Int32.Parse(numberLiteral);
 				return new IntLiteralExpression(intVal);
 			}
-			case { } x when x is LiteralStringNode { Text: { Length: > 0 } stringLiteral }:
+			case LiteralStringNode { Text: { Length: > 0 } stringLiteral }:
 			{
 				return new StringLiteralExpression(stringLiteral);
 			}
-			case { } x when x is IdentifierNode { Text: { Length: > 0 } id }:
+			case IdentifierNode { Text: { Length: > 0 } id }:
 			{
 				// intrinsic identifiers
 				if (id is "return" or "print" or "if" or "bool" or "int" or "string")
@@ -96,7 +96,7 @@ public static class Analyzer
 
 				return new IdentifierExpression(type, Identifier: id);
 			}
-			case { } x when x is PlusNode { Left: { } left, Right: { } right }:
+			case PlusNode { Left: { } left, Right: { } right }:
 			{
 				var leftValue = AnalyzeExpression(left, scope, queue);
 				var rightValue = AnalyzeExpression(right, scope, queue);
@@ -110,7 +110,7 @@ public static class Analyzer
 
 				return new AddExpression(addType, Left: leftValue, Right: rightValue);
 			}
-			case { } x when x is BracesNode { Lines: { } lines }:
+			case BracesNode { Lines: { } lines }:
 			{
 				// TODO: all braces are functions for now, future: InlineScopeExpression
 
@@ -124,7 +124,7 @@ public static class Analyzer
 				var returnType = new DotnetAnalysisType(typeof(int));
 				return new FunctionExpression(innerScope, returnType);
 			}
-			case { } x when x is MemberNode { Target: { } target, Member: { } member }:
+			case MemberNode { Target: { } target, Member: { } member }:
 			{
 				var targetExpression = AnalyzeExpression(target, scope, queue);
 
@@ -136,7 +136,7 @@ public static class Analyzer
 				// TODO: Assuming member is method for now
 				return new MemberMethodGroupExpression(Target: targetExpression, MethodName: memberId);
 			}
-			case { } x when x is CallNode { Target: { } target, Arguments: { } arguments }:
+			case CallNode { Target: { } target, Arguments: { } arguments }:
 			{
 				var targetExpression = AnalyzeExpression(target, scope, queue);
 
@@ -224,14 +224,14 @@ public static class Analyzer
 
 				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");
 			}
-			case { } x when x is AssignNode { Target: { } target, Value: { } value }:
+			case AssignNode { Target: { } target, Value: { } value }:
 			{
 				var targetExpression = AnalyzeExpression(target, scope, queue);
 				var valueExpression = AnalyzeExpression(value, scope, queue);
 				// TODO: TYPE-CHECK
 				return new AssignExpression(Type: targetExpression.Type, Target: targetExpression, Value: valueExpression);
 			}
-			case { } x when x is LogicalNegationNode { Node: { } innerNode }:
+			case LogicalNegationNode { Node: { } innerNode }:
 			{
 				var nodeValue = AnalyzeExpression(innerNode, scope, queue);
 				if (nodeValue.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
@@ -240,11 +240,11 @@ public static class Analyzer
 				}
 				return new LogicalNegationExpression(nodeValue);
 			}
-			case { } x when x is ParameterNode:
+			case ParameterNode:
 			{
 				return new ParameterExpression();
 			}
-			case { } x when x is DeclareStaticNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
+			case DeclareStaticNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
 			{
 				if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
 				{
@@ -262,7 +262,7 @@ public static class Analyzer
 				scope.NameTable[id] = actualType;
 				return new DeclarationExpression(actualType, id, value, true);
 			}
-			case { } x when x is DeclareAssignNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
+			case DeclareAssignNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
 			{
 				if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
 				{
