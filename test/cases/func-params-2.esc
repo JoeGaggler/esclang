@@ -1,0 +1,6 @@
+add :: {
+    a : int : <>
+    b : int : <>
+    return (a + b)
+}
+return (add 12 13)
