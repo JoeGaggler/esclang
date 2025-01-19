@@ -133,21 +133,21 @@ Lex:
 0130: 254 + 1 -- (20, 8) -- EndOfLine -- \n
 0131: 255 + 6 -- (21, 1) -- Identifier -- return
 0132: 261 + 1 -- (21, 7) -- Spaces -- " "
-0133: 262 + 23 -- (21, 8) -- Comment -- // testing early return
-0134: 285 + 1 -- (21, 31) -- EndOfLine -- \n
-0135: 286 + 5 -- (22, 1) -- Identifier -- print
-0136: 291 + 1 -- (22, 6) -- Spaces -- " "
-0137: 292 + 1 -- (22, 7) -- ParenOpen -- (
-0138: 293 + 1 -- (22, 8) -- Identifier -- b
-0139: 294 + 1 -- (22, 9) -- Period -- .
-0140: 295 + 8 -- (22, 10) -- Identifier -- ToString
-0141: 303 + 1 -- (22, 18) -- Spaces -- " "
-0142: 304 + 3 -- (22, 19) -- LiteralString -- "C"
-0143: 307 + 1 -- (22, 22) -- ParenClose -- )
-0144: 308 + 1 -- (22, 23) -- Spaces -- " "
-0145: 309 + 13 -- (22, 24) -- Comment -- // C=currency
-0146: 322 + 1 -- (22, 37) -- EndOfLine -- \n
-0147: 323 + 0 -- (23, 1) -- EndOfFile -- <EOF>
+0133: 262 + 61 -- (21, 8) -- Comment -- // TODO: this is analyzed as "identifier" instead of "return"
+0134: 323 + 1 -- (21, 69) -- EndOfLine -- \n
+0135: 324 + 5 -- (22, 1) -- Identifier -- print
+0136: 329 + 1 -- (22, 6) -- Spaces -- " "
+0137: 330 + 1 -- (22, 7) -- ParenOpen -- (
+0138: 331 + 1 -- (22, 8) -- Identifier -- b
+0139: 332 + 1 -- (22, 9) -- Period -- .
+0140: 333 + 8 -- (22, 10) -- Identifier -- ToString
+0141: 341 + 1 -- (22, 18) -- Spaces -- " "
+0142: 342 + 3 -- (22, 19) -- LiteralString -- "C"
+0143: 345 + 1 -- (22, 22) -- ParenClose -- )
+0144: 346 + 1 -- (22, 23) -- Spaces -- " "
+0145: 347 + 13 -- (22, 24) -- Comment -- // C=currency
+0146: 360 + 1 -- (22, 37) -- EndOfLine -- \n
+0147: 361 + 0 -- (23, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declare-static
@@ -260,14 +260,14 @@ Analyze:
 main procedure
   scope
     static: func2 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
-      func
+      function
         scope
           static: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
             parameter: UnknownAnalysisType { FullName = Unknown }
           call
             intrinsic: if
             bool: False
-            func
+            function
               scope
                 return
                   int: 0
@@ -275,14 +275,14 @@ main procedure
             intrinsic: if
             not
               identifier: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
-            func
+            function
               scope
                 return
                   int: 100
           return
             int: 9999
     static: func1 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
-      func
+      function
         scope
           static: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
             int: 2

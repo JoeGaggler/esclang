@@ -53,7 +53,7 @@ public class ValueTable
 
 	private Int32 NextArgumentIndex = 0;
 	public List<Evaluation> Arguments { get; } = new();
-	public void SetArguments(List<Evaluation> parameters)
+	public void SetArguments(Evaluation[] parameters)
 	{
 		this.Arguments.Clear();
 		this.Arguments.AddRange(parameters);
@@ -120,4 +120,4 @@ public record class BooleanEvaluation(Boolean Value) : Evaluation;
 public record class FunctionDeclarationEvaluation() : Evaluation; // TODO: inputs/outputs
 public record class ReturnVoidEvaluation() : Evaluation;
 public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
-public record class FunctionExpressionEvaluation(Analyze.FunctionExpression Func) : Evaluation;
+public record class FunctionEvaluation(Analyze.FunctionExpression Func) : Evaluation;

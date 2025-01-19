@@ -27,23 +27,22 @@ public record class Scope()
 
 public abstract record class AnalysisType
 {
-	public abstract String FullName { get; }
+	public abstract String FullName { get; } // Only used for debugging, could be extracted elsewhere
 };
 public record class UnknownAnalysisType() : AnalysisType
 {
-	public static UnknownAnalysisType Instance = new();
+	public static readonly UnknownAnalysisType Instance = new();
+
 	public override String FullName => "Unknown";
 }
 public record class FunctionAnalysisType(AnalysisType ReturnType) : AnalysisType
 {
-	public static UnknownAnalysisType Instance = new();
 	public override String FullName => "Function";
 }
 public record class DotnetAnalysisType(Type Type) : AnalysisType
 {
 	public override String FullName => $"Dotnet::{Type.FullName}";
 }
-
 
 public abstract record class TypedExpression(AnalysisType Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(UnknownAnalysisType.Instance);

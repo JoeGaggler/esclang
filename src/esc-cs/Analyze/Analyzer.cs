@@ -133,7 +133,7 @@ public static class Analyzer
 					throw new Exception("Invalid member identifier");
 				}
 
-				// Assuming member is method for now
+				// TODO: Assuming member is method for now
 				return new MemberMethodGroupExpression(Target: targetExpression, MethodName: memberId);
 			}
 			case { } x when x is CallNode { Target: { } target, Arguments: { } arguments }:

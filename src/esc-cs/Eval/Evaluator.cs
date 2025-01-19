@@ -12,7 +12,7 @@ public static class Evaluator
 
 		var scope = file.Main;
 		var table = new ValueTable(globalTable);
-		return EvaluateFunctionScopeExpression(scope, programOutput, table);
+		return EvaluateFunctionScope(scope, programOutput, table);
 	}
 
 	private static Evaluation CreateExpressionResult(AnalysisType analysisType, Object? value)
@@ -45,8 +45,9 @@ public static class Evaluator
 	private static Evaluation EvaluateTypedExpressionAndCall(TypedExpression value, ValueTable table, StringWriter programOutput)
 	{
 		var result = EvaluateTypedExpression(value, table, programOutput);
-		if (result is FunctionExpressionEvaluation { Func: { } func })
+		if (result is FunctionEvaluation { Func: { } func })
 		{
+			// TODO: analyzer should have covered this case (actual: identifier, expect: call)
 			// bare function expression becomes a function call with no arguments
 			return CallFunctionExpression(func, [], table, programOutput);
 		}
@@ -130,13 +131,6 @@ public static class Evaluator
 
 	private static Evaluation EvaluateCallExpression(CallExpression callExpression, ValueTable table, StringWriter programOutput)
 	{
-		// CallExpression { 
-		//	Type = System.String, 
-		// 	ReturnType = System.String, 
-		// 	MethodInfo = System.String ToString(System.String, System.IFormatProvider)
-		//	Target = IdentifierExpression { Type = System.Int32, Identifier = b }, 
-		//	Args = EscLang.Analyze.TypedExpression[] 
-		// }
 		if (callExpression is not { Type: { } returnType, Target: { } methodTarget })
 		{
 			throw new NotImplementedException($"Invalid call expression: {callExpression}");
@@ -180,7 +174,7 @@ public static class Evaluator
 					{
 						throw new NotImplementedException($"Invalid if block: {ifBlock}");
 					}
-					return EvaluateSharedScopeExpression(functionScopeExpression.Scope, table, programOutput);
+					return EvaluateSharedScope(functionScopeExpression.Scope, table, programOutput);
 				}
 				default:
 				{
@@ -188,9 +182,8 @@ public static class Evaluator
 				}
 			}
 		}
-		else if (targetExpression is FunctionExpressionEvaluation { Func: { } func })
+		else if (targetExpression is FunctionEvaluation { Func: { } func })
 		{
-			// TODO: parameters
 			var returnExpression = CallFunctionExpression(func, args, table, programOutput);
 			return returnExpression;
 		}
@@ -222,17 +215,17 @@ public static class Evaluator
 
 	private static Evaluation EvaluateFunctionExpression(FunctionExpression functionExpression, ValueTable table, StringWriter programOutput)
 	{
-		return new FunctionExpressionEvaluation(functionExpression);
+		return new FunctionEvaluation(functionExpression);
 	}
 
 	private static Evaluation CallFunctionExpression(FunctionExpression functionExpression, Evaluation[] args, ValueTable table, StringWriter programOutput)
 	{
 		var innerValueTable = new ValueTable(table);
-		innerValueTable.SetArguments(args.ToList());
-		return EvaluateFunctionScopeExpression(functionExpression.Scope, programOutput, innerValueTable);
+		innerValueTable.SetArguments(args);
+		return EvaluateFunctionScope(functionExpression.Scope, programOutput, innerValueTable);
 	}
 
-	private static Evaluation EvaluateFunctionScopeExpression(Analyze.Scope scope, StringWriter programOutput, ValueTable innerValueTable)
+	private static Evaluation EvaluateFunctionScope(Analyze.Scope scope, StringWriter programOutput, ValueTable innerValueTable)
 	{
 		foreach (var step in scope.Expressions)
 		{
@@ -249,7 +242,7 @@ public static class Evaluator
 		return new ReturnVoidEvaluation();
 	}
 
-	private static Evaluation EvaluateSharedScopeExpression(Analyze.Scope scope, ValueTable table, StringWriter programOutput)
+	private static Evaluation EvaluateSharedScope(Analyze.Scope scope, ValueTable table, StringWriter programOutput)
 	{
 		foreach (var step in scope.Expressions)
 		{
@@ -259,7 +252,8 @@ public static class Evaluator
 				return stepNode; // pass return result to parent scope until a function scope is reached
 			}
 		}
-		return new ReturnVoidEvaluation();
+
+		return VoidEvaluation.Instance;
 	}
 
 	private static Evaluation EvaluateAddExpression(AddExpression addExpression, ValueTable table, StringWriter programOutput)
@@ -267,7 +261,7 @@ public static class Evaluator
 		var left = EvaluateTypedExpressionAndCall(addExpression.Left, table, programOutput);
 		var right = EvaluateTypedExpressionAndCall(addExpression.Right, table, programOutput);
 
-		var leftObj = EvaluateExpressionResult(left);
+		var leftObj = EvaluateExpressionResult(left); // TODO: not typesafe, type(s) should be encoded in the AddExpression
 		var rightObj = EvaluateExpressionResult(right);
 
 		if (addExpression.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Int32))

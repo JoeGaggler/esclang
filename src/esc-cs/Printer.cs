@@ -394,7 +394,7 @@ public static class Printer
 			case FunctionExpression funcExp:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine($"func");
+				outputFile.WriteLine($"function");
 				PrintAnalysisScope(outputFile, funcExp.Scope, v + 1);
 				break;
 			}
