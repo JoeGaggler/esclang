@@ -5,6 +5,7 @@ WriteLine(Environment.CurrentDirectory);
 Run("cases/first.esc", NoResult());
 Run("cases/simple-reassignment.esc", Number(4));
 Run("cases/two-func-calls.esc", Number(999));
+Run("cases/two-func-calls-reverse-declaration.esc", Number(999)); // TODO: out of order declarations
 
 static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 {

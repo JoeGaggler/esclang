@@ -1,0 +1,7 @@
+func1 :: {
+    return (func2 + 555)
+}
+func2 :: {
+    return 123
+}
+return (321 + func1)
