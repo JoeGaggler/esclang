@@ -3,6 +3,7 @@
 Run("cases/first.esc", NoResult());
 Run("cases/first-print-return.esc", Text("hello, world"));
 Run("cases/simple-reassignment.esc", Number(4));
+Run("cases/blocks.esc", Number(16));
 Run("cases/func-params.esc", Number(13));
 Run("cases/func-params-2.esc", Number(25));
 Run("cases/two-func-calls.esc", Number(999));
