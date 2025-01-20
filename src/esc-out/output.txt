@@ -256,6 +256,80 @@ call
       arguments
         "C"
 
+Analysis Log:
+0000 file: lines=9
+0001 scope: nodes=9
+0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func2 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
+0001 type: 
+0001 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0002 scope: nodes=4
+0002 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = cond }, Type = IdentifierNode { Text = bool }, Value = ParameterNode { } }
+0002 type: IdentifierNode { Text = bool }
+0002 expression: ParameterNode { }
+0002 expression: CallNode { Target = IdentifierNode { Text = if }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0002 expression: IdentifierNode { Text = if }
+0002 expression: IdentifierNode { Text = false }
+0002 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0003 scope: nodes=1
+0003 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0003 expression: IdentifierNode { Text = return }
+0003 expression: LiteralNumberNode { Text = 0 }
+0002 expression: CallNode { Target = IdentifierNode { Text = if }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0002 expression: IdentifierNode { Text = if }
+0002 expression: LogicalNegationNode { Node = IdentifierNode { Text = cond } }
+0002 expression: IdentifierNode { Text = cond }
+0002 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0004 scope: nodes=1
+0004 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0004 expression: IdentifierNode { Text = return }
+0004 expression: LiteralNumberNode { Text = 100 }
+0002 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0002 expression: IdentifierNode { Text = return }
+0002 expression: LiteralNumberNode { Text = 9999 }
+0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func1 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
+0001 type: 
+0001 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0005 scope: nodes=3
+0005 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = a }, Type = , Value = LiteralNumberNode { Text = 2 } }
+0005 type: 
+0005 expression: LiteralNumberNode { Text = 2 }
+0005 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = b }, Type = , Value = PlusNode { Left = IdentifierNode { Text = a }, Right = CallNode { Target = IdentifierNode { Text = func2 }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } } }
+0005 type: 
+0005 expression: PlusNode { Left = IdentifierNode { Text = a }, Right = CallNode { Target = IdentifierNode { Text = func2 }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
+0005 expression: IdentifierNode { Text = a }
+0005 expression: CallNode { Target = IdentifierNode { Text = func2 }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0005 expression: IdentifierNode { Text = func2 }
+0005 expression: IdentifierNode { Text = false }
+0005 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0005 expression: IdentifierNode { Text = return }
+0005 expression: IdentifierNode { Text = b }
+0001 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = a }, Type = , Value = LiteralNumberNode { Text = 13 } }
+0001 type: 
+0001 expression: LiteralNumberNode { Text = 13 }
+0001 expression: AssignNode { Target = IdentifierNode { Text = a }, Value = LiteralNumberNode { Text = 39 } }
+0001 expression: IdentifierNode { Text = a }
+0001 expression: LiteralNumberNode { Text = 39 }
+0001 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = b }, Type = , Value = PlusNode { Left = PlusNode { Left = IdentifierNode { Text = a }, Right = IdentifierNode { Text = func1 } }, Right = LiteralNumberNode { Text = 5 } } }
+0001 type: 
+0001 expression: PlusNode { Left = PlusNode { Left = IdentifierNode { Text = a }, Right = IdentifierNode { Text = func1 } }, Right = LiteralNumberNode { Text = 5 } }
+0001 expression: PlusNode { Left = IdentifierNode { Text = a }, Right = IdentifierNode { Text = func1 } }
+0001 expression: IdentifierNode { Text = a }
+0001 expression: IdentifierNode { Text = func1 }
+0001 expression: LiteralNumberNode { Text = 5 }
+0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: IdentifierNode { Text = print }
+0001 expression: IdentifierNode { Text = a }
+0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: IdentifierNode { Text = print }
+0001 expression: IdentifierNode { Text = b }
+0001 expression: IdentifierNode { Text = return }
+0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: IdentifierNode { Text = print }
+0001 expression: CallNode { Target = MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }
+0001 expression: IdentifierNode { Text = b }
+0001 expression: LiteralStringNode { Text = C }
+
 Analyze:
 main procedure
   scope

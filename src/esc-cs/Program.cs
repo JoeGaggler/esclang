@@ -21,7 +21,7 @@ class Program
 
 		var outputFilePath = Path.Combine(outputPath, "output.txt");
 		using var outputFile = new StreamWriter(outputFilePath);
-		
+
 		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
 		String escSourceCode;
@@ -74,7 +74,9 @@ class Program
 		Printer.PrintSyntax(outputFile, file, lexemes);
 
 		// Analyzer
-		var unit = Analyze.Analyzer.Analyze(file);
+		outputFile.WriteLine();
+		outputFile.WriteLine("Analysis Log:");
+		var unit = Analyze.Analyzer.Analyze(file, outputFile);
 		Measure("Analyze", measurements, stopwatch);
 
 		// Debug Analyzer

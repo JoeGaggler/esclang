@@ -10,28 +10,33 @@ using AnalysisQueue = Queue<Object>; // TODO: strong type
 
 public static class Analyzer
 {
-	public static Analysis Analyze(Parse.EscFile file)
-	{
-		var queue = new AnalysisQueue();
-		var globalScope = new Scope();
+	private static Int32 ScopeCounter = -1;
 
-		var mainFunc = AnalyzeScope(file.Lines, globalScope, queue);
+	public static Analysis Analyze(Parse.EscFile file, StreamWriter log)
+	{
+		var globalScope = new Scope(++ScopeCounter);
+		log.WriteLine($"{globalScope.Id:0000} file: lines={file.Lines.Count}");
+		var queue = new AnalysisQueue();
+
+		var mainFunc = AnalyzeScope(file.Lines, globalScope, queue, log);
 
 		Analysis analysis = new(Main: mainFunc.Scope);
 		return analysis;
 	}
 
 	// TODO: all braces are functions for now, future: InlineScopeExpression
-	private static FunctionExpression AnalyzeScope(List<SyntaxNode> nodes, Scope parentScope, AnalysisQueue queue)
+	private static FunctionExpression AnalyzeScope(List<SyntaxNode> nodes, Scope parentScope, AnalysisQueue queue, StreamWriter log)
 	{
+		var scopeId = ++ScopeCounter;
+		log.WriteLine($"{scopeId:0000} scope: nodes={nodes.Count}");
 		// TODO: collect declarations
 		// TODO: analyze return type
 
-		var innerScope = new Scope() { Parent = parentScope };
+		var innerScope = new Scope(scopeId) { Parent = parentScope };
 
 		foreach (var node in nodes)
 		{
-			var targetResult = AnalyzeExpression(node, innerScope, queue);
+			var targetResult = AnalyzeExpression(node, innerScope, queue, log);
 			if (targetResult is KeywordExpression { Keyword: "return" })
 			{
 				innerScope.Expressions.Add(new ReturnVoidExpression());
@@ -47,8 +52,9 @@ public static class Analyzer
 		return new FunctionExpression(innerScope, returnType);
 	}
 
-	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
+	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, StreamWriter log)
 	{
+		log.WriteLine($"{scope.Id:0000} type: {node}");
 		if (node is null) { return null; }
 		if (node is IdentifierNode { Text: { } id })
 		{
@@ -59,8 +65,9 @@ public static class Analyzer
 		return null;
 	}
 
-	private static TypedExpression AnalyzeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
+	private static TypedExpression AnalyzeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, StreamWriter log)
 	{
+		log.WriteLine($"{scope.Id:0000} expression: {node}");
 		switch (node)
 		{
 			case LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
@@ -91,10 +98,12 @@ public static class Analyzer
 				// scoped identifiers
 				if (!scope.TryGetNameTableValue(id, out var type))
 				{
+					log.WriteLine($"{scope.Id:0000} queued: id={id}"); // TODO: queue for later analysis, must also have a failure path
 					throw new Exception($"Unknown identifier: {id}");
 				}
 				else if (type is null)
 				{
+					log.WriteLine($"{scope.Id:0000} queued: typeof id={id}"); // TODO: queue for later analysis, must also have a failure path
 					throw new Exception("Unknown identifier type");
 				}
 
@@ -107,8 +116,8 @@ public static class Analyzer
 			}
 			case PlusNode { Left: { } left, Right: { } right }:
 			{
-				var leftValue = AnalyzeExpression(left, scope, queue);
-				var rightValue = AnalyzeExpression(right, scope, queue);
+				var leftValue = AnalyzeExpression(left, scope, queue, log);
+				var rightValue = AnalyzeExpression(right, scope, queue, log);
 
 				if (leftValue.Type != rightValue.Type)
 				{
@@ -121,11 +130,11 @@ public static class Analyzer
 			}
 			case BracesNode { Lines: { } lines }:
 			{
-				return AnalyzeScope(lines, scope, queue);
+				return AnalyzeScope(lines, scope, queue, log);
 			}
 			case MemberNode { Target: { } target, Member: { } member }:
 			{
-				var targetExpression = AnalyzeExpression(target, scope, queue);
+				var targetExpression = AnalyzeExpression(target, scope, queue, log);
 
 				if (member is not IdentifierNode { Text: { Length: > 0 } memberId })
 				{
@@ -137,12 +146,12 @@ public static class Analyzer
 			}
 			case CallNode { Target: { } target, Arguments: { } arguments }:
 			{
-				var targetExpression = AnalyzeExpression(target, scope, queue);
+				var targetExpression = AnalyzeExpression(target, scope, queue, log);
 
 				var argumentExpressions = new List<TypedExpression>();
 				foreach (var arg in arguments)
 				{
-					var argValue = AnalyzeExpression(arg, scope, queue);
+					var argValue = AnalyzeExpression(arg, scope, queue, log);
 					argumentExpressions.Add(argValue);
 				}
 
@@ -163,7 +172,7 @@ public static class Analyzer
 						{
 							throw new Exception("Invalid print call");
 						}
-						return new CallExpression(UnknownAnalysisType.Instance, Target: new IntrinsicFunctionExpression("print", UnknownAnalysisType.Instance), Args: [argumentExpressions[0]]);
+						return new CallExpression(AnalysisType.String, Target: new IntrinsicFunctionExpression("print", AnalysisType.String), Args: [argumentExpressions[0]]);
 					}
 					if (keyword == "if")
 					{
@@ -225,14 +234,14 @@ public static class Analyzer
 			}
 			case AssignNode { Target: { } target, Value: { } value }:
 			{
-				var targetExpression = AnalyzeExpression(target, scope, queue);
-				var valueExpression = AnalyzeExpression(value, scope, queue);
+				var targetExpression = AnalyzeExpression(target, scope, queue, log);
+				var valueExpression = AnalyzeExpression(value, scope, queue, log);
 				// TODO: TYPE-CHECK
 				return new AssignExpression(Type: targetExpression.Type, Target: targetExpression, Value: valueExpression);
 			}
 			case LogicalNegationNode { Node: { } innerNode }:
 			{
-				var nodeValue = AnalyzeExpression(innerNode, scope, queue);
+				var nodeValue = AnalyzeExpression(innerNode, scope, queue, log);
 				if (nodeValue.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
 				{
 					throw new Exception("Invalid logical negation");
@@ -255,8 +264,8 @@ public static class Analyzer
 					throw new Exception("Duplicate identifier");
 				}
 
-				var declType = AnalyzeTypeExpression(typeNode, scope, queue);
-				var value = AnalyzeExpression(valueNode, scope, queue);
+				var declType = AnalyzeTypeExpression(typeNode, scope, queue, log);
+				var value = AnalyzeExpression(valueNode, scope, queue, log);
 				var actualType = declType ?? value.Type;
 				scope.NameTable[id] = actualType;
 				return new DeclarationExpression(actualType, id, value, true);
@@ -273,8 +282,8 @@ public static class Analyzer
 					throw new Exception("Duplicate identifier");
 				}
 
-				var declType = AnalyzeTypeExpression(typeNode, scope, queue);
-				var value = AnalyzeExpression(valueNode, scope, queue);
+				var declType = AnalyzeTypeExpression(typeNode, scope, queue, log);
+				var value = AnalyzeExpression(valueNode, scope, queue, log);
 				var actualType = declType ?? value.Type;
 				scope.NameTable[id] = actualType;
 				return new DeclarationExpression(actualType, id, value, true);

@@ -6,7 +6,7 @@ public record class Analysis(Scope Main)
 {
 }
 
-public record class Scope()
+public record class Scope(Int32 Id)
 {
 	public Scope? Parent;
 	public Dictionary<String, AnalysisType?> NameTable = [];
@@ -28,6 +28,7 @@ public record class Scope()
 public abstract record class AnalysisType
 {
 	public abstract String FullName { get; } // Only used for debugging, could be extracted elsewhere
+	public static readonly AnalysisType String = new DotnetAnalysisType(typeof(String));
 };
 public record class UnknownAnalysisType() : AnalysisType
 {
