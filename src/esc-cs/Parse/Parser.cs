@@ -84,6 +84,11 @@ public static partial class Parser
 			start = next;
 			return new(first);
 		}
+		else if (peek.Type is LexemeType.BraceClose)
+		{
+			// caller handles brace close
+			return new(first);
+		}
 		else
 		{
 			return new(peek, Error.Message("expected line token"));

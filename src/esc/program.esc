@@ -3,9 +3,7 @@ func2 :: {
     if false {
         return 0
     }
-    if !cond {
-        return 100
-    }
+    if !cond { return 100 }
     return 9999 // unreachable
 }
 func1 :: {

@@ -23,7 +23,7 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 	EscLang.Analyze.Analysis analysis;
 	try
 	{
-		analysis = EscLang.Analyze.Analyzer.Analyze(file);
+		analysis = EscLang.Analyze.Analyzer.Analyze(file, StreamWriter.Null);
 	}
 	catch (Exception e)
 	{
