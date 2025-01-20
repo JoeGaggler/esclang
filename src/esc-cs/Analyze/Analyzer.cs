@@ -13,29 +13,38 @@ public static class Analyzer
 	public static Analysis Analyze(Parse.EscFile file)
 	{
 		var queue = new AnalysisQueue();
-		var mainScope = new Scope();
+		var globalScope = new Scope();
 
-		foreach (var line in file.Lines)
-		{
-			AnalyzeLine(line, mainScope, queue);
-		}
+		var mainFunc = AnalyzeScope(file.Lines, globalScope, queue);
 
-		Analysis analysis = new(Main: mainScope);
+		Analysis analysis = new(Main: mainFunc.Scope);
 		return analysis;
 	}
 
-	// TODO: combine this with other scope processing?
-	public static void AnalyzeLine(Parse.SyntaxNode lineItem, Scope scope, AnalysisQueue queue)
+	// TODO: all braces are functions for now, future: InlineScopeExpression
+	private static FunctionExpression AnalyzeScope(List<SyntaxNode> nodes, Scope parentScope, AnalysisQueue queue)
 	{
-		var targetResult = AnalyzeExpression(lineItem, scope, queue);
-		if (targetResult is KeywordExpression { Keyword: "return" })
+		// TODO: collect declarations
+		// TODO: analyze return type
+
+		var innerScope = new Scope() { Parent = parentScope };
+
+		foreach (var node in nodes)
 		{
-			scope.Expressions.Add(new ReturnVoidExpression());
+			var targetResult = AnalyzeExpression(node, innerScope, queue);
+			if (targetResult is KeywordExpression { Keyword: "return" })
+			{
+				innerScope.Expressions.Add(new ReturnVoidExpression());
+			}
+			else
+			{
+				innerScope.Expressions.Add(targetResult);
+			}
 		}
-		else
-		{
-			scope.Expressions.Add(targetResult);
-		}
+
+		// TODO: analyze return type of function scope
+		var returnType = new DotnetAnalysisType(typeof(int));
+		return new FunctionExpression(innerScope, returnType);
 	}
 
 	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue)
@@ -112,17 +121,7 @@ public static class Analyzer
 			}
 			case BracesNode { Lines: { } lines }:
 			{
-				// TODO: all braces are functions for now, future: InlineScopeExpression
-
-				var innerScope = new Scope() { Parent = scope };
-				foreach (var line in lines)
-				{
-					AnalyzeLine(line, innerScope, queue);
-				}
-
-				// TODO: analyze return type of function scope
-				var returnType = new DotnetAnalysisType(typeof(int));
-				return new FunctionExpression(innerScope, returnType);
+				return AnalyzeScope(lines, scope, queue);
 			}
 			case MemberNode { Target: { } target, Member: { } member }:
 			{
