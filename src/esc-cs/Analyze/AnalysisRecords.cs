@@ -36,6 +36,12 @@ public record class UnknownAnalysisType() : AnalysisType
 
 	public override String FullName => "Unknown";
 }
+public record class VoidAnalysisType() : AnalysisType
+{
+	public static readonly VoidAnalysisType Instance = new();
+
+	public override String FullName => "Void";
+}
 public record class FunctionAnalysisType(AnalysisType ReturnType) : AnalysisType
 {
 	public override String FullName => "Function";
@@ -48,8 +54,8 @@ public record class DotnetAnalysisType(Type Type) : AnalysisType
 public abstract record class TypedExpression(AnalysisType Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(UnknownAnalysisType.Instance);
 public record class IntrinsicFunctionExpression(String Name, AnalysisType Type) : TypedExpression(Type);
-public record class ReturnVoidExpression() : TypedExpression(UnknownAnalysisType.Instance);
-public record class ReturnValueExpression(TypedExpression ReturnValue) : TypedExpression(ReturnValue.Type);
+public record class VoidExpression() : TypedExpression(VoidAnalysisType.Instance) { public static readonly VoidExpression Instance = new(); }
+public record class ReturnValueExpression(TypedExpression ReturnValue) : TypedExpression(ReturnValue.Type) { public static readonly ReturnValueExpression VoidInstance = new ReturnValueExpression(VoidExpression.Instance); }
 public record class IntLiteralExpression(Int32 Value) : TypedExpression(new DotnetAnalysisType(typeof(Int32)));
 public record class StringLiteralExpression(String Value) : TypedExpression(new DotnetAnalysisType(typeof(String)));
 public record class BooleanLiteralExpression(Boolean Value) : TypedExpression(new DotnetAnalysisType(typeof(Boolean)));
@@ -60,6 +66,6 @@ public record class FunctionExpression(Scope Scope, AnalysisType ReturnType) : T
 public record class MemberMethodGroupExpression(TypedExpression Target, String MethodName) : TypedExpression(UnknownAnalysisType.Instance); // actual type depends on method selection
 public record class CallDotnetMethodExpression(AnalysisType ReturnType, System.Reflection.MethodInfo MethodInfo, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
 public record class CallExpression(AnalysisType ReturnType, TypedExpression Target, TypedExpression[] Args) : TypedExpression(ReturnType);
-public record class ParameterExpression() : TypedExpression(Type: UnknownAnalysisType.Instance); // depends on usage
+public record class ParameterExpression(AnalysisType Type) : TypedExpression(Type: Type);
 public record class AssignExpression(AnalysisType Type, TypedExpression Target, TypedExpression Value) : TypedExpression(Type);
 public record class LogicalNegationExpression(TypedExpression Node) : TypedExpression(new DotnetAnalysisType(typeof(Boolean)));

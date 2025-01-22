@@ -72,7 +72,7 @@ public static class Evaluator
 			ParameterExpression parameterExpression => EvaluateParameterExpression(parameterExpression, table, programOutput),
 			IntrinsicFunctionExpression intrinsicFunctionExpression => EvaluateIntrinsicFunctionExpression(intrinsicFunctionExpression, table, programOutput),
 			ReturnValueExpression returnExpression => EvaluateReturnExpression(returnExpression, table, programOutput),
-			ReturnVoidExpression returnExpression => EvaluateReturnVoidExpression(returnExpression, table, programOutput),
+			VoidExpression returnExpression => EvaluateVoidExpression(returnExpression, table, programOutput),
 			DeclarationExpression declarationExpression => EvaluateDeclarationExpression(declarationExpression, table, programOutput),
 			_ => throw new NotImplementedException($"Invalid typed expression: {value}"),
 		};
@@ -90,9 +90,9 @@ public static class Evaluator
 		return new ReturnValueEvaluation(EvaluateTypedExpression(returnExpression.ReturnValue, table, programOutput));
 	}
 
-	private static Evaluation EvaluateReturnVoidExpression(ReturnVoidExpression returnExpression, ValueTable table, StringWriter programOutput)
+	private static Evaluation EvaluateVoidExpression(VoidExpression returnExpression, ValueTable table, StringWriter programOutput)
 	{
-		return new ReturnValueEvaluation(VoidEvaluation.Instance);
+		return VoidEvaluation.Instance;
 	}
 
 	private static Evaluation EvaluateIntrinsicFunctionExpression(IntrinsicFunctionExpression intrinsicFunctionExpression, ValueTable table, StringWriter programOutput)

@@ -488,10 +488,10 @@ public static class Printer
 				outputFile.WriteLine($"keyword: {keyword} ({type})");
 				break;
 			}
-			case ReturnVoidExpression:
+			case VoidExpression voidExpression:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine("return void");
+				outputFile.WriteLine("void");
 				break;
 			}
 			default:

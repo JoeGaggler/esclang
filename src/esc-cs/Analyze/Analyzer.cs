@@ -38,7 +38,7 @@ public static class Analyzer
 			var targetResult = AnalyzeExpression(node, innerScope, queue, log);
 			if (targetResult is KeywordExpression { Keyword: "return" })
 			{
-				innerScope.Expressions.Add(new ReturnVoidExpression());
+				innerScope.Expressions.Add(ReturnValueExpression.VoidInstance);
 			}
 			else
 			{
@@ -69,18 +69,14 @@ public static class Analyzer
 		log.WriteLine($"{scope.Id:0000} expression: {node}");
 		switch (node)
 		{
-			case EscFile { Lines: { } lines }:
-			{
-				return AnalyzeScope(lines, scope, queue, log);
-			}
+			case EscFile { Lines: { } lines }: { return AnalyzeScope(lines, scope, queue, log); }
+			case LiteralStringNode { Text: { Length: > 0 } stringLiteral }: { return new StringLiteralExpression(stringLiteral); }
+			case BracesNode { Lines: { } lines }: { return AnalyzeScope(lines, scope, queue, log); }
+			case ParameterNode: { return new ParameterExpression(UnknownAnalysisType.Instance); }
 			case LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
 			{
 				var intVal = Int32.Parse(numberLiteral);
 				return new IntLiteralExpression(intVal);
-			}
-			case LiteralStringNode { Text: { Length: > 0 } stringLiteral }:
-			{
-				return new StringLiteralExpression(stringLiteral);
 			}
 			case IdentifierNode { Text: { Length: > 0 } id }:
 			{
@@ -131,10 +127,7 @@ public static class Analyzer
 
 				return new AddExpression(addType, Left: leftValue, Right: rightValue);
 			}
-			case BracesNode { Lines: { } lines }:
-			{
-				return AnalyzeScope(lines, scope, queue, log);
-			}
+
 			case MemberNode { Target: { } target, Member: { } member }:
 			{
 				var targetExpression = AnalyzeExpression(target, scope, queue, log);
@@ -187,7 +180,6 @@ public static class Analyzer
 					}
 					throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
 				}
-
 				if (targetExpression is MemberMethodGroupExpression { MethodName: { } methodName, Target: { } methodTarget })
 				{
 					if (methodTarget.Type is not DotnetAnalysisType { Type: { } targetType })
@@ -251,10 +243,7 @@ public static class Analyzer
 				}
 				return new LogicalNegationExpression(nodeValue);
 			}
-			case ParameterNode:
-			{
-				return new ParameterExpression();
-			}
+
 			case DeclareStaticNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
 			{
 				if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })

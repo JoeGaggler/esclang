@@ -383,7 +383,8 @@ main procedure
     call
       intrinsic: print
       identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    return void
+    return
+      void
     call
       intrinsic: print
       call
