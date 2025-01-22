@@ -17,4 +17,4 @@ b := a + func1 + 5
 print a
 print b
 return // early return
-print (b.ToString "C") // C=currency
+//print (b.ToString "C") // C=currency

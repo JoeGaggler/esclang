@@ -133,19 +133,9 @@ Lex:
 0130: 249 + 1 -- (19, 7) -- Spaces -- " "
 0131: 250 + 15 -- (19, 8) -- Comment -- // early return
 0132: 265 + 1 -- (19, 23) -- EndOfLine -- \n
-0133: 266 + 5 -- (20, 1) -- Identifier -- print
-0134: 271 + 1 -- (20, 6) -- Spaces -- " "
-0135: 272 + 1 -- (20, 7) -- ParenOpen -- (
-0136: 273 + 1 -- (20, 8) -- Identifier -- b
-0137: 274 + 1 -- (20, 9) -- Period -- .
-0138: 275 + 8 -- (20, 10) -- Identifier -- ToString
-0139: 283 + 1 -- (20, 18) -- Spaces -- " "
-0140: 284 + 3 -- (20, 19) -- LiteralString -- "C"
-0141: 287 + 1 -- (20, 22) -- ParenClose -- )
-0142: 288 + 1 -- (20, 23) -- Spaces -- " "
-0143: 289 + 13 -- (20, 24) -- Comment -- // C=currency
-0144: 302 + 1 -- (20, 37) -- EndOfLine -- \n
-0145: 303 + 0 -- (21, 1) -- EndOfFile -- <EOF>
+0133: 266 + 38 -- (20, 1) -- Comment -- //print (b.ToString "C") // C=currency
+0134: 304 + 1 -- (20, 39) -- EndOfLine -- \n
+0135: 305 + 0 -- (21, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declare-static
@@ -242,21 +232,10 @@ call
   arguments
     identifier: b
 identifier: return
-call
-  target
-    identifier: print
-  arguments
-    call
-      target
-        member
-          identifier: b
-          identifier: ToString
-      arguments
-        "C"
 
 Analysis Log:
 0000 expression: EscFile { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 scope: nodes=9
+0001 scope: nodes=8
 0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func2 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
 0001 type: 
 0001 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
@@ -321,12 +300,6 @@ Analysis Log:
 0001 expression: IdentifierNode { Text = print }
 0001 expression: IdentifierNode { Text = b }
 0001 expression: IdentifierNode { Text = return }
-0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: IdentifierNode { Text = print }
-0001 expression: CallNode { Target = MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }
-0001 expression: IdentifierNode { Text = b }
-0001 expression: LiteralStringNode { Text = C }
 
 Analyze:
 main procedure
@@ -385,16 +358,6 @@ main procedure
       identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
     return
       void
-    call
-      intrinsic: print
-      call
-        method info: System.String ToString(System.String)
-        type: Dotnet::System.String
-        return type: Dotnet::System.String
-        target:
-          identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-        args: 1
-          string: C
 
 Output:
 39

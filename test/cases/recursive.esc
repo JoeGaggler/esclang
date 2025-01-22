@@ -1,11 +1,11 @@
 func :: {
     cond : bool : <>
     if !cond {
-        return func true
+        return (func true) // TODO: make parens optional for return
     }
     return 100
 }
 a := 10
-b := a + func + 1
+b := a + func false + 1
 print b
 return b

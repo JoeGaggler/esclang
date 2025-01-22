@@ -18,9 +18,190 @@ public static class Analyzer
 		var queue = new AnalysisQueue();
 
 		var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
+		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, globalScope);
+		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc2, globalScope);
+		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc2, globalScope);
+		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc2, globalScope);
 
-		Analysis analysis = new(Main: mainFunc.Scope);
+		Analysis analysis = new(Main: mainFunc2.Scope);
 		return analysis;
+	}
+
+	private static TypedExpression TypeCheck(TypedExpression expression, Scope scope)
+	{
+		switch (expression)
+		{
+			case VoidExpression { }: { return expression; }
+			case BooleanLiteralExpression { }: { return expression; }
+			case IntLiteralExpression { }: { return expression; }
+			case StringLiteralExpression { }: { return expression; }
+			case ParameterExpression { }: { return expression; }
+
+			case FunctionExpression { ReturnType: { } returnType, Scope: { } funcScope }:
+			{
+				AnalysisType? newReturnType = null;
+
+				var newExpressions = new List<TypedExpression>();
+				foreach (var innerExpr in funcScope.Expressions)
+				{
+					var newExpression = TypeCheck(innerExpr, funcScope);
+					if (newExpression is ReturnValueExpression { Type: { } retType } && newReturnType is null)
+					{
+						newReturnType = retType;
+					}
+					newExpressions.Add(newExpression);
+				}
+				funcScope.Expressions = newExpressions;
+				return new FunctionExpression(funcScope, newReturnType ?? UnknownAnalysisType.Instance);
+			}
+			case DeclarationExpression { Type: { } declType, Value: { } value, Identifier: { } id, IsStatic: { } isStatic }:
+			{
+				// TODO: not implemented yet
+				var newValue = TypeCheck(value, scope);
+				var actualType = (declType, newValue.Type) switch
+				{
+					(UnknownAnalysisType _, _) => newValue.Type,
+					_ => declType,
+				};
+				scope.NameTable[id] = actualType;
+				return new DeclarationExpression(actualType, id, newValue, isStatic);
+			}
+			case CallExpression { Type: { } callType, Args: { } args, ReturnType: { } returnType, Target: { } target }:
+			{
+				// TODO: not implemented yet
+
+				var newArgs = new List<TypedExpression>();
+				foreach (var arg in args)
+				{
+					var newArg = TypeCheck(arg, scope);
+					newArgs.Add(newArg);
+				}
+
+				var newTarget = TypeCheck(target, scope);
+				if (newTarget is IdentifierExpression { Identifier: { } identifier, Type: { } type })
+				{
+					if (!scope.TryGetNameTableValue(identifier, out var targetType))
+					{
+						throw new Exception($"Unknown identifier: {identifier}");
+					}
+					if (targetType is FunctionAnalysisType { ReturnType: { } newRetType })
+					{
+						return new CallExpression(ReturnType: newRetType, Target: newTarget, Args: [.. newArgs]);
+					}
+					else
+					{
+						throw new Exception($"Invalid identifier type: {targetType}");
+					}
+					// return new CallExpression(ReturnType: UnknownAnalysisType.Instance, Target: targetExpression, Args: [.. argumentExpressions]);
+				}
+
+				return new CallExpression(callType, Target: newTarget, Args: [.. newArgs]);
+			}
+			// TODO: CallDotnetMethodExpression
+			// case CallDotnetMethodExpression { ReturnType: { } callType, MethodInfo: { } methodInfo, Args: { } args, Target: { } methodTarget }:
+			// {
+			// 	// TODO: not implemented yet
+			// 	var newTarg = TypeCheck(methodTarget, scope);
+			// 	var newArgs = new List<TypedExpression>();
+			// 	foreach (var arg in args)
+			// 	{
+			// 		var newArg = TypeCheck(arg, scope);
+			// 		newArgs.Add(newArg);
+			// 	}
+			// 	return new CallDotnetMethodExpression(callType, MethodInfo: methodInfo, Target: newTarg, Args: [.. newArgs]);
+
+			// 	if (methodTarget.Type is not DotnetAnalysisType { Type: { } targetType })
+			// 	{
+			// 		throw new Exception("Invalid member target type");
+			// 	}
+
+			// 	MethodInfo? found = null;
+			// 	foreach (var methodInfo in targetType.GetMethods().Where(m => m.Name == methodName))
+			// 	{
+			// 		// TODO: check argument types
+			// 		if (methodInfo.GetParameters().Length != argumentExpressions.Count)
+			// 		{
+			// 			continue;
+			// 		}
+
+			// 		found = methodInfo;
+			// 		break;
+			// 	}
+
+			// 	if (found is null)
+			// 	{
+			// 		throw new Exception($"Method not found: {methodName}");
+			// 	}
+
+			// 	var foundReturnType = new DotnetAnalysisType(found.ReturnType);
+			// 	return new CallDotnetMethodExpression(ReturnType: foundReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
+			// }
+			case ReturnValueExpression { ReturnValue: { } returnValue, Type: { } returnType }:
+			{
+				// TODO: not implemented yet
+				var newReturnValue = TypeCheck(returnValue, scope);
+				return new ReturnValueExpression(newReturnValue);
+			}
+			case AddExpression { Type: { } addType, Left: { } left, Right: { } right }:
+			{
+				// TODO: not implemented yet
+				var newLeft = TypeCheck(left, scope);
+				var newRight = TypeCheck(right, scope);
+
+				if (newLeft.Type != newRight.Type)
+				{
+					throw new Exception($"Type mismatch: left={newLeft.Type}, right={newRight.Type}");
+				}
+
+				var newAddType = newLeft.Type; // assuming result is same type as operands
+
+				return new AddExpression(newAddType, Left: newLeft, Right: newRight);
+			}
+			case AssignExpression { Type: { } assignType, Target: { } target, Value: { } value }:
+			{
+				// TODO: not implemented yet
+				var newTarget = TypeCheck(target, scope);
+				var newValue = TypeCheck(value, scope);
+				return new AssignExpression(assignType, Target: newTarget, Value: newValue);
+			}
+			case LogicalNegationExpression { Node: { } node, Type: { } type }:
+			{
+				// TODO: not implemented yet
+				var newNode = TypeCheck(node, scope);
+				if (newNode.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
+				{
+					throw new Exception("Invalid logical negation");
+				}
+				return new LogicalNegationExpression(newNode);
+			}
+			case IdentifierExpression { Identifier: { } id, Type: { } idType }:
+			{
+				// scoped identifiers
+				if (!scope.TryGetNameTableValue(id, out var type))
+				{
+					// log.WriteLine($"{scope.Id:0000} queued: id={id}"); // TODO: queue for later analysis, must also have a failure path
+					throw new Exception($"Unknown identifier: {id}");
+				}
+				else if (type is null)
+				{
+					// log.WriteLine($"{scope.Id:0000} queued: typeof id={id}"); // TODO: queue for later analysis, must also have a failure path
+					throw new Exception("Unknown identifier type");
+				}
+
+				if (type is FunctionAnalysisType { ReturnType: { } returnType })
+				{
+					type = returnType;
+				}
+
+				return new IdentifierExpression(type, Identifier: id);
+			}
+			case IntrinsicFunctionExpression { Name: { } name, Type: { } intrinsicType }:
+			{
+				// TODO: not implemented yet
+				return expression;
+			}
+			default: { throw new NotImplementedException($"TODO: TypeCheck: {expression}"); }
+		}
 	}
 
 	// TODO: all braces are functions for now, future: InlineScopeExpression
@@ -94,23 +275,8 @@ public static class Analyzer
 					return new BooleanLiteralExpression(Value: false);
 				}
 
-				// scoped identifiers
-				if (!scope.TryGetNameTableValue(id, out var type))
-				{
-					log.WriteLine($"{scope.Id:0000} queued: id={id}"); // TODO: queue for later analysis, must also have a failure path
-					throw new Exception($"Unknown identifier: {id}");
-				}
-				else if (type is null)
-				{
-					log.WriteLine($"{scope.Id:0000} queued: typeof id={id}"); // TODO: queue for later analysis, must also have a failure path
-					throw new Exception("Unknown identifier type");
-				}
-
-				if (type is FunctionAnalysisType { ReturnType: { } returnType })
-				{
-					type = returnType;
-				}
-
+				// type check in second pass
+				var type = UnknownAnalysisType.Instance;
 				return new IdentifierExpression(type, Identifier: id);
 			}
 			case PlusNode { Left: { } left, Right: { } right }:
@@ -118,13 +284,8 @@ public static class Analyzer
 				var leftValue = AnalyzeExpression(left, scope, queue, log);
 				var rightValue = AnalyzeExpression(right, scope, queue, log);
 
-				if (leftValue.Type != rightValue.Type)
-				{
-					throw new Exception($"Type mismatch: left={leftValue.Type}, right={rightValue.Type}");
-				}
-
-				var addType = leftValue.Type; // assuming result is same type as operands
-
+				// type check in second pass
+				var addType = UnknownAnalysisType.Instance;
 				return new AddExpression(addType, Left: leftValue, Right: rightValue);
 			}
 
@@ -180,52 +341,36 @@ public static class Analyzer
 					}
 					throw new NotImplementedException($"TODO CALLNODE KEYWORD: {keyword}");
 				}
-				if (targetExpression is MemberMethodGroupExpression { MethodName: { } methodName, Target: { } methodTarget })
-				{
-					if (methodTarget.Type is not DotnetAnalysisType { Type: { } targetType })
-					{
-						throw new Exception("Invalid member target type");
-					}
+				// if (targetExpression is MemberMethodGroupExpression { MethodName: { } methodName, Target: { } methodTarget })
+				// {
+				// 	if (methodTarget.Type is not DotnetAnalysisType { Type: { } targetType })
+				// 	{
+				// 		throw new Exception("Invalid member target type");
+				// 	}
 
-					MethodInfo? found = null;
-					foreach (var methodInfo in targetType.GetMethods().Where(m => m.Name == methodName))
-					{
-						// TODO: check argument types
-						if (methodInfo.GetParameters().Length != argumentExpressions.Count)
-						{
-							continue;
-						}
+				// 	MethodInfo? found = null;
+				// 	foreach (var methodInfo in targetType.GetMethods().Where(m => m.Name == methodName))
+				// 	{
+				// 		// TODO: check argument types
+				// 		if (methodInfo.GetParameters().Length != argumentExpressions.Count)
+				// 		{
+				// 			continue;
+				// 		}
 
-						found = methodInfo;
-						break;
-					}
+				// 		found = methodInfo;
+				// 		break;
+				// 	}
 
-					if (found is null)
-					{
-						throw new Exception($"Method not found: {methodName}");
-					}
+				// 	if (found is null)
+				// 	{
+				// 		throw new Exception($"Method not found: {methodName}");
+				// 	}
 
-					var foundReturnType = new DotnetAnalysisType(found.ReturnType);
-					return new CallDotnetMethodExpression(ReturnType: foundReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
-				}
+				// 	var foundReturnType = new DotnetAnalysisType(found.ReturnType);
+				// 	return new CallDotnetMethodExpression(ReturnType: foundReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
+				// }
 
-				if (targetExpression is IdentifierExpression { Identifier: { } identifier, Type: { } type })
-				{
-					if (!scope.TryGetNameTableValue(identifier, out var targetType))
-					{
-						throw new Exception($"Unknown identifier: {identifier}");
-					}
-					if (targetType is FunctionAnalysisType { ReturnType: { } returnType })
-					{
-						return new CallExpression(ReturnType: returnType, Target: targetExpression, Args: [.. argumentExpressions]);
-					}
-					else
-					{
-						throw new Exception($"Invalid identifier type: {targetType}");
-					}
-				}
-
-				throw new NotImplementedException($"TODO: call node -- target={targetExpression}, arguments={String.Join(", ", argumentExpressions.Select(i => $"{i}"))}");
+				return new CallExpression(ReturnType: UnknownAnalysisType.Instance, Target: targetExpression, Args: [.. argumentExpressions]);
 			}
 			case AssignNode { Target: { } target, Value: { } value }:
 			{
@@ -237,10 +382,6 @@ public static class Analyzer
 			case LogicalNegationNode { Node: { } innerNode }:
 			{
 				var nodeValue = AnalyzeExpression(innerNode, scope, queue, log);
-				if (nodeValue.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
-				{
-					throw new Exception("Invalid logical negation");
-				}
 				return new LogicalNegationExpression(nodeValue);
 			}
 
@@ -274,11 +415,10 @@ public static class Analyzer
 					throw new Exception("Duplicate identifier");
 				}
 
-				var declType = AnalyzeTypeExpression(typeNode, scope, queue, log);
+				var declType = AnalyzeTypeExpression(typeNode, scope, queue, log) ?? UnknownAnalysisType.Instance; // type is refined in second pass
 				var value = AnalyzeExpression(valueNode, scope, queue, log);
-				var actualType = declType ?? value.Type;
-				scope.NameTable[id] = actualType;
-				return new DeclarationExpression(actualType, id, value, true);
+				scope.NameTable[id] = declType;
+				return new DeclarationExpression(declType, id, value, true);
 			}
 			default:
 			{
