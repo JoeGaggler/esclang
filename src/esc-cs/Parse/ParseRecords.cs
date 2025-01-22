@@ -1,8 +1,8 @@
 namespace EscLang.Parse;
 
-public record EscFile(List<SyntaxNode> Lines) { }
-
 public abstract record SyntaxNode { }
+
+public record EscFile(List<SyntaxNode> Lines) : SyntaxNode { }
 
 public record BracesNode(List<SyntaxNode> Lines) : SyntaxNode { }
 

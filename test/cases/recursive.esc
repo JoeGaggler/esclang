@@ -1,0 +1,11 @@
+func :: {
+    cond : bool : <>
+    if !cond {
+        return func true
+    }
+    return 100
+}
+a := 10
+b := a + func + 1
+print b
+return b

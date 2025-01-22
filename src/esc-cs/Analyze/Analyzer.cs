@@ -15,10 +15,9 @@ public static class Analyzer
 	public static Analysis Analyze(Parse.EscFile file, StreamWriter log)
 	{
 		var globalScope = new Scope(++ScopeCounter);
-		log.WriteLine($"{globalScope.Id:0000} file: lines={file.Lines.Count}");
 		var queue = new AnalysisQueue();
 
-		var mainFunc = AnalyzeScope(file.Lines, globalScope, queue, log);
+		var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
 
 		Analysis analysis = new(Main: mainFunc.Scope);
 		return analysis;
@@ -70,6 +69,10 @@ public static class Analyzer
 		log.WriteLine($"{scope.Id:0000} expression: {node}");
 		switch (node)
 		{
+			case EscFile { Lines: { } lines }:
+			{
+				return AnalyzeScope(lines, scope, queue, log);
+			}
 			case LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
 			{
 				var intVal = Int32.Parse(numberLiteral);

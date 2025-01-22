@@ -255,7 +255,7 @@ call
         "C"
 
 Analysis Log:
-0000 file: lines=9
+0000 expression: EscFile { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
 0001 scope: nodes=9
 0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func2 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
 0001 type: 
