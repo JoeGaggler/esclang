@@ -65,7 +65,7 @@ public static class Evaluator
 			IdentifierExpression identifierExpression => EvaluateIdentifierExpression(identifierExpression, table, programOutput),
 			AddExpression addExpression => EvaluateAddExpression(addExpression, table, programOutput),
 			FunctionExpression funcScopeExp => EvaluateFunctionExpression(funcScopeExp, table, programOutput), // TODO: brace scope without function
-			CallDotnetMethodExpression callExpression => EvaluateCallDotnetMethodExpression(callExpression, table, programOutput),
+			DotnetMemberMethodExpression callExpression => EvaluateCallDotnetMethodExpression(callExpression, table, programOutput),
 			CallExpression callExpression => EvaluateCallExpression(callExpression, table, programOutput),
 			AssignExpression assignExpression => EvaluateAssignExpression(assignExpression, table, programOutput),
 			LogicalNegationExpression logicalNegationExpression => EvaluateLogicalNegationExpression(logicalNegationExpression, table, programOutput),
@@ -187,28 +187,38 @@ public static class Evaluator
 			var returnExpression = CallFunctionExpression(func, args, table, programOutput);
 			return returnExpression;
 		}
+		else if (targetExpression is DotnetMemberMethodEvaluation { } eval)
+		{
+			var returnExpression = CallDotnetMemberMethodEvaluation(eval, args, table, programOutput);
+			return returnExpression;
+		}
 		else
 		{
-			throw new NotImplementedException($"Invalid call target: {methodTarget}");
+			throw new NotImplementedException($"Invalid call target: {targetExpression}");
 		}
 	}
 
-	private static Evaluation EvaluateCallDotnetMethodExpression(CallDotnetMethodExpression callExpression, ValueTable table, StringWriter programOutput)
+	private static Evaluation EvaluateCallDotnetMethodExpression(DotnetMemberMethodExpression callExpression, ValueTable table, StringWriter programOutput)
 	{
-		if (callExpression is not { Type: { } returnType, MethodInfo: { } methodInfo, Target: { } methodTarget })
+		var target = EvaluateTypedExpression(callExpression.Target, table, programOutput);
+		return new DotnetMemberMethodEvaluation(MethodInfo: callExpression.MethodInfo, Target: target); // TODO: implement
+	}
+
+	private static Evaluation CallDotnetMemberMethodEvaluation(DotnetMemberMethodEvaluation callExpression, Evaluation[] evalArgs, ValueTable table, StringWriter programOutput)
+	{
+		if (callExpression is not { MethodInfo: { } methodInfo, Target: { } targetExpression })
 		{
 			throw new NotImplementedException($"Invalid call expression: {callExpression}");
 		}
-		var args = new Object[callExpression.Args.Length];
-		foreach (var (i, arg) in callExpression.Args.Index())
+		var args = new Object[evalArgs.Length];
+		foreach (var (i, arg) in evalArgs.Index())
 		{
-			var argExp = EvaluateTypedExpression(arg, table, programOutput);
-			var argObj = EvaluateExpressionResult(argExp);
+			var argObj = EvaluateExpressionResult(arg);
 			args[i] = argObj;
 		}
-		var targetExpression = EvaluateTypedExpression(methodTarget, table, programOutput);
 		var targetObject = EvaluateExpressionResult(targetExpression);
 		var returnValue = methodInfo.Invoke(targetObject, args);
+		var returnType = new DotnetAnalysisType(methodInfo.ReturnType);
 		var returnExpression = CreateExpressionResult(returnType, returnValue);
 		return returnExpression;
 	}

@@ -129,13 +129,27 @@ Lex:
 0126: 240 + 1 -- (18, 6) -- Spaces -- " "
 0127: 241 + 1 -- (18, 7) -- Identifier -- b
 0128: 242 + 1 -- (18, 8) -- EndOfLine -- \n
-0129: 243 + 6 -- (19, 1) -- Identifier -- return
-0130: 249 + 1 -- (19, 7) -- Spaces -- " "
-0131: 250 + 15 -- (19, 8) -- Comment -- // early return
-0132: 265 + 1 -- (19, 23) -- EndOfLine -- \n
-0133: 266 + 38 -- (20, 1) -- Comment -- //print (b.ToString "C") // C=currency
-0134: 304 + 1 -- (20, 39) -- EndOfLine -- \n
-0135: 305 + 0 -- (21, 1) -- EndOfFile -- <EOF>
+0129: 243 + 5 -- (19, 1) -- Identifier -- print
+0130: 248 + 1 -- (19, 6) -- Spaces -- " "
+0131: 249 + 1 -- (19, 7) -- ParenOpen -- (
+0132: 250 + 1 -- (19, 8) -- Identifier -- b
+0133: 251 + 1 -- (19, 9) -- Period -- .
+0134: 252 + 8 -- (19, 10) -- Identifier -- ToString
+0135: 260 + 1 -- (19, 18) -- Spaces -- " "
+0136: 261 + 3 -- (19, 19) -- LiteralString -- "C"
+0137: 264 + 1 -- (19, 22) -- ParenClose -- )
+0138: 265 + 1 -- (19, 23) -- Spaces -- " "
+0139: 266 + 13 -- (19, 24) -- Comment -- // C=currency
+0140: 279 + 1 -- (19, 37) -- EndOfLine -- \n
+0141: 280 + 6 -- (20, 1) -- Identifier -- return
+0142: 286 + 1 -- (20, 7) -- Spaces -- " "
+0143: 287 + 15 -- (20, 8) -- Comment -- // early return
+0144: 302 + 1 -- (20, 23) -- EndOfLine -- \n
+0145: 303 + 5 -- (21, 1) -- Identifier -- print
+0146: 308 + 1 -- (21, 6) -- Spaces -- " "
+0147: 309 + 13 -- (21, 7) -- LiteralString -- "unreachable"
+0148: 322 + 1 -- (21, 20) -- EndOfLine -- \n
+0149: 323 + 0 -- (22, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declare-static
@@ -231,11 +245,27 @@ call
     identifier: print
   arguments
     identifier: b
+call
+  target
+    identifier: print
+  arguments
+    call
+      target
+        member
+          identifier: b
+          identifier: ToString
+      arguments
+        "C"
 identifier: return
+call
+  target
+    identifier: print
+  arguments
+    "unreachable"
 
 Analysis Log:
 0000 expression: EscFile { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 scope: nodes=8
+0001 scope: nodes=10
 0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func2 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
 0001 type: 
 0001 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
@@ -299,7 +329,16 @@ Analysis Log:
 0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
 0001 expression: IdentifierNode { Text = print }
 0001 expression: IdentifierNode { Text = b }
+0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: IdentifierNode { Text = print }
+0001 expression: CallNode { Target = MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }
+0001 expression: IdentifierNode { Text = b }
+0001 expression: LiteralStringNode { Text = C }
 0001 expression: IdentifierNode { Text = return }
+0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
+0001 expression: IdentifierNode { Text = print }
+0001 expression: LiteralStringNode { Text = unreachable }
 
 Analyze:
 main procedure
@@ -335,7 +374,7 @@ main procedure
             add
               identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
               call
-                identifier: func2 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+                identifier: func2 (UnknownAnalysisType { FullName = Unknown })
                 bool: False
           return
             identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
@@ -356,12 +395,26 @@ main procedure
     call
       intrinsic: print
       identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+    call
+      intrinsic: print
+      call
+        call
+          method info: System.String ToString(System.String)
+          type: Dotnet::System.String
+          return type: Dotnet::System.String
+          target:
+            identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
+        string: C
     return
       void
+    call
+      intrinsic: print
+      string: unreachable
 
 Output:
 39
 146
+$146.00
 
 Stats:
 -    Read: 0.00s

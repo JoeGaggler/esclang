@@ -18,16 +18,13 @@ public static class Analyzer
 		var queue = new AnalysisQueue();
 
 		var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
-		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, globalScope);
-		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc2, globalScope);
-		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc2, globalScope);
-		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc2, globalScope);
+		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope);
 
 		Analysis analysis = new(Main: mainFunc2.Scope);
 		return analysis;
 	}
 
-	private static TypedExpression TypeCheck(TypedExpression expression, Scope scope)
+	private static TypedExpression TypeCheck(TypedExpression expression, TypedExpression? parentExpression, Scope scope)
 	{
 		switch (expression)
 		{
@@ -37,6 +34,8 @@ public static class Analyzer
 			case StringLiteralExpression { }: { return expression; }
 			case ParameterExpression { }: { return expression; }
 
+			// case DotnetMemberMethodExpression: { return expression; } // TODO
+
 			case FunctionExpression { ReturnType: { } returnType, Scope: { } funcScope }:
 			{
 				AnalysisType? newReturnType = null;
@@ -44,7 +43,7 @@ public static class Analyzer
 				var newExpressions = new List<TypedExpression>();
 				foreach (var innerExpr in funcScope.Expressions)
 				{
-					var newExpression = TypeCheck(innerExpr, funcScope);
+					var newExpression = TypeCheck(innerExpr, expression, funcScope);
 					if (newExpression is ReturnValueExpression { Type: { } retType } && newReturnType is null)
 					{
 						newReturnType = retType;
@@ -57,7 +56,9 @@ public static class Analyzer
 			case DeclarationExpression { Type: { } declType, Value: { } value, Identifier: { } id, IsStatic: { } isStatic }:
 			{
 				// TODO: not implemented yet
-				var newValue = TypeCheck(value, scope);
+				var newValue = TypeCheck(value, expression, scope);
+				// Console.WriteLine($"TypeCheck DeclExpr: {id} = {newValue}");
+
 				var actualType = (declType, newValue.Type) switch
 				{
 					(UnknownAnalysisType _, _) => newValue.Type,
@@ -73,11 +74,14 @@ public static class Analyzer
 				var newArgs = new List<TypedExpression>();
 				foreach (var arg in args)
 				{
-					var newArg = TypeCheck(arg, scope);
+					var newArg = TypeCheck(arg, expression, scope);
 					newArgs.Add(newArg);
 				}
 
-				var newTarget = TypeCheck(target, scope);
+				// Partially type-checked call expression used as context for target type-checking (TODO: dependency graph)
+				var newCallExpression = new CallExpression(callType, Target: target, Args: [.. newArgs]);
+
+				var newTarget = TypeCheck(target, newCallExpression, scope);
 				if (newTarget is IdentifierExpression { Identifier: { } identifier, Type: { } type })
 				{
 					if (!scope.TryGetNameTableValue(identifier, out var targetType))
@@ -86,71 +90,67 @@ public static class Analyzer
 					}
 					if (targetType is FunctionAnalysisType { ReturnType: { } newRetType })
 					{
-						return new CallExpression(ReturnType: newRetType, Target: newTarget, Args: [.. newArgs]);
+						return newCallExpression with { ReturnType = newRetType, Type = newRetType };
 					}
 					else
 					{
 						throw new Exception($"Invalid identifier type: {targetType}");
 					}
-					// return new CallExpression(ReturnType: UnknownAnalysisType.Instance, Target: targetExpression, Args: [.. argumentExpressions]);
 				}
 
-				return new CallExpression(callType, Target: newTarget, Args: [.. newArgs]);
+				return newCallExpression with { Target = newTarget, ReturnType = newTarget.Type, Type = newTarget.Type };
 			}
-			// TODO: CallDotnetMethodExpression
-			// case CallDotnetMethodExpression { ReturnType: { } callType, MethodInfo: { } methodInfo, Args: { } args, Target: { } methodTarget }:
-			// {
-			// 	// TODO: not implemented yet
-			// 	var newTarg = TypeCheck(methodTarget, scope);
-			// 	var newArgs = new List<TypedExpression>();
-			// 	foreach (var arg in args)
-			// 	{
-			// 		var newArg = TypeCheck(arg, scope);
-			// 		newArgs.Add(newArg);
-			// 	}
-			// 	return new CallDotnetMethodExpression(callType, MethodInfo: methodInfo, Target: newTarg, Args: [.. newArgs]);
+			case MemberExpression { Target: { } target, MemberName: { } methodName, Type: { } type }:
+			{
+				// TODO: this depends on if the parent is a call expression (method) or not (property)
+				// for a call, this also depends on the arguments to disambiguate the method group
 
-			// 	if (methodTarget.Type is not DotnetAnalysisType { Type: { } targetType })
-			// 	{
-			// 		throw new Exception("Invalid member target type");
-			// 	}
+				//MemberMethodGroupExpression { Type = UnknownAnalysisType { FullName = Unknown }, Target = IdentifierExpression { Type = UnknownAnalysisType { FullName = Unknown }, Identifier = b }, MethodName = ToString }
+				var newTarget = TypeCheck(target, expression, scope);
+				var targetType = newTarget.Type;
+				if (targetType is DotnetAnalysisType { Type: { } dotnetType })
+				{
+					if (parentExpression is CallExpression { Args: { } argumentExpressions })
+					{
+						foreach (var methodInfo in dotnetType.GetMethods().Where(m => m.Name == methodName))
+						{
+							// TODO: check argument types
+							if (methodInfo.GetParameters().Length != argumentExpressions.Length)
+							{
+								continue;
+							}
 
-			// 	MethodInfo? found = null;
-			// 	foreach (var methodInfo in targetType.GetMethods().Where(m => m.Name == methodName))
-			// 	{
-			// 		// TODO: check argument types
-			// 		if (methodInfo.GetParameters().Length != argumentExpressions.Count)
-			// 		{
-			// 			continue;
-			// 		}
+							return new DotnetMemberMethodExpression(ReturnType: new DotnetAnalysisType(methodInfo.ReturnType), MethodInfo: methodInfo, Target: newTarget);
+						}
 
-			// 		found = methodInfo;
-			// 		break;
-			// 	}
-
-			// 	if (found is null)
-			// 	{
-			// 		throw new Exception($"Method not found: {methodName}");
-			// 	}
-
-			// 	var foundReturnType = new DotnetAnalysisType(found.ReturnType);
-			// 	return new CallDotnetMethodExpression(ReturnType: foundReturnType, MethodInfo: found, Target: methodTarget, Args: [.. argumentExpressions]);
-			// }
+						throw new NotImplementedException($"TODO: TypeCheck MemberExpression not found");
+					}
+					else
+					{
+						throw new NotImplementedException($"TODO: TypeCheck MemberExpression parent: {parentExpression}");
+					}
+				}
+				else
+				{
+					throw new Exception($"Invalid member target type: {targetType}");
+				}
+			}
 			case ReturnValueExpression { ReturnValue: { } returnValue, Type: { } returnType }:
 			{
 				// TODO: not implemented yet
-				var newReturnValue = TypeCheck(returnValue, scope);
+				var newReturnValue = TypeCheck(returnValue, expression, scope);
 				return new ReturnValueExpression(newReturnValue);
 			}
 			case AddExpression { Type: { } addType, Left: { } left, Right: { } right }:
 			{
 				// TODO: not implemented yet
-				var newLeft = TypeCheck(left, scope);
-				var newRight = TypeCheck(right, scope);
+				var newLeft = TypeCheck(left, expression, scope);
+				var newRight = TypeCheck(right, expression, scope);
 
 				if (newLeft.Type != newRight.Type)
 				{
-					throw new Exception($"Type mismatch: left={newLeft.Type}, right={newRight.Type}");
+					throw new Exception($"Type mismatch: left={newLeft.Type}, right={newRight}");
+					// Console.WriteLine($"Type mismatch: left={newLeft.Type}, right={newRight}");
 				}
 
 				var newAddType = newLeft.Type; // assuming result is same type as operands
@@ -160,14 +160,14 @@ public static class Analyzer
 			case AssignExpression { Type: { } assignType, Target: { } target, Value: { } value }:
 			{
 				// TODO: not implemented yet
-				var newTarget = TypeCheck(target, scope);
-				var newValue = TypeCheck(value, scope);
+				var newTarget = TypeCheck(target, expression, scope);
+				var newValue = TypeCheck(value, expression, scope);
 				return new AssignExpression(assignType, Target: newTarget, Value: newValue);
 			}
 			case LogicalNegationExpression { Node: { } node, Type: { } type }:
 			{
 				// TODO: not implemented yet
-				var newNode = TypeCheck(node, scope);
+				var newNode = TypeCheck(node, expression, scope);
 				if (newNode.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
 				{
 					throw new Exception("Invalid logical negation");
@@ -298,8 +298,8 @@ public static class Analyzer
 					throw new Exception("Invalid member identifier");
 				}
 
-				// TODO: Assuming member is method for now
-				return new MemberMethodGroupExpression(Target: targetExpression, MethodName: memberId);
+				var type = UnknownAnalysisType.Instance; // type check in second pass
+				return new MemberExpression(type, Target: targetExpression, MemberName: memberId);
 			}
 			case CallNode { Target: { } target, Arguments: { } arguments }:
 			{

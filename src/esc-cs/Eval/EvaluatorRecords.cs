@@ -118,6 +118,7 @@ public record class IntEvaluation(Int32 Value) : Evaluation;
 public record class StringEvaluation(String Value) : Evaluation;
 public record class BooleanEvaluation(Boolean Value) : Evaluation;
 public record class FunctionDeclarationEvaluation() : Evaluation; // TODO: inputs/outputs
+public record class DotnetMemberMethodEvaluation(System.Reflection.MethodInfo MethodInfo, Evaluation Target) : Evaluation;
 public record class ReturnVoidEvaluation() : Evaluation;
 public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
 public record class FunctionEvaluation(Analyze.FunctionExpression Func) : Evaluation;

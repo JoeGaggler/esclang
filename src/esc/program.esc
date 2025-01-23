@@ -16,5 +16,6 @@ a = 39
 b := a + func1 + 5
 print a
 print b
+print (b.ToString "C") // C=currency
 return // early return
-//print (b.ToString "C") // C=currency
+print "unreachable"

@@ -398,7 +398,7 @@ public static class Printer
 				PrintAnalysisScope(outputFile, funcExp.Scope, v + 1);
 				break;
 			}
-			case MemberMethodGroupExpression { Target: TypedExpression target, MethodName: String methodName }:
+			case MemberExpression { Target: TypedExpression target, MemberName: String methodName }:
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine($"member method group");
@@ -409,7 +409,7 @@ public static class Printer
 				outputFile.WriteLine($"method name: {methodName}");
 				break;
 			}
-			case CallDotnetMethodExpression { Type: { } type, ReturnType: { } returnType, Target: { } target, Args: { } args, MethodInfo: { } methodInfo }:
+			case DotnetMemberMethodExpression { Type: { } type, ReturnType: { } returnType, Target: { } target, MethodInfo: { } methodInfo }:
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine($"call");
@@ -422,12 +422,6 @@ public static class Printer
 				outputFile.Indent(v + 1);
 				outputFile.WriteLine($"target:");
 				PrintAnalysisTypedExpression(outputFile, target, v + 2);
-				outputFile.Indent(v + 1);
-				outputFile.WriteLine($"args: {args.Length}");
-				foreach (var arg in args)
-				{
-					PrintAnalysisTypedExpression(outputFile, arg, v + 2);
-				}
 				break;
 			}
 			case AssignExpression assignExpression:
@@ -488,7 +482,7 @@ public static class Printer
 				outputFile.WriteLine($"keyword: {keyword} ({type})");
 				break;
 			}
-			case VoidExpression voidExpression:
+			case VoidExpression:
 			{
 				outputFile.Indent(v);
 				outputFile.WriteLine("void");
