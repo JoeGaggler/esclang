@@ -19,6 +19,7 @@ public static class Analyzer
 
 		var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
 		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope);
+		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope);
 
 		Analysis analysis = new(Main: mainFunc2.Scope);
 		return analysis;
@@ -34,7 +35,11 @@ public static class Analyzer
 			case StringLiteralExpression { }: { return expression; }
 			case ParameterExpression { }: { return expression; }
 
-			// case DotnetMemberMethodExpression: { return expression; } // TODO
+			// case DotnetMemberMethodExpression { Target: { } target } methodExpr:
+			// {
+			// 	var newTarget = TypeCheck(target, expression, scope);
+			// 	return methodExpr with { Target = newTarget };
+			// }
 
 			case FunctionExpression { ReturnType: { } returnType, Scope: { } funcScope }:
 			{
@@ -234,7 +239,7 @@ public static class Analyzer
 
 	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, StreamWriter log)
 	{
-		log.WriteLine($"{scope.Id:0000} type: {node}");
+		log.WriteLine($"{scope.Id:0000} type: {(node is null ? "null" : node.ToString())}");
 		if (node is null) { return null; }
 		if (node is IdentifierNode { Text: { } id })
 		{

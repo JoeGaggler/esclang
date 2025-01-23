@@ -394,7 +394,7 @@ public static class Printer
 			case FunctionExpression funcExp:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine($"function");
+				outputFile.WriteLine($"function: return={funcExp.ReturnType}");
 				PrintAnalysisScope(outputFile, funcExp.Scope, v + 1);
 				break;
 			}
@@ -412,7 +412,7 @@ public static class Printer
 			case DotnetMemberMethodExpression { Type: { } type, ReturnType: { } returnType, Target: { } target, MethodInfo: { } methodInfo }:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine($"call");
+				outputFile.WriteLine($"dotnet member call");
 				outputFile.Indent(v + 1);
 				outputFile.WriteLine($"method info: {methodInfo}");
 				outputFile.Indent(v + 1);
@@ -442,7 +442,7 @@ public static class Printer
 			case CallExpression callExpression:
 			{
 				outputFile.Indent(v);
-				outputFile.WriteLine($"call");
+				outputFile.WriteLine($"call: type={callExpression.Type} return={callExpression.ReturnType}");
 				PrintAnalysisTypedExpression(outputFile, callExpression.Target, v + 1);
 				foreach (var arg in callExpression.Args)
 				{
