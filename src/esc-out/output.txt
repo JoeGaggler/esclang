@@ -366,7 +366,7 @@ Analysis Log:
 0001 declaration: id=func1 type=FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
 0001 declaration: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
 0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 assign: UnknownAnalysisType { FullName = Unknown }
+0001 assign: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
 0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
 0001 identifier: id=func1 type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
 0001 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }

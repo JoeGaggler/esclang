@@ -182,7 +182,7 @@ public static class Analyzer
 				// TODO: not implemented yet
 				var newTarget = TypeCheck(target, expression, scope, log);
 				var newValue = TypeCheck(value, expression, scope, log);
-				var final = new AssignExpression(assignType, Target: newTarget, Value: newValue);
+				var final = new AssignExpression(newValue.Type, Target: newTarget, Value: newValue);
 				log.WriteLine($"{scope.Id:0000} assign: {final.Type}");
 				return final;
 			}
