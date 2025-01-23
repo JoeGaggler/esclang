@@ -17,15 +17,16 @@ public static class Analyzer
 		var globalScope = new Scope(++ScopeCounter);
 		var queue = new AnalysisQueue();
 
+		log.WriteLine("=== Analyze ===");
 		var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
-		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope);
-		// mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope);
+		log.WriteLine("=== TypeCheck ===");
+		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope, log);
 
 		Analysis analysis = new(Main: mainFunc2.Scope);
 		return analysis;
 	}
 
-	private static TypedExpression TypeCheck(TypedExpression expression, TypedExpression? parentExpression, Scope scope)
+	private static TypedExpression TypeCheck(TypedExpression expression, TypedExpression? parentExpression, Scope scope, StreamWriter log)
 	{
 		switch (expression)
 		{
@@ -48,7 +49,7 @@ public static class Analyzer
 				var newExpressions = new List<TypedExpression>();
 				foreach (var innerExpr in funcScope.Expressions)
 				{
-					var newExpression = TypeCheck(innerExpr, expression, funcScope);
+					var newExpression = TypeCheck(innerExpr, expression, funcScope, log);
 					if (newExpression is ReturnValueExpression { Type: { } retType } && newReturnType is null)
 					{
 						newReturnType = retType;
@@ -56,12 +57,15 @@ public static class Analyzer
 					newExpressions.Add(newExpression);
 				}
 				funcScope.Expressions = newExpressions;
-				return new FunctionExpression(funcScope, newReturnType ?? UnknownAnalysisType.Instance);
+
+				var final = new FunctionExpression(funcScope, newReturnType ?? UnknownAnalysisType.Instance);
+				log.WriteLine($"{scope.Id:0000} function: {final.Type}");
+				return final;
 			}
 			case DeclarationExpression { Type: { } declType, Value: { } value, Identifier: { } id, IsStatic: { } isStatic }:
 			{
 				// TODO: not implemented yet
-				var newValue = TypeCheck(value, expression, scope);
+				var newValue = TypeCheck(value, expression, scope, log);
 				// Console.WriteLine($"TypeCheck DeclExpr: {id} = {newValue}");
 
 				var actualType = (declType, newValue.Type) switch
@@ -70,7 +74,10 @@ public static class Analyzer
 					_ => declType,
 				};
 				scope.NameTable[id] = actualType;
-				return new DeclarationExpression(actualType, id, newValue, isStatic);
+
+				var final = new DeclarationExpression(actualType, id, newValue, isStatic);
+				log.WriteLine($"{scope.Id:0000} declaration: id={id} type={final.Type}");
+				return final;
 			}
 			case CallExpression { Type: { } callType, Args: { } args, ReturnType: { } returnType, Target: { } target }:
 			{
@@ -79,14 +86,14 @@ public static class Analyzer
 				var newArgs = new List<TypedExpression>();
 				foreach (var arg in args)
 				{
-					var newArg = TypeCheck(arg, expression, scope);
+					var newArg = TypeCheck(arg, expression, scope, log);
 					newArgs.Add(newArg);
 				}
 
 				// Partially type-checked call expression used as context for target type-checking (TODO: dependency graph)
 				var newCallExpression = new CallExpression(callType, Target: target, Args: [.. newArgs]);
 
-				var newTarget = TypeCheck(target, newCallExpression, scope);
+				var newTarget = TypeCheck(target, newCallExpression, scope, log);
 				if (newTarget is IdentifierExpression { Identifier: { } identifier, Type: { } type })
 				{
 					if (!scope.TryGetNameTableValue(identifier, out var targetType))
@@ -95,7 +102,9 @@ public static class Analyzer
 					}
 					if (targetType is FunctionAnalysisType { ReturnType: { } newRetType })
 					{
-						return newCallExpression with { ReturnType = newRetType, Type = newRetType };
+						var final2 = newCallExpression with { ReturnType = newRetType, Type = newRetType };
+						log.WriteLine($"{scope.Id:0000} call: {final2.Type}");
+						return final2;
 					}
 					else
 					{
@@ -103,7 +112,9 @@ public static class Analyzer
 					}
 				}
 
-				return newCallExpression with { Target = newTarget, ReturnType = newTarget.Type, Type = newTarget.Type };
+				var final = newCallExpression with { Target = newTarget, ReturnType = newTarget.Type, Type = newTarget.Type };
+				log.WriteLine($"{scope.Id:0000} call: {final.Type}");
+				return final;
 			}
 			case MemberExpression { Target: { } target, MemberName: { } methodName, Type: { } type }:
 			{
@@ -111,7 +122,7 @@ public static class Analyzer
 				// for a call, this also depends on the arguments to disambiguate the method group
 
 				//MemberMethodGroupExpression { Type = UnknownAnalysisType { FullName = Unknown }, Target = IdentifierExpression { Type = UnknownAnalysisType { FullName = Unknown }, Identifier = b }, MethodName = ToString }
-				var newTarget = TypeCheck(target, expression, scope);
+				var newTarget = TypeCheck(target, expression, scope, log);
 				var targetType = newTarget.Type;
 				if (targetType is DotnetAnalysisType { Type: { } dotnetType })
 				{
@@ -143,14 +154,16 @@ public static class Analyzer
 			case ReturnValueExpression { ReturnValue: { } returnValue, Type: { } returnType }:
 			{
 				// TODO: not implemented yet
-				var newReturnValue = TypeCheck(returnValue, expression, scope);
-				return new ReturnValueExpression(newReturnValue);
+				var newReturnValue = TypeCheck(returnValue, expression, scope, log);
+				var final = new ReturnValueExpression(newReturnValue);
+				log.WriteLine($"{scope.Id:0000} return: {final.Type}");
+				return final;
 			}
 			case AddExpression { Type: { } addType, Left: { } left, Right: { } right }:
 			{
 				// TODO: not implemented yet
-				var newLeft = TypeCheck(left, expression, scope);
-				var newRight = TypeCheck(right, expression, scope);
+				var newLeft = TypeCheck(left, expression, scope, log);
+				var newRight = TypeCheck(right, expression, scope, log);
 
 				if (newLeft.Type != newRight.Type)
 				{
@@ -160,19 +173,23 @@ public static class Analyzer
 
 				var newAddType = newLeft.Type; // assuming result is same type as operands
 
-				return new AddExpression(newAddType, Left: newLeft, Right: newRight);
+				var final = new AddExpression(newAddType, Left: newLeft, Right: newRight);
+				log.WriteLine($"{scope.Id:0000} add: {final.Type}");
+				return final;
 			}
 			case AssignExpression { Type: { } assignType, Target: { } target, Value: { } value }:
 			{
 				// TODO: not implemented yet
-				var newTarget = TypeCheck(target, expression, scope);
-				var newValue = TypeCheck(value, expression, scope);
-				return new AssignExpression(assignType, Target: newTarget, Value: newValue);
+				var newTarget = TypeCheck(target, expression, scope, log);
+				var newValue = TypeCheck(value, expression, scope, log);
+				var final = new AssignExpression(assignType, Target: newTarget, Value: newValue);
+				log.WriteLine($"{scope.Id:0000} assign: {final.Type}");
+				return final;
 			}
 			case LogicalNegationExpression { Node: { } node, Type: { } type }:
 			{
 				// TODO: not implemented yet
-				var newNode = TypeCheck(node, expression, scope);
+				var newNode = TypeCheck(node, expression, scope, log);
 				if (newNode.Type is not DotnetAnalysisType { Type: { } dotnetType } || dotnetType != typeof(Boolean))
 				{
 					throw new Exception("Invalid logical negation");
@@ -198,12 +215,16 @@ public static class Analyzer
 					type = returnType;
 				}
 
-				return new IdentifierExpression(type, Identifier: id);
+				var final = new IdentifierExpression(type, Identifier: id);
+				log.WriteLine($"{scope.Id:0000} identifier: id={id} type={final.Type}");
+				return final;
 			}
 			case IntrinsicFunctionExpression { Name: { } name, Type: { } intrinsicType }:
 			{
 				// TODO: not implemented yet
-				return expression;
+				var final = new IntrinsicFunctionExpression(name, intrinsicType);
+				log.WriteLine($"{scope.Id:0000} intrinsic(TODO): {final.Type}");
+				return final;
 			}
 			default: { throw new NotImplementedException($"TODO: TypeCheck: {expression}"); }
 		}

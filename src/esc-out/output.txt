@@ -264,6 +264,7 @@ call
     "unreachable"
 
 Analysis Log:
+=== Analyze ===
 0000 expression: EscFile { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
 0001 scope: nodes=10
 0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func2 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
@@ -339,6 +340,52 @@ Analysis Log:
 0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
 0001 expression: IdentifierNode { Text = print }
 0001 expression: LiteralStringNode { Text = unreachable }
+=== TypeCheck ===
+0002 declaration: id=cond type=DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean }
+0003 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0002 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
+0002 intrinsic(TODO): UnknownAnalysisType { FullName = Unknown }
+0002 call: UnknownAnalysisType { FullName = Unknown }
+0002 identifier: id=cond type=DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean }
+0004 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0002 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
+0002 intrinsic(TODO): UnknownAnalysisType { FullName = Unknown }
+0002 call: UnknownAnalysisType { FullName = Unknown }
+0002 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
+0001 declaration: id=func2 type=FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
+0005 declaration: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 identifier: id=func2 type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 call: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 declaration: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 identifier: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0005 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
+0001 declaration: id=func1 type=FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
+0001 declaration: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 assign: UnknownAnalysisType { FullName = Unknown }
+0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 identifier: id=func1 type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 declaration: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 identifier: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 identifier: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
+0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 return: VoidAnalysisType { FullName = Void }
+0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
+0000 function: FunctionAnalysisType { FullName = Function, ReturnType = VoidAnalysisType { FullName = Void } }
 
 Analyze:
 main procedure
