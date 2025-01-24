@@ -20,6 +20,9 @@ public static class Analyzer
 		log.WriteLine("=== Table ===");
 		_ = BuildTable(file, 0, log);
 
+		log.WriteLine("=== Tree ===");
+		Printer.PrintTable(log);
+
 		// log.WriteLine("=== Analyze ===");
 		// var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
 
@@ -102,10 +105,15 @@ public static class Analyzer
 				var data = new BracesSlotData([]);
 				var slot = Table.Instance.Add(parentSlot, TableSlotType.Braces, data, log);
 
+				var lineSlots = new List<int>();
 				foreach (var line in lines)
 				{
 					var lineSlot = BuildTable(line, slot, log);
+					lineSlots.Add(lineSlot);
 				}
+
+				data = data with { Lines = [.. lineSlots] };
+				Table.Instance.Update(slot, data, log);
 
 				return slot;
 			}
@@ -157,6 +165,15 @@ public static class Analyzer
 		if (!bracesData.TryAddNameTableValue(id, slot))
 		{
 			throw new Exception("Duplicate identifier");
+		}
+
+		// Type
+		var typeSlot = 0;
+		if (typeNode is not null)
+		{
+			typeSlot = BuildTable(typeNode, slot, log);
+			data = data with { Type = typeSlot };
+			Table.Instance.Update(slot, data, log);
 		}
 
 		// Value

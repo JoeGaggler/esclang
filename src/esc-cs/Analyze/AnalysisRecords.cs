@@ -43,6 +43,9 @@ public class Table
 		dataIfFound = slot.Data as T;
 		return dataIfFound is not null;
 	}
+
+	public TableSlot Root { get => Slots[1]; }
+	public TableSlot this[int slotId] { get => Slots[slotId]; }
 }
 
 public enum TableSlotType
@@ -65,7 +68,7 @@ public record class TableSlot(int ParentSlot, TableSlotType Type, SlotData Data)
 public abstract record class SlotData;
 public record class InvalidSlotData : SlotData { public static readonly InvalidSlotData Instance = new(); private InvalidSlotData() { } }
 public record class FileSlotData(int Main = 0) : SlotData;
-public record class DeclareSlotData(String Name, Boolean IsStatic, int Value = 0) : SlotData;
+public record class DeclareSlotData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : SlotData;
 public record class CallSlotData(int Target, int[] Args) : SlotData;
 public record class IdentifierSlotData(String Name) : SlotData;
 public record class BracesSlotData(int[] Lines) : SlotData

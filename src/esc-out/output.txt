@@ -94,30 +94,31 @@ Analysis Log:
 slot 0001 in 0000 :: File = FileSlotData { Main = 0 }
 slot 0002 in 0001 :: Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0001 in 0000 <- File = FileSlotData { Main = 2 }
-slot 0003 in 0002 :: Declare = DeclareSlotData { Name = func1, IsStatic = True, Value = 0 }
+slot 0003 in 0002 :: Declare = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 0 }
 slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0004 in 0003 :: Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0005 in 0004 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 0 }
+slot 0005 in 0004 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 0 }
 slot 0004 in 0003 -> Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0006 in 0005 :: Integer = IntegerSlotData { Value = 2 }
-slot 0005 in 0004 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 6 }
+slot 0005 in 0004 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 6 }
 slot 0007 in 0004 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
 slot 0008 in 0007 :: Identifier = IdentifierSlotData { Name = return }
 slot 0007 in 0004 <- Call = CallSlotData { Target = 8, Args = System.Int32[] }
 slot 0009 in 0007 :: Identifier = IdentifierSlotData { Name = a }
 slot 0007 in 0004 <- Call = CallSlotData { Target = 8, Args = System.Int32[] }
-slot 0003 in 0002 <- Declare = DeclareSlotData { Name = func1, IsStatic = True, Value = 4 }
-slot 0010 in 0002 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 0 }
+slot 0004 in 0003 <- Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0003 in 0002 <- Declare = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
+slot 0010 in 0002 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 0 }
 slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0011 in 0010 :: Integer = IntegerSlotData { Value = 13 }
-slot 0010 in 0002 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 11 }
-slot 0012 in 0002 :: Declare = DeclareSlotData { Name = b, IsStatic = False, Value = 0 }
+slot 0010 in 0002 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 11 }
+slot 0012 in 0002 :: Declare = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 0 }
 slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0013 in 0012 :: Add = AddOpSlotData { Left = 0, Right = 0 }
 slot 0014 in 0013 :: Identifier = IdentifierSlotData { Name = a }
 slot 0015 in 0013 :: Identifier = IdentifierSlotData { Name = func1 }
 slot 0013 in 0012 <- Add = AddOpSlotData { Left = 14, Right = 15 }
-slot 0012 in 0002 <- Declare = DeclareSlotData { Name = b, IsStatic = False, Value = 13 }
+slot 0012 in 0002 <- Declare = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
 slot 0016 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
 slot 0017 in 0016 :: Identifier = IdentifierSlotData { Name = print }
 slot 0016 in 0002 <- Call = CallSlotData { Target = 17, Args = System.Int32[] }
@@ -129,6 +130,32 @@ slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
 slot 0021 in 0019 :: Identifier = IdentifierSlotData { Name = b }
 slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
 slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
+=== Tree ===
+file
+  braces
+    declare func1 (static)
+      value
+        braces
+          declare a
+            value
+              integer :: 2
+          call
+            id :: return
+            id :: a
+    declare a
+      value
+        integer :: 13
+    declare b
+      value
+        add
+          id :: a
+          id :: func1
+    call
+      id :: print
+      id :: a
+    call
+      id :: print
+      id :: b
 
 Analyze:
 main procedure

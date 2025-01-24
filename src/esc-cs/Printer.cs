@@ -497,6 +497,99 @@ public static class Printer
 		}
 	}
 
+	public static void PrintTable(TextWriter outputFile)
+	{
+		var root = Table.Instance.Root;
+		PrintTableSlot(outputFile, 1, 0);
+	}
+
+	private static void PrintTableSlot(TextWriter outputFile, int slotId, int level)
+	{
+		var slot = Table.Instance[slotId];
+		switch (slot.Type)
+		{
+			case TableSlotType.File:
+			{
+				var data = (FileSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine("file");
+				PrintTableSlot(outputFile, data.Main, level + 1);
+				break;
+			}
+			case TableSlotType.Braces:
+			{
+				var data = (BracesSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine("braces");
+				foreach (var line in data.Lines)
+				{
+					PrintTableSlot(outputFile, line, level + 1);
+				}
+				break;
+			}
+			case TableSlotType.Declare:
+			{
+				var data = (DeclareSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine($"declare {data.Name}{(data.IsStatic ? " (static)" : "")}");
+				if (data.Type != 0)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("type");
+					PrintTableSlot(outputFile, data.Type, level + 2);
+				}
+				if (data.Value != 0)
+				{
+					outputFile.Indent(level + 1);
+					outputFile.WriteLine("value");
+					PrintTableSlot(outputFile, data.Value, level + 2);
+				}
+				break;
+			}
+			case TableSlotType.Call:
+			{
+				var data = (CallSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine("call");
+				PrintTableSlot(outputFile, data.Target, level + 1);
+				foreach (var arg in data.Args)
+				{
+					PrintTableSlot(outputFile, arg, level + 1);
+				}
+				break;
+			}
+			case TableSlotType.Integer:
+			{
+				var data = (IntegerSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine($"integer :: {data.Value}");
+				break;
+			}
+			case TableSlotType.Add:
+			{
+				var data = (AddOpSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine("add");
+				PrintTableSlot(outputFile, data.Left, level + 1);
+				PrintTableSlot(outputFile, data.Right, level + 1);
+				break;
+			}
+			case TableSlotType.Identifier:
+			{
+				var data = (IdentifierSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine($"id :: {data.Name}");
+				break;
+			}
+			default:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine($"unknown {slot.Type} = {slot.Data}");
+				break;
+			}
+		}
+	}
+
 	public static void Indent(this TextWriter textWriter, int level)
 	{
 		textWriter.Write(new String(' ', level * 2));
