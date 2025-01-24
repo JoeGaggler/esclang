@@ -6,6 +6,86 @@ public record class Analysis(Scope Main)
 {
 }
 
+public class Table
+{
+	public static readonly Table Instance = new Table();
+
+	private Table() { }
+
+	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
+
+	public int Add(int parentSlot, TableSlotType type, SlotData data, StreamWriter log)
+	{
+		var id = Slots.Count;
+		var slot = new TableSlot(parentSlot, type, data);
+		Slots.Add(slot);
+		log.WriteLine($"slot {id:0000} in {parentSlot:0000} :: {type} = {data}");
+		return id;
+	}
+
+	public void Update(int slotId, SlotData data, StreamWriter log)
+	{
+		var slot = Slots[slotId];
+		Slots[slotId] = slot with { Data = data };
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.Type} = {data}");
+	}
+
+	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, StreamWriter log) where T : SlotData
+	{
+		var slot = Slots[slotId];
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.Type} = {slot.Data}");
+		if (slot.Type != type)
+		{
+			dataIfFound = default;
+			return false;
+		}
+
+		dataIfFound = slot.Data as T;
+		return dataIfFound is not null;
+	}
+}
+
+public enum TableSlotType
+{
+	Unknown = 0,
+	File,
+	Declare,
+	Call,
+	Identifier,
+	Braces,
+	Integer,
+	Add,
+}
+
+public record class TableSlot(int ParentSlot, TableSlotType Type, SlotData Data)
+{
+
+}
+
+public abstract record class SlotData;
+public record class InvalidSlotData : SlotData { public static readonly InvalidSlotData Instance = new(); private InvalidSlotData() { } }
+public record class FileSlotData(int Main = 0) : SlotData;
+public record class DeclareSlotData(String Name, Boolean IsStatic, int Value = 0) : SlotData;
+public record class CallSlotData(int Target, int[] Args) : SlotData;
+public record class IdentifierSlotData(String Name) : SlotData;
+public record class BracesSlotData(int[] Lines) : SlotData
+{
+	private readonly Dictionary<String, int> NameTable = [];
+	public Boolean TryAddNameTableValue(String name, int slot)
+	{
+		if (NameTable.ContainsKey(name))
+		{
+			return false;
+		}
+		NameTable.Add(name, slot);
+		return true;
+	}
+}
+public record class IntegerSlotData(Int32 Value) : SlotData;
+public record class AddOpSlotData(Int32 Left = 0, Int32 Right = 0) : SlotData;
+
+////////////////////////////////
+
 public record class Scope(Int32 Id)
 {
 	public Scope? Parent;
@@ -52,6 +132,7 @@ public record class DotnetAnalysisType(Type Type) : AnalysisType
 }
 
 public abstract record class TypedExpression(AnalysisType Type);
+public record class FileExpression(AnalysisType Type) : TypedExpression(Type);
 public record class KeywordExpression(String Keyword) : TypedExpression(UnknownAnalysisType.Instance);
 public record class IntrinsicFunctionExpression(String Name, AnalysisType Type) : TypedExpression(Type);
 public record class VoidExpression() : TypedExpression(VoidAnalysisType.Instance) { public static readonly VoidExpression Instance = new(); }

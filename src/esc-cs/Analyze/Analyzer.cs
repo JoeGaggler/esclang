@@ -17,13 +17,154 @@ public static class Analyzer
 		var globalScope = new Scope(++ScopeCounter);
 		var queue = new AnalysisQueue();
 
-		log.WriteLine("=== Analyze ===");
-		var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
-		log.WriteLine("=== TypeCheck ===");
-		var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope, log);
+		log.WriteLine("=== Table ===");
+		_ = BuildTable(file, 0, log);
 
-		Analysis analysis = new(Main: mainFunc2.Scope);
+		// log.WriteLine("=== Analyze ===");
+		// var mainFunc = (FunctionExpression)AnalyzeExpression(file, globalScope, queue, log);
+
+		// log.WriteLine("=== TypeCheck ===");
+		// var mainFunc2 = (FunctionExpression)TypeCheck(mainFunc, null, globalScope, log);
+
+		// Analysis analysis = new(Main: mainFunc2.Scope);
+		Analysis analysis = new(Main: globalScope);
 		return analysis;
+	}
+
+	private static int BuildTable(SyntaxNode node, int parentSlot, StreamWriter log)
+	{
+		switch (node)
+		{
+			case EscFile { Lines: { } lines }:
+			{
+				var fileData = new FileSlotData();
+				var fileSlot = Table.Instance.Add(parentSlot, TableSlotType.File, fileData, log);
+
+				var bracesData = new BracesSlotData(Lines: []);
+				var bracesSlot = Table.Instance.Add(fileSlot, TableSlotType.Braces, bracesData, log);
+
+				fileData = fileData with { Main = bracesSlot };
+				Table.Instance.Update(fileSlot, fileData, log);
+
+				// Lines
+				var lineSlots = new List<int>();
+				foreach (var line in lines)
+				{
+					var lineSlot = BuildTable(line, bracesSlot, log);
+					lineSlots.Add(lineSlot);
+				}
+
+				bracesData = bracesData with { Lines = [.. lineSlots] };
+				Table.Instance.Update(bracesSlot, bracesData, log);
+
+				return fileSlot;
+			}
+			case DeclareStaticNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
+			{
+				return BuildDeclareNode(true, parentSlot, log, idNode, typeNode, valueNode);
+			}
+			case DeclareAssignNode { Identifier: { } idNode, Type: var typeNode, Value: { } valueNode }:
+			{
+				return BuildDeclareNode(false, parentSlot, log, idNode, typeNode, valueNode);
+			}
+			case CallNode { Target: { } target, Arguments: { } arguments }:
+			{
+				var data = new CallSlotData(Target: 0, Args: []);
+				var slot = Table.Instance.Add(parentSlot, TableSlotType.Call, data, log);
+
+				// Target
+				var targetSlot = BuildTable(target, slot, log);
+				data = data with { Target = targetSlot };
+				Table.Instance.Update(slot, data, log);
+
+				// Args
+				var argSlots = new List<int>();
+				foreach (var arg in arguments)
+				{
+					var argSlot = BuildTable(arg, slot, log);
+					argSlots.Add(argSlot);
+				}
+
+				data = data with { Args = [.. argSlots] };
+				Table.Instance.Update(slot, data, log);
+
+				return slot;
+			}
+			case IdentifierNode { Text: { Length: > 0 } id }:
+			{
+				var data = new IdentifierSlotData(Name: id);
+				var slot = Table.Instance.Add(parentSlot, TableSlotType.Identifier, data, log);
+
+				return slot;
+			}
+			case BracesNode { Lines: { } lines }:
+			{
+				var data = new BracesSlotData([]);
+				var slot = Table.Instance.Add(parentSlot, TableSlotType.Braces, data, log);
+
+				foreach (var line in lines)
+				{
+					var lineSlot = BuildTable(line, slot, log);
+				}
+
+				return slot;
+			}
+			case LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
+			{
+				var data = new IntegerSlotData(Value: Int32.Parse(numberLiteral));
+				var slot = Table.Instance.Add(parentSlot, TableSlotType.Integer, data, log);
+
+				return slot;
+			}
+			case PlusNode { Left: { } left, Right: { } right }:
+			{
+				var data = new AddOpSlotData();
+				var slot = Table.Instance.Add(parentSlot, TableSlotType.Add, data, log);
+
+				// Operands
+				var leftSlot = BuildTable(left, slot, log);
+				var rightSlot = BuildTable(right, slot, log);
+
+				data = data with { Left = leftSlot, Right = rightSlot };
+				Table.Instance.Update(slot, data, log);
+
+				return slot;
+			}
+			default:
+			{
+				log.WriteLine($"unknown node for table: {node}");
+				throw new NotImplementedException($"TODO: BuildTable: {node}");
+			}
+		}
+	}
+
+	private static int BuildDeclareNode(Boolean isStatic, int parentSlot, StreamWriter log, SyntaxNode idNode, SyntaxNode? typeNode, SyntaxNode valueNode)
+	{
+		if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
+		{
+			throw new Exception("Invalid identifier");
+		}
+
+		// TODO: add slot, enqueue child nodes, queue update slot with analyzed data
+		var data = new DeclareSlotData(Name: id, IsStatic: isStatic);
+		var slot = Table.Instance.Add(parentSlot, TableSlotType.Declare, data, log);
+
+		// Name
+		if (!Table.Instance.TryGetSlot<BracesSlotData>(parentSlot, TableSlotType.Braces, out var bracesData, log))
+		{
+			throw new Exception("Invalid parent slot");
+		}
+		if (!bracesData.TryAddNameTableValue(id, slot))
+		{
+			throw new Exception("Duplicate identifier");
+		}
+
+		// Value
+		var valueSlot = BuildTable(valueNode, slot, log);
+		data = data with { Value = valueSlot };
+		Table.Instance.Update(slot, data, log);
+
+		return slot;
 	}
 
 	private static TypedExpression TypeCheck(TypedExpression expression, TypedExpression? parentExpression, Scope scope, StreamWriter log)

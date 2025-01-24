@@ -1,6 +1,6 @@
 
 Lex:
-0000: 0 + 5 -- (1, 1) -- Identifier -- func2
+0000: 0 + 5 -- (1, 1) -- Identifier -- func1
 0001: 5 + 1 -- (1, 6) -- Spaces -- " "
 0002: 6 + 1 -- (1, 7) -- Colon -- :
 0003: 7 + 1 -- (1, 8) -- Colon -- :
@@ -8,190 +8,49 @@ Lex:
 0005: 9 + 1 -- (1, 10) -- BraceOpen -- {
 0006: 10 + 1 -- (1, 11) -- EndOfLine -- \n
 0007: 11 + 4 -- (2, 1) -- Spaces -- "    "
-0008: 15 + 4 -- (2, 5) -- Identifier -- cond
-0009: 19 + 1 -- (2, 9) -- Spaces -- " "
-0010: 20 + 1 -- (2, 10) -- Colon -- :
-0011: 21 + 1 -- (2, 11) -- Spaces -- " "
-0012: 22 + 4 -- (2, 12) -- Identifier -- bool
-0013: 26 + 1 -- (2, 16) -- Spaces -- " "
-0014: 27 + 1 -- (2, 17) -- Colon -- :
-0015: 28 + 1 -- (2, 18) -- Spaces -- " "
-0016: 29 + 1 -- (2, 19) -- LessThan -- <
-0017: 30 + 1 -- (2, 20) -- GreaterThan -- >
-0018: 31 + 1 -- (2, 21) -- EndOfLine -- \n
-0019: 32 + 4 -- (3, 1) -- Spaces -- "    "
-0020: 36 + 2 -- (3, 5) -- Identifier -- if
-0021: 38 + 1 -- (3, 7) -- Spaces -- " "
-0022: 39 + 5 -- (3, 8) -- Identifier -- false
-0023: 44 + 1 -- (3, 13) -- Spaces -- " "
-0024: 45 + 1 -- (3, 14) -- BraceOpen -- {
-0025: 46 + 1 -- (3, 15) -- EndOfLine -- \n
-0026: 47 + 8 -- (4, 1) -- Spaces -- "        "
-0027: 55 + 6 -- (4, 9) -- Identifier -- return
-0028: 61 + 1 -- (4, 15) -- Spaces -- " "
-0029: 62 + 1 -- (4, 16) -- Number -- 0
-0030: 63 + 1 -- (4, 17) -- EndOfLine -- \n
-0031: 64 + 4 -- (5, 1) -- Spaces -- "    "
-0032: 68 + 1 -- (5, 5) -- BraceClose -- }
-0033: 69 + 1 -- (5, 6) -- EndOfLine -- \n
-0034: 70 + 4 -- (6, 1) -- Spaces -- "    "
-0035: 74 + 2 -- (6, 5) -- Identifier -- if
-0036: 76 + 1 -- (6, 7) -- Spaces -- " "
-0037: 77 + 1 -- (6, 8) -- Exclamation -- !
-0038: 78 + 4 -- (6, 9) -- Identifier -- cond
-0039: 82 + 1 -- (6, 13) -- Spaces -- " "
-0040: 83 + 1 -- (6, 14) -- BraceOpen -- {
-0041: 84 + 1 -- (6, 15) -- Spaces -- " "
-0042: 85 + 6 -- (6, 16) -- Identifier -- return
-0043: 91 + 1 -- (6, 22) -- Spaces -- " "
-0044: 92 + 3 -- (6, 23) -- Number -- 100
-0045: 95 + 1 -- (6, 26) -- Spaces -- " "
-0046: 96 + 1 -- (6, 27) -- BraceClose -- }
-0047: 97 + 1 -- (6, 28) -- EndOfLine -- \n
-0048: 98 + 4 -- (7, 1) -- Spaces -- "    "
-0049: 102 + 6 -- (7, 5) -- Identifier -- return
-0050: 108 + 1 -- (7, 11) -- Spaces -- " "
-0051: 109 + 4 -- (7, 12) -- Number -- 9999
-0052: 113 + 1 -- (7, 16) -- Spaces -- " "
-0053: 114 + 14 -- (7, 17) -- Comment -- // unreachable
-0054: 128 + 1 -- (7, 31) -- EndOfLine -- \n
-0055: 129 + 1 -- (8, 1) -- BraceClose -- }
-0056: 130 + 1 -- (8, 2) -- EndOfLine -- \n
-0057: 131 + 5 -- (9, 1) -- Identifier -- func1
-0058: 136 + 1 -- (9, 6) -- Spaces -- " "
-0059: 137 + 1 -- (9, 7) -- Colon -- :
-0060: 138 + 1 -- (9, 8) -- Colon -- :
-0061: 139 + 1 -- (9, 9) -- Spaces -- " "
-0062: 140 + 1 -- (9, 10) -- BraceOpen -- {
-0063: 141 + 1 -- (9, 11) -- EndOfLine -- \n
-0064: 142 + 4 -- (10, 1) -- Spaces -- "    "
-0065: 146 + 1 -- (10, 5) -- Identifier -- a
-0066: 147 + 1 -- (10, 6) -- Spaces -- " "
-0067: 148 + 1 -- (10, 7) -- Colon -- :
-0068: 149 + 1 -- (10, 8) -- Equals -- =
-0069: 150 + 1 -- (10, 9) -- Spaces -- " "
-0070: 151 + 1 -- (10, 10) -- Number -- 2
-0071: 152 + 1 -- (10, 11) -- EndOfLine -- \n
-0072: 153 + 4 -- (11, 1) -- Spaces -- "    "
-0073: 157 + 1 -- (11, 5) -- Identifier -- b
-0074: 158 + 1 -- (11, 6) -- Spaces -- " "
-0075: 159 + 1 -- (11, 7) -- Colon -- :
-0076: 160 + 1 -- (11, 8) -- Equals -- =
-0077: 161 + 1 -- (11, 9) -- Spaces -- " "
-0078: 162 + 1 -- (11, 10) -- Identifier -- a
-0079: 163 + 1 -- (11, 11) -- Spaces -- " "
-0080: 164 + 1 -- (11, 12) -- Plus -- +
-0081: 165 + 1 -- (11, 13) -- Spaces -- " "
-0082: 166 + 5 -- (11, 14) -- Identifier -- func2
-0083: 171 + 1 -- (11, 19) -- Spaces -- " "
-0084: 172 + 5 -- (11, 20) -- Identifier -- false
-0085: 177 + 1 -- (11, 25) -- EndOfLine -- \n
-0086: 178 + 4 -- (12, 1) -- Spaces -- "    "
-0087: 182 + 6 -- (12, 5) -- Identifier -- return
-0088: 188 + 1 -- (12, 11) -- Spaces -- " "
-0089: 189 + 1 -- (12, 12) -- Identifier -- b
-0090: 190 + 1 -- (12, 13) -- EndOfLine -- \n
-0091: 191 + 1 -- (13, 1) -- BraceClose -- }
-0092: 192 + 1 -- (13, 2) -- EndOfLine -- \n
-0093: 193 + 1 -- (14, 1) -- Identifier -- a
-0094: 194 + 1 -- (14, 2) -- Spaces -- " "
-0095: 195 + 1 -- (14, 3) -- Colon -- :
-0096: 196 + 1 -- (14, 4) -- Equals -- =
-0097: 197 + 1 -- (14, 5) -- Spaces -- " "
-0098: 198 + 2 -- (14, 6) -- Number -- 13
-0099: 200 + 1 -- (14, 8) -- EndOfLine -- \n
-0100: 201 + 1 -- (15, 1) -- Identifier -- a
-0101: 202 + 1 -- (15, 2) -- Spaces -- " "
-0102: 203 + 1 -- (15, 3) -- Equals -- =
-0103: 204 + 1 -- (15, 4) -- Spaces -- " "
-0104: 205 + 2 -- (15, 5) -- Number -- 39
-0105: 207 + 1 -- (15, 7) -- EndOfLine -- \n
-0106: 208 + 1 -- (16, 1) -- Identifier -- b
-0107: 209 + 1 -- (16, 2) -- Spaces -- " "
-0108: 210 + 1 -- (16, 3) -- Colon -- :
-0109: 211 + 1 -- (16, 4) -- Equals -- =
-0110: 212 + 1 -- (16, 5) -- Spaces -- " "
-0111: 213 + 1 -- (16, 6) -- Identifier -- a
-0112: 214 + 1 -- (16, 7) -- Spaces -- " "
-0113: 215 + 1 -- (16, 8) -- Plus -- +
-0114: 216 + 1 -- (16, 9) -- Spaces -- " "
-0115: 217 + 5 -- (16, 10) -- Identifier -- func1
-0116: 222 + 1 -- (16, 15) -- Spaces -- " "
-0117: 223 + 1 -- (16, 16) -- Plus -- +
-0118: 224 + 1 -- (16, 17) -- Spaces -- " "
-0119: 225 + 1 -- (16, 18) -- Number -- 5
-0120: 226 + 1 -- (16, 19) -- EndOfLine -- \n
-0121: 227 + 5 -- (17, 1) -- Identifier -- print
-0122: 232 + 1 -- (17, 6) -- Spaces -- " "
-0123: 233 + 1 -- (17, 7) -- Identifier -- a
-0124: 234 + 1 -- (17, 8) -- EndOfLine -- \n
-0125: 235 + 5 -- (18, 1) -- Identifier -- print
-0126: 240 + 1 -- (18, 6) -- Spaces -- " "
-0127: 241 + 1 -- (18, 7) -- Identifier -- b
-0128: 242 + 1 -- (18, 8) -- EndOfLine -- \n
-0129: 243 + 5 -- (19, 1) -- Identifier -- print
-0130: 248 + 1 -- (19, 6) -- Spaces -- " "
-0131: 249 + 1 -- (19, 7) -- ParenOpen -- (
-0132: 250 + 1 -- (19, 8) -- Identifier -- b
-0133: 251 + 1 -- (19, 9) -- Period -- .
-0134: 252 + 8 -- (19, 10) -- Identifier -- ToString
-0135: 260 + 1 -- (19, 18) -- Spaces -- " "
-0136: 261 + 3 -- (19, 19) -- LiteralString -- "C"
-0137: 264 + 1 -- (19, 22) -- ParenClose -- )
-0138: 265 + 1 -- (19, 23) -- Spaces -- " "
-0139: 266 + 13 -- (19, 24) -- Comment -- // C=currency
-0140: 279 + 1 -- (19, 37) -- EndOfLine -- \n
-0141: 280 + 6 -- (20, 1) -- Identifier -- return
-0142: 286 + 1 -- (20, 7) -- Spaces -- " "
-0143: 287 + 15 -- (20, 8) -- Comment -- // early return
-0144: 302 + 1 -- (20, 23) -- EndOfLine -- \n
-0145: 303 + 5 -- (21, 1) -- Identifier -- print
-0146: 308 + 1 -- (21, 6) -- Spaces -- " "
-0147: 309 + 13 -- (21, 7) -- LiteralString -- "unreachable"
-0148: 322 + 1 -- (21, 20) -- EndOfLine -- \n
-0149: 323 + 0 -- (22, 1) -- EndOfFile -- <EOF>
+0008: 15 + 1 -- (2, 5) -- Identifier -- a
+0009: 16 + 1 -- (2, 6) -- Spaces -- " "
+0010: 17 + 1 -- (2, 7) -- Colon -- :
+0011: 18 + 1 -- (2, 8) -- Equals -- =
+0012: 19 + 1 -- (2, 9) -- Spaces -- " "
+0013: 20 + 1 -- (2, 10) -- Number -- 2
+0014: 21 + 1 -- (2, 11) -- EndOfLine -- \n
+0015: 22 + 4 -- (3, 1) -- Spaces -- "    "
+0016: 26 + 6 -- (3, 5) -- Identifier -- return
+0017: 32 + 1 -- (3, 11) -- Spaces -- " "
+0018: 33 + 1 -- (3, 12) -- Identifier -- a
+0019: 34 + 1 -- (3, 13) -- EndOfLine -- \n
+0020: 35 + 1 -- (4, 1) -- BraceClose -- }
+0021: 36 + 1 -- (4, 2) -- EndOfLine -- \n
+0022: 37 + 1 -- (5, 1) -- Identifier -- a
+0023: 38 + 1 -- (5, 2) -- Spaces -- " "
+0024: 39 + 1 -- (5, 3) -- Colon -- :
+0025: 40 + 1 -- (5, 4) -- Equals -- =
+0026: 41 + 1 -- (5, 5) -- Spaces -- " "
+0027: 42 + 2 -- (5, 6) -- Number -- 13
+0028: 44 + 1 -- (5, 8) -- EndOfLine -- \n
+0029: 45 + 1 -- (6, 1) -- Identifier -- b
+0030: 46 + 1 -- (6, 2) -- Spaces -- " "
+0031: 47 + 1 -- (6, 3) -- Colon -- :
+0032: 48 + 1 -- (6, 4) -- Equals -- =
+0033: 49 + 1 -- (6, 5) -- Spaces -- " "
+0034: 50 + 1 -- (6, 6) -- Identifier -- a
+0035: 51 + 1 -- (6, 7) -- Spaces -- " "
+0036: 52 + 1 -- (6, 8) -- Plus -- +
+0037: 53 + 1 -- (6, 9) -- Spaces -- " "
+0038: 54 + 5 -- (6, 10) -- Identifier -- func1
+0039: 59 + 1 -- (6, 15) -- EndOfLine -- \n
+0040: 60 + 5 -- (7, 1) -- Identifier -- print
+0041: 65 + 1 -- (7, 6) -- Spaces -- " "
+0042: 66 + 1 -- (7, 7) -- Identifier -- a
+0043: 67 + 1 -- (7, 8) -- EndOfLine -- \n
+0044: 68 + 5 -- (8, 1) -- Identifier -- print
+0045: 73 + 1 -- (8, 6) -- Spaces -- " "
+0046: 74 + 1 -- (8, 7) -- Identifier -- b
+0047: 75 + 1 -- (8, 8) -- EndOfLine -- \n
+0048: 76 + 0 -- (9, 1) -- EndOfFile -- <EOF>
 
 Parse:
-declare-static
-  id
-    identifier: func2
-  value
-    braces
-      declare-static
-        id
-          identifier: cond
-        type
-          identifier: bool
-        value
-          parameter
-      call
-        target
-          identifier: if
-        arguments
-          identifier: false
-          braces
-            call
-              target
-                identifier: return
-              arguments
-                0
-      call
-        target
-          identifier: if
-        arguments
-          not
-            identifier: cond
-          braces
-            call
-              target
-                identifier: return
-              arguments
-                100
-      call
-        target
-          identifier: return
-        arguments
-          9999
 declare-static
   id
     identifier: func1
@@ -202,39 +61,23 @@ declare-static
           identifier: a
         value
           2
-      declare-assign
-        id
-          identifier: b
-        value
-          plus
-            identifier: a
-            call
-              target
-                identifier: func2
-              arguments
-                identifier: false
       call
         target
           identifier: return
         arguments
-          identifier: b
+          identifier: a
 declare-assign
   id
     identifier: a
   value
     13
-assign
-  identifier: a
-  39
 declare-assign
   id
     identifier: b
   value
     plus
-      plus
-        identifier: a
-        identifier: func1
-      5
+      identifier: a
+      identifier: func1
 call
   target
     identifier: print
@@ -245,223 +88,53 @@ call
     identifier: print
   arguments
     identifier: b
-call
-  target
-    identifier: print
-  arguments
-    call
-      target
-        member
-          identifier: b
-          identifier: ToString
-      arguments
-        "C"
-identifier: return
-call
-  target
-    identifier: print
-  arguments
-    "unreachable"
 
 Analysis Log:
-=== Analyze ===
-0000 expression: EscFile { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 scope: nodes=10
-0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func2 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
-0001 type: null
-0001 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0002 scope: nodes=4
-0002 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = cond }, Type = IdentifierNode { Text = bool }, Value = ParameterNode { } }
-0002 type: IdentifierNode { Text = bool }
-0002 expression: ParameterNode { }
-0002 expression: CallNode { Target = IdentifierNode { Text = if }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0002 expression: IdentifierNode { Text = if }
-0002 expression: IdentifierNode { Text = false }
-0002 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0003 scope: nodes=1
-0003 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0003 expression: IdentifierNode { Text = return }
-0003 expression: LiteralNumberNode { Text = 0 }
-0002 expression: CallNode { Target = IdentifierNode { Text = if }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0002 expression: IdentifierNode { Text = if }
-0002 expression: LogicalNegationNode { Node = IdentifierNode { Text = cond } }
-0002 expression: IdentifierNode { Text = cond }
-0002 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0004 scope: nodes=1
-0004 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0004 expression: IdentifierNode { Text = return }
-0004 expression: LiteralNumberNode { Text = 100 }
-0002 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0002 expression: IdentifierNode { Text = return }
-0002 expression: LiteralNumberNode { Text = 9999 }
-0001 expression: DeclareStaticNode { Identifier = IdentifierNode { Text = func1 }, Type = , Value = BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
-0001 type: null
-0001 expression: BracesNode { Lines = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0005 scope: nodes=3
-0005 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = a }, Type = , Value = LiteralNumberNode { Text = 2 } }
-0005 type: null
-0005 expression: LiteralNumberNode { Text = 2 }
-0005 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = b }, Type = , Value = PlusNode { Left = IdentifierNode { Text = a }, Right = CallNode { Target = IdentifierNode { Text = func2 }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } } }
-0005 type: null
-0005 expression: PlusNode { Left = IdentifierNode { Text = a }, Right = CallNode { Target = IdentifierNode { Text = func2 }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] } }
-0005 expression: IdentifierNode { Text = a }
-0005 expression: CallNode { Target = IdentifierNode { Text = func2 }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0005 expression: IdentifierNode { Text = func2 }
-0005 expression: IdentifierNode { Text = false }
-0005 expression: CallNode { Target = IdentifierNode { Text = return }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0005 expression: IdentifierNode { Text = return }
-0005 expression: IdentifierNode { Text = b }
-0001 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = a }, Type = , Value = LiteralNumberNode { Text = 13 } }
-0001 type: null
-0001 expression: LiteralNumberNode { Text = 13 }
-0001 expression: AssignNode { Target = IdentifierNode { Text = a }, Value = LiteralNumberNode { Text = 39 } }
-0001 expression: IdentifierNode { Text = a }
-0001 expression: LiteralNumberNode { Text = 39 }
-0001 expression: DeclareAssignNode { Identifier = IdentifierNode { Text = b }, Type = , Value = PlusNode { Left = PlusNode { Left = IdentifierNode { Text = a }, Right = IdentifierNode { Text = func1 } }, Right = LiteralNumberNode { Text = 5 } } }
-0001 type: null
-0001 expression: PlusNode { Left = PlusNode { Left = IdentifierNode { Text = a }, Right = IdentifierNode { Text = func1 } }, Right = LiteralNumberNode { Text = 5 } }
-0001 expression: PlusNode { Left = IdentifierNode { Text = a }, Right = IdentifierNode { Text = func1 } }
-0001 expression: IdentifierNode { Text = a }
-0001 expression: IdentifierNode { Text = func1 }
-0001 expression: LiteralNumberNode { Text = 5 }
-0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: IdentifierNode { Text = print }
-0001 expression: IdentifierNode { Text = a }
-0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: IdentifierNode { Text = print }
-0001 expression: IdentifierNode { Text = b }
-0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: IdentifierNode { Text = print }
-0001 expression: CallNode { Target = MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: MemberNode { Target = IdentifierNode { Text = b }, Member = IdentifierNode { Text = ToString } }
-0001 expression: IdentifierNode { Text = b }
-0001 expression: LiteralStringNode { Text = C }
-0001 expression: IdentifierNode { Text = return }
-0001 expression: CallNode { Target = IdentifierNode { Text = print }, Arguments = System.Collections.Generic.List`1[EscLang.Parse.SyntaxNode] }
-0001 expression: IdentifierNode { Text = print }
-0001 expression: LiteralStringNode { Text = unreachable }
-=== TypeCheck ===
-0002 declaration: id=cond type=DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean }
-0003 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0002 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
-0002 intrinsic(TODO): UnknownAnalysisType { FullName = Unknown }
-0002 call: UnknownAnalysisType { FullName = Unknown }
-0002 identifier: id=cond type=DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean }
-0004 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0002 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
-0002 intrinsic(TODO): UnknownAnalysisType { FullName = Unknown }
-0002 call: UnknownAnalysisType { FullName = Unknown }
-0002 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
-0001 declaration: id=func2 type=FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
-0005 declaration: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 identifier: id=func2 type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 call: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 declaration: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 identifier: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0005 return: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 function: FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
-0001 declaration: id=func1 type=FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } }
-0001 declaration: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 assign: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 identifier: id=func1 type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 add: DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 declaration: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 identifier: id=a type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 identifier: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 identifier: id=b type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 return: VoidAnalysisType { FullName = Void }
-0001 intrinsic(TODO): DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0001 call: DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-0000 function: FunctionAnalysisType { FullName = Function, ReturnType = VoidAnalysisType { FullName = Void } }
+=== Table ===
+slot 0001 in 0000 :: File = FileSlotData { Main = 0 }
+slot 0002 in 0001 :: Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0001 in 0000 <- File = FileSlotData { Main = 2 }
+slot 0003 in 0002 :: Declare = DeclareSlotData { Name = func1, IsStatic = True, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0004 in 0003 :: Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0005 in 0004 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 0 }
+slot 0004 in 0003 -> Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0006 in 0005 :: Integer = IntegerSlotData { Value = 2 }
+slot 0005 in 0004 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 6 }
+slot 0007 in 0004 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
+slot 0008 in 0007 :: Identifier = IdentifierSlotData { Name = return }
+slot 0007 in 0004 <- Call = CallSlotData { Target = 8, Args = System.Int32[] }
+slot 0009 in 0007 :: Identifier = IdentifierSlotData { Name = a }
+slot 0007 in 0004 <- Call = CallSlotData { Target = 8, Args = System.Int32[] }
+slot 0003 in 0002 <- Declare = DeclareSlotData { Name = func1, IsStatic = True, Value = 4 }
+slot 0010 in 0002 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0011 in 0010 :: Integer = IntegerSlotData { Value = 13 }
+slot 0010 in 0002 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Value = 11 }
+slot 0012 in 0002 :: Declare = DeclareSlotData { Name = b, IsStatic = False, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0013 in 0012 :: Add = AddOpSlotData { Left = 0, Right = 0 }
+slot 0014 in 0013 :: Identifier = IdentifierSlotData { Name = a }
+slot 0015 in 0013 :: Identifier = IdentifierSlotData { Name = func1 }
+slot 0013 in 0012 <- Add = AddOpSlotData { Left = 14, Right = 15 }
+slot 0012 in 0002 <- Declare = DeclareSlotData { Name = b, IsStatic = False, Value = 13 }
+slot 0016 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
+slot 0017 in 0016 :: Identifier = IdentifierSlotData { Name = print }
+slot 0016 in 0002 <- Call = CallSlotData { Target = 17, Args = System.Int32[] }
+slot 0018 in 0016 :: Identifier = IdentifierSlotData { Name = a }
+slot 0016 in 0002 <- Call = CallSlotData { Target = 17, Args = System.Int32[] }
+slot 0019 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
+slot 0020 in 0019 :: Identifier = IdentifierSlotData { Name = print }
+slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
+slot 0021 in 0019 :: Identifier = IdentifierSlotData { Name = b }
+slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
+slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
 
 Analyze:
 main procedure
   scope
-    static: func2 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
-      function: return=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-        scope
-          static: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
-            parameter: UnknownAnalysisType { FullName = Unknown }
-          call: type=UnknownAnalysisType { FullName = Unknown } return=UnknownAnalysisType { FullName = Unknown }
-            intrinsic: if
-            bool: False
-            function: return=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-              scope
-                return
-                  int: 0
-          call: type=UnknownAnalysisType { FullName = Unknown } return=UnknownAnalysisType { FullName = Unknown }
-            intrinsic: if
-            not
-              identifier: cond (DotnetAnalysisType { FullName = Dotnet::System.Boolean, Type = System.Boolean })
-            function: return=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-              scope
-                return
-                  int: 100
-          return
-            int: 9999
-    static: func1 (FunctionAnalysisType { FullName = Function, ReturnType = DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } })
-      function: return=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-        scope
-          static: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-            int: 2
-          static: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-            add
-              identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-              call: type=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 } return=DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 }
-                identifier: func2 (UnknownAnalysisType { FullName = Unknown })
-                bool: False
-          return
-            identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    static: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-      int: 13
-    assign
-      identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-      int: 39
-    static: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-      add
-        add
-          identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-          identifier: func1 (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-        int: 5
-    call: type=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String } return=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-      intrinsic: print
-      identifier: a (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    call: type=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String } return=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-      intrinsic: print
-      identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-    call: type=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String } return=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-      intrinsic: print
-      call: type=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String } return=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-        dotnet member call
-          method info: System.String ToString(System.String)
-          type: Dotnet::System.String
-          return type: Dotnet::System.String
-          target:
-            identifier: b (DotnetAnalysisType { FullName = Dotnet::System.Int32, Type = System.Int32 })
-        string: C
-    return
-      void
-    call: type=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String } return=DotnetAnalysisType { FullName = Dotnet::System.String, Type = System.String }
-      intrinsic: print
-      string: unreachable
 
 Output:
-39
-146
-$146.00
 
 Stats:
 -    Read: 0.00s

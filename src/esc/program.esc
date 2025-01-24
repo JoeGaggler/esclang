@@ -1,21 +1,8 @@
-func2 :: {
-    cond : bool : <>
-    if false {
-        return 0
-    }
-    if !cond { return 100 }
-    return 9999 // unreachable
-}
 func1 :: {
     a := 2
-    b := a + func2 false
-    return b
+    return a
 }
 a := 13
-a = 39
-b := a + func1 + 5
+b := a + func1
 print a
 print b
-print (b.ToString "C") // C=currency
-return // early return
-print "unreachable"
