@@ -578,7 +578,18 @@ public static class Printer
 			{
 				var data = (IdentifierSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine($"id :: {data.Name}");
+				outputFile.WriteLine($"id: name = {data.Name}");
+				break;
+			}
+			case TableSlotType.Return:
+			{
+				var data = (ReturnSlotData)slot.Data;
+				outputFile.Indent(level);
+				outputFile.WriteLine("return");
+				if (data.Value != 0)
+				{
+					PrintTableSlot(outputFile, data.Value, level + 1);
+				}
 				break;
 			}
 			default:

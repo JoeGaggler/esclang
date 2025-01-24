@@ -25,9 +25,16 @@ public class Table
 
 	public void Update(int slotId, SlotData data, StreamWriter log)
 	{
-		var slot = Slots[slotId];
-		Slots[slotId] = slot with { Data = data };
+		var slot = Slots[slotId] with { Data = data };
+		Slots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.Type} = {data}");
+	}
+
+	public void Replace(int slotId, TableSlotType type, SlotData data, StreamWriter log)
+	{
+		var slot = Slots[slotId] with { Type = type, Data = data };
+		Slots[slotId] = slot;
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.Type} = {data}");
 	}
 
 	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, StreamWriter log) where T : SlotData
@@ -44,6 +51,17 @@ public class Table
 		return dataIfFound is not null;
 	}
 
+	public IEnumerable<TableSlot> All
+	{
+		get
+		{
+			for (var i = 1; i < Slots.Count; i++)
+			{
+				yield return Slots[i];
+			}
+		}
+	}
+
 	public TableSlot Root { get => Slots[1]; }
 	public TableSlot this[int slotId] { get => Slots[slotId]; }
 }
@@ -58,9 +76,10 @@ public enum TableSlotType
 	Braces,
 	Integer,
 	Add,
+	Return,
 }
 
-public record class TableSlot(int ParentSlot, TableSlotType Type, SlotData Data)
+public record class TableSlot(int ParentSlot, TableSlotType Type, SlotData Data) // TODO: add type info
 {
 
 }
@@ -86,6 +105,7 @@ public record class BracesSlotData(int[] Lines) : SlotData
 }
 public record class IntegerSlotData(Int32 Value) : SlotData;
 public record class AddOpSlotData(Int32 Left = 0, Int32 Right = 0) : SlotData;
+public record class ReturnSlotData(int Value = 0) : SlotData;
 
 ////////////////////////////////
 

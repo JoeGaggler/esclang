@@ -90,7 +90,7 @@ call
     identifier: b
 
 Analysis Log:
-=== Table ===
+=== Build: init ===
 slot 0001 in 0000 :: File = FileSlotData { Main = 0 }
 slot 0002 in 0001 :: Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0001 in 0000 <- File = FileSlotData { Main = 2 }
@@ -130,6 +130,12 @@ slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
 slot 0021 in 0019 :: Identifier = IdentifierSlotData { Name = b }
 slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
 slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
+=== Build: return ===
+slot 0008 in 0007 -> Identifier = IdentifierSlotData { Name = return }
+slot 0006 in 0005 << Return = ReturnSlotData { Value = 9 }
+slot 0006 in 0004 -- call -> return
+slot 0017 in 0016 -> Identifier = IdentifierSlotData { Name = print }
+slot 0020 in 0019 -> Identifier = IdentifierSlotData { Name = print }
 === Tree ===
 file
   braces
@@ -138,24 +144,25 @@ file
         braces
           declare a
             value
-              integer :: 2
+              return
+                id: name = a
           call
-            id :: return
-            id :: a
+            id: name = return
+            id: name = a
     declare a
       value
         integer :: 13
     declare b
       value
         add
-          id :: a
-          id :: func1
+          id: name = a
+          id: name = func1
     call
-      id :: print
-      id :: a
+      id: name = print
+      id: name = a
     call
-      id :: print
-      id :: b
+      id: name = print
+      id: name = b
 
 Analyze:
 main procedure

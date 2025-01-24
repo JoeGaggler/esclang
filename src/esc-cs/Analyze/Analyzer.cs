@@ -14,11 +14,14 @@ public static class Analyzer
 
 	public static Analysis Analyze(Parse.EscFile file, StreamWriter log)
 	{
-		var globalScope = new Scope(++ScopeCounter);
+	   var globalScope = new Scope(++ScopeCounter);
 		var queue = new AnalysisQueue();
 
-		log.WriteLine("=== Table ===");
+		log.WriteLine("=== Build: init ===");
 		_ = BuildTable(file, 0, log);
+
+		log.WriteLine("=== Build: return ===");
+		BuildReturn(log);
 
 		log.WriteLine("=== Tree ===");
 		Printer.PrintTable(log);
@@ -146,6 +149,31 @@ public static class Analyzer
 		}
 	}
 
+	private static void BuildReturn(StreamWriter log)
+	{
+		foreach (var (slot, node) in Table.Instance.All.Index())
+		{
+			if (node.Type != TableSlotType.Call) { continue; }
+
+			var call = (CallSlotData)node.Data;
+			if (call.Target == 0) { continue; }
+			if (call.Args.Length != 1) { continue; }
+
+			if (!Table.Instance.TryGetSlot<IdentifierSlotData>(call.Target, TableSlotType.Identifier, out var targetId, log))
+			{
+				continue;
+			}
+			if (targetId.Name != "return") { continue; }
+
+			var argSlot = call.Args[0];
+			if (argSlot == 0) { continue; }
+
+			var returnData = new ReturnSlotData(argSlot);
+			Table.Instance.Replace(slot, TableSlotType.Return, returnData, log);
+
+			log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
+		}
+	}
 	private static int BuildDeclareNode(Boolean isStatic, int parentSlot, StreamWriter log, SyntaxNode idNode, SyntaxNode? typeNode, SyntaxNode valueNode)
 	{
 		if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
