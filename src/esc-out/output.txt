@@ -217,47 +217,47 @@ slot 0011 in 0010 <- Integer : 2 = IntegerSlotData { Value = 13 }
 slot 0014 in 0013 <- Integer : 2 = IntegerSlotData { Value = 1 }
 slot 0015 in 0013 <- Integer : 2 = IntegerSlotData { Value = 2 }
 === Build: spill types ===
-add source: 6
-add source: 11
-add source: 14
-add source: 15
-source: 6
+enqueue 0006
+enqueue 0011
+enqueue 0014
+enqueue 0015
+dequeue: 0006
 add target: 5
 slot 0005 in 0004 <- Declare : 2 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 6 }
 slot 0013 in 0012 <- Add : 2 = AddOpSlotData { Left = 14, Right = 15 }
-source: 11
+dequeue: 0011
 add target: 10
 slot 0010 in 0002 <- Declare : 2 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 11 }
-source: 14
-source: 15
-source: 5
+dequeue: 0014
+dequeue: 0015
+dequeue: 0005
 id target: 9
 slot 0009 in 0007 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 5 }
-source: 13
+dequeue: 0013
 add target: 12
 slot 0012 in 0002 <- Declare : 2 = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
-source: 10
+dequeue: 0010
 id target: 19
 slot 0019 in 0018 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
 id target: 24
 slot 0024 in 0022 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
-source: 9
+dequeue: 0009
 slot 0007 return: type <- NativeTypeSlot { Name = int } 2 via 0009
 slot 0007 in 0004 <- Return : 2 = ReturnSlotData { Value = 9, Function = 4 }
-source: 12
+dequeue: 0012
 id target: 21
 slot 0021 in 0017 <- Identifier : 2 = IdentifierSlotData { Name = b, Target = 12 }
-source: 19
-source: 24
-source: 7
+dequeue: 0019
+dequeue: 0024
+dequeue: 0007
 add type 3 = FunctionTypeSlot { ReturnType = 2 }
 slot 0004 braces: found return 0007 3
 slot 0004 in 0003 <- Braces : 3 = BracesSlotData { Lines = System.Int32[] }
-source: 21
-source: 4
+dequeue: 0021
+dequeue: 0004
 add target: 3
 slot 0003 in 0002 <- Declare : 3 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
-source: 3
+dequeue: 0003
 id target: 20
 TODO: id type assigned from function: 20
 done after 15 iterations

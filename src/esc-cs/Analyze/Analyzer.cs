@@ -53,13 +53,13 @@ public static class Analyzer
 			case EscFile { Lines: { } lines }:
 			{
 				var fileData = new FileSlotData();
-				var fileSlot = Table.Instance.Add(parentSlot, TableSlotType.File, fileData, log);
+				var fileSlot = Table.Add(parentSlot, TableSlotType.File, fileData, log);
 
 				var bracesData = new BracesSlotData(Lines: []);
-				var bracesSlot = Table.Instance.Add(fileSlot, TableSlotType.Braces, bracesData, log);
+				var bracesSlot = Table.Add(fileSlot, TableSlotType.Braces, bracesData, log);
 
 				fileData = fileData with { Main = bracesSlot };
-				Table.Instance.UpdateData(fileSlot, fileData, log);
+				Table.UpdateData(fileSlot, fileData, log);
 
 				// Lines
 				var lineSlots = new List<int>();
@@ -70,7 +70,7 @@ public static class Analyzer
 				}
 
 				bracesData = bracesData with { Lines = [.. lineSlots] };
-				Table.Instance.UpdateData(bracesSlot, bracesData, log);
+				Table.UpdateData(bracesSlot, bracesData, log);
 
 				return fileSlot;
 			}
@@ -85,12 +85,12 @@ public static class Analyzer
 			case CallNode { Target: { } target, Arguments: { } arguments }:
 			{
 				var data = new CallSlotData(Target: 0, Args: []);
-				var slot = Table.Instance.Add(parentSlot, TableSlotType.Call, data, log);
+				var slot = Table.Add(parentSlot, TableSlotType.Call, data, log);
 
 				// Target
 				var targetSlot = BuildTable(target, slot, log);
 				data = data with { Target = targetSlot };
-				Table.Instance.UpdateData(slot, data, log);
+				Table.UpdateData(slot, data, log);
 
 				// Args
 				var argSlots = new List<int>();
@@ -101,21 +101,21 @@ public static class Analyzer
 				}
 
 				data = data with { Args = [.. argSlots] };
-				Table.Instance.UpdateData(slot, data, log);
+				Table.UpdateData(slot, data, log);
 
 				return slot;
 			}
 			case IdentifierNode { Text: { Length: > 0 } id }:
 			{
 				var data = new IdentifierSlotData(Name: id);
-				var slot = Table.Instance.Add(parentSlot, TableSlotType.Identifier, data, log);
+				var slot = Table.Add(parentSlot, TableSlotType.Identifier, data, log);
 
 				return slot;
 			}
 			case BracesNode { Lines: { } lines }:
 			{
 				var data = new BracesSlotData([]);
-				var slot = Table.Instance.Add(parentSlot, TableSlotType.Braces, data, log);
+				var slot = Table.Add(parentSlot, TableSlotType.Braces, data, log);
 
 				var lineSlots = new List<int>();
 				foreach (var line in lines)
@@ -125,28 +125,28 @@ public static class Analyzer
 				}
 
 				data = data with { Lines = [.. lineSlots] };
-				Table.Instance.UpdateData(slot, data, log);
+				Table.UpdateData(slot, data, log);
 
 				return slot;
 			}
 			case LiteralNumberNode { Text: { Length: > 0 } numberLiteral }:
 			{
 				var data = new IntegerSlotData(Value: Int32.Parse(numberLiteral));
-				var slot = Table.Instance.Add(parentSlot, TableSlotType.Integer, data, log);
+				var slot = Table.Add(parentSlot, TableSlotType.Integer, data, log);
 
 				return slot;
 			}
 			case PlusNode { Left: { } left, Right: { } right }:
 			{
 				var data = new AddOpSlotData();
-				var slot = Table.Instance.Add(parentSlot, TableSlotType.Add, data, log);
+				var slot = Table.Add(parentSlot, TableSlotType.Add, data, log);
 
 				// Operands
 				var leftSlot = BuildTable(left, slot, log);
 				var rightSlot = BuildTable(right, slot, log);
 
 				data = data with { Left = leftSlot, Right = rightSlot };
-				Table.Instance.UpdateData(slot, data, log);
+				Table.UpdateData(slot, data, log);
 
 				return slot;
 			}
@@ -162,7 +162,7 @@ public static class Analyzer
 	{
 		var returnQueue = new Queue<int>();
 
-		foreach (var (slot, node) in Table.Instance.All.Index())
+		foreach (var (slot, node) in Table.All.Index())
 		{
 			if (node.DataType != TableSlotType.Call) { continue; }
 
@@ -170,7 +170,7 @@ public static class Analyzer
 			if (call.Target == 0) { continue; }
 			if (call.Args.Length != 1) { continue; }
 
-			if (!Table.Instance.TryGetSlot<IdentifierSlotData>(call.Target, TableSlotType.Identifier, out var targetId, log))
+			if (!Table.TryGetSlot<IdentifierSlotData>(call.Target, TableSlotType.Identifier, out var targetId, log))
 			{
 				continue;
 			}
@@ -180,11 +180,11 @@ public static class Analyzer
 			if (argSlot == 0) { continue; }
 
 			var returnData = new ReturnSlotData(argSlot);
-			Table.Instance.ReplaceData(slot, TableSlotType.Return, returnData, log);
+			Table.ReplaceData(slot, TableSlotType.Return, returnData, log);
 			returnQueue.Enqueue(slot);
 
 			// Invalidate the "return" identifier
-			Table.Instance.ReplaceData(call.Target, TableSlotType.Unknown, InvalidSlotData.Instance, log);
+			Table.ReplaceData(call.Target, TableSlotType.Unknown, InvalidSlotData.Instance, log);
 
 			log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
 		}
@@ -192,7 +192,7 @@ public static class Analyzer
 		while (returnQueue.Count > 0)
 		{
 			var slot = returnQueue.Dequeue();
-			var node = Table.Instance[slot];
+			var node = Table.GetSlot(slot);
 
 			if (node.DataType != TableSlotType.Return) { continue; } // should be redundant
 
@@ -205,14 +205,14 @@ public static class Analyzer
 			{
 				if (currentSlot == 0) { break; } // not embedded in a braces node?
 
-				var currentNode = Table.Instance[currentSlot];
+				var currentNode = Table.GetSlot(currentSlot);
 				if (currentNode.DataType == TableSlotType.Braces)
 				{
 					var bracesData = (BracesSlotData)currentNode.Data;
 
 					log.WriteLine($"slot {slot:0000} <- returns to {currentSlot:0000}");
 
-					Table.Instance.UpdateData(slot, returnData with { Function = currentSlot }, log);
+					Table.UpdateData(slot, returnData with { Function = currentSlot }, log);
 					break;
 				}
 
@@ -223,7 +223,7 @@ public static class Analyzer
 
 	private static void BuildResolver(StreamWriter log)
 	{
-		foreach (var (slot, node) in Table.Instance.All.Index())
+		foreach (var (slot, node) in Table.All.Index())
 		{
 			if (node.DataType != TableSlotType.Identifier) { continue; }
 			var slotData = (IdentifierSlotData)node.Data;
@@ -243,7 +243,7 @@ public static class Analyzer
 					log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}0000 = ROOT");
 					break;
 				}
-				currentNode = Table.Instance[currentSlot];
+				currentNode = Table.GetSlot(currentSlot);
 
 
 				if (currentNode.DataType == TableSlotType.Braces)
@@ -253,7 +253,7 @@ public static class Analyzer
 					{
 						log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}{currentSlot:0000} FOUND: {bracesData}");
 						var newData = slotData with { Target = valueSlot };
-						Table.Instance.UpdateData(slot, newData, log);
+						Table.UpdateData(slot, newData, log);
 						break;
 					}
 				}
@@ -262,39 +262,19 @@ public static class Analyzer
 					log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}{currentSlot:0000} = {currentNode.DataType}");
 
 				}
-
-				// if (!Table.Instance.TryGetSlot<DeclareSlotData>(slot, TableSlotType.Declare, out var declareData, log))
-				// {
-				// 	break;
-				// }
-
-				// if (declareData.Value == 0) { break; }
-
-				// if (!Table.Instance.TryGetSlot<IdentifierSlotData>(declareData.Value, TableSlotType.Identifier, out var valueData, log))
-				// {
-				// 	break;
-				// }
-
-				// if (valueData.Name == slotData.Name)
-				// {
-				// 	Table.Instance.UpdateType(slot, Table.Instance[declareData.Value].TypeSlot, log);
-				// 	break;
-				// }
-
-				// slot = declareData.Value;
 			}
 		}
 	}
 
 	private static void BuildTypes(StreamWriter log)
 	{
-		foreach (var (slot, node) in Table.Instance.All.Index())
+		foreach (var (slot, node) in Table.All.Index())
 		{
 			switch (node.DataType)
 			{
 				case TableSlotType.Integer:
 				{
-					Table.Instance.UpdateType(slot, Table.IntType, log);
+					Table.UpdateType(slot, Table.IntType, log);
 					break;
 				}
 				case TableSlotType.Declare:
@@ -308,34 +288,32 @@ public static class Analyzer
 
 	private static void BuildSpillTypes(StreamWriter log)
 	{
+		// updated nodes that trigger its dependents to refresh
 		var sourceQueue = new Queue<int>();
 
-		// start with all nodes that have a type
-		foreach (var (sourceSlotId, sourceSlot) in Table.Instance.All.Index())
+		// start with all nodes that have a type from previous passes
+		foreach (var (sourceSlotId, sourceSlot) in Table.All.Index())
 		{
-			if (sourceSlot.TypeSlot != 0)
-			{
-				sourceQueue.Enqueue(sourceSlotId);
-				log.WriteLine($"add source: {sourceSlotId}");
-			}
+			if (sourceSlot.TypeSlot == 0) { continue; }
+			sourceQueue.Enqueue(sourceSlotId);
+			log.WriteLine($"enqueue {sourceSlotId:0000}");
 		}
 
-		int x = 0;
+		var iteration = 0;
 		while (sourceQueue.Count > 0)
 		{
-			x++;
-			if (x > 100) throw new InvalidOperationException("Infinite loop");
+			if (++iteration > 1000) { throw new InvalidOperationException("Type checking reached max iterations"); }
 
 			var sourceSlotId = sourceQueue.Dequeue();
-			log.WriteLine($"source: {sourceSlotId}");
+			log.WriteLine($"dequeue: {sourceSlotId:0000}");
 
 			// find all nodes that reference this node
 			// future: build a reverse lookup table on an earlier pass
-			foreach (var (targetSlotId, targetSlot) in Table.Instance.All.Index())
+			foreach (var (targetSlotId, targetSlot) in Table.All.Index())
 			{
 				if (targetSlot.DataType == TableSlotType.Declare)
 				{
-					var declareData = (DeclareSlotData)Table.Instance[targetSlotId].Data;
+					var declareData = Table.GetSlotData<DeclareSlotData>(targetSlotId);
 
 					// TODO: explicit types?
 
@@ -351,45 +329,22 @@ public static class Analyzer
 						else
 						{
 							var valueSlotId = declareData.Value;
-							var valueSlot = Table.Instance[valueSlotId];
+							var valueSlot = Table.GetSlot(valueSlotId);
 							var valueSlotType = valueSlot.TypeSlot;
 
 							if (valueSlotType != targetSlot.TypeSlot)
 							{
-								Table.Instance.UpdateType(targetSlotId, valueSlotType, log);
+								Table.UpdateType(targetSlotId, valueSlotType, log);
 								sourceQueue.Enqueue(targetSlotId);
 							}
 						}
 					}
 				}
-				// else if (node.DataType == TableSlotType.Call)
-				// {
-				// 	if (!Table.Instance.TryGetSlot<CallSlotData>(slot, TableSlotType.Call, out var callData, log))
-				// 	{
-				// 		throw new Exception("Invalid call slot");
-				// 	}
-
-				// 	if (callData.Target == sourceSlot)
-				// 	{
-				// 		targetQueue.Enqueue(slot);
-				// 	}
-				// 	else
-				// 	{
-				// 		foreach (var arg in callData.Args)
-				// 		{
-				// 			if (arg == sourceSlot)
-				// 			{
-				// 				targetQueue.Enqueue(slot);
-				// 			}
-				// 		}
-				// 	}
-				// }
 				else if (targetSlot.DataType == TableSlotType.Add)
 				{
 					// NOTE: this assumes that add produces the same type as its operands
 
-					var addSlot = Table.Instance[targetSlotId];
-					var addData = (AddOpSlotData)addSlot.Data;
+					var (addSlot, addData) = Table.GetSlotTuple<AddOpSlotData>(targetSlotId);
 
 					// skip if either operand is not known yet
 					if (addData.Left == 0 || addData.Right == 0)
@@ -397,8 +352,8 @@ public static class Analyzer
 						continue;
 					}
 
-					var leftType = Table.Instance[addData.Left].TypeSlot;
-					var rightType = Table.Instance[addData.Right].TypeSlot;
+					var leftType = Table.GetSlot(addData.Left).TypeSlot;
+					var rightType = Table.GetSlot(addData.Right).TypeSlot;
 
 					// skip if operands do not match
 					if (leftType != rightType)
@@ -412,13 +367,12 @@ public static class Analyzer
 						continue;
 					}
 
-					Table.Instance.UpdateType(targetSlotId, leftType, log);
+					Table.UpdateType(targetSlotId, leftType, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.DataType == TableSlotType.Identifier)
 				{
-					var idSlot = Table.Instance[targetSlotId];
-					var idData = (IdentifierSlotData)idSlot.Data;
+					var (idSlot, idData) = Table.GetSlotTuple<IdentifierSlotData>(targetSlotId);
 
 					if (idData.Target != sourceSlotId)
 					{
@@ -428,54 +382,53 @@ public static class Analyzer
 					// targetQueue.Enqueue(targetSlotId);
 					log.WriteLine($"id target: {targetSlotId}");
 
-					var sourceSlotRecord = Table.Instance[sourceSlotId];
+					var sourceSlotRecord = Table.GetSlot(sourceSlotId);
 					if (sourceSlotRecord.TypeSlot == 0) { continue; } // should be redundant
 
 					// TODO: don't copy function type, must copy return type
-					var typeSlot = Table.Instance.Types[sourceSlotRecord.TypeSlot];
+					var typeSlot = Table.GetTypeSlot(sourceSlotRecord.TypeSlot);
 					if (typeSlot is FunctionTypeSlot)
 					{
 						log.WriteLine($"TODO: id type assigned from function: {targetSlotId}");
 						continue;
 					}
 
-					Table.Instance.UpdateType(targetSlotId, sourceSlotRecord.TypeSlot, log);
+					Table.UpdateType(targetSlotId, sourceSlotRecord.TypeSlot, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.DataType == TableSlotType.Return)
 				{
-					var returnSlot = Table.Instance[targetSlotId];
-					var returnData = (ReturnSlotData)returnSlot.Data;
+					var (returnSlot, returnData) = Table.GetSlotTuple<ReturnSlotData>(targetSlotId);
 
 					if (returnData.Value != sourceSlotId)
 					{
 						continue;
 					}
 
-					var sourceTypeId = Table.Instance[sourceSlotId].TypeSlot;
-					var typeRow = Table.Instance.Types[sourceTypeId];
+					var sourceTypeId = Table.GetSlot(sourceSlotId).TypeSlot;
+					var typeRow = Table.GetTypeSlot(sourceTypeId);
 					log.WriteLine($"slot {targetSlotId:0000} return: type <- {typeRow} {sourceTypeId} via {returnData.Value:0000}");
-					Table.Instance.UpdateType(targetSlotId, sourceTypeId, log);
+					Table.UpdateType(targetSlotId, sourceTypeId, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.DataType == TableSlotType.Braces)
 				{
-					var bracesSlot = Table.Instance[targetSlotId];
-					var bracesData = (BracesSlotData)bracesSlot.Data;
+					var (bracesSlot, bracesData) = Table.GetSlotTuple<BracesSlotData>(targetSlotId);
+
 					if (bracesSlot.TypeSlot != 0) { continue; } // already found a return value, but might need to consider more?
 
-					var returnSlot = Table.Instance[sourceSlotId];
+					var returnSlot = Table.GetSlot(sourceSlotId);
 					if (returnSlot.DataType != TableSlotType.Return) { continue; } // should be redundant
 					var returnData = (ReturnSlotData)returnSlot.Data;
 					if (returnData.Function != targetSlotId) { continue; } // should be redundant
 					if (returnSlot.TypeSlot == 0) { continue; } // should be redundant
 
-					var returnType = Table.Instance.Types[returnSlot.TypeSlot];
+					var returnType = Table.GetTypeSlot(returnSlot.TypeSlot);
 					var funcType = new FunctionTypeSlot(returnSlot.TypeSlot);
-					var funcTypeId = Table.Instance.GetOrAddType(funcType, log);
+					var funcTypeId = Table.GetOrAddType(funcType, log);
 
 					log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} {funcTypeId}");
-					Table.Instance.UpdateType(targetSlotId, funcTypeId, log);
+					Table.UpdateType(targetSlotId, funcTypeId, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else
@@ -484,7 +437,7 @@ public static class Analyzer
 				}
 			}
 		}
-		log.WriteLine($"done after {x} iterations");
+		log.WriteLine($"done after {iteration} iterations");
 	}
 
 
@@ -497,10 +450,10 @@ public static class Analyzer
 
 		// TODO: add slot, enqueue child nodes, queue update slot with analyzed data
 		var data = new DeclareSlotData(Name: id, IsStatic: isStatic);
-		var slot = Table.Instance.Add(parentSlot, TableSlotType.Declare, data, log);
+		var slot = Table.Add(parentSlot, TableSlotType.Declare, data, log);
 
 		// Name
-		if (!Table.Instance.TryGetSlot<BracesSlotData>(parentSlot, TableSlotType.Braces, out var bracesData, log))
+		if (!Table.TryGetSlot<BracesSlotData>(parentSlot, TableSlotType.Braces, out var bracesData, log))
 		{
 			throw new Exception("Invalid parent slot");
 		}
@@ -515,13 +468,13 @@ public static class Analyzer
 		{
 			typeSlot = BuildTable(typeNode, slot, log);
 			data = data with { Type = typeSlot };
-			Table.Instance.UpdateData(slot, data, log);
+			Table.UpdateData(slot, data, log);
 		}
 
 		// Value
 		var valueSlot = BuildTable(valueNode, slot, log);
 		data = data with { Value = valueSlot };
-		Table.Instance.UpdateData(slot, data, log);
+		Table.UpdateData(slot, data, log);
 
 		return slot;
 	}

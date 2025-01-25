@@ -8,69 +8,75 @@ public record class Analysis(Scope Main)
 
 public class Table
 {
-	public static readonly Table Instance = new Table();
+	public static readonly Table Instance = new Table(); // TODO: make private singleton
+
+	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
+	private readonly List<TypeSlot> Types = [UnknownTypeSlot.Instance];
 
 	private Table() { }
 
 	static Table()
 	{
-		VoidType = Instance.GetOrAddType(VoidTypeSlot.Instance, StreamWriter.Null);
-		IntType = Instance.GetOrAddType(new NativeTypeSlot("int"), StreamWriter.Null);
+		VoidType = GetOrAddType(VoidTypeSlot.Instance, StreamWriter.Null);
+		IntType = GetOrAddType(new NativeTypeSlot("int"), StreamWriter.Null);
 	}
 
 	public static readonly int IntType;
 	public static readonly int VoidType;
 
-	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
-	public readonly List<TypeSlot> Types = [UnknownTypeSlot.Instance];
+	public static TableSlot GetSlot(int slotId) => Instance.Slots[slotId];
+	public static T GetSlotData<T>(int slotId) where T : SlotData => (T)Instance.Slots[slotId].Data;
+	public static (TableSlot, T) GetSlotTuple<T>(int slotId) where T : SlotData => (Instance.Slots[slotId], (T)Instance.Slots[slotId].Data);
+	public static TypeSlot GetTypeSlot(int typeSlotId) => Instance.Types[typeSlotId];
 
-	public int GetOrAddType(TypeSlot type, StreamWriter log)
+	public static void UpdateType(int slotId, int typeSlotId, StreamWriter? log)
+	{
+		log ??= StreamWriter.Null;
+		var slot = Instance.Slots[slotId] with { TypeSlot = typeSlotId };
+		Instance.Slots[slotId] = slot;
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} : {typeSlotId} = {slot.Data}");
+	}
+
+	public static int GetOrAddType(TypeSlot type, StreamWriter log)
 	{
 		var id = -1;
-		id = Types.IndexOf(type); // TODO: does this work for class records?
+		id = Instance.Types.IndexOf(type); // TODO: does this work for class records?
 		if (id == -1)
 		{
-			id = Types.Count;
-			Types.Add(type);
+			id = Instance.Types.Count;
+			Instance.Types.Add(type);
 			log.WriteLine($"add type {id} = {type}");
 		}
 		return id;
 	}
 
-	public int Add(int parentSlot, TableSlotType type, SlotData data, StreamWriter log)
+	public static int Add(int parentSlot, TableSlotType type, SlotData data, StreamWriter log)
 	{
-		var id = Slots.Count;
+		var id = Instance.Slots.Count;
 		var slot = new TableSlot(parentSlot, type, data);
-		Slots.Add(slot);
+		Instance.Slots.Add(slot);
 		log.WriteLine($"slot {id:0000} in {parentSlot:0000} :: {type} = {data}");
 		return id;
 	}
 
-	public void UpdateType(int slotId, int typeSlotId, StreamWriter log)
+	public static void UpdateData(int slotId, SlotData data, StreamWriter log)
 	{
-		var slot = Slots[slotId] with { TypeSlot = typeSlotId };
-		Slots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} : {typeSlotId} = {slot.Data}");
-	}
-
-	public void UpdateData(int slotId, SlotData data, StreamWriter log)
-	{
-		var slot = Slots[slotId] with { Data = data };
-		Slots[slotId] = slot;
+		var slot = Instance.Slots[slotId] with { Data = data };
+		Instance.Slots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} = {data}");
 	}
 
-	public void ReplaceData(int slotId, TableSlotType type, SlotData data, StreamWriter log)
+	public static void ReplaceData(int slotId, TableSlotType type, SlotData data, StreamWriter log)
 	{
 		// TODO: replacing a slot may invalidate previously referenced slots that are no longer reachable, caller should try to avoid this situation by marking the slots as invalid
-		var slot = Slots[slotId] with { DataType = type, Data = data };
-		Slots[slotId] = slot;
+		var slot = Instance.Slots[slotId] with { DataType = type, Data = data };
+		Instance.Slots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.DataType} = {data}");
 	}
 
-	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, StreamWriter log) where T : SlotData
+	public static bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, StreamWriter log) where T : SlotData
 	{
-		var slot = Slots[slotId];
+		var slot = Instance.Slots[slotId];
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.DataType} = {slot.Data}");
 		if (slot.DataType != type)
 		{
@@ -82,19 +88,18 @@ public class Table
 		return dataIfFound is not null;
 	}
 
-	public IEnumerable<TableSlot> All
+	public static IEnumerable<TableSlot> All
 	{
 		get
 		{
-			for (var i = 0; i < Slots.Count; i++)
+			for (var i = 0; i < Instance.Slots.Count; i++)
 			{
-				yield return Slots[i];
+				yield return Instance.Slots[i];
 			}
 		}
 	}
 
-	public TableSlot Root { get => Slots[1]; }
-	public TableSlot this[int slotId] { get => Slots[slotId]; }
+	public static TableSlot Root { get => Instance.Slots[1]; }
 }
 
 public abstract record class TypeSlot;

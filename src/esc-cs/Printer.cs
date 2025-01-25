@@ -499,13 +499,13 @@ public static class Printer
 
 	public static void PrintTable(TextWriter outputFile)
 	{
-		var root = Table.Instance.Root;
+		var root = Table.Root;
 		PrintTableSlot(outputFile, 1, 0);
 	}
 
 	private static void PrintTableSlot(TextWriter outputFile, int slotId, int level)
 	{
-		var slot = Table.Instance[slotId];
+		var slot = Table.GetSlot(slotId);
 		switch (slot.DataType)
 		{
 			case TableSlotType.File:
@@ -592,7 +592,7 @@ public static class Printer
 
 	public static String GetTypeSlotName(int typeSlotId)
 	{
-		var typeSlot = Table.Instance.Types[typeSlotId];
+		var typeSlot = Table.GetTypeSlot(typeSlotId);
 		return typeSlot switch
 		{
 			VoidTypeSlot => "void",
