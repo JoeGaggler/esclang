@@ -213,13 +213,12 @@ identifier: 0027 = IdentifierSlotData { Name = c, Target = 0 }
 slot 0027 in 0025 <- Identifier = IdentifierSlotData { Name = c, Target = 16 }
 === Build: types ===
 slot 0006 in 0005 <- Integer : 2 = IntegerSlotData { Value = 2 }
-slot 0011 in 0010 <- Integer : 2 = IntegerSlotData { Value = 13 }
-slot 0014 in 0013 <- Integer : 2 = IntegerSlotData { Value = 1 }
-slot 0015 in 0013 <- Integer : 2 = IntegerSlotData { Value = 2 }
-=== Build: spill types ===
 enqueue 0006
+slot 0011 in 0010 <- Integer : 2 = IntegerSlotData { Value = 13 }
 enqueue 0011
+slot 0014 in 0013 <- Integer : 2 = IntegerSlotData { Value = 1 }
 enqueue 0014
+slot 0015 in 0013 <- Integer : 2 = IntegerSlotData { Value = 2 }
 enqueue 0015
 dequeue: 0006
 add target: 5

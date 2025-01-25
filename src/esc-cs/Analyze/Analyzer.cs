@@ -29,9 +29,6 @@ public static class Analyzer
 		log.WriteLine("=== Build: types ===");
 		BuildTypes(log);
 
-		log.WriteLine("=== Build: spill types ===");
-		BuildSpillTypes(log);
-
 		log.WriteLine("=== Tree ===");
 		Printer.PrintTable(log);
 
@@ -268,6 +265,9 @@ public static class Analyzer
 
 	private static void BuildTypes(StreamWriter log)
 	{
+		// updated nodes that trigger its dependents to refresh
+		var sourceQueue = new Queue<int>();
+
 		foreach (var (slot, node) in Table.All.Index())
 		{
 			switch (node.DataType)
@@ -275,6 +275,8 @@ public static class Analyzer
 				case TableSlotType.Integer:
 				{
 					Table.UpdateType(slot, Table.IntType, log);
+					sourceQueue.Enqueue(slot);
+					log.WriteLine($"enqueue {slot:0000}");
 					break;
 				}
 				case TableSlotType.Declare:
@@ -283,20 +285,6 @@ public static class Analyzer
 					break;
 				}
 			}
-		}
-	}
-
-	private static void BuildSpillTypes(StreamWriter log)
-	{
-		// updated nodes that trigger its dependents to refresh
-		var sourceQueue = new Queue<int>();
-
-		// start with all nodes that have a type from previous passes
-		foreach (var (sourceSlotId, sourceSlot) in Table.All.Index())
-		{
-			if (sourceSlot.TypeSlot == 0) { continue; }
-			sourceQueue.Enqueue(sourceSlotId);
-			log.WriteLine($"enqueue {sourceSlotId:0000}");
 		}
 
 		var iteration = 0;
@@ -386,6 +374,7 @@ public static class Analyzer
 					if (sourceSlotRecord.TypeSlot == 0) { continue; } // should be redundant
 
 					// TODO: don't copy function type, must copy return type
+					// TODO: identifier to a function must turn into a call
 					var typeSlot = Table.GetTypeSlot(sourceSlotRecord.TypeSlot);
 					if (typeSlot is FunctionTypeSlot)
 					{
