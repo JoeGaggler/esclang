@@ -23,6 +23,9 @@ public static class Analyzer
 		log.WriteLine("=== Build: return ===");
 		BuildReturn(log);
 
+		log.WriteLine("=== Build: resolve identifiers ===");
+		BuildResolver(log);
+
 		log.WriteLine("=== Build: types ===");
 		BuildTypes(log);
 
@@ -177,7 +180,75 @@ public static class Analyzer
 			var returnData = new ReturnSlotData(argSlot);
 			Table.Instance.ReplaceData(slot, TableSlotType.Return, returnData, log);
 
+			// Invalidate the "return" identifier
+			Table.Instance.ReplaceData(call.Target, TableSlotType.Unknown, InvalidSlotData.Instance, log);
+
 			log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
+		}
+	}
+
+	private static void BuildResolver(StreamWriter log)
+	{
+		foreach (var (slot, node) in Table.Instance.All.Index())
+		{
+			if (node.DataType != TableSlotType.Identifier) { continue; }
+			var slotData = (IdentifierSlotData)node.Data;
+			log.WriteLine($"identifier: {slot:0000} = {slotData}");
+			var ident = slotData.Name;
+
+			var indent = 0;
+			var currentNode = node;
+			while (true)
+			{
+				indent++;
+				if (indent > 100) { throw new InvalidOperationException("Infinite loop"); }
+
+				var currentSlot = currentNode.ParentSlot;
+				if (currentSlot == 0)
+				{
+					log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}0000 = ROOT");
+					break;
+				}
+				currentNode = Table.Instance[currentSlot];
+
+
+				if (currentNode.DataType == TableSlotType.Braces)
+				{
+					var bracesData = (BracesSlotData)currentNode.Data;
+					if (bracesData.TryGetNameTableValue(ident, out var valueSlot))
+					{
+						log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}{currentSlot:0000} FOUND: {bracesData}");
+						var newData = slotData with { Target = valueSlot };
+						Table.Instance.UpdateData(slot, newData, log);
+						break;
+					}
+				}
+				else
+				{
+					log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}{currentSlot:0000} = {currentNode.DataType}");
+
+				}
+
+				// if (!Table.Instance.TryGetSlot<DeclareSlotData>(slot, TableSlotType.Declare, out var declareData, log))
+				// {
+				// 	break;
+				// }
+
+				// if (declareData.Value == 0) { break; }
+
+				// if (!Table.Instance.TryGetSlot<IdentifierSlotData>(declareData.Value, TableSlotType.Identifier, out var valueData, log))
+				// {
+				// 	break;
+				// }
+
+				// if (valueData.Name == slotData.Name)
+				// {
+				// 	Table.Instance.UpdateType(slot, Table.Instance[declareData.Value].TypeSlot, log);
+				// 	break;
+				// }
+
+				// slot = declareData.Value;
+			}
 		}
 	}
 

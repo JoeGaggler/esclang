@@ -52,6 +52,7 @@ public class Table
 
 	public void ReplaceData(int slotId, TableSlotType type, SlotData data, StreamWriter log)
 	{
+		// TODO: replacing a slot may invalidate previously referenced slots that are no longer reachable, caller should try to avoid this situation by marking the slots as invalid
 		var slot = Slots[slotId] with { DataType = type, Data = data };
 		Slots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.DataType} = {data}");
@@ -115,10 +116,11 @@ public record class InvalidSlotData : SlotData { public static readonly InvalidS
 public record class FileSlotData(int Main = 0) : SlotData;
 public record class DeclareSlotData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : SlotData;
 public record class CallSlotData(int Target, int[] Args) : SlotData;
-public record class IdentifierSlotData(String Name) : SlotData;
+public record class IdentifierSlotData(String Name, int Target = 0) : SlotData;
 public record class BracesSlotData(int[] Lines) : SlotData
 {
 	private readonly Dictionary<String, int> NameTable = [];
+
 	public Boolean TryAddNameTableValue(String name, int slot)
 	{
 		if (NameTable.ContainsKey(name))
@@ -127,6 +129,11 @@ public record class BracesSlotData(int[] Lines) : SlotData
 		}
 		NameTable.Add(name, slot);
 		return true;
+	}
+
+	public Boolean TryGetNameTableValue(String name, [MaybeNullWhen(false)] out int slot)
+	{
+		return NameTable.TryGetValue(name, out slot);
 	}
 }
 public record class IntegerSlotData(Int32 Value) : SlotData;

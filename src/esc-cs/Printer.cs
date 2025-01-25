@@ -511,16 +511,14 @@ public static class Printer
 			case TableSlotType.File:
 			{
 				var data = (FileSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"file ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"file ({GetTypeSlotName(slot.TypeSlot)})");
 				PrintTableSlot(outputFile, data.Main, level + 1);
 				break;
 			}
 			case TableSlotType.Braces:
 			{
 				var data = (BracesSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"braces ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"braces ({GetTypeSlotName(slot.TypeSlot)})");
 				foreach (var line in data.Lines)
 				{
 					PrintTableSlot(outputFile, line, level + 1);
@@ -530,18 +528,15 @@ public static class Printer
 			case TableSlotType.Declare:
 			{
 				var data = (DeclareSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"{(data.IsStatic ? "static" : "declare")} {data.Name} ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"{(data.IsStatic ? "static" : "declare")} {data.Name} ({GetTypeSlotName(slot.TypeSlot)})");
 				if (data.Type != 0)
 				{
-					outputFile.Indent(level + 1);
-					outputFile.WriteLine("type");
+					outputFile.WriteIndentLine(level + 1, "type");
 					PrintTableSlot(outputFile, data.Type, level + 2);
 				}
 				if (data.Value != 0)
 				{
-					outputFile.Indent(level + 1);
-					outputFile.WriteLine("value");
+					outputFile.WriteIndentLine(level + 1, "value");
 					PrintTableSlot(outputFile, data.Value, level + 2);
 				}
 				break;
@@ -549,8 +544,7 @@ public static class Printer
 			case TableSlotType.Call:
 			{
 				var data = (CallSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"call ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"call ({GetTypeSlotName(slot.TypeSlot)})");
 				PrintTableSlot(outputFile, data.Target, level + 1);
 				foreach (var arg in data.Args)
 				{
@@ -561,15 +555,13 @@ public static class Printer
 			case TableSlotType.Integer:
 			{
 				var data = (IntegerSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"integer={data.Value} ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"integer={data.Value} ({GetTypeSlotName(slot.TypeSlot)})");
 				break;
 			}
 			case TableSlotType.Add:
 			{
 				var data = (AddOpSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"add ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"add ({GetTypeSlotName(slot.TypeSlot)})");
 				PrintTableSlot(outputFile, data.Left, level + 1);
 				PrintTableSlot(outputFile, data.Right, level + 1);
 				break;
@@ -577,15 +569,13 @@ public static class Printer
 			case TableSlotType.Identifier:
 			{
 				var data = (IdentifierSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"id: name = {data.Name} ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"id: name = {data.Name} ({GetTypeSlotName(slot.TypeSlot)}){(data.Target != 0 ? $" -> {data.Target:0000}" : "")}");
 				break;
 			}
 			case TableSlotType.Return:
 			{
 				var data = (ReturnSlotData)slot.Data;
-				outputFile.Indent(level);
-				outputFile.WriteLine($"return ({GetTypeSlotName(slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"return ({GetTypeSlotName(slot.TypeSlot)})");
 				if (data.Value != 0)
 				{
 					PrintTableSlot(outputFile, data.Value, level + 1);
@@ -594,8 +584,7 @@ public static class Printer
 			}
 			default:
 			{
-				outputFile.Indent(level);
-				outputFile.WriteLine($"unknown {slot.DataType} = {slot.Data}");
+				outputFile.WriteIndentLine(level, slotId, $"unknown {slot.DataType} = {slot.Data}");
 				break;
 			}
 		}
@@ -616,5 +605,19 @@ public static class Printer
 	public static void Indent(this TextWriter textWriter, int level)
 	{
 		textWriter.Write(new String(' ', level * 2));
+	}
+
+	public static void WriteIndentLine(this TextWriter textWriter, int level, int slot, String text)
+	{
+		textWriter.Write("{0:0000}: ", slot);
+		textWriter.Write(new String(' ', level * 2));
+		textWriter.WriteLine(text);
+	}
+
+	public static void WriteIndentLine(this TextWriter textWriter, int level, String text)
+	{
+		textWriter.Write("      ");
+		textWriter.Write(new String(' ', level * 2));
+		textWriter.WriteLine(text);
 	}
 }
