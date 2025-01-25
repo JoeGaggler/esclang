@@ -122,7 +122,7 @@ class Program
 	{
 		var time = stopwatch.Elapsed;
 		var nameString = name + ":";
-		var timeString = time.ToString("s\\.ff\\s");
+		var timeString = time.ToString("s\\.f\\s");
 		measurements.Add((nameString, timeString));
 		stopwatch.Restart();
 	}

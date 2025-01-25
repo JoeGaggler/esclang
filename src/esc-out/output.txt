@@ -166,11 +166,13 @@ slot 0025 in 0002 <- Call = CallSlotData { Target = 26, Args = System.Int32[] }
 slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
 === Build: return ===
 slot 0008 in 0007 -> Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0007 in 0004 << Return = ReturnSlotData { Value = 9 }
+slot 0007 in 0004 << Return = ReturnSlotData { Value = 9, Function = 0 }
 slot 0008 in 0007 << Unknown = InvalidSlotData { }
 slot 0007 in 0004 -- call -> return
 slot 0023 in 0022 -> Identifier = IdentifierSlotData { Name = print, Target = 0 }
 slot 0026 in 0025 -> Identifier = IdentifierSlotData { Name = print, Target = 0 }
+slot 0007 <- returns to 0004
+slot 0007 in 0004 <- Return = ReturnSlotData { Value = 9, Function = 4 }
 === Build: resolve identifiers ===
 identifier: 0009 = IdentifierSlotData { Name = a, Target = 0 }
   0007 = Return
@@ -240,22 +242,31 @@ slot 0019 in 0018 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10
 id target: 24
 slot 0024 in 0022 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
 source: 9
-return: 0007 <- NativeTypeSlot { Name = int } 2 via 0009
-slot 0007 in 0004 <- Return : 2 = ReturnSlotData { Value = 9 }
+slot 0007 return: type <- NativeTypeSlot { Name = int } 2 via 0009
+slot 0007 in 0004 <- Return : 2 = ReturnSlotData { Value = 9, Function = 4 }
 source: 12
 id target: 21
 slot 0021 in 0017 <- Identifier : 2 = IdentifierSlotData { Name = b, Target = 12 }
 source: 19
 source: 24
 source: 7
+add type 3 = FunctionTypeSlot { ReturnType = 2 }
+slot 0004 braces: found return 0007 3
+slot 0004 in 0003 <- Braces : 3 = BracesSlotData { Lines = System.Int32[] }
 source: 21
-done after 13 iterations
+source: 4
+add target: 3
+slot 0003 in 0002 <- Declare : 3 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
+source: 3
+id target: 20
+TODO: id type assigned from function: 20
+done after 15 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (unknown)
-0003:     static func1 (unknown)
+0003:     static func1 (function -> int)
             value
-0004:         braces (unknown)
+0004:         braces (function -> int)
 0005:           declare a (int)
                   value
 0006:               integer=2 (int)
@@ -290,11 +301,11 @@ main procedure
 Output:
 
 Stats:
--   Start: 0.00s
--    Read: 0.00s
--     Lex: 0.00s
--   Parse: 0.00s
-- Analyze: 0.00s
--    Eval: 0.00s
--   Print: 0.00s
--  Output: 0.00s
+-   Start: 0.0s
+-    Read: 0.0s
+-     Lex: 0.0s
+-   Parse: 0.0s
+- Analyze: 0.0s
+-    Eval: 0.0s
+-   Print: 0.0s
+-  Output: 0.0s

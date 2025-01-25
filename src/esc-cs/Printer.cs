@@ -598,7 +598,8 @@ public static class Printer
 			VoidTypeSlot => "void",
 			NativeTypeSlot nativeTypeSlot => nativeTypeSlot.Name,
 			UnknownTypeSlot => "unknown",
-			_ => "null",
+			FunctionTypeSlot { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(returnTypeId)}",
+			_ => "unexpected",
 		};
 	}
 

@@ -14,11 +14,8 @@ public class Table
 
 	static Table()
 	{
-		VoidType = Instance.Types.Count;
-		Instance.Types.Add(VoidTypeSlot.Instance);
-		
-		IntType = Instance.Types.Count;
-		Instance.Types.Add(new NativeTypeSlot("int"));
+		VoidType = Instance.GetOrAddType(VoidTypeSlot.Instance, StreamWriter.Null);
+		IntType = Instance.GetOrAddType(new NativeTypeSlot("int"), StreamWriter.Null);
 	}
 
 	public static readonly int IntType;
@@ -26,6 +23,19 @@ public class Table
 
 	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
 	public readonly List<TypeSlot> Types = [UnknownTypeSlot.Instance];
+
+	public int GetOrAddType(TypeSlot type, StreamWriter log)
+	{
+		var id = -1;
+		id = Types.IndexOf(type); // TODO: does this work for class records?
+		if (id == -1)
+		{
+			id = Types.Count;
+			Types.Add(type);
+			log.WriteLine($"add type {id} = {type}");
+		}
+		return id;
+	}
 
 	public int Add(int parentSlot, TableSlotType type, SlotData data, StreamWriter log)
 	{
@@ -91,7 +101,7 @@ public abstract record class TypeSlot;
 public record class UnknownTypeSlot : TypeSlot { public static readonly UnknownTypeSlot Instance = new(); private UnknownTypeSlot() { } }
 public record class VoidTypeSlot : TypeSlot { public static readonly VoidTypeSlot Instance = new(); private VoidTypeSlot() { } }
 public record class NativeTypeSlot(String Name) : TypeSlot;
-
+public record class FunctionTypeSlot(int ReturnType) : TypeSlot;
 
 public enum TableSlotType
 {
@@ -138,7 +148,7 @@ public record class BracesSlotData(int[] Lines) : SlotData
 }
 public record class IntegerSlotData(Int32 Value) : SlotData;
 public record class AddOpSlotData(Int32 Left = 0, Int32 Right = 0) : SlotData;
-public record class ReturnSlotData(int Value = 0) : SlotData;
+public record class ReturnSlotData(int Value = 0, int Function = 0) : SlotData;
 
 ////////////////////////////////
 

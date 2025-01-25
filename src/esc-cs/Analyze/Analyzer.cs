@@ -160,6 +160,8 @@ public static class Analyzer
 
 	private static void BuildReturn(StreamWriter log)
 	{
+		var returnQueue = new Queue<int>();
+
 		foreach (var (slot, node) in Table.Instance.All.Index())
 		{
 			if (node.DataType != TableSlotType.Call) { continue; }
@@ -179,11 +181,43 @@ public static class Analyzer
 
 			var returnData = new ReturnSlotData(argSlot);
 			Table.Instance.ReplaceData(slot, TableSlotType.Return, returnData, log);
+			returnQueue.Enqueue(slot);
 
 			// Invalidate the "return" identifier
 			Table.Instance.ReplaceData(call.Target, TableSlotType.Unknown, InvalidSlotData.Instance, log);
 
 			log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
+		}
+
+		while (returnQueue.Count > 0)
+		{
+			var slot = returnQueue.Dequeue();
+			var node = Table.Instance[slot];
+
+			if (node.DataType != TableSlotType.Return) { continue; } // should be redundant
+
+			var returnData = (ReturnSlotData)node.Data;
+			if (returnData.Function != 0) { continue; }
+
+			// recurse up to find the braces node
+			var currentSlot = node.ParentSlot;
+			while (true)
+			{
+				if (currentSlot == 0) { break; } // not embedded in a braces node?
+
+				var currentNode = Table.Instance[currentSlot];
+				if (currentNode.DataType == TableSlotType.Braces)
+				{
+					var bracesData = (BracesSlotData)currentNode.Data;
+
+					log.WriteLine($"slot {slot:0000} <- returns to {currentSlot:0000}");
+
+					Table.Instance.UpdateData(slot, returnData with { Function = currentSlot }, log);
+					break;
+				}
+
+				currentSlot = currentNode.ParentSlot;
+			}
 		}
 	}
 
@@ -296,6 +330,7 @@ public static class Analyzer
 			log.WriteLine($"source: {sourceSlotId}");
 
 			// find all nodes that reference this node
+			// future: build a reverse lookup table on an earlier pass
 			foreach (var (targetSlotId, targetSlot) in Table.Instance.All.Index())
 			{
 				if (targetSlot.DataType == TableSlotType.Declare)
@@ -397,6 +432,13 @@ public static class Analyzer
 					if (sourceSlotRecord.TypeSlot == 0) { continue; } // should be redundant
 
 					// TODO: don't copy function type, must copy return type
+					var typeSlot = Table.Instance.Types[sourceSlotRecord.TypeSlot];
+					if (typeSlot is FunctionTypeSlot)
+					{
+						log.WriteLine($"TODO: id type assigned from function: {targetSlotId}");
+						continue;
+					}
+
 					Table.Instance.UpdateType(targetSlotId, sourceSlotRecord.TypeSlot, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
@@ -412,8 +454,28 @@ public static class Analyzer
 
 					var sourceTypeId = Table.Instance[sourceSlotId].TypeSlot;
 					var typeRow = Table.Instance.Types[sourceTypeId];
-					log.WriteLine($"slot {targetSlotId:0000} return:  <- {typeRow} {sourceTypeId} via {returnData.Value:0000}");
+					log.WriteLine($"slot {targetSlotId:0000} return: type <- {typeRow} {sourceTypeId} via {returnData.Value:0000}");
 					Table.Instance.UpdateType(targetSlotId, sourceTypeId, log);
+					sourceQueue.Enqueue(targetSlotId);
+				}
+				else if (targetSlot.DataType == TableSlotType.Braces)
+				{
+					var bracesSlot = Table.Instance[targetSlotId];
+					var bracesData = (BracesSlotData)bracesSlot.Data;
+					if (bracesSlot.TypeSlot != 0) { continue; } // already found a return value, but might need to consider more?
+
+					var returnSlot = Table.Instance[sourceSlotId];
+					if (returnSlot.DataType != TableSlotType.Return) { continue; } // should be redundant
+					var returnData = (ReturnSlotData)returnSlot.Data;
+					if (returnData.Function != targetSlotId) { continue; } // should be redundant
+					if (returnSlot.TypeSlot == 0) { continue; } // should be redundant
+
+					var returnType = Table.Instance.Types[returnSlot.TypeSlot];
+					var funcType = new FunctionTypeSlot(returnSlot.TypeSlot);
+					var funcTypeId = Table.Instance.GetOrAddType(funcType, log);
+
+					log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} {funcTypeId}");
+					Table.Instance.UpdateType(targetSlotId, funcTypeId, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else
