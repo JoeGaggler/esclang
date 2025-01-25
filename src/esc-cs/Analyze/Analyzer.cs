@@ -365,6 +365,27 @@ public static class Analyzer
 					Table.Instance.UpdateType(slot, leftType, log);
 					sourceQueue.Enqueue(slot);
 				}
+				else if (node.DataType == TableSlotType.Identifier)
+				{
+					var idSlot = Table.Instance[slot];
+					var idData = (IdentifierSlotData)idSlot.Data;
+
+					if (idData.Target == sourceSlot)
+					{
+						targetQueue.Enqueue(slot);
+						log.WriteLine($"id target: {slot}");
+
+						var sourceSlotRecord = Table.Instance[sourceSlot];
+						if (sourceSlotRecord.TypeSlot == 0) { continue; }
+
+						// TODO: don't copy function type, must copy return type
+						Table.Instance.UpdateType(slot, sourceSlotRecord.TypeSlot, log);
+					}
+					else
+					{
+						continue;
+					}
+				}
 			}
 
 			while (targetQueue.Count > 0)

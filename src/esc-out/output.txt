@@ -235,8 +235,20 @@ add target: 12
 target: 12
 slot 0012 in 0002 <- Declare : 2 = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
 source: 5
+id target: 9
+slot 0009 in 0007 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 5 }
+target: 9
 source: 10
+id target: 19
+slot 0019 in 0018 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
+id target: 24
+slot 0024 in 0022 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
+target: 19
+target: 24
 source: 12
+id target: 21
+slot 0021 in 0017 <- Identifier : 2 = IdentifierSlotData { Name = b, Target = 12 }
+target: 21
 done after 8 iterations
 === Tree ===
 0001: file (unknown)
@@ -248,7 +260,7 @@ done after 8 iterations
                   value
 0006:               integer=2 (int)
 0007:           return (unknown)
-0009:             id: name = a (unknown) -> 0005
+0009:             id: name = a (int) -> 0005
 0010:     declare a (int)
             value
 0011:         integer=13 (int)
@@ -261,12 +273,12 @@ done after 8 iterations
             value
 0017:         add (unknown)
 0018:           add (unknown)
-0019:             id: name = a (unknown) -> 0010
+0019:             id: name = a (int) -> 0010
 0020:             id: name = func1 (unknown) -> 0003
-0021:           id: name = b (unknown) -> 0012
+0021:           id: name = b (int) -> 0012
 0022:     call (unknown)
 0023:       id: name = print (unknown)
-0024:       id: name = a (unknown) -> 0010
+0024:       id: name = a (int) -> 0010
 0025:     call (unknown)
 0026:       id: name = print (unknown)
 0027:       id: name = c (unknown) -> 0016
