@@ -506,13 +506,13 @@ public static class Printer
 	private static void PrintTableSlot(TextWriter outputFile, int slotId, int level)
 	{
 		var slot = Table.Instance[slotId];
-		switch (slot.Type)
+		switch (slot.DataType)
 		{
 			case TableSlotType.File:
 			{
 				var data = (FileSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine("file");
+				outputFile.WriteLine($"file ({GetTypeSlotName(slot.TypeSlot)})");
 				PrintTableSlot(outputFile, data.Main, level + 1);
 				break;
 			}
@@ -520,7 +520,7 @@ public static class Printer
 			{
 				var data = (BracesSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine("braces");
+				outputFile.WriteLine($"braces ({GetTypeSlotName(slot.TypeSlot)})");
 				foreach (var line in data.Lines)
 				{
 					PrintTableSlot(outputFile, line, level + 1);
@@ -531,7 +531,7 @@ public static class Printer
 			{
 				var data = (DeclareSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine($"declare {data.Name}{(data.IsStatic ? " (static)" : "")}");
+				outputFile.WriteLine($"{(data.IsStatic ? "static" : "declare")} {data.Name} ({GetTypeSlotName(slot.TypeSlot)})");
 				if (data.Type != 0)
 				{
 					outputFile.Indent(level + 1);
@@ -550,7 +550,7 @@ public static class Printer
 			{
 				var data = (CallSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine("call");
+				outputFile.WriteLine($"call ({GetTypeSlotName(slot.TypeSlot)})");
 				PrintTableSlot(outputFile, data.Target, level + 1);
 				foreach (var arg in data.Args)
 				{
@@ -562,14 +562,14 @@ public static class Printer
 			{
 				var data = (IntegerSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine($"integer :: {data.Value}");
+				outputFile.WriteLine($"integer={data.Value} ({GetTypeSlotName(slot.TypeSlot)})");
 				break;
 			}
 			case TableSlotType.Add:
 			{
 				var data = (AddOpSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine("add");
+				outputFile.WriteLine($"add ({GetTypeSlotName(slot.TypeSlot)})");
 				PrintTableSlot(outputFile, data.Left, level + 1);
 				PrintTableSlot(outputFile, data.Right, level + 1);
 				break;
@@ -578,14 +578,14 @@ public static class Printer
 			{
 				var data = (IdentifierSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine($"id: name = {data.Name}");
+				outputFile.WriteLine($"id: name = {data.Name} ({GetTypeSlotName(slot.TypeSlot)})");
 				break;
 			}
 			case TableSlotType.Return:
 			{
 				var data = (ReturnSlotData)slot.Data;
 				outputFile.Indent(level);
-				outputFile.WriteLine("return");
+				outputFile.WriteLine($"return ({GetTypeSlotName(slot.TypeSlot)})");
 				if (data.Value != 0)
 				{
 					PrintTableSlot(outputFile, data.Value, level + 1);
@@ -595,10 +595,22 @@ public static class Printer
 			default:
 			{
 				outputFile.Indent(level);
-				outputFile.WriteLine($"unknown {slot.Type} = {slot.Data}");
+				outputFile.WriteLine($"unknown {slot.DataType} = {slot.Data}");
 				break;
 			}
 		}
+	}
+
+	public static String GetTypeSlotName(int typeSlotId)
+	{
+		var typeSlot = Table.Instance.Types[typeSlotId];
+		return typeSlot switch
+		{
+			VoidTypeSlot => "void",
+			NativeTypeSlot nativeTypeSlot => nativeTypeSlot.Name,
+			UnknownTypeSlot => "unknown",
+			_ => "null",
+		};
 	}
 
 	public static void Indent(this TextWriter textWriter, int level)

@@ -14,7 +14,7 @@ public static class Analyzer
 
 	public static Analysis Analyze(Parse.EscFile file, StreamWriter log)
 	{
-	   var globalScope = new Scope(++ScopeCounter);
+		var globalScope = new Scope(++ScopeCounter);
 		var queue = new AnalysisQueue();
 
 		log.WriteLine("=== Build: init ===");
@@ -22,6 +22,12 @@ public static class Analyzer
 
 		log.WriteLine("=== Build: return ===");
 		BuildReturn(log);
+
+		log.WriteLine("=== Build: types ===");
+		BuildTypes(log);
+
+		log.WriteLine("=== Build: spill types ===");
+		BuildSpillTypes(log);
 
 		log.WriteLine("=== Tree ===");
 		Printer.PrintTable(log);
@@ -50,7 +56,7 @@ public static class Analyzer
 				var bracesSlot = Table.Instance.Add(fileSlot, TableSlotType.Braces, bracesData, log);
 
 				fileData = fileData with { Main = bracesSlot };
-				Table.Instance.Update(fileSlot, fileData, log);
+				Table.Instance.UpdateData(fileSlot, fileData, log);
 
 				// Lines
 				var lineSlots = new List<int>();
@@ -61,7 +67,7 @@ public static class Analyzer
 				}
 
 				bracesData = bracesData with { Lines = [.. lineSlots] };
-				Table.Instance.Update(bracesSlot, bracesData, log);
+				Table.Instance.UpdateData(bracesSlot, bracesData, log);
 
 				return fileSlot;
 			}
@@ -81,7 +87,7 @@ public static class Analyzer
 				// Target
 				var targetSlot = BuildTable(target, slot, log);
 				data = data with { Target = targetSlot };
-				Table.Instance.Update(slot, data, log);
+				Table.Instance.UpdateData(slot, data, log);
 
 				// Args
 				var argSlots = new List<int>();
@@ -92,7 +98,7 @@ public static class Analyzer
 				}
 
 				data = data with { Args = [.. argSlots] };
-				Table.Instance.Update(slot, data, log);
+				Table.Instance.UpdateData(slot, data, log);
 
 				return slot;
 			}
@@ -116,7 +122,7 @@ public static class Analyzer
 				}
 
 				data = data with { Lines = [.. lineSlots] };
-				Table.Instance.Update(slot, data, log);
+				Table.Instance.UpdateData(slot, data, log);
 
 				return slot;
 			}
@@ -137,7 +143,7 @@ public static class Analyzer
 				var rightSlot = BuildTable(right, slot, log);
 
 				data = data with { Left = leftSlot, Right = rightSlot };
-				Table.Instance.Update(slot, data, log);
+				Table.Instance.UpdateData(slot, data, log);
 
 				return slot;
 			}
@@ -153,7 +159,7 @@ public static class Analyzer
 	{
 		foreach (var (slot, node) in Table.Instance.All.Index())
 		{
-			if (node.Type != TableSlotType.Call) { continue; }
+			if (node.DataType != TableSlotType.Call) { continue; }
 
 			var call = (CallSlotData)node.Data;
 			if (call.Target == 0) { continue; }
@@ -169,11 +175,171 @@ public static class Analyzer
 			if (argSlot == 0) { continue; }
 
 			var returnData = new ReturnSlotData(argSlot);
-			Table.Instance.Replace(slot, TableSlotType.Return, returnData, log);
+			Table.Instance.ReplaceData(slot, TableSlotType.Return, returnData, log);
 
 			log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
 		}
 	}
+
+	private static void BuildTypes(StreamWriter log)
+	{
+		foreach (var (slot, node) in Table.Instance.All.Index())
+		{
+			switch (node.DataType)
+			{
+				case TableSlotType.Integer:
+				{
+					Table.Instance.UpdateType(slot, Table.IntType, log);
+					break;
+				}
+				case TableSlotType.Declare:
+				{
+					// TODO: explicit type
+					break;
+				}
+			}
+		}
+	}
+
+	private static void BuildSpillTypes(StreamWriter log)
+	{
+		var sourceQueue = new Queue<int>();
+		var targetQueue = new Queue<int>();
+
+		// start with all nodes that have a type
+		foreach (var (slot, node) in Table.Instance.All.Index())
+		{
+			if (node.TypeSlot != 0)
+			{
+				sourceQueue.Enqueue(slot);
+				log.WriteLine($"add source: {slot}");
+			}
+		}
+
+		int x = 0;
+		while (sourceQueue.Count > 0)
+		{
+			x++;
+			if (x > 100) throw new InvalidOperationException("Infinite loop");
+
+			var sourceSlot = sourceQueue.Dequeue();
+			log.WriteLine($"source: {sourceSlot}");
+
+			// find all nodes that reference this node
+			foreach (var (slot, node) in Table.Instance.All.Index())
+			{
+				if (node.DataType == TableSlotType.Declare)
+				{
+					var declareData = (DeclareSlotData)Table.Instance[slot].Data;
+					// if (!Table.Instance.TryGetSlot<DeclareSlotData>(slot, TableSlotType.Declare, out var declareData, log))
+					// {
+					// 	throw new Exception("Invalid declare slot");
+					// }
+
+					// TODO: explicit types?
+
+					if (declareData.Value == sourceSlot)
+					{
+						targetQueue.Enqueue(slot);
+						log.WriteLine($"add target: {slot}");
+					}
+				}
+				// else if (node.DataType == TableSlotType.Call)
+				// {
+				// 	if (!Table.Instance.TryGetSlot<CallSlotData>(slot, TableSlotType.Call, out var callData, log))
+				// 	{
+				// 		throw new Exception("Invalid call slot");
+				// 	}
+
+				// 	if (callData.Target == sourceSlot)
+				// 	{
+				// 		targetQueue.Enqueue(slot);
+				// 	}
+				// 	else
+				// 	{
+				// 		foreach (var arg in callData.Args)
+				// 		{
+				// 			if (arg == sourceSlot)
+				// 			{
+				// 				targetQueue.Enqueue(slot);
+				// 			}
+				// 		}
+				// 	}
+				// }
+				else if (node.DataType == TableSlotType.Add)
+				{
+					// NOTE: this assumes that add produces the same type as its operands
+
+					var addSlot = Table.Instance[slot];
+					var addData = (AddOpSlotData)addSlot.Data;
+
+					if (addData.Left == 0 || addData.Right == 0)
+					{
+						continue;
+					}
+
+					var leftType = Table.Instance[addData.Left].TypeSlot;
+					var rightType = Table.Instance[addData.Right].TypeSlot;
+
+					if (leftType != rightType)
+					{
+						continue;
+					}
+
+					if (leftType == addSlot.TypeSlot)
+					{
+						continue;
+					}
+
+					Table.Instance.UpdateType(slot, leftType, log);
+					sourceQueue.Enqueue(slot);
+				}
+			}
+
+			while (targetQueue.Count > 0)
+			{
+				var slotId = targetQueue.Dequeue();
+				var slot = Table.Instance[slotId];
+				var slotType = slot.TypeSlot;
+				log.WriteLine($"target: {slotId}");
+
+				switch (slot.DataType)
+				{
+					case TableSlotType.Declare:
+					{
+						var declareData = (DeclareSlotData)Table.Instance[slotId].Data;
+						// if (!Table.Instance.TryGetSlot<DeclareSlotData>(slotId, TableSlotType.Declare, out var declareData, log))
+						// {
+						// 	throw new Exception("Invalid declare slot");
+						// }
+
+						if (declareData.Type != 0)
+						{
+							// TODO: explicit types
+							break;
+						}
+						else
+						{
+							var valueSlotId = declareData.Value;
+							var valueSlot = Table.Instance[valueSlotId];
+							var valueSlotType = valueSlot.TypeSlot;
+
+							if (valueSlotType != slotType)
+							{
+								Table.Instance.UpdateType(slotId, valueSlotType, log);
+								sourceQueue.Enqueue(slotId);
+							}
+						}
+
+						break;
+					}
+				}
+			}
+		}
+		log.WriteLine($"done after {x} iterations");
+	}
+
+
 	private static int BuildDeclareNode(Boolean isStatic, int parentSlot, StreamWriter log, SyntaxNode idNode, SyntaxNode? typeNode, SyntaxNode valueNode)
 	{
 		if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
@@ -201,13 +367,13 @@ public static class Analyzer
 		{
 			typeSlot = BuildTable(typeNode, slot, log);
 			data = data with { Type = typeSlot };
-			Table.Instance.Update(slot, data, log);
+			Table.Instance.UpdateData(slot, data, log);
 		}
 
 		// Value
 		var valueSlot = BuildTable(valueNode, slot, log);
 		data = data with { Value = valueSlot };
-		Table.Instance.Update(slot, data, log);
+		Table.Instance.UpdateData(slot, data, log);
 
 		return slot;
 	}

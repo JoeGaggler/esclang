@@ -12,7 +12,20 @@ public class Table
 
 	private Table() { }
 
+	static Table()
+	{
+		VoidType = Instance.Types.Count;
+		Instance.Types.Add(VoidTypeSlot.Instance);
+		
+		IntType = Instance.Types.Count;
+		Instance.Types.Add(new NativeTypeSlot("int"));
+	}
+
+	public static readonly int IntType;
+	public static readonly int VoidType;
+
 	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
+	public readonly List<TypeSlot> Types = [UnknownTypeSlot.Instance];
 
 	public int Add(int parentSlot, TableSlotType type, SlotData data, StreamWriter log)
 	{
@@ -23,25 +36,32 @@ public class Table
 		return id;
 	}
 
-	public void Update(int slotId, SlotData data, StreamWriter log)
+	public void UpdateType(int slotId, int typeSlotId, StreamWriter log)
+	{
+		var slot = Slots[slotId] with { TypeSlot = typeSlotId };
+		Slots[slotId] = slot;
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} : {typeSlotId} = {slot.Data}");
+	}
+
+	public void UpdateData(int slotId, SlotData data, StreamWriter log)
 	{
 		var slot = Slots[slotId] with { Data = data };
 		Slots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.Type} = {data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} = {data}");
 	}
 
-	public void Replace(int slotId, TableSlotType type, SlotData data, StreamWriter log)
+	public void ReplaceData(int slotId, TableSlotType type, SlotData data, StreamWriter log)
 	{
-		var slot = Slots[slotId] with { Type = type, Data = data };
+		var slot = Slots[slotId] with { DataType = type, Data = data };
 		Slots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.Type} = {data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.DataType} = {data}");
 	}
 
 	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, StreamWriter log) where T : SlotData
 	{
 		var slot = Slots[slotId];
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.Type} = {slot.Data}");
-		if (slot.Type != type)
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.DataType} = {slot.Data}");
+		if (slot.DataType != type)
 		{
 			dataIfFound = default;
 			return false;
@@ -55,7 +75,7 @@ public class Table
 	{
 		get
 		{
-			for (var i = 1; i < Slots.Count; i++)
+			for (var i = 0; i < Slots.Count; i++)
 			{
 				yield return Slots[i];
 			}
@@ -65,6 +85,12 @@ public class Table
 	public TableSlot Root { get => Slots[1]; }
 	public TableSlot this[int slotId] { get => Slots[slotId]; }
 }
+
+public abstract record class TypeSlot;
+public record class UnknownTypeSlot : TypeSlot { public static readonly UnknownTypeSlot Instance = new(); private UnknownTypeSlot() { } }
+public record class VoidTypeSlot : TypeSlot { public static readonly VoidTypeSlot Instance = new(); private VoidTypeSlot() { } }
+public record class NativeTypeSlot(String Name) : TypeSlot;
+
 
 public enum TableSlotType
 {
@@ -79,7 +105,7 @@ public enum TableSlotType
 	Return,
 }
 
-public record class TableSlot(int ParentSlot, TableSlotType Type, SlotData Data) // TODO: add type info
+public record class TableSlot(int ParentSlot, TableSlotType DataType, SlotData Data, int TypeSlot = 0)
 {
 
 }

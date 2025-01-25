@@ -34,21 +34,36 @@ Lex:
 0031: 47 + 1 -- (6, 3) -- Colon -- :
 0032: 48 + 1 -- (6, 4) -- Equals -- =
 0033: 49 + 1 -- (6, 5) -- Spaces -- " "
-0034: 50 + 1 -- (6, 6) -- Identifier -- a
+0034: 50 + 1 -- (6, 6) -- Number -- 1
 0035: 51 + 1 -- (6, 7) -- Spaces -- " "
 0036: 52 + 1 -- (6, 8) -- Plus -- +
 0037: 53 + 1 -- (6, 9) -- Spaces -- " "
-0038: 54 + 5 -- (6, 10) -- Identifier -- func1
-0039: 59 + 1 -- (6, 15) -- EndOfLine -- \n
-0040: 60 + 5 -- (7, 1) -- Identifier -- print
-0041: 65 + 1 -- (7, 6) -- Spaces -- " "
-0042: 66 + 1 -- (7, 7) -- Identifier -- a
-0043: 67 + 1 -- (7, 8) -- EndOfLine -- \n
-0044: 68 + 5 -- (8, 1) -- Identifier -- print
-0045: 73 + 1 -- (8, 6) -- Spaces -- " "
-0046: 74 + 1 -- (8, 7) -- Identifier -- b
-0047: 75 + 1 -- (8, 8) -- EndOfLine -- \n
-0048: 76 + 0 -- (9, 1) -- EndOfFile -- <EOF>
+0038: 54 + 1 -- (6, 10) -- Number -- 2
+0039: 55 + 1 -- (6, 11) -- EndOfLine -- \n
+0040: 56 + 1 -- (7, 1) -- Identifier -- c
+0041: 57 + 1 -- (7, 2) -- Spaces -- " "
+0042: 58 + 1 -- (7, 3) -- Colon -- :
+0043: 59 + 1 -- (7, 4) -- Equals -- =
+0044: 60 + 1 -- (7, 5) -- Spaces -- " "
+0045: 61 + 1 -- (7, 6) -- Identifier -- a
+0046: 62 + 1 -- (7, 7) -- Spaces -- " "
+0047: 63 + 1 -- (7, 8) -- Plus -- +
+0048: 64 + 1 -- (7, 9) -- Spaces -- " "
+0049: 65 + 5 -- (7, 10) -- Identifier -- func1
+0050: 70 + 1 -- (7, 15) -- Spaces -- " "
+0051: 71 + 1 -- (7, 16) -- Plus -- +
+0052: 72 + 1 -- (7, 17) -- Spaces -- " "
+0053: 73 + 1 -- (7, 18) -- Identifier -- b
+0054: 74 + 1 -- (7, 19) -- EndOfLine -- \n
+0055: 75 + 5 -- (8, 1) -- Identifier -- print
+0056: 80 + 1 -- (8, 6) -- Spaces -- " "
+0057: 81 + 1 -- (8, 7) -- Identifier -- a
+0058: 82 + 1 -- (8, 8) -- EndOfLine -- \n
+0059: 83 + 5 -- (9, 1) -- Identifier -- print
+0060: 88 + 1 -- (9, 6) -- Spaces -- " "
+0061: 89 + 1 -- (9, 7) -- Identifier -- c
+0062: 90 + 1 -- (9, 8) -- EndOfLine -- \n
+0063: 91 + 0 -- (10, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declare-static
@@ -76,8 +91,17 @@ declare-assign
     identifier: b
   value
     plus
-      identifier: a
-      identifier: func1
+      1
+      2
+declare-assign
+  id
+    identifier: c
+  value
+    plus
+      plus
+        identifier: a
+        identifier: func1
+      identifier: b
 call
   target
     identifier: print
@@ -87,7 +111,7 @@ call
   target
     identifier: print
   arguments
-    identifier: b
+    identifier: c
 
 Analysis Log:
 === Build: init ===
@@ -115,54 +139,98 @@ slot 0010 in 0002 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Typ
 slot 0012 in 0002 :: Declare = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 0 }
 slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
 slot 0013 in 0012 :: Add = AddOpSlotData { Left = 0, Right = 0 }
-slot 0014 in 0013 :: Identifier = IdentifierSlotData { Name = a }
-slot 0015 in 0013 :: Identifier = IdentifierSlotData { Name = func1 }
+slot 0014 in 0013 :: Integer = IntegerSlotData { Value = 1 }
+slot 0015 in 0013 :: Integer = IntegerSlotData { Value = 2 }
 slot 0013 in 0012 <- Add = AddOpSlotData { Left = 14, Right = 15 }
 slot 0012 in 0002 <- Declare = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
-slot 0016 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0017 in 0016 :: Identifier = IdentifierSlotData { Name = print }
-slot 0016 in 0002 <- Call = CallSlotData { Target = 17, Args = System.Int32[] }
-slot 0018 in 0016 :: Identifier = IdentifierSlotData { Name = a }
-slot 0016 in 0002 <- Call = CallSlotData { Target = 17, Args = System.Int32[] }
-slot 0019 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0020 in 0019 :: Identifier = IdentifierSlotData { Name = print }
-slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
-slot 0021 in 0019 :: Identifier = IdentifierSlotData { Name = b }
-slot 0019 in 0002 <- Call = CallSlotData { Target = 20, Args = System.Int32[] }
+slot 0016 in 0002 :: Declare = DeclareSlotData { Name = c, IsStatic = False, Type = 0, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0017 in 0016 :: Add = AddOpSlotData { Left = 0, Right = 0 }
+slot 0018 in 0017 :: Add = AddOpSlotData { Left = 0, Right = 0 }
+slot 0019 in 0018 :: Identifier = IdentifierSlotData { Name = a }
+slot 0020 in 0018 :: Identifier = IdentifierSlotData { Name = func1 }
+slot 0018 in 0017 <- Add = AddOpSlotData { Left = 19, Right = 20 }
+slot 0021 in 0017 :: Identifier = IdentifierSlotData { Name = b }
+slot 0017 in 0016 <- Add = AddOpSlotData { Left = 18, Right = 21 }
+slot 0016 in 0002 <- Declare = DeclareSlotData { Name = c, IsStatic = False, Type = 0, Value = 17 }
+slot 0022 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
+slot 0023 in 0022 :: Identifier = IdentifierSlotData { Name = print }
+slot 0022 in 0002 <- Call = CallSlotData { Target = 23, Args = System.Int32[] }
+slot 0024 in 0022 :: Identifier = IdentifierSlotData { Name = a }
+slot 0022 in 0002 <- Call = CallSlotData { Target = 23, Args = System.Int32[] }
+slot 0025 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
+slot 0026 in 0025 :: Identifier = IdentifierSlotData { Name = print }
+slot 0025 in 0002 <- Call = CallSlotData { Target = 26, Args = System.Int32[] }
+slot 0027 in 0025 :: Identifier = IdentifierSlotData { Name = c }
+slot 0025 in 0002 <- Call = CallSlotData { Target = 26, Args = System.Int32[] }
 slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
 === Build: return ===
 slot 0008 in 0007 -> Identifier = IdentifierSlotData { Name = return }
-slot 0006 in 0005 << Return = ReturnSlotData { Value = 9 }
-slot 0006 in 0004 -- call -> return
-slot 0017 in 0016 -> Identifier = IdentifierSlotData { Name = print }
-slot 0020 in 0019 -> Identifier = IdentifierSlotData { Name = print }
+slot 0007 in 0004 << Return = ReturnSlotData { Value = 9 }
+slot 0007 in 0004 -- call -> return
+slot 0023 in 0022 -> Identifier = IdentifierSlotData { Name = print }
+slot 0026 in 0025 -> Identifier = IdentifierSlotData { Name = print }
+=== Build: types ===
+slot 0006 in 0005 <- Integer : 2 = IntegerSlotData { Value = 2 }
+slot 0011 in 0010 <- Integer : 2 = IntegerSlotData { Value = 13 }
+slot 0014 in 0013 <- Integer : 2 = IntegerSlotData { Value = 1 }
+slot 0015 in 0013 <- Integer : 2 = IntegerSlotData { Value = 2 }
+=== Build: spill types ===
+add source: 6
+add source: 11
+add source: 14
+add source: 15
+source: 6
+add target: 5
+slot 0013 in 0012 <- Add : 2 = AddOpSlotData { Left = 14, Right = 15 }
+target: 5
+slot 0005 in 0004 <- Declare : 2 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 6 }
+source: 11
+add target: 10
+target: 10
+slot 0010 in 0002 <- Declare : 2 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 11 }
+source: 14
+source: 15
+source: 13
+add target: 12
+target: 12
+slot 0012 in 0002 <- Declare : 2 = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
+source: 5
+source: 10
+source: 12
+done after 8 iterations
 === Tree ===
-file
-  braces
-    declare func1 (static)
+file (unknown)
+  braces (unknown)
+    static func1 (unknown)
       value
-        braces
-          declare a
+        braces (unknown)
+          declare a (int)
             value
-              return
-                id: name = a
-          call
-            id: name = return
-            id: name = a
-    declare a
+              integer=2 (int)
+          return (unknown)
+            id: name = a (unknown)
+    declare a (int)
       value
-        integer :: 13
-    declare b
+        integer=13 (int)
+    declare b (int)
       value
-        add
-          id: name = a
-          id: name = func1
-    call
-      id: name = print
-      id: name = a
-    call
-      id: name = print
-      id: name = b
+        add (int)
+          integer=1 (int)
+          integer=2 (int)
+    declare c (unknown)
+      value
+        add (unknown)
+          add (unknown)
+            id: name = a (unknown)
+            id: name = func1 (unknown)
+          id: name = b (unknown)
+    call (unknown)
+      id: name = print (unknown)
+      id: name = a (unknown)
+    call (unknown)
+      id: name = print (unknown)
+      id: name = c (unknown)
 
 Analyze:
 main procedure

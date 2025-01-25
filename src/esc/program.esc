@@ -3,6 +3,7 @@ func1 :: {
     return a
 }
 a := 13
-b := a + func1
+b := 1 + 2
+c := a + func1 + b
 print a
-print b
+print c
