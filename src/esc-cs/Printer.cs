@@ -572,6 +572,12 @@ public static class Printer
 				outputFile.WriteIndentLine(level, slotId, $"id: name = {data.Name} ({GetTypeSlotName(slot.TypeSlot)}){(data.Target != 0 ? $" -> {data.Target:0000}" : "")}");
 				break;
 			}
+			case TableSlotType.Intrinsic:
+			{
+				var data = (IntrinsicSlotData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"intrinsic: name = {data.Name} ({GetTypeSlotName(slot.TypeSlot)})");
+				break;
+			}
 			case TableSlotType.Return:
 			{
 				var data = (ReturnSlotData)slot.Data;

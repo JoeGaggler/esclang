@@ -237,11 +237,20 @@ public static class Analyzer
 				var currentSlot = currentNode.ParentSlot;
 				if (currentSlot == 0)
 				{
+					// check for intrinsics
+					if (ident == "print")
+					{
+						Table.ReplaceData(slot, TableSlotType.Intrinsic, new IntrinsicSlotData("print"), log);
+						var str = Table.GetOrAddType(new NativeTypeSlot("string"), log);
+						var fun = Table.GetOrAddType(new FunctionTypeSlot(str), log);
+						Table.UpdateType(slot, fun, log);
+						break;
+					}
+
 					log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}0000 = ROOT");
 					break;
 				}
 				currentNode = Table.GetSlot(currentSlot);
-
 
 				if (currentNode.DataType == TableSlotType.Braces)
 				{
@@ -440,7 +449,11 @@ public static class Analyzer
 					if (callTargetSlot.TypeSlot == 0) { continue; }
 					if (callData.Args.Any(i => Table.GetSlot(i).TypeSlot == 0)) { continue; }
 
-					log.WriteLine($"slot {targetSlotId:0000} call: TODO");
+					var callTargetType = Table.GetTypeSlot(callTargetSlot.TypeSlot);
+					if (callTargetType is not FunctionTypeSlot { ReturnType: var returnType }) { throw new InvalidOperationException($"Invalid call target type: {callTargetType}"); }
+
+					Table.UpdateType(targetSlotId, returnType, log);
+					sourceQueue.Enqueue(targetSlotId);
 				}
 				else
 				{

@@ -119,6 +119,7 @@ public enum TableSlotType
 	Integer,
 	Add,
 	Return,
+	Intrinsic,
 }
 
 public record class TableSlot(int ParentSlot, TableSlotType DataType, SlotData Data, int TypeSlot = 0)
@@ -132,6 +133,7 @@ public record class FileSlotData(int Main = 0) : SlotData;
 public record class DeclareSlotData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : SlotData;
 public record class CallSlotData(int Target, int[] Args) : SlotData;
 public record class IdentifierSlotData(String Name, int Target = 0) : SlotData;
+public record class IntrinsicSlotData(String Name) : SlotData;
 public record class BracesSlotData(int[] Lines) : SlotData
 {
 	private readonly Dictionary<String, int> NameTable = [];

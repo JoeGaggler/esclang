@@ -198,7 +198,10 @@ slot 0021 in 0017 <- Identifier = IdentifierSlotData { Name = b, Target = 12 }
 identifier: 0023 = IdentifierSlotData { Name = print, Target = 0 }
   0022 = Call
       0001 = File
-        0000 = ROOT
+slot 0023 in 0022 << Intrinsic = IntrinsicSlotData { Name = print }
+add type 3 = NativeTypeSlot { Name = string }
+add type 4 = FunctionTypeSlot { ReturnType = 3 }
+slot 0023 in 0022 <- Intrinsic : 4 = IntrinsicSlotData { Name = print }
 identifier: 0024 = IdentifierSlotData { Name = a, Target = 0 }
   0022 = Call
     0002 FOUND: BracesSlotData { Lines = System.Int32[] }
@@ -206,7 +209,8 @@ slot 0024 in 0022 <- Identifier = IdentifierSlotData { Name = a, Target = 10 }
 identifier: 0026 = IdentifierSlotData { Name = print, Target = 0 }
   0025 = Call
       0001 = File
-        0000 = ROOT
+slot 0026 in 0025 << Intrinsic = IntrinsicSlotData { Name = print }
+slot 0026 in 0025 <- Intrinsic : 4 = IntrinsicSlotData { Name = print }
 identifier: 0027 = IdentifierSlotData { Name = c, Target = 0 }
   0025 = Call
     0002 FOUND: BracesSlotData { Lines = System.Int32[] }
@@ -248,27 +252,41 @@ id target: 21
 slot 0021 in 0017 <- Identifier : 2 = IdentifierSlotData { Name = b, Target = 12 }
 dequeue: 0019
 dequeue: 0024
+slot 0022 in 0002 <- Call : 3 = CallSlotData { Target = 23, Args = System.Int32[] }
 dequeue: 0007
-add type 3 = FunctionTypeSlot { ReturnType = 2 }
-slot 0004 braces: found return 0007 3
-slot 0004 in 0003 <- Braces : 3 = BracesSlotData { Lines = System.Int32[] }
+add type 5 = FunctionTypeSlot { ReturnType = 2 }
+slot 0004 braces: found return 0007 5
+slot 0004 in 0003 <- Braces : 5 = BracesSlotData { Lines = System.Int32[] }
 dequeue: 0021
+dequeue: 0022
 dequeue: 0004
 add target: 3
-slot 0003 in 0002 <- Declare : 3 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
+slot 0003 in 0002 <- Declare : 5 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
 dequeue: 0003
 id target: 20
 slot 0028 in 0020 :: Identifier = IdentifierSlotData { Name = func1, Target = 3 }
-slot 0028 in 0020 <- Identifier : 3 = IdentifierSlotData { Name = func1, Target = 3 }
+slot 0028 in 0020 <- Identifier : 5 = IdentifierSlotData { Name = func1, Target = 3 }
 slot 0020 in 0018 << Call = CallSlotData { Target = 28, Args = System.Int32[] }
 id target: 28
-slot 0028 in 0020 <- Identifier : 3 = IdentifierSlotData { Name = func1, Target = 3 }
+slot 0028 in 0020 <- Identifier : 5 = IdentifierSlotData { Name = func1, Target = 3 }
 dequeue: 0028
-slot 0020 call: TODO
+slot 0020 in 0018 <- Call : 2 = CallSlotData { Target = 28, Args = System.Int32[] }
 dequeue: 0020
+slot 0018 in 0017 <- Add : 2 = AddOpSlotData { Left = 19, Right = 20 }
 dequeue: 0028
-slot 0020 call: TODO
-done after 18 iterations
+slot 0017 in 0016 <- Add : 2 = AddOpSlotData { Left = 18, Right = 21 }
+dequeue: 0020
+dequeue: 0018
+dequeue: 0017
+add target: 16
+slot 0016 in 0002 <- Declare : 2 = DeclareSlotData { Name = c, IsStatic = False, Type = 0, Value = 17 }
+dequeue: 0016
+id target: 27
+slot 0027 in 0025 <- Identifier : 2 = IdentifierSlotData { Name = c, Target = 16 }
+dequeue: 0027
+slot 0025 in 0002 <- Call : 3 = CallSlotData { Target = 26, Args = System.Int32[] }
+dequeue: 0025
+done after 25 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (unknown)
@@ -288,20 +306,20 @@ done after 18 iterations
 0013:         add (int)
 0014:           integer=1 (int)
 0015:           integer=2 (int)
-0016:     declare c (unknown)
+0016:     declare c (int)
             value
-0017:         add (unknown)
-0018:           add (unknown)
+0017:         add (int)
+0018:           add (int)
 0019:             id: name = a (int) -> 0010
-0020:             call (unknown)
+0020:             call (int)
 0028:               id: name = func1 (function -> int) -> 0003
 0021:           id: name = b (int) -> 0012
-0022:     call (unknown)
-0023:       id: name = print (unknown)
+0022:     call (string)
+0023:       intrinsic: name = print (function -> string)
 0024:       id: name = a (int) -> 0010
-0025:     call (unknown)
-0026:       id: name = print (unknown)
-0027:       id: name = c (unknown) -> 0016
+0025:     call (string)
+0026:       intrinsic: name = print (function -> string)
+0027:       id: name = c (int) -> 0016
 
 Analyze:
 main procedure
