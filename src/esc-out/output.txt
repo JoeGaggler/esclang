@@ -258,8 +258,17 @@ add target: 3
 slot 0003 in 0002 <- Declare : 3 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
 dequeue: 0003
 id target: 20
-TODO: id type assigned from function: 20
-done after 15 iterations
+slot 0028 in 0020 :: Identifier = IdentifierSlotData { Name = func1, Target = 3 }
+slot 0028 in 0020 <- Identifier : 3 = IdentifierSlotData { Name = func1, Target = 3 }
+slot 0020 in 0018 << Call = CallSlotData { Target = 28, Args = System.Int32[] }
+id target: 28
+slot 0028 in 0020 <- Identifier : 3 = IdentifierSlotData { Name = func1, Target = 3 }
+dequeue: 0028
+slot 0020 call: TODO
+dequeue: 0020
+dequeue: 0028
+slot 0020 call: TODO
+done after 18 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (unknown)
@@ -284,7 +293,8 @@ done after 15 iterations
 0017:         add (unknown)
 0018:           add (unknown)
 0019:             id: name = a (int) -> 0010
-0020:             id: name = func1 (unknown) -> 0003
+0020:             call (unknown)
+0028:               id: name = func1 (function -> int) -> 0003
 0021:           id: name = b (int) -> 0012
 0022:     call (unknown)
 0023:       id: name = print (unknown)

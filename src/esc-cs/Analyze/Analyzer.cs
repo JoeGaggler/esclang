@@ -297,6 +297,7 @@ public static class Analyzer
 
 			// find all nodes that reference this node
 			// future: build a reverse lookup table on an earlier pass
+			// note two targets to be refreshed with each update: 1) parent, 2) arbitrary references
 			foreach (var (targetSlotId, targetSlot) in Table.All.Index())
 			{
 				if (targetSlot.DataType == TableSlotType.Declare)
@@ -367,19 +368,25 @@ public static class Analyzer
 						continue;
 					}
 
-					// targetQueue.Enqueue(targetSlotId);
 					log.WriteLine($"id target: {targetSlotId}");
 
 					var sourceSlotRecord = Table.GetSlot(sourceSlotId);
 					if (sourceSlotRecord.TypeSlot == 0) { continue; } // should be redundant
 
-					// TODO: don't copy function type, must copy return type
-					// TODO: identifier to a function must turn into a call
 					var typeSlot = Table.GetTypeSlot(sourceSlotRecord.TypeSlot);
 					if (typeSlot is FunctionTypeSlot)
 					{
-						log.WriteLine($"TODO: id type assigned from function: {targetSlotId}");
-						continue;
+						// identifier to a function must turn into a call
+						var parentSlot = Table.GetSlot(idSlot.ParentSlot);
+						if (parentSlot.DataType != TableSlotType.Call)
+						{
+							var newIdSlotId = Table.Add(targetSlotId, TableSlotType.Identifier, idData, log);
+							Table.UpdateType(newIdSlotId, sourceSlotRecord.TypeSlot, log);
+							Table.ReplaceData(targetSlotId, TableSlotType.Call, new CallSlotData(Target: newIdSlotId, Args: []), log);
+							sourceQueue.Enqueue(newIdSlotId);
+							sourceQueue.Enqueue(targetSlotId);
+							continue;
+						}
 					}
 
 					Table.UpdateType(targetSlotId, sourceSlotRecord.TypeSlot, log);
@@ -420,6 +427,21 @@ public static class Analyzer
 					Table.UpdateType(targetSlotId, funcTypeId, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
+				else if (targetSlot.DataType == TableSlotType.Call)
+				{
+					var (callSlot, callData) = Table.GetSlotTuple<CallSlotData>(targetSlotId);
+					if (callSlot.TypeSlot != 0) { continue; } // already set
+					
+					// match dequeued source slot
+					if (callData.Target != sourceSlotId && !callData.Args.Contains(sourceSlotId)) { continue; }
+					var callTargetSlot = Table.GetSlot(callData.Target);
+
+					// skip if target or arg types are not known yet
+					if (callTargetSlot.TypeSlot == 0) { continue; }
+					if (callData.Args.Any(i => Table.GetSlot(i).TypeSlot == 0)) { continue; }
+
+					log.WriteLine($"slot {targetSlotId:0000} call: TODO");
+				}
 				else
 				{
 					continue;
@@ -428,7 +450,6 @@ public static class Analyzer
 		}
 		log.WriteLine($"done after {iteration} iterations");
 	}
-
 
 	private static int BuildDeclareNode(Boolean isStatic, int parentSlot, StreamWriter log, SyntaxNode idNode, SyntaxNode? typeNode, SyntaxNode valueNode)
 	{
