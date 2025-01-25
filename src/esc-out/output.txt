@@ -221,35 +221,35 @@ add source: 14
 add source: 15
 source: 6
 add target: 5
-slot 0013 in 0012 <- Add : 2 = AddOpSlotData { Left = 14, Right = 15 }
-target: 5
 slot 0005 in 0004 <- Declare : 2 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 6 }
+slot 0013 in 0012 <- Add : 2 = AddOpSlotData { Left = 14, Right = 15 }
 source: 11
 add target: 10
-target: 10
 slot 0010 in 0002 <- Declare : 2 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 11 }
 source: 14
 source: 15
-source: 13
-add target: 12
-target: 12
-slot 0012 in 0002 <- Declare : 2 = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
 source: 5
 id target: 9
 slot 0009 in 0007 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 5 }
-target: 9
+source: 13
+add target: 12
+slot 0012 in 0002 <- Declare : 2 = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 13 }
 source: 10
 id target: 19
 slot 0019 in 0018 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
 id target: 24
 slot 0024 in 0022 <- Identifier : 2 = IdentifierSlotData { Name = a, Target = 10 }
-target: 19
-target: 24
+source: 9
+return: 0007 <- NativeTypeSlot { Name = int } 2 via 0009
+slot 0007 in 0004 <- Return : 2 = ReturnSlotData { Value = 9 }
 source: 12
 id target: 21
 slot 0021 in 0017 <- Identifier : 2 = IdentifierSlotData { Name = b, Target = 12 }
-target: 21
-done after 8 iterations
+source: 19
+source: 24
+source: 7
+source: 21
+done after 13 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (unknown)
@@ -259,7 +259,7 @@ done after 8 iterations
 0005:           declare a (int)
                   value
 0006:               integer=2 (int)
-0007:           return (unknown)
+0007:           return (int)
 0009:             id: name = a (int) -> 0005
 0010:     declare a (int)
             value

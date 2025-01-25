@@ -275,15 +275,14 @@ public static class Analyzer
 	private static void BuildSpillTypes(StreamWriter log)
 	{
 		var sourceQueue = new Queue<int>();
-		var targetQueue = new Queue<int>();
 
 		// start with all nodes that have a type
-		foreach (var (slot, node) in Table.Instance.All.Index())
+		foreach (var (sourceSlotId, sourceSlot) in Table.Instance.All.Index())
 		{
-			if (node.TypeSlot != 0)
+			if (sourceSlot.TypeSlot != 0)
 			{
-				sourceQueue.Enqueue(slot);
-				log.WriteLine($"add source: {slot}");
+				sourceQueue.Enqueue(sourceSlotId);
+				log.WriteLine($"add source: {sourceSlotId}");
 			}
 		}
 
@@ -293,26 +292,39 @@ public static class Analyzer
 			x++;
 			if (x > 100) throw new InvalidOperationException("Infinite loop");
 
-			var sourceSlot = sourceQueue.Dequeue();
-			log.WriteLine($"source: {sourceSlot}");
+			var sourceSlotId = sourceQueue.Dequeue();
+			log.WriteLine($"source: {sourceSlotId}");
 
 			// find all nodes that reference this node
-			foreach (var (slot, node) in Table.Instance.All.Index())
+			foreach (var (targetSlotId, targetSlot) in Table.Instance.All.Index())
 			{
-				if (node.DataType == TableSlotType.Declare)
+				if (targetSlot.DataType == TableSlotType.Declare)
 				{
-					var declareData = (DeclareSlotData)Table.Instance[slot].Data;
-					// if (!Table.Instance.TryGetSlot<DeclareSlotData>(slot, TableSlotType.Declare, out var declareData, log))
-					// {
-					// 	throw new Exception("Invalid declare slot");
-					// }
+					var declareData = (DeclareSlotData)Table.Instance[targetSlotId].Data;
 
 					// TODO: explicit types?
 
-					if (declareData.Value == sourceSlot)
+					if (declareData.Value == sourceSlotId)
 					{
-						targetQueue.Enqueue(slot);
-						log.WriteLine($"add target: {slot}");
+						// targetQueue.Enqueue(targetSlotId);
+						log.WriteLine($"add target: {targetSlotId}");
+						if (declareData.Type != 0)
+						{
+							// TODO: explicit types
+							break;
+						}
+						else
+						{
+							var valueSlotId = declareData.Value;
+							var valueSlot = Table.Instance[valueSlotId];
+							var valueSlotType = valueSlot.TypeSlot;
+
+							if (valueSlotType != targetSlot.TypeSlot)
+							{
+								Table.Instance.UpdateType(targetSlotId, valueSlotType, log);
+								sourceQueue.Enqueue(targetSlotId);
+							}
+						}
 					}
 				}
 				// else if (node.DataType == TableSlotType.Call)
@@ -337,13 +349,14 @@ public static class Analyzer
 				// 		}
 				// 	}
 				// }
-				else if (node.DataType == TableSlotType.Add)
+				else if (targetSlot.DataType == TableSlotType.Add)
 				{
 					// NOTE: this assumes that add produces the same type as its operands
 
-					var addSlot = Table.Instance[slot];
+					var addSlot = Table.Instance[targetSlotId];
 					var addData = (AddOpSlotData)addSlot.Data;
 
+					// skip if either operand is not known yet
 					if (addData.Left == 0 || addData.Right == 0)
 					{
 						continue;
@@ -352,79 +365,60 @@ public static class Analyzer
 					var leftType = Table.Instance[addData.Left].TypeSlot;
 					var rightType = Table.Instance[addData.Right].TypeSlot;
 
+					// skip if operands do not match
 					if (leftType != rightType)
 					{
 						continue;
 					}
 
+					// skip if already set
 					if (leftType == addSlot.TypeSlot)
 					{
 						continue;
 					}
 
-					Table.Instance.UpdateType(slot, leftType, log);
-					sourceQueue.Enqueue(slot);
+					Table.Instance.UpdateType(targetSlotId, leftType, log);
+					sourceQueue.Enqueue(targetSlotId);
 				}
-				else if (node.DataType == TableSlotType.Identifier)
+				else if (targetSlot.DataType == TableSlotType.Identifier)
 				{
-					var idSlot = Table.Instance[slot];
+					var idSlot = Table.Instance[targetSlotId];
 					var idData = (IdentifierSlotData)idSlot.Data;
 
-					if (idData.Target == sourceSlot)
-					{
-						targetQueue.Enqueue(slot);
-						log.WriteLine($"id target: {slot}");
-
-						var sourceSlotRecord = Table.Instance[sourceSlot];
-						if (sourceSlotRecord.TypeSlot == 0) { continue; }
-
-						// TODO: don't copy function type, must copy return type
-						Table.Instance.UpdateType(slot, sourceSlotRecord.TypeSlot, log);
-					}
-					else
+					if (idData.Target != sourceSlotId)
 					{
 						continue;
 					}
+
+					// targetQueue.Enqueue(targetSlotId);
+					log.WriteLine($"id target: {targetSlotId}");
+
+					var sourceSlotRecord = Table.Instance[sourceSlotId];
+					if (sourceSlotRecord.TypeSlot == 0) { continue; } // should be redundant
+
+					// TODO: don't copy function type, must copy return type
+					Table.Instance.UpdateType(targetSlotId, sourceSlotRecord.TypeSlot, log);
+					sourceQueue.Enqueue(targetSlotId);
 				}
-			}
-
-			while (targetQueue.Count > 0)
-			{
-				var slotId = targetQueue.Dequeue();
-				var slot = Table.Instance[slotId];
-				var slotType = slot.TypeSlot;
-				log.WriteLine($"target: {slotId}");
-
-				switch (slot.DataType)
+				else if (targetSlot.DataType == TableSlotType.Return)
 				{
-					case TableSlotType.Declare:
+					var returnSlot = Table.Instance[targetSlotId];
+					var returnData = (ReturnSlotData)returnSlot.Data;
+
+					if (returnData.Value != sourceSlotId)
 					{
-						var declareData = (DeclareSlotData)Table.Instance[slotId].Data;
-						// if (!Table.Instance.TryGetSlot<DeclareSlotData>(slotId, TableSlotType.Declare, out var declareData, log))
-						// {
-						// 	throw new Exception("Invalid declare slot");
-						// }
-
-						if (declareData.Type != 0)
-						{
-							// TODO: explicit types
-							break;
-						}
-						else
-						{
-							var valueSlotId = declareData.Value;
-							var valueSlot = Table.Instance[valueSlotId];
-							var valueSlotType = valueSlot.TypeSlot;
-
-							if (valueSlotType != slotType)
-							{
-								Table.Instance.UpdateType(slotId, valueSlotType, log);
-								sourceQueue.Enqueue(slotId);
-							}
-						}
-
-						break;
+						continue;
 					}
+
+					var sourceTypeId = Table.Instance[sourceSlotId].TypeSlot;
+					var typeRow = Table.Instance.Types[sourceTypeId];
+					log.WriteLine($"slot {targetSlotId:0000} return:  <- {typeRow} {sourceTypeId} via {returnData.Value:0000}");
+					Table.Instance.UpdateType(targetSlotId, sourceTypeId, log);
+					sourceQueue.Enqueue(targetSlotId);
+				}
+				else
+				{
+					continue;
 				}
 			}
 		}
