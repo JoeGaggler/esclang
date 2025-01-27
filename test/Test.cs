@@ -37,7 +37,7 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
     EscLang.Eval.Evaluation actual;
     try
     {
-        actual = EscLang.Eval.Evaluator.Evaluate(analysis, programOutput);
+        actual = EscLang.Eval.Evaluator.Evaluate(EscLang.Analyze.Table.Instance, programOutput);
     }
     catch (Exception e)
     {

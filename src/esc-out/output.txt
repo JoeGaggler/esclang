@@ -330,6 +330,8 @@ main procedure
   scope
 
 Output:
+13
+18
 
 Stats:
 -   Start: 0.0s

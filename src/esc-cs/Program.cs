@@ -90,7 +90,7 @@ class Program
 		var programOutput = new StringWriter();
 		try
 		{
-			Eval.Evaluator.Evaluate(unit, programOutput);
+			Eval.Evaluator.Evaluate(Analyze.Table.Instance, programOutput);
 		}
 		catch (Exception e)
 		{

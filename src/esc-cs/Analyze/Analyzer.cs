@@ -18,7 +18,7 @@ public static class Analyzer
 		var queue = new AnalysisQueue();
 
 		log.WriteLine("=== Build: init ===");
-		_ = BuildTable(file, 0, log);
+		var fileSlotId = BuildTable(file, 0, log);
 
 		log.WriteLine("=== Build: return ===");
 		BuildReturn(log);
@@ -130,6 +130,13 @@ public static class Analyzer
 			{
 				var data = new IntegerSlotData(Value: Int32.Parse(numberLiteral));
 				var slot = Table.Add(parentSlot, TableSlotType.Integer, data, log);
+
+				return slot;
+			}
+			case LiteralStringNode { Text: { Length: > 0 } stringLiteral }:
+			{
+				var data = new StringSlotData(Value: stringLiteral);
+				var slot = Table.Add(parentSlot, TableSlotType.String, data, log);
 
 				return slot;
 			}

@@ -8,7 +8,7 @@ public record class Analysis(Scope Main)
 
 public class Table
 {
-	public static readonly Table Instance = new Table(); // TODO: make private singleton
+	public static readonly Table Instance = new Table();
 
 	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
 	private readonly List<TypeSlot> Types = [UnknownTypeSlot.Instance];
@@ -101,6 +101,10 @@ public class Table
 	}
 
 	public static TableSlot Root { get => Instance.Slots[1]; }
+
+	// Instance
+	public TableSlot GetSlot1(int slotId) => Slots[slotId];
+	public (TableSlot, T) GetSlotTuple1<T>(int slotId) where T : SlotData => (Slots[slotId], (T)Slots[slotId].Data);
 }
 
 public abstract record class TypeSlot;
@@ -118,6 +122,7 @@ public enum TableSlotType
 	Identifier,
 	Braces,
 	Integer,
+	String,
 	Add,
 	Return,
 	Intrinsic,
@@ -155,6 +160,7 @@ public record class BracesSlotData(int[] Lines) : SlotData
 	}
 }
 public record class IntegerSlotData(Int32 Value) : SlotData;
+public record class StringSlotData(String Value) : SlotData;
 public record class AddOpSlotData(Int32 Left = 0, Int32 Right = 0) : SlotData;
 public record class ReturnSlotData(int Value = 0, int Function = 0) : SlotData;
 

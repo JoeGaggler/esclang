@@ -122,3 +122,4 @@ public record class DotnetMemberMethodEvaluation(System.Reflection.MethodInfo Me
 public record class ReturnVoidEvaluation() : Evaluation;
 public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
 public record class FunctionEvaluation(Analyze.FunctionExpression Func) : Evaluation;
+public record class FunctionEvaluation2(int BracesSlotId) : Evaluation;
