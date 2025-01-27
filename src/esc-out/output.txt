@@ -165,6 +165,9 @@ slot 0027 in 0025 :: Identifier = IdentifierSlotData { Name = c, Target = 0 }
 slot 0025 in 0002 <- Call = CallSlotData { Target = 26, Args = System.Int32[] }
 slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
 === Build: return ===
+add type 3 = FunctionTypeSlot { ReturnType = 1 }
+slot 0002 in 0001 <- Braces : 3 = BracesSlotData { Lines = System.Int32[] }
+slot 0004 in 0003 <- Braces : 3 = BracesSlotData { Lines = System.Int32[] }
 slot 0008 in 0007 -> Identifier = IdentifierSlotData { Name = return, Target = 0 }
 slot 0007 in 0004 << Return = ReturnSlotData { Value = 9, Function = 0 }
 slot 0008 in 0007 << Unknown = InvalidSlotData { }
@@ -173,6 +176,7 @@ slot 0023 in 0022 -> Identifier = IdentifierSlotData { Name = print, Target = 0 
 slot 0026 in 0025 -> Identifier = IdentifierSlotData { Name = print, Target = 0 }
 slot 0007 <- returns to 0004
 slot 0007 in 0004 <- Return = ReturnSlotData { Value = 9, Function = 4 }
+slot 0004 in 0003 <- Braces : 0 = BracesSlotData { Lines = System.Int32[] }
 === Build: resolve identifiers ===
 identifier: 0009 = IdentifierSlotData { Name = a, Target = 0 }
   0007 = Return
@@ -199,9 +203,9 @@ identifier: 0023 = IdentifierSlotData { Name = print, Target = 0 }
   0022 = Call
       0001 = File
 slot 0023 in 0022 << Intrinsic = IntrinsicSlotData { Name = print }
-add type 3 = NativeTypeSlot { Name = string }
-add type 4 = FunctionTypeSlot { ReturnType = 3 }
-slot 0023 in 0022 <- Intrinsic : 4 = IntrinsicSlotData { Name = print }
+add type 4 = NativeTypeSlot { Name = string }
+add type 5 = FunctionTypeSlot { ReturnType = 4 }
+slot 0023 in 0022 <- Intrinsic : 5 = IntrinsicSlotData { Name = print }
 identifier: 0024 = IdentifierSlotData { Name = a, Target = 0 }
   0022 = Call
     0002 FOUND: BracesSlotData { Lines = System.Int32[] }
@@ -210,7 +214,7 @@ identifier: 0026 = IdentifierSlotData { Name = print, Target = 0 }
   0025 = Call
       0001 = File
 slot 0026 in 0025 << Intrinsic = IntrinsicSlotData { Name = print }
-slot 0026 in 0025 <- Intrinsic : 4 = IntrinsicSlotData { Name = print }
+slot 0026 in 0025 <- Intrinsic : 5 = IntrinsicSlotData { Name = print }
 identifier: 0027 = IdentifierSlotData { Name = c, Target = 0 }
   0025 = Call
     0002 FOUND: BracesSlotData { Lines = System.Int32[] }
@@ -252,23 +256,23 @@ id target: 21
 slot 0021 in 0017 <- Identifier : 2 = IdentifierSlotData { Name = b, Target = 12 }
 dequeue: 0019
 dequeue: 0024
-slot 0022 in 0002 <- Call : 3 = CallSlotData { Target = 23, Args = System.Int32[] }
+slot 0022 in 0002 <- Call : 4 = CallSlotData { Target = 23, Args = System.Int32[] }
 dequeue: 0007
-add type 5 = FunctionTypeSlot { ReturnType = 2 }
-slot 0004 braces: found return 0007 5
-slot 0004 in 0003 <- Braces : 5 = BracesSlotData { Lines = System.Int32[] }
+add type 6 = FunctionTypeSlot { ReturnType = 2 }
+slot 0004 braces: found return 0007 6
+slot 0004 in 0003 <- Braces : 6 = BracesSlotData { Lines = System.Int32[] }
 dequeue: 0021
 dequeue: 0022
 dequeue: 0004
 add target: 3
-slot 0003 in 0002 <- Declare : 5 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
+slot 0003 in 0002 <- Declare : 6 = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 4 }
 dequeue: 0003
 id target: 20
 slot 0028 in 0020 :: Identifier = IdentifierSlotData { Name = func1, Target = 3 }
-slot 0028 in 0020 <- Identifier : 5 = IdentifierSlotData { Name = func1, Target = 3 }
+slot 0028 in 0020 <- Identifier : 6 = IdentifierSlotData { Name = func1, Target = 3 }
 slot 0020 in 0018 << Call = CallSlotData { Target = 28, Args = System.Int32[] }
 id target: 28
-slot 0028 in 0020 <- Identifier : 5 = IdentifierSlotData { Name = func1, Target = 3 }
+slot 0028 in 0020 <- Identifier : 6 = IdentifierSlotData { Name = func1, Target = 3 }
 dequeue: 0028
 slot 0020 in 0018 <- Call : 2 = CallSlotData { Target = 28, Args = System.Int32[] }
 dequeue: 0020
@@ -284,12 +288,12 @@ dequeue: 0016
 id target: 27
 slot 0027 in 0025 <- Identifier : 2 = IdentifierSlotData { Name = c, Target = 16 }
 dequeue: 0027
-slot 0025 in 0002 <- Call : 3 = CallSlotData { Target = 26, Args = System.Int32[] }
+slot 0025 in 0002 <- Call : 4 = CallSlotData { Target = 26, Args = System.Int32[] }
 dequeue: 0025
 done after 25 iterations
 === Tree ===
 0001: file (unknown)
-0002:   braces (unknown)
+0002:   braces (function -> void)
 0003:     static func1 (function -> int)
             value
 0004:         braces (function -> int)

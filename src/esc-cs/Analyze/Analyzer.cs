@@ -161,6 +161,14 @@ public static class Analyzer
 
 		foreach (var (slot, node) in Table.All.Index())
 		{
+			// all functions are procs unless a return statement is found
+			if (node.DataType == TableSlotType.Braces)
+			{
+				var retVoid = Table.GetOrAddType(new FunctionTypeSlot(Table.VoidType), log);
+				Table.UpdateType(slot, retVoid, log);
+				continue;
+			}
+
 			if (node.DataType != TableSlotType.Call) { continue; }
 
 			var call = (CallSlotData)node.Data;
@@ -210,6 +218,9 @@ public static class Analyzer
 					log.WriteLine($"slot {slot:0000} <- returns to {currentSlot:0000}");
 
 					Table.UpdateData(slot, returnData with { Function = currentSlot }, log);
+
+					// clear "proc" type since we found a return statement
+					Table.UpdateType(currentSlot, 0, log);
 					break;
 				}
 

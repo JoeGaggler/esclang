@@ -39,8 +39,9 @@ public class Table
 
 	public static int GetOrAddType(TypeSlot type, StreamWriter log)
 	{
+		// TODO: linear search could be slow
 		var id = -1;
-		id = Instance.Types.IndexOf(type); // TODO: does this work for class records?
+		id = Instance.Types.IndexOf(type);
 		if (id == -1)
 		{
 			id = Instance.Types.Count;
