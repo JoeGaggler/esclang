@@ -82,15 +82,15 @@ class Program
 		Measure("Analyze", measurements, stopwatch);
 
 		// Debug Analyzer
-		outputFile.WriteLine();
-		outputFile.WriteLine("Analyze:");
-		Printer.PrintAnalysis(outputFile, unit);
+		// outputFile.WriteLine();
+		// outputFile.WriteLine("Analyze:");
+		// Printer.PrintAnalysis(outputFile, unit);
 
 		// Evaluator
 		var programOutput = new StringWriter();
 		try
 		{
-			Eval.Evaluator.Evaluate(Analyze.Table.Instance, programOutput);
+			Eval.Evaluator.Evaluate(unit, programOutput);
 		}
 		catch (Exception e)
 		{

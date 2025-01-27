@@ -9,6 +9,7 @@ Run("cases/func-params-2.esc", Number(25));
 Run("cases/recursive.esc", Number(111));
 Run("cases/two-func-calls.esc", Number(999));
 Run("cases/two-func-calls-reverse-declaration.esc", Number(999)); // TODO: out of order declarations
+Run("cases/func-declare-after-use.esc", Number(444));
 
 static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 {
@@ -22,7 +23,7 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 		return;
 	}
 
-	EscLang.Analyze.Analysis analysis;
+	EscLang.Analyze.Table analysis;
 	try
 	{
 		analysis = EscLang.Analyze.Analyzer.Analyze(file, StreamWriter.Null);
@@ -37,7 +38,7 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
     EscLang.Eval.Evaluation actual;
     try
     {
-        actual = EscLang.Eval.Evaluator.Evaluate(EscLang.Analyze.Table.Instance, programOutput);
+        actual = EscLang.Eval.Evaluator.Evaluate(analysis, programOutput);
     }
     catch (Exception e)
     {

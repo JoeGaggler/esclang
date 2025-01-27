@@ -17,7 +17,7 @@ public static class Evaluator
 
 	private static Evaluation CallFunctionSlot(int bracesSlotId, Evaluation[] args, Table slotTable, StringWriter programOutput, ValueTable valueTable)
 	{
-		var (bracesSlot, bracesData) = slotTable.GetSlotTuple1<BracesSlotData>(bracesSlotId);
+		var (bracesSlot, bracesData) = slotTable.GetSlotTuple<BracesSlotData>(bracesSlotId);
 
 		var bracesValueTable = new ValueTable(valueTable);
 		bracesValueTable.SetArguments(args);
@@ -34,12 +34,13 @@ public static class Evaluator
 				return VoidEvaluation.Instance; // return void, returns do not propagate outside of current function
 			}
 		}
-		return new VoidEvaluation();
+
+		return VoidEvaluation.Instance;
 	}
 
 	private static Evaluation EvaluateSlot(int slotId, Table slotTable, StringWriter programOutput, ValueTable valueTable)
 	{
-		var (slot, slotData) = slotTable.GetSlotTuple1<SlotData>(slotId);
+		var (slot, slotData) = slotTable.GetSlotTuple<SlotData>(slotId);
 		switch (slot.DataType)
 		{
 			case TableSlotType.Integer: return new IntEvaluation(((Analyze.IntegerSlotData)slotData).Value);
@@ -93,7 +94,8 @@ public static class Evaluator
 				var left = EvaluateSlot(addData.Left, slotTable, programOutput, valueTable);
 				var right = EvaluateSlot(addData.Right, slotTable, programOutput, valueTable);
 
-				if (slot.TypeSlot != Analyze.Table.IntType)
+				var intTypeSlotId = slotTable.GetOrAddType(new NativeTypeSlot("int"), StreamWriter.Null);
+				if (slot.TypeSlot != intTypeSlotId)
 				{
 					throw new NotImplementedException($"Invalid add expression type: {slot.TypeSlot}");
 				}

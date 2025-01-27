@@ -112,14 +112,14 @@ public class ValueTable
 
 public abstract record class Evaluation;
 public record class IntrinsicFunctionEvaluation(String Name) : Evaluation;
-public record class VoidEvaluation() : Evaluation { public static readonly VoidEvaluation Instance = new(); };
+public record class VoidEvaluation : Evaluation { public static readonly VoidEvaluation Instance = new(); private VoidEvaluation() { } };
 public record class ObjectEvaluation(Object Value) : Evaluation;
 public record class IntEvaluation(Int32 Value) : Evaluation;
 public record class StringEvaluation(String Value) : Evaluation;
 public record class BooleanEvaluation(Boolean Value) : Evaluation;
 public record class FunctionDeclarationEvaluation() : Evaluation; // TODO: inputs/outputs
 public record class DotnetMemberMethodEvaluation(System.Reflection.MethodInfo MethodInfo, Evaluation Target) : Evaluation;
-public record class ReturnVoidEvaluation() : Evaluation;
+public record class ReturnVoidEvaluation : Evaluation { public static readonly ReturnVoidEvaluation Instance = new(); private ReturnVoidEvaluation() { } };
 public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
 public record class FunctionEvaluation(Analyze.FunctionExpression Func) : Evaluation;
 public record class FunctionEvaluation2(int BracesSlotId) : Evaluation;

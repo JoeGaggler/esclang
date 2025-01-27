@@ -1,0 +1,5 @@
+return (func + 321)
+
+func :: {
+    return 123
+}
