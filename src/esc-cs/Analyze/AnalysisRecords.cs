@@ -15,15 +15,15 @@ public class Table
 	{
 	}
 
-	public void UpdateType(int slotId, int typeSlotId, StreamWriter? log)
+	public void UpdateType(int slotId, int typeSlotId, TextWriter? log)
 	{
-		log ??= StreamWriter.Null;
+		log ??= TextWriter.Null;
 		var slot = Slots[slotId] with { TypeSlot = typeSlotId };
 		Slots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} : {typeSlotId} = {slot.Data}");
 	}
 
-	public int GetOrAddType(TypeSlot type, StreamWriter log)
+	public int GetOrAddType(TypeSlot type, TextWriter log)
 	{
 		// TODO: linear search could be slow
 		var id = -1;
@@ -37,7 +37,7 @@ public class Table
 		return id;
 	}
 
-	public int Add(int parentSlot, TableSlotType type, SlotData data, StreamWriter log)
+	public int Add(int parentSlot, TableSlotType type, SlotData data, TextWriter log)
 	{
 		var id = Slots.Count;
 		var slot = new TableSlot(parentSlot, type, data);
@@ -46,14 +46,14 @@ public class Table
 		return id;
 	}
 
-	public void UpdateData(int slotId, SlotData data, StreamWriter log)
+	public void UpdateData(int slotId, SlotData data, TextWriter log)
 	{
 		var slot = Slots[slotId] with { Data = data };
 		Slots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} = {data}");
 	}
 
-	public void ReplaceData(int slotId, TableSlotType type, SlotData data, StreamWriter log)
+	public void ReplaceData(int slotId, TableSlotType type, SlotData data, TextWriter log)
 	{
 		// TODO: replacing a slot may invalidate previously referenced slots that are no longer reachable, caller should try to avoid this situation by marking the slots as invalid
 		var slot = Slots[slotId] with { DataType = type, Data = data };
@@ -61,7 +61,7 @@ public class Table
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.DataType} = {data}");
 	}
 
-	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, StreamWriter log) where T : SlotData
+	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, TextWriter log) where T : SlotData
 	{
 		var slot = Slots[slotId];
 		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.DataType} = {slot.Data}");
@@ -98,6 +98,8 @@ public class Table
 public abstract record class TypeSlot;
 public record class UnknownTypeSlot : TypeSlot { public static readonly UnknownTypeSlot Instance = new(); private UnknownTypeSlot() { } }
 public record class VoidTypeSlot : TypeSlot { public static readonly VoidTypeSlot Instance = new(); private VoidTypeSlot() { } }
+public record class ParameterTypeSlot : TypeSlot { public static readonly ParameterTypeSlot Instance = new(); private ParameterTypeSlot() { } }
+public record class MetaTypeSlot(int InstanceType) : TypeSlot;
 public record class NativeTypeSlot(String Name) : TypeSlot;
 public record class FunctionTypeSlot(int ReturnType) : TypeSlot;
 

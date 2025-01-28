@@ -12,7 +12,7 @@ public static class Analyzer
 {
 	private static Int32 ScopeCounter = -1;
 
-	public static Table Analyze(Parse.EscFile file, StreamWriter log)
+	public static Table Analyze(Parse.EscFile file, TextWriter log)
 	{
 		var globalScope = new Scope(++ScopeCounter);
 		var queue = new AnalysisQueue();
@@ -36,7 +36,7 @@ public static class Analyzer
 		return table;
 	}
 
-	private static int BuildTable(SyntaxNode node, int parentSlot, Table table, StreamWriter log)
+	private static int BuildTable(SyntaxNode node, int parentSlot, Table table, TextWriter log)
 	{
 		switch (node)
 		{
@@ -170,7 +170,7 @@ public static class Analyzer
 		}
 	}
 
-	private static void BuildReturn(Table Table, StreamWriter log)
+	private static void BuildReturn(Table Table, TextWriter log)
 	{
 		var returnQueue = new Queue<int>();
 
@@ -245,7 +245,7 @@ public static class Analyzer
 		}
 	}
 
-	private static void BuildResolver(Table table, StreamWriter log)
+	private static void BuildResolver(Table table, TextWriter log)
 	{
 		foreach (var (slot, node) in table.All.Index())
 		{
@@ -271,6 +271,14 @@ public static class Analyzer
 						var str = table.GetOrAddType(new NativeTypeSlot("string"), log);
 						var fun = table.GetOrAddType(new FunctionTypeSlot(str), log);
 						table.UpdateType(slot, fun, log);
+						break;
+					}
+					if (ident == "int")
+					{
+						table.ReplaceData(slot, TableSlotType.Intrinsic, new IntrinsicSlotData("int"), log);
+						var fun = table.GetOrAddType(new NativeTypeSlot("int"), log);
+						var meta = table.GetOrAddType(new MetaTypeSlot(fun), log);
+						table.UpdateType(slot, meta, log);
 						break;
 					}
 
@@ -299,7 +307,7 @@ public static class Analyzer
 		}
 	}
 
-	private static void BuildTypes(Table table, StreamWriter log)
+	private static void BuildTypes(Table table, TextWriter log)
 	{
 		// updated nodes that trigger its dependents to refresh
 		var sourceQueue = new Queue<int>();
@@ -316,9 +324,20 @@ public static class Analyzer
 					log.WriteLine($"enqueue {slot:0000}");
 					break;
 				}
-				case TableSlotType.Declare:
+				case TableSlotType.Intrinsic:
 				{
-					// TODO: explicit type
+					sourceQueue.Enqueue(slot);
+					log.WriteLine($"enqueue {slot:0000}");
+					log.WriteLine($"intrinsic: {slot:0000} = {node}");
+					// TODO: intrinsic types
+					break;
+				}
+				case TableSlotType.Parameter:
+				{
+					var intType = table.GetOrAddType(ParameterTypeSlot.Instance, log);
+					table.UpdateType(slot, intType, log);
+					sourceQueue.Enqueue(slot);
+					log.WriteLine($"enqueue {slot:0000}");
 					break;
 				}
 			}
@@ -341,7 +360,24 @@ public static class Analyzer
 				{
 					var declareData = table.GetSlotData<DeclareSlotData>(targetSlotId);
 
-					// TODO: explicit types?
+					if (targetSlot.TypeSlot != 0) { continue; } // already set
+
+					if (declareData.Type == sourceSlotId)
+					{
+						var (s2, t2) = table.GetSlotTuple<IntrinsicSlotData>(declareData.Type);
+
+						var t3 = table.GetTypeSlot(s2.TypeSlot);
+						if (t3 is MetaTypeSlot { InstanceType: { } instanceType2})
+						{
+							table.UpdateType(targetSlotId, instanceType2, log);
+							sourceQueue.Enqueue(targetSlotId);
+						}
+						else
+						{
+							throw new NotImplementedException($"Invalid type: {t3}");
+						}
+						continue;
+					}
 
 					if (declareData.Value == sourceSlotId)
 					{
@@ -492,7 +528,7 @@ public static class Analyzer
 		log.WriteLine($"done after {iteration} iterations");
 	}
 
-	private static int BuildDeclareNode(Boolean isStatic, int parentSlot, Table table, StreamWriter log, SyntaxNode idNode, SyntaxNode? typeNode, SyntaxNode valueNode)
+	private static int BuildDeclareNode(Boolean isStatic, int parentSlot, Table table, TextWriter log, SyntaxNode idNode, SyntaxNode? typeNode, SyntaxNode valueNode)
 	{
 		if (idNode is not Parse.IdentifierNode { Text: { Length: > 0 } id })
 		{
@@ -530,7 +566,7 @@ public static class Analyzer
 		return slot;
 	}
 
-	private static TypedExpression TypeCheck(TypedExpression expression, TypedExpression? parentExpression, Scope scope, StreamWriter log)
+	private static TypedExpression TypeCheck(TypedExpression expression, TypedExpression? parentExpression, Scope scope, TextWriter log)
 	{
 		switch (expression)
 		{
@@ -735,7 +771,7 @@ public static class Analyzer
 	}
 
 	// TODO: all braces are functions for now, future: InlineScopeExpression
-	private static FunctionExpression AnalyzeScope(List<SyntaxNode> nodes, Scope parentScope, AnalysisQueue queue, StreamWriter log)
+	private static FunctionExpression AnalyzeScope(List<SyntaxNode> nodes, Scope parentScope, AnalysisQueue queue, TextWriter log)
 	{
 		var scopeId = ++ScopeCounter;
 		log.WriteLine($"{scopeId:0000} scope: nodes={nodes.Count}");
@@ -762,7 +798,7 @@ public static class Analyzer
 		return new FunctionExpression(innerScope, returnType);
 	}
 
-	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, StreamWriter log)
+	private static AnalysisType? AnalyzeTypeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, TextWriter log)
 	{
 		log.WriteLine($"{scope.Id:0000} type: {(node is null ? "null" : node.ToString())}");
 		if (node is null) { return null; }
@@ -775,7 +811,7 @@ public static class Analyzer
 		return null;
 	}
 
-	private static TypedExpression AnalyzeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, StreamWriter log)
+	private static TypedExpression AnalyzeExpression(SyntaxNode? node, Scope scope, AnalysisQueue queue, TextWriter log)
 	{
 		log.WriteLine($"{scope.Id:0000} expression: {node}");
 		switch (node)

@@ -588,6 +588,12 @@ public static class Printer
 				}
 				break;
 			}
+			case TableSlotType.Parameter:
+			{
+				var data = (ParameterSlotData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"parameter ({GetTypeSlotName(table, slot.TypeSlot)})");
+				break;
+			}
 			default:
 			{
 				outputFile.WriteIndentLine(level, slotId, $"unknown {slot.DataType} = {slot.Data}");
@@ -605,6 +611,8 @@ public static class Printer
 			NativeTypeSlot nativeTypeSlot => nativeTypeSlot.Name,
 			UnknownTypeSlot => "unknown",
 			FunctionTypeSlot { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(table, returnTypeId)}",
+			ParameterTypeSlot => "parameter",
+			MetaTypeSlot { InstanceType: var instanceTypeId } => $"typeof -> {GetTypeSlotName(table, instanceTypeId)}",
 			_ => "unexpected",
 		};
 	}

@@ -1,9 +1,10 @@
 func1 :: {
-    a := 2
+    what : int : <>
+    a := what
     return a
 }
 a := 13
 b := 1 + 2
-c := a + func1 + b
+c := a + (func1 3) + b
 print a
 print c

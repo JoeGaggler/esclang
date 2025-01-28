@@ -123,6 +123,12 @@ public static class Evaluator
 				var intrinsicData = (Analyze.IntrinsicSlotData)slotData;
 				return new IntrinsicFunctionEvaluation(intrinsicData.Name);
 			}
+			case TableSlotType.Parameter:
+			{
+				var parameterData = (Analyze.ParameterSlotData)slotData;
+				var parameter = valueTable.GetNextParameter();
+				return parameter;
+			}
 			case TableSlotType.Call:
 			{
 				var callData = (Analyze.CallSlotData)slotData;
