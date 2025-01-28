@@ -121,5 +121,4 @@ public record class FunctionDeclarationEvaluation() : Evaluation; // TODO: input
 public record class DotnetMemberMethodEvaluation(System.Reflection.MethodInfo MethodInfo, Evaluation Target) : Evaluation;
 public record class ReturnVoidEvaluation : Evaluation { public static readonly ReturnVoidEvaluation Instance = new(); private ReturnVoidEvaluation() { } };
 public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
-public record class FunctionEvaluation(Analyze.FunctionExpression Func) : Evaluation;
-public record class FunctionEvaluation2(int BracesSlotId) : Evaluation;
+public record class FunctionEvaluation(int BracesSlotId) : Evaluation;

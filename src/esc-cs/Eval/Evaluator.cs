@@ -50,7 +50,7 @@ public static class Evaluator
 			{
 				var fileData = (Analyze.FileSlotData)slotData;
 				var mainDeclResult = EvaluateSlot(fileData.Main, slotTable, programOutput, valueTable);
-				if (mainDeclResult is not FunctionEvaluation2 { BracesSlotId: { } bracesSlotId })
+				if (mainDeclResult is not FunctionEvaluation { BracesSlotId: { } bracesSlotId })
 				{
 					throw new NotImplementedException($"Invalid main declaration: {mainDeclResult}");
 				}
@@ -60,7 +60,7 @@ public static class Evaluator
 			case TableSlotType.Braces:
 			{
 				// var braceData = (Analyze.BracesSlotData)slotData;
-				return new FunctionEvaluation2(slotId);
+				return new FunctionEvaluation(slotId);
 			}
 			case TableSlotType.Declare:
 			{
@@ -180,7 +180,7 @@ public static class Evaluator
 						}
 					}
 				}
-				else if (targetExpression is FunctionEvaluation2 { BracesSlotId: { } bracesSlotId })
+				else if (targetExpression is FunctionEvaluation { BracesSlotId: { } bracesSlotId })
 				{
 					// TODO: ARGS!
 					var returnExpression = CallFunctionSlot(bracesSlotId, args, slotTable, programOutput, valueTable);
