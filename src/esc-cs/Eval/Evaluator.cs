@@ -43,6 +43,7 @@ public static class Evaluator
 		var (slot, slotData) = slotTable.GetSlotTuple<SlotData>(slotId);
 		switch (slot.DataType)
 		{
+			case TableSlotType.Boolean: return new BooleanEvaluation(((Analyze.BooleanSlotData)slotData).Value);
 			case TableSlotType.Integer: return new IntEvaluation(((Analyze.IntegerSlotData)slotData).Value);
 			case TableSlotType.String: return new StringEvaluation(((Analyze.StringSlotData)slotData).Value);
 
@@ -128,6 +129,16 @@ public static class Evaluator
 				var parameterData = (Analyze.ParameterSlotData)slotData;
 				var parameter = valueTable.GetNextParameter();
 				return parameter;
+			}
+			case TableSlotType.LogicalNegation:
+			{
+				var logicalNegationData = (Analyze.LogicalNegationSlotData)slotData;
+				var value = EvaluateSlot(logicalNegationData.Value, slotTable, programOutput, valueTable);
+				if (value is not BooleanEvaluation booleanExpressionResult)
+				{
+					throw new NotImplementedException($"Invalid logical negation value: {value}");
+				}
+				return new BooleanEvaluation(!booleanExpressionResult.Value);
 			}
 			case TableSlotType.Call:
 			{

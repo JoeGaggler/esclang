@@ -105,6 +105,7 @@ public enum TableSlotType
 	Call,
 	Identifier,
 	Braces,
+	Boolean,
 	Integer,
 	String,
 	Add,
@@ -145,6 +146,7 @@ public record class BracesSlotData(int[] Lines) : SlotData
 		return NameTable.TryGetValue(name, out slot);
 	}
 }
+public record class BooleanSlotData(Boolean Value) : SlotData;
 public record class IntegerSlotData(Int32 Value) : SlotData;
 public record class StringSlotData(String Value) : SlotData;
 public record class AddOpSlotData(Int32 Left = 0, Int32 Right = 0) : SlotData;

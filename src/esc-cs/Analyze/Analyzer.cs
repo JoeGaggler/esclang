@@ -261,6 +261,20 @@ public static class Analyzer
 				if (currentSlot == 0)
 				{
 					// check for intrinsics
+					if (ident == "true")
+					{
+						table.ReplaceData(slot, TableSlotType.Boolean, new BooleanSlotData(true), log);
+						var fun = table.GetOrAddType(new NativeTypeSlot("bool"), log);
+						table.UpdateType(slot, fun, log);
+						break;
+					}
+					if (ident == "false")
+					{
+						table.ReplaceData(slot, TableSlotType.Boolean, new BooleanSlotData(false), log);
+						var fun = table.GetOrAddType(new NativeTypeSlot("bool"), log);
+						table.UpdateType(slot, fun, log);
+						break;
+					}
 					if (ident == "print")
 					{
 						table.ReplaceData(slot, TableSlotType.Intrinsic, new IntrinsicSlotData("print"), log);
