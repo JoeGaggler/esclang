@@ -1,10 +1,11 @@
-func1 :: {
-    what : int : <>
-    a := what
-    return a
+func :: {
+    cond : bool : <>
+    if !cond {
+        return (func true) // TODO: make parens optional for return
+    }
+    return 100
 }
-a := 13
-b := 1 + 2
-c := a + (func1 3) + b
-print a
-print c
+a := 10
+b := a + func false + 1
+print b
+return b

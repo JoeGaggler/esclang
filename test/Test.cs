@@ -45,7 +45,6 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
     {
         programOutput.WriteLine("*** CRASH! ***");
         programOutput.WriteLine(e.ToString());
-        WriteLine($"Failed: Crash - " + e.ToString());
 		WriteLine($"Failed: {testCasePath} --" + " Crash - " + e.ToString());
 		return;
 	}

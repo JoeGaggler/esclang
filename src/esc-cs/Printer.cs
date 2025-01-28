@@ -393,6 +393,18 @@ public static class Printer
 				outputFile.WriteIndentLine(level, slotId, $"integer={data.Value} ({GetTypeSlotName(table, slot.TypeSlot)})");
 				break;
 			}
+			case TableSlotType.Boolean:
+			{
+				var data = (BooleanSlotData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"boolean={data.Value} ({GetTypeSlotName(table, slot.TypeSlot)})");
+				break;
+			}
+			case TableSlotType.String:
+			{
+				var data = (StringSlotData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"string=\"{data.Value}\" ({GetTypeSlotName(table, slot.TypeSlot)})");
+				break;
+			}
 			case TableSlotType.Add:
 			{
 				var data = (AddOpSlotData)slot.Data;
@@ -423,10 +435,25 @@ public static class Printer
 				}
 				break;
 			}
+			case TableSlotType.LogicalNegation:
+			{
+				var data = (LogicalNegationSlotData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"not ({GetTypeSlotName(table, slot.TypeSlot)})");
+				PrintTableSlot(table, outputFile, data.Value, level + 1);
+				break;
+			}
 			case TableSlotType.Parameter:
 			{
 				var data = (ParameterSlotData)slot.Data;
 				outputFile.WriteIndentLine(level, slotId, $"parameter ({GetTypeSlotName(table, slot.TypeSlot)})");
+				break;
+			}
+			case TableSlotType.If:
+			{
+				var data = (IfSlotData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"if ({GetTypeSlotName(table, slot.TypeSlot)})");
+				PrintTableSlot(table, outputFile, data.Condition, level + 1);
+				PrintTableSlot(table, outputFile, data.Body, level + 1);
 				break;
 			}
 			default:

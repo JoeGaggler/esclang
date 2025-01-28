@@ -291,6 +291,27 @@ public static class Analyzer
 						table.UpdateType(slot, meta, log);
 						break;
 					}
+					if (ident == "bool")
+					{
+						table.ReplaceData(slot, TableSlotType.Intrinsic, new IntrinsicSlotData("bool"), log);
+						var fun = table.GetOrAddType(new NativeTypeSlot("bool"), log);
+						var meta = table.GetOrAddType(new MetaTypeSlot(fun), log);
+						table.UpdateType(slot, meta, log);
+						break;
+					}
+					if (ident == "if")
+					{
+						var (callNode, callData) = table.GetSlotTuple<CallSlotData>(node.ParentSlot);
+						if (callData.Args.Length != 2)
+						{
+							throw new InvalidOperationException("Invalid if statement");
+						}
+						var ifData = new IfSlotData(Condition: callData.Args[0], Body: callData.Args[1]);
+						// var ifSlot = table.Add(node.ParentSlot, TableSlotType.If, ifData, log);
+						table.ReplaceData(node.ParentSlot, TableSlotType.If, ifData, log);
+						table.ReplaceData(slot, TableSlotType.Unknown, InvalidSlotData.Instance, log); // invalidate id slot
+						break; 
+					}
 
 					log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}0000 = ROOT");
 					break;

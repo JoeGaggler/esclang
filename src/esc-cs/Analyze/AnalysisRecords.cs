@@ -108,6 +108,7 @@ public enum TableSlotType
 	Boolean,
 	Integer,
 	String,
+	If,
 	Add,
 	Return,
 	Intrinsic,
@@ -127,6 +128,7 @@ public record class DeclareSlotData(String Name, Boolean IsStatic, int Type = 0,
 public record class CallSlotData(int Target, int[] Args) : SlotData;
 public record class IdentifierSlotData(String Name, int Target = 0) : SlotData;
 public record class IntrinsicSlotData(String Name) : SlotData;
+public record class IfSlotData(int Condition, int Body) : SlotData;
 public record class BracesSlotData(int[] Lines) : SlotData
 {
 	private readonly Dictionary<String, int> NameTable = [];

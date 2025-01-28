@@ -207,6 +207,21 @@ public static class Evaluator
 					throw new NotImplementedException($"Invalid call target: {targetExpression}");
 				}
 			}
+			case TableSlotType.If:
+			{
+				var ifData = (Analyze.IfSlotData)slotData;
+				var condition = EvaluateSlot(ifData.Condition, slotTable, programOutput, valueTable);
+				if (condition is not BooleanEvaluation booleanExpressionResult)
+				{
+					throw new NotImplementedException($"Invalid if condition: {condition}");
+				}
+				if (!booleanExpressionResult.Value)
+				{
+					return VoidEvaluation.Instance;
+				}
+				var ifBlock = EvaluateSlot(ifData.Body, slotTable, programOutput, valueTable);
+				return ifBlock;
+			}
 			default:
 			{
 				throw new InvalidOperationException($"Invalid slot type: {slot}");
