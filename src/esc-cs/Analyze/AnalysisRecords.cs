@@ -94,7 +94,6 @@ public record class UnknownTypeData : TypeData { public static readonly UnknownT
 public record class VoidTypeData : TypeData { public static readonly VoidTypeData Instance = new(); private VoidTypeData() { } }
 public record class ParameterTypeData : TypeData { public static readonly ParameterTypeData Instance = new(); private ParameterTypeData() { } }
 public record class MetaTypeData(int InstanceType) : TypeData;
-public record class NativeTypeData(String Name) : TypeData;
 public record class FunctionTypeData(int ReturnType) : TypeData;
 public record class MemberTypeData(int TargetType) : TypeData;
 // TODO: public record class MethodTypeData(int TargetType) : TypeData;

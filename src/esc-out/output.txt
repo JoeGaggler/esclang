@@ -437,7 +437,7 @@ identifier: 0006 = IdentifierCodeData { Name = bool, Target = 0 }
       0003 = Declare
           0001 = File
 slot 0006 in 0005 << Intrinsic = IntrinsicCodeData { Name = bool }
-add type 3 = NativeTypeData { Name = bool }
+add type 3 = DotnetTypeData { Type = System.Boolean }
 add type 4 = MetaTypeData { InstanceType = 3 }
 slot 0006 in 0005 <- Intrinsic : 4 = IntrinsicCodeData { Name = bool }
 identifier: 0009 = IdentifierCodeData { Name = if, Target = 0 }
@@ -506,7 +506,7 @@ identifier: 0051 = IdentifierCodeData { Name = print, Target = 0 }
   0050 = Call
       0001 = File
 slot 0051 in 0050 << Intrinsic = IntrinsicCodeData { Name = print }
-add type 5 = NativeTypeData { Name = string }
+add type 5 = DotnetTypeData { Type = System.String }
 add type 6 = FunctionTypeData { ReturnType = 5 }
 slot 0051 in 0050 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
 identifier: 0052 = IdentifierCodeData { Name = a, Target = 0 }
@@ -550,7 +550,7 @@ intrinsic: 0006 = CodeSlot { ParentSlot = 5, CodeType = Intrinsic, Data = Intrin
 add type 7 = ParameterTypeData { }
 slot 0007 in 0005 <- Parameter : 7 = ParameterCodeData { }
 enqueue 0007
-add type 8 = NativeTypeData { Name = int }
+add type 8 = DotnetTypeData { Type = System.Int32 }
 slot 0014 in 0012 <- Integer : 8 = IntegerCodeData { Value = 0 }
 enqueue 0014
 slot 0022 in 0020 <- Integer : 8 = IntegerCodeData { Value = 100 }
@@ -582,13 +582,13 @@ dequeue: 0006
 slot 0005 in 0004 <- Declare : 3 = DeclareCodeData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
 dequeue: 0007
 dequeue: 0014
-slot 0012 return: type <- NativeTypeData { Name = int } 8 via 0014
+slot 0012 return: type <- DotnetTypeData { Type = System.Int32 } 8 via 0014
 slot 0012 in 0011 <- Return : 8 = ReturnCodeData { Value = 14, Function = 11 }
 dequeue: 0022
-slot 0020 return: type <- NativeTypeData { Name = int } 8 via 0022
+slot 0020 return: type <- DotnetTypeData { Type = System.Int32 } 8 via 0022
 slot 0020 in 0019 <- Return : 8 = ReturnCodeData { Value = 22, Function = 19 }
 dequeue: 0025
-slot 0023 return: type <- NativeTypeData { Name = int } 8 via 0025
+slot 0023 return: type <- DotnetTypeData { Type = System.Int32 } 8 via 0025
 slot 0023 in 0004 <- Return : 8 = ReturnCodeData { Value = 25, Function = 4 }
 dequeue: 0029
 add target: 28
@@ -597,7 +597,7 @@ dequeue: 0040
 add target: 39
 slot 0039 in 0002 <- Declare : 8 = DeclareCodeData { Name = a, IsStatic = False, Type = 0, Value = 40 }
 dequeue: 0043
-slot 0041 assign: type <- NativeTypeData { Name = int } 8 via 0043
+slot 0041 assign: type <- DotnetTypeData { Type = System.Int32 } 8 via 0043
 slot 0041 in 0002 <- Assign : 8 = AssignCodeData { Target = 42, Value = 43 }
 dequeue: 0049
 dequeue: 0051
@@ -639,6 +639,8 @@ dequeue: 0063
 slot 0002 braces: found return 0063 2
 slot 0002 in 0001 <- Braces : 2 = BracesCodeData { Lines = System.Int32[] }
 dequeue: 0017
+slot 0018 negation: type <- DotnetTypeData { Type = System.Boolean } 3 via 0017
+slot 0018 in 0015 <- LogicalNegation : 3 = LogicalNegationCodeData { Value = 17 }
 dequeue: 0011
 dequeue: 0019
 dequeue: 0004
@@ -650,6 +652,7 @@ dequeue: 0047
 dequeue: 0052
 slot 0050 in 0002 <- Call : 5 = CallCodeData { Target = 51, Args = System.Int32[] }
 dequeue: 0002
+dequeue: 0018
 dequeue: 0003
 id target: 34
 slot 0034 in 0033 <- Identifier : 9 = IdentifierCodeData { Name = func2, Target = 3 }
@@ -665,7 +668,7 @@ dequeue: 0030
 id target: 38
 slot 0038 in 0036 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 30 }
 dequeue: 0038
-slot 0036 return: type <- NativeTypeData { Name = int } 8 via 0038
+slot 0036 return: type <- DotnetTypeData { Type = System.Int32 } 8 via 0038
 slot 0036 in 0027 <- Return : 8 = ReturnCodeData { Value = 38, Function = 27 }
 dequeue: 0036
 slot 0027 braces: found return 0036 9
@@ -704,83 +707,82 @@ add type 10 = MemberTypeData { TargetType = 8 }
 slot 0059 in 0058 <- Member : 10 = MemberCodeData { Target = 60, Member = 61, Members = System.Reflection.MemberInfo[] }
 dequeue: 0053
 dequeue: 0059
-add type 11 = DotnetTypeData { Type = System.String }
-slot 0058 in 0056 <- Call : 11 = CallCodeData { Target = 59, Args = System.Int32[] }
+slot 0058 in 0056 <- Call : 5 = CallCodeData { Target = 59, Args = System.Int32[] }
 dequeue: 0058
 slot 0056 in 0002 <- Call : 5 = CallCodeData { Target = 57, Args = System.Int32[] }
 dequeue: 0056
-done after 57 iterations
+done after 58 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (function -> void)
-0003:     static func2 (function -> int)
+0003:     static func2 (function -> dotnet -> System.Int32)
             value
-0004:         braces (function -> int)
-0005:           static cond (bool)
+0004:         braces (function -> dotnet -> System.Int32)
+0005:           static cond (dotnet -> System.Boolean)
                   type
-0006:               intrinsic: name = bool (typeof -> bool)
+0006:               intrinsic: name = bool (typeof -> dotnet -> System.Boolean)
                   value
 0007:               parameter (parameter)
 0008:           if (unknown)
-0010:             boolean=False (bool)
-0011:             braces (function -> int)
-0012:               return (int)
-0014:                 integer=0 (int)
+0010:             boolean=False (dotnet -> System.Boolean)
+0011:             braces (function -> dotnet -> System.Int32)
+0012:               return (dotnet -> System.Int32)
+0014:                 integer=0 (dotnet -> System.Int32)
 0015:           if (unknown)
-0018:             not (unknown)
-0017:               id: name = cond (bool) -> 0005
-0019:             braces (function -> int)
-0020:               return (int)
-0022:                 integer=100 (int)
-0023:           return (int)
-0025:             integer=9999 (int)
-0026:     static func1 (function -> int)
+0018:             not (dotnet -> System.Boolean)
+0017:               id: name = cond (dotnet -> System.Boolean) -> 0005
+0019:             braces (function -> dotnet -> System.Int32)
+0020:               return (dotnet -> System.Int32)
+0022:                 integer=100 (dotnet -> System.Int32)
+0023:           return (dotnet -> System.Int32)
+0025:             integer=9999 (dotnet -> System.Int32)
+0026:     static func1 (function -> dotnet -> System.Int32)
             value
-0027:         braces (function -> int)
-0028:           declare a (int)
+0027:         braces (function -> dotnet -> System.Int32)
+0028:           declare a (dotnet -> System.Int32)
                   value
-0029:               integer=2 (int)
-0030:           declare b (int)
+0029:               integer=2 (dotnet -> System.Int32)
+0030:           declare b (dotnet -> System.Int32)
                   value
-0031:               add (int)
-0032:                 id: name = a (int) -> 0028
-0033:                 call (int)
-0034:                   id: name = func2 (function -> int) -> 0003
-0035:                   boolean=False (bool)
-0036:           return (int)
-0038:             id: name = b (int) -> 0030
-0039:     declare a (int)
+0031:               add (dotnet -> System.Int32)
+0032:                 id: name = a (dotnet -> System.Int32) -> 0028
+0033:                 call (dotnet -> System.Int32)
+0034:                   id: name = func2 (function -> dotnet -> System.Int32) -> 0003
+0035:                   boolean=False (dotnet -> System.Boolean)
+0036:           return (dotnet -> System.Int32)
+0038:             id: name = b (dotnet -> System.Int32) -> 0030
+0039:     declare a (dotnet -> System.Int32)
             value
-0040:         integer=13 (int)
-0041:     assign (int)
-0042:       id: name = a (int) -> 0039
-0043:       integer=39 (int)
-0044:     declare b (int)
+0040:         integer=13 (dotnet -> System.Int32)
+0041:     assign (dotnet -> System.Int32)
+0042:       id: name = a (dotnet -> System.Int32) -> 0039
+0043:       integer=39 (dotnet -> System.Int32)
+0044:     declare b (dotnet -> System.Int32)
             value
-0045:         add (int)
-0046:           add (int)
-0047:             id: name = a (int) -> 0039
-0048:             call (int)
-0068:               id: name = func1 (function -> int) -> 0026
-0049:           integer=5 (int)
-0050:     call (string)
-0051:       intrinsic: name = print (function -> string)
-0052:       id: name = a (int) -> 0039
-0053:     call (string)
-0054:       intrinsic: name = print (function -> string)
-0055:       id: name = b (int) -> 0044
-0056:     call (string)
-0057:       intrinsic: name = print (function -> string)
+0045:         add (dotnet -> System.Int32)
+0046:           add (dotnet -> System.Int32)
+0047:             id: name = a (dotnet -> System.Int32) -> 0039
+0048:             call (dotnet -> System.Int32)
+0068:               id: name = func1 (function -> dotnet -> System.Int32) -> 0026
+0049:           integer=5 (dotnet -> System.Int32)
+0050:     call (dotnet -> System.String)
+0051:       intrinsic: name = print (function -> dotnet -> System.String)
+0052:       id: name = a (dotnet -> System.Int32) -> 0039
+0053:     call (dotnet -> System.String)
+0054:       intrinsic: name = print (function -> dotnet -> System.String)
+0055:       id: name = b (dotnet -> System.Int32) -> 0044
+0056:     call (dotnet -> System.String)
+0057:       intrinsic: name = print (function -> dotnet -> System.String)
 0058:       call (dotnet -> System.String)
-0059:         member (memberof -> int)
-0060:           id: name = b (int) -> 0044
+0059:         member (memberof -> dotnet -> System.Int32)
+0060:           id: name = b (dotnet -> System.Int32) -> 0044
 0061:           id: name = ToString (unknown)
-0062:         string="C" (string)
+0062:         string="C" (dotnet -> System.String)
 0063:     return (void)
 0067:       void (void)
-0064:     call (string)
-0065:       intrinsic: name = print (function -> string)
-0066:       string="unreachable" (string)
+0064:     call (dotnet -> System.String)
+0065:       intrinsic: name = print (function -> dotnet -> System.String)
+0066:       string="unreachable" (dotnet -> System.String)
 
 Output:
 39

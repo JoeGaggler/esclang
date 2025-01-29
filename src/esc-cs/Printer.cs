@@ -492,7 +492,6 @@ public static class Printer
 		return typeSlot switch
 		{
 			VoidTypeData => "void",
-			NativeTypeData nativeTypeSlot => nativeTypeSlot.Name,
 			UnknownTypeData => "unknown",
 			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
 			ParameterTypeData => "parameter",

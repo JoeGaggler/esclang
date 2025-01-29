@@ -221,7 +221,7 @@ public static class Analyzer
 				if (idData.Name == "return")
 				{
 					// TODO: shared void slot?
-					var voidSlot = analysis.Add(slot, CodeSlotEnum.Void, VoidCodeData.Instance, log);					
+					var voidSlot = analysis.Add(slot, CodeSlotEnum.Void, VoidCodeData.Instance, log);
 					var voidType = analysis.GetOrAddType(VoidTypeData.Instance, log);
 					analysis.UpdateType(voidSlot, voidType, log);
 
@@ -323,21 +323,21 @@ public static class Analyzer
 					if (ident == "true")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Boolean, new BooleanCodeData(true), log);
-						var fun = analysis.GetOrAddType(new NativeTypeData("bool"), log);
+						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
 						analysis.UpdateType(slot, fun, log);
 						break;
 					}
 					if (ident == "false")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Boolean, new BooleanCodeData(false), log);
-						var fun = analysis.GetOrAddType(new NativeTypeData("bool"), log);
+						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
 						analysis.UpdateType(slot, fun, log);
 						break;
 					}
 					if (ident == "print")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("print"), log);
-						var str = analysis.GetOrAddType(new NativeTypeData("string"), log);
+						var str = analysis.GetOrAddType(new DotnetTypeData(typeof(string)), log);
 						var fun = analysis.GetOrAddType(new FunctionTypeData(str), log);
 						analysis.UpdateType(slot, fun, log);
 						break;
@@ -345,7 +345,7 @@ public static class Analyzer
 					if (ident == "int")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("int"), log);
-						var fun = analysis.GetOrAddType(new NativeTypeData("int"), log);
+						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), log);
 						var meta = analysis.GetOrAddType(new MetaTypeData(fun), log);
 						analysis.UpdateType(slot, meta, log);
 						break;
@@ -353,7 +353,7 @@ public static class Analyzer
 					if (ident == "bool")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("bool"), log);
-						var fun = analysis.GetOrAddType(new NativeTypeData("bool"), log);
+						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
 						var meta = analysis.GetOrAddType(new MetaTypeData(fun), log);
 						analysis.UpdateType(slot, meta, log);
 						break;
@@ -415,7 +415,7 @@ public static class Analyzer
 				}
 				case CodeSlotEnum.Integer:
 				{
-					var intType = analysis.GetOrAddType(new NativeTypeData("int"), log);
+					var intType = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), log);
 					analysis.UpdateType(slot, intType, log);
 					sourceQueue.Enqueue(slot);
 					log.WriteLine($"enqueue {slot:0000}");
@@ -423,7 +423,7 @@ public static class Analyzer
 				}
 				case CodeSlotEnum.String:
 				{
-					var strType = analysis.GetOrAddType(new NativeTypeData("string"), log);
+					var strType = analysis.GetOrAddType(new DotnetTypeData(typeof(string)), log);
 					analysis.UpdateType(slot, strType, log);
 					sourceQueue.Enqueue(slot);
 					log.WriteLine($"enqueue {slot:0000}");
@@ -690,21 +690,8 @@ public static class Analyzer
 					var rightData = analysis.GetCodeData<IdentifierCodeData>(memberData.Member);
 					var rightName = rightData.Name;
 
-					if (leftType is NativeTypeData { Name: { } nativeTypeName })
+					if (leftType is DotnetTypeData { Type: { } dotnetType })
 					{
-						// convert keywords to full type name
-						nativeTypeName = nativeTypeName switch
-						{
-							"int" => "System.Int32",
-							"bool" => "System.Boolean",
-							"string" => "System.String",
-							_ => nativeTypeName,
-						};
-
-						if (Type.GetType(nativeTypeName) is not { } dotnetType)
-						{
-							throw new InvalidOperationException($"Invalid native type: {nativeTypeName}");
-						}
 						var members = dotnetType.GetMember(rightName);
 						if (members.Length == 0)
 						{
@@ -724,6 +711,19 @@ public static class Analyzer
 					{
 						throw new NotImplementedException($"Invalid type: {leftType}");
 					}
+				}
+				else if (targetSlot.CodeType == CodeSlotEnum.LogicalNegation)
+				{
+					var negationSlot = analysis.GetCodeSlot(targetSlotId);
+					var negationData = analysis.GetCodeData<LogicalNegationCodeData>(targetSlotId);
+
+					if (negationData.Value != sourceSlotId) { continue; }
+
+					var sourceTypeId = analysis.GetCodeSlot(sourceSlotId).TypeSlot;
+					var typeRow = analysis.GetTypeData(sourceTypeId);
+					log.WriteLine($"slot {targetSlotId:0000} negation: type <- {typeRow} {sourceTypeId} via {negationData.Value:0000}");
+					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					sourceQueue.Enqueue(targetSlotId);
 				}
 				else
 				{
