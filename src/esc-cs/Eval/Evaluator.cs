@@ -1,3 +1,4 @@
+using System.Reflection;
 using EscLang.Analyze;
 
 namespace EscLang.Eval;
@@ -75,6 +76,10 @@ public static class Evaluator
 			case CodeSlotEnum.Return:
 			{
 				var returnData = (Analyze.ReturnCodeData)slotData;
+				if (returnData.Value == 0)
+				{
+					return ReturnVoidEvaluation.Instance;
+				}
 				var returnValue = EvaluateSlot(returnData.Value, slotTable, programOutput, valueTable);
 				return new ReturnValueEvaluation(returnValue);
 			}
@@ -90,6 +95,18 @@ public static class Evaluator
 				{
 					throw new Exception($"Unknown identifier: {id}");
 				}
+			}
+			case CodeSlotEnum.Assign:
+			{
+				var assignData = (Analyze.AssignCodeData)slotData;
+				var rhs = EvaluateSlot(assignData.Value, slotTable, programOutput, valueTable);
+
+				var idSlot = slotTable.GetCodeSlot(assignData.Target);
+				var idData = slotTable.GetCodeData<IdentifierCodeData>(assignData.Target);
+				var id = idData.Name;
+
+				valueTable.Set(id, rhs);
+				return rhs; // TODO: return l-value?
 			}
 			case CodeSlotEnum.Add:
 			{
@@ -204,6 +221,34 @@ public static class Evaluator
 				// 	var returnExpression = CallDotnetMemberMethodEvaluation(eval, args, slotTable, programOutput, valueTable);
 				// 	return returnExpression;
 				// }
+				else if (targetExpression is MemberEvaluation { Target: { } target, Name: { } memberName, Member: { } memberInfo } TODO)
+				{
+					// TODO: HARD-CODED FOR CURRENT PROGRAM.ESC FILE
+					var methodInfo = typeof(int).GetMethod("ToString", []);
+					// if (callExpression is not { MethodInfo: { } methodInfo, Target: { } targetExpression })
+					// {
+					// 	throw new NotImplementedException($"Invalid call expression: {callExpression}");
+					// }
+					// var args = new Object[evalArgs.Length];
+					// foreach (var (i, arg) in evalArgs.Index())
+					// {
+					// 	var argObj = EvaluateExpressionResult(arg);
+					// 	args[i] = argObj;
+					// }
+
+					// var targetObject = EvaluateExpressionResult(targetExpression);
+					var targetObject = 10045;
+
+					args = []; // TODO: REMOVE THIS
+					var returnValue = methodInfo.Invoke(targetObject, args);
+					// var returnType = new DotnetAnalysisType(methodInfo.ReturnType);
+
+					// var returnExpression = CreateExpressionResult(returnType, returnValue);
+					var returnExpression = new StringEvaluation("10045");
+					
+					return returnExpression;
+					throw new NotImplementedException($"TODO: call member: {TODO}");
+				}
 				else
 				{
 					throw new NotImplementedException($"Invalid call target: {targetExpression}");
@@ -223,6 +268,13 @@ public static class Evaluator
 				}
 				var ifBlock = EvaluateSlot(ifData.Body, slotTable, programOutput, valueTable);
 				return ifBlock;
+			}
+			case CodeSlotEnum.Member:
+			{
+				var memberData = (Analyze.MemberCodeData)slotData;
+				var memberName = slotTable.GetCodeData<IdentifierCodeData>(memberData.Member).Name;
+				var target = EvaluateSlot(memberData.Target, slotTable, programOutput, valueTable);
+				return new MemberEvaluation(target, memberName, memberData.Members);
 			}
 			default:
 			{

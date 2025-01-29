@@ -456,6 +456,22 @@ public static class Printer
 				PrintTableSlot(table, outputFile, data.Body, level + 1);
 				break;
 			}
+			case CodeSlotEnum.Assign:
+			{
+				var data = (AssignCodeData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"assign ({GetTypeSlotName(table, slot.TypeSlot)})");
+				PrintTableSlot(table, outputFile, data.Target, level + 1);
+				PrintTableSlot(table, outputFile, data.Value, level + 1);
+				break;
+			}
+			case CodeSlotEnum.Member:
+			{
+				var data = (MemberCodeData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"member ({GetTypeSlotName(table, slot.TypeSlot)})");
+				PrintTableSlot(table, outputFile, data.Target, level + 1);
+				PrintTableSlot(table, outputFile, data.Member, level + 1);
+				break;
+			}
 			default:
 			{
 				outputFile.WriteIndentLine(level, slotId, $"unknown {slot.CodeType} = {slot.Data}");
@@ -464,17 +480,19 @@ public static class Printer
 		}
 	}
 
-	public static String GetTypeSlotName(Analysis table, int typeSlotId)
+	public static String GetTypeSlotName(Analysis analysis, int typeSlotId)
 	{
-		var typeSlot = table.GetTypeData(typeSlotId);
+		var typeSlot = analysis.GetTypeData(typeSlotId);
 		return typeSlot switch
 		{
 			VoidTypeData => "void",
 			NativeTypeData nativeTypeSlot => nativeTypeSlot.Name,
 			UnknownTypeData => "unknown",
-			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(table, returnTypeId)}",
+			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
 			ParameterTypeData => "parameter",
-			MetaTypeData { InstanceType: var instanceTypeId } => $"typeof -> {GetTypeSlotName(table, instanceTypeId)}",
+			MetaTypeData { InstanceType: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
+			MemberTypeData { TargetType: var targetTypeId } => $"memberof -> {GetTypeSlotName(analysis, targetTypeId)}",
+			DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
 			_ => "unexpected",
 		};
 	}

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace EscLang.Analyze;
 
@@ -95,6 +96,9 @@ public record class ParameterTypeData : TypeData { public static readonly Parame
 public record class MetaTypeData(int InstanceType) : TypeData;
 public record class NativeTypeData(String Name) : TypeData;
 public record class FunctionTypeData(int ReturnType) : TypeData;
+public record class MemberTypeData(int TargetType) : TypeData;
+// TODO: public record class MethodTypeData(int TargetType) : TypeData;
+public record class DotnetTypeData(Type Type) : TypeData;
 
 public enum CodeSlotEnum
 {
@@ -113,6 +117,8 @@ public enum CodeSlotEnum
 	Intrinsic,
 	Parameter,
 	LogicalNegation,
+	Assign,
+	Member,
 }
 
 public record class CodeSlot(int ParentSlot, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
@@ -148,6 +154,8 @@ public record class BooleanCodeData(Boolean Value) : CodeData;
 public record class IntegerCodeData(Int32 Value) : CodeData;
 public record class StringCodeData(String Value) : CodeData;
 public record class AddOpCodeData(Int32 Left = 0, Int32 Right = 0) : CodeData;
+public record class AssignCodeData(Int32 Target = 0, Int32 Value = 0) : CodeData;
+public record class MemberCodeData(Int32 Target, Int32 Member, MemberInfo[] Members) : CodeData;
 public record class ReturnCodeData(int Value = 0, int Function = 0) : CodeData;
 public record class ParameterCodeData : CodeData;
 public record class LogicalNegationCodeData(int Value = 0) : CodeData;

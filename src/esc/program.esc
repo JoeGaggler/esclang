@@ -1,11 +1,21 @@
-func :: {
+func2 :: {
     cond : bool : <>
-    if !cond {
-        return (func true) // TODO: make parens optional for return
+    if false {
+        return 0
     }
-    return 100
+    if !cond { return 100 }
+    return 9999 // unreachable
 }
-a := 10
-b := a + func false + 1
+func1 :: {
+    a := 2
+    b := a + func2 false
+    return b
+}
+a := 13
+a = 39
+b := a + func1 + 5
+print a
 print b
-return b
+print (b.ToString "C") // C=currency
+return // early return
+print "unreachable"
