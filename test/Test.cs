@@ -23,10 +23,9 @@ static void Run(String testCasePath, EscLang.Eval.Evaluation expected)
 		return;
 	}
 
-	EscLang.Analyze.Table analysis;
+	EscLang.Analyze.Analysis analysis;
 	try
 	{
-		
 		analysis = EscLang.Analyze.Analyzer.Analyze(file, StreamWriter.Null); //Console.Out;
 	}
 	catch (Exception e)

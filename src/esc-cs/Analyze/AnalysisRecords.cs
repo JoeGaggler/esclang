@@ -2,66 +2,66 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace EscLang.Analyze;
 
-public class Table
+public class Analysis
 {
-	private readonly List<TableSlot> Slots = [new(0, TableSlotType.Unknown, InvalidSlotData.Instance)];
-	private readonly List<TypeSlot> Types = [UnknownTypeSlot.Instance];
+	private readonly List<CodeSlot> CodeSlots = [new(0, CodeSlotEnum.Unknown, InvalidCodeData.Instance)];
+	private readonly List<TypeData> TypeSlots = [UnknownTypeData.Instance];
 
-	public Table()
+	public Analysis()
 	{
 	}
 
 	public void UpdateType(int slotId, int typeSlotId, TextWriter? log)
 	{
 		log ??= TextWriter.Null;
-		var slot = Slots[slotId] with { TypeSlot = typeSlotId };
-		Slots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} : {typeSlotId} = {slot.Data}");
+		var slot = CodeSlots[slotId] with { TypeSlot = typeSlotId };
+		CodeSlots[slotId] = slot;
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.CodeType} : {typeSlotId} = {slot.Data}");
 	}
 
-	public int GetOrAddType(TypeSlot type, TextWriter log)
+	public int GetOrAddType(TypeData type, TextWriter log)
 	{
 		// TODO: linear search could be slow
 		var id = -1;
-		id = Types.IndexOf(type);
+		id = TypeSlots.IndexOf(type);
 		if (id == -1)
 		{
-			id = Types.Count;
-			Types.Add(type);
+			id = TypeSlots.Count;
+			TypeSlots.Add(type);
 			log.WriteLine($"add type {id} = {type}");
 		}
 		return id;
 	}
 
-	public int Add(int parentSlot, TableSlotType type, SlotData data, TextWriter log)
+	public int Add(int parentSlot, CodeSlotEnum type, CodeData data, TextWriter log)
 	{
-		var id = Slots.Count;
-		var slot = new TableSlot(parentSlot, type, data);
-		Slots.Add(slot);
+		var id = CodeSlots.Count;
+		var slot = new CodeSlot(parentSlot, type, data);
+		CodeSlots.Add(slot);
 		log.WriteLine($"slot {id:0000} in {parentSlot:0000} :: {type} = {data}");
 		return id;
 	}
 
-	public void UpdateData(int slotId, SlotData data, TextWriter log)
+	public void UpdateData(int slotId, CodeData data, TextWriter log)
 	{
-		var slot = Slots[slotId] with { Data = data };
-		Slots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.DataType} = {data}");
+		var slot = CodeSlots[slotId] with { Data = data };
+		CodeSlots[slotId] = slot;
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.CodeType} = {data}");
 	}
 
-	public void ReplaceData(int slotId, TableSlotType type, SlotData data, TextWriter log)
+	public void ReplaceData(int slotId, CodeSlotEnum type, CodeData data, TextWriter log)
 	{
 		// TODO: replacing a slot may invalidate previously referenced slots that are no longer reachable, caller should try to avoid this situation by marking the slots as invalid
-		var slot = Slots[slotId] with { DataType = type, Data = data };
-		Slots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.DataType} = {data}");
+		var slot = CodeSlots[slotId] with { CodeType = type, Data = data };
+		CodeSlots[slotId] = slot;
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.CodeType} = {data}");
 	}
 
-	public bool TryGetSlot<T>(int slotId, TableSlotType type, [MaybeNullWhen(false)] out T dataIfFound, TextWriter log) where T : SlotData
+	public bool TryGetSlot<T>(int slotId, CodeSlotEnum type, [MaybeNullWhen(false)] out T dataIfFound, TextWriter log) where T : CodeData
 	{
-		var slot = Slots[slotId];
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.DataType} = {slot.Data}");
-		if (slot.DataType != type)
+		var slot = CodeSlots[slotId];
+		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.CodeType} = {slot.Data}");
+		if (slot.CodeType != type)
 		{
 			dataIfFound = default;
 			return false;
@@ -71,33 +71,32 @@ public class Table
 		return dataIfFound is not null;
 	}
 
-	public IEnumerable<TableSlot> All
+	public IEnumerable<CodeSlot> All
 	{
 		get
 		{
-			for (var i = 0; i < Slots.Count; i++)
+			for (var i = 0; i < CodeSlots.Count; i++)
 			{
-				yield return Slots[i];
+				yield return CodeSlots[i];
 			}
 		}
 	}
 
 	// Instance
-	public TableSlot GetSlot(int slotId) => Slots[slotId];
-	public (TableSlot, T) GetSlotTuple<T>(int slotId) where T : SlotData => (Slots[slotId], (T)Slots[slotId].Data);
-	public T GetSlotData<T>(int slotId) where T : SlotData => (T)Slots[slotId].Data;
-	public TypeSlot GetTypeSlot(int typeSlotId) => Types[typeSlotId];
+	public CodeSlot GetCodeSlot(int slotId) => CodeSlots[slotId];
+	public T GetCodeData<T>(int slotId) where T : CodeData => (T)CodeSlots[slotId].Data;
+	public TypeData GetTypeData(int typeSlotId) => TypeSlots[typeSlotId];
 }
 
-public abstract record class TypeSlot;
-public record class UnknownTypeSlot : TypeSlot { public static readonly UnknownTypeSlot Instance = new(); private UnknownTypeSlot() { } }
-public record class VoidTypeSlot : TypeSlot { public static readonly VoidTypeSlot Instance = new(); private VoidTypeSlot() { } }
-public record class ParameterTypeSlot : TypeSlot { public static readonly ParameterTypeSlot Instance = new(); private ParameterTypeSlot() { } }
-public record class MetaTypeSlot(int InstanceType) : TypeSlot;
-public record class NativeTypeSlot(String Name) : TypeSlot;
-public record class FunctionTypeSlot(int ReturnType) : TypeSlot;
+public abstract record class TypeData;
+public record class UnknownTypeData : TypeData { public static readonly UnknownTypeData Instance = new(); private UnknownTypeData() { } }
+public record class VoidTypeData : TypeData { public static readonly VoidTypeData Instance = new(); private VoidTypeData() { } }
+public record class ParameterTypeData : TypeData { public static readonly ParameterTypeData Instance = new(); private ParameterTypeData() { } }
+public record class MetaTypeData(int InstanceType) : TypeData;
+public record class NativeTypeData(String Name) : TypeData;
+public record class FunctionTypeData(int ReturnType) : TypeData;
 
-public enum TableSlotType
+public enum CodeSlotEnum
 {
 	Unknown = 0,
 	File,
@@ -116,20 +115,17 @@ public enum TableSlotType
 	LogicalNegation,
 }
 
-public record class TableSlot(int ParentSlot, TableSlotType DataType, SlotData Data, int TypeSlot = 0)
-{
+public record class CodeSlot(int ParentSlot, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
 
-}
-
-public abstract record class SlotData;
-public record class InvalidSlotData : SlotData { public static readonly InvalidSlotData Instance = new(); private InvalidSlotData() { } }
-public record class FileSlotData(int Main = 0) : SlotData;
-public record class DeclareSlotData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : SlotData;
-public record class CallSlotData(int Target, int[] Args) : SlotData;
-public record class IdentifierSlotData(String Name, int Target = 0) : SlotData;
-public record class IntrinsicSlotData(String Name) : SlotData;
-public record class IfSlotData(int Condition, int Body) : SlotData;
-public record class BracesSlotData(int[] Lines) : SlotData
+public abstract record class CodeData;
+public record class InvalidCodeData : CodeData { public static readonly InvalidCodeData Instance = new(); private InvalidCodeData() { } }
+public record class FileCodeData(int Main = 0) : CodeData;
+public record class DeclareCodeData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : CodeData;
+public record class CallCodeData(int Target, int[] Args) : CodeData;
+public record class IdentifierCodeData(String Name, int Target = 0) : CodeData;
+public record class IntrinsicCodeData(String Name) : CodeData;
+public record class IfSlotCodeData(int Condition, int Body) : CodeData;
+public record class BracesCodeData(int[] Lines) : CodeData
 {
 	private readonly Dictionary<String, int> NameTable = [];
 
@@ -148,10 +144,10 @@ public record class BracesSlotData(int[] Lines) : SlotData
 		return NameTable.TryGetValue(name, out slot);
 	}
 }
-public record class BooleanSlotData(Boolean Value) : SlotData;
-public record class IntegerSlotData(Int32 Value) : SlotData;
-public record class StringSlotData(String Value) : SlotData;
-public record class AddOpSlotData(Int32 Left = 0, Int32 Right = 0) : SlotData;
-public record class ReturnSlotData(int Value = 0, int Function = 0) : SlotData;
-public record class ParameterSlotData : SlotData;
-public record class LogicalNegationSlotData(int Value = 0) : SlotData;
+public record class BooleanCodeData(Boolean Value) : CodeData;
+public record class IntegerCodeData(Int32 Value) : CodeData;
+public record class StringCodeData(String Value) : CodeData;
+public record class AddOpCodeData(Int32 Left = 0, Int32 Right = 0) : CodeData;
+public record class ReturnCodeData(int Value = 0, int Function = 0) : CodeData;
+public record class ParameterCodeData : CodeData;
+public record class LogicalNegationCodeData(int Value = 0) : CodeData;

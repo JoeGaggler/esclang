@@ -147,249 +147,249 @@ call
 
 Analysis Log:
 === Build: init ===
-slot 0001 in 0000 :: File = FileSlotData { Main = 0 }
-slot 0002 in 0001 :: Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0001 in 0000 <- File = FileSlotData { Main = 2 }
-slot 0003 in 0002 :: Declare = DeclareSlotData { Name = func, IsStatic = True, Type = 0, Value = 0 }
-slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0004 in 0003 :: Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0005 in 0004 :: Declare = DeclareSlotData { Name = cond, IsStatic = True, Type = 0, Value = 0 }
-slot 0004 in 0003 -> Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0006 in 0005 :: Identifier = IdentifierSlotData { Name = bool, Target = 0 }
-slot 0005 in 0004 <- Declare = DeclareSlotData { Name = cond, IsStatic = True, Type = 6, Value = 0 }
-slot 0007 in 0005 :: Parameter = ParameterSlotData { }
-slot 0005 in 0004 <- Declare = DeclareSlotData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
-slot 0008 in 0004 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0009 in 0008 :: Identifier = IdentifierSlotData { Name = if, Target = 0 }
-slot 0008 in 0004 <- Call = CallSlotData { Target = 9, Args = System.Int32[] }
-slot 0010 in 0008 :: Identifier = IdentifierSlotData { Name = cond, Target = 0 }
-slot 0011 in 0008 :: LogicalNegation = LogicalNegationSlotData { Value = 10 }
-slot 0012 in 0008 :: Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0013 in 0012 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0014 in 0013 :: Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0013 in 0012 <- Call = CallSlotData { Target = 14, Args = System.Int32[] }
-slot 0015 in 0013 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0016 in 0015 :: Identifier = IdentifierSlotData { Name = func, Target = 0 }
-slot 0015 in 0013 <- Call = CallSlotData { Target = 16, Args = System.Int32[] }
-slot 0017 in 0015 :: Identifier = IdentifierSlotData { Name = true, Target = 0 }
-slot 0015 in 0013 <- Call = CallSlotData { Target = 16, Args = System.Int32[] }
-slot 0013 in 0012 <- Call = CallSlotData { Target = 14, Args = System.Int32[] }
-slot 0012 in 0008 <- Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0008 in 0004 <- Call = CallSlotData { Target = 9, Args = System.Int32[] }
-slot 0018 in 0004 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0019 in 0018 :: Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0018 in 0004 <- Call = CallSlotData { Target = 19, Args = System.Int32[] }
-slot 0020 in 0018 :: Integer = IntegerSlotData { Value = 100 }
-slot 0018 in 0004 <- Call = CallSlotData { Target = 19, Args = System.Int32[] }
-slot 0004 in 0003 <- Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0003 in 0002 <- Declare = DeclareSlotData { Name = func, IsStatic = True, Type = 0, Value = 4 }
-slot 0021 in 0002 :: Declare = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 0 }
-slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0022 in 0021 :: Integer = IntegerSlotData { Value = 10 }
-slot 0021 in 0002 <- Declare = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 22 }
-slot 0023 in 0002 :: Declare = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 0 }
-slot 0002 in 0001 -> Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0024 in 0023 :: Add = AddOpSlotData { Left = 0, Right = 0 }
-slot 0025 in 0024 :: Add = AddOpSlotData { Left = 0, Right = 0 }
-slot 0026 in 0025 :: Identifier = IdentifierSlotData { Name = a, Target = 0 }
-slot 0027 in 0025 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0028 in 0027 :: Identifier = IdentifierSlotData { Name = func, Target = 0 }
-slot 0027 in 0025 <- Call = CallSlotData { Target = 28, Args = System.Int32[] }
-slot 0029 in 0027 :: Identifier = IdentifierSlotData { Name = false, Target = 0 }
-slot 0027 in 0025 <- Call = CallSlotData { Target = 28, Args = System.Int32[] }
-slot 0025 in 0024 <- Add = AddOpSlotData { Left = 26, Right = 27 }
-slot 0030 in 0024 :: Integer = IntegerSlotData { Value = 1 }
-slot 0024 in 0023 <- Add = AddOpSlotData { Left = 25, Right = 30 }
-slot 0023 in 0002 <- Declare = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 24 }
-slot 0031 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0032 in 0031 :: Identifier = IdentifierSlotData { Name = print, Target = 0 }
-slot 0031 in 0002 <- Call = CallSlotData { Target = 32, Args = System.Int32[] }
-slot 0033 in 0031 :: Identifier = IdentifierSlotData { Name = b, Target = 0 }
-slot 0031 in 0002 <- Call = CallSlotData { Target = 32, Args = System.Int32[] }
-slot 0034 in 0002 :: Call = CallSlotData { Target = 0, Args = System.Int32[] }
-slot 0035 in 0034 :: Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0034 in 0002 <- Call = CallSlotData { Target = 35, Args = System.Int32[] }
-slot 0036 in 0034 :: Identifier = IdentifierSlotData { Name = b, Target = 0 }
-slot 0034 in 0002 <- Call = CallSlotData { Target = 35, Args = System.Int32[] }
-slot 0002 in 0001 <- Braces = BracesSlotData { Lines = System.Int32[] }
+slot 0001 in 0000 :: File = FileCodeData { Main = 0 }
+slot 0002 in 0001 :: Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0001 in 0000 <- File = FileCodeData { Main = 2 }
+slot 0003 in 0002 :: Declare = DeclareCodeData { Name = func, IsStatic = True, Type = 0, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0004 in 0003 :: Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0005 in 0004 :: Declare = DeclareCodeData { Name = cond, IsStatic = True, Type = 0, Value = 0 }
+slot 0004 in 0003 -> Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0006 in 0005 :: Identifier = IdentifierCodeData { Name = bool, Target = 0 }
+slot 0005 in 0004 <- Declare = DeclareCodeData { Name = cond, IsStatic = True, Type = 6, Value = 0 }
+slot 0007 in 0005 :: Parameter = ParameterCodeData { }
+slot 0005 in 0004 <- Declare = DeclareCodeData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
+slot 0008 in 0004 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0009 in 0008 :: Identifier = IdentifierCodeData { Name = if, Target = 0 }
+slot 0008 in 0004 <- Call = CallCodeData { Target = 9, Args = System.Int32[] }
+slot 0010 in 0008 :: Identifier = IdentifierCodeData { Name = cond, Target = 0 }
+slot 0011 in 0008 :: LogicalNegation = LogicalNegationCodeData { Value = 10 }
+slot 0012 in 0008 :: Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0013 in 0012 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0014 in 0013 :: Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0013 in 0012 <- Call = CallCodeData { Target = 14, Args = System.Int32[] }
+slot 0015 in 0013 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0016 in 0015 :: Identifier = IdentifierCodeData { Name = func, Target = 0 }
+slot 0015 in 0013 <- Call = CallCodeData { Target = 16, Args = System.Int32[] }
+slot 0017 in 0015 :: Identifier = IdentifierCodeData { Name = true, Target = 0 }
+slot 0015 in 0013 <- Call = CallCodeData { Target = 16, Args = System.Int32[] }
+slot 0013 in 0012 <- Call = CallCodeData { Target = 14, Args = System.Int32[] }
+slot 0012 in 0008 <- Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0008 in 0004 <- Call = CallCodeData { Target = 9, Args = System.Int32[] }
+slot 0018 in 0004 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0019 in 0018 :: Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0018 in 0004 <- Call = CallCodeData { Target = 19, Args = System.Int32[] }
+slot 0020 in 0018 :: Integer = IntegerCodeData { Value = 100 }
+slot 0018 in 0004 <- Call = CallCodeData { Target = 19, Args = System.Int32[] }
+slot 0004 in 0003 <- Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0003 in 0002 <- Declare = DeclareCodeData { Name = func, IsStatic = True, Type = 0, Value = 4 }
+slot 0021 in 0002 :: Declare = DeclareCodeData { Name = a, IsStatic = False, Type = 0, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0022 in 0021 :: Integer = IntegerCodeData { Value = 10 }
+slot 0021 in 0002 <- Declare = DeclareCodeData { Name = a, IsStatic = False, Type = 0, Value = 22 }
+slot 0023 in 0002 :: Declare = DeclareCodeData { Name = b, IsStatic = False, Type = 0, Value = 0 }
+slot 0002 in 0001 -> Braces = BracesCodeData { Lines = System.Int32[] }
+slot 0024 in 0023 :: Add = AddOpCodeData { Left = 0, Right = 0 }
+slot 0025 in 0024 :: Add = AddOpCodeData { Left = 0, Right = 0 }
+slot 0026 in 0025 :: Identifier = IdentifierCodeData { Name = a, Target = 0 }
+slot 0027 in 0025 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0028 in 0027 :: Identifier = IdentifierCodeData { Name = func, Target = 0 }
+slot 0027 in 0025 <- Call = CallCodeData { Target = 28, Args = System.Int32[] }
+slot 0029 in 0027 :: Identifier = IdentifierCodeData { Name = false, Target = 0 }
+slot 0027 in 0025 <- Call = CallCodeData { Target = 28, Args = System.Int32[] }
+slot 0025 in 0024 <- Add = AddOpCodeData { Left = 26, Right = 27 }
+slot 0030 in 0024 :: Integer = IntegerCodeData { Value = 1 }
+slot 0024 in 0023 <- Add = AddOpCodeData { Left = 25, Right = 30 }
+slot 0023 in 0002 <- Declare = DeclareCodeData { Name = b, IsStatic = False, Type = 0, Value = 24 }
+slot 0031 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0032 in 0031 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0031 in 0002 <- Call = CallCodeData { Target = 32, Args = System.Int32[] }
+slot 0033 in 0031 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
+slot 0031 in 0002 <- Call = CallCodeData { Target = 32, Args = System.Int32[] }
+slot 0034 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[] }
+slot 0035 in 0034 :: Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0034 in 0002 <- Call = CallCodeData { Target = 35, Args = System.Int32[] }
+slot 0036 in 0034 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
+slot 0034 in 0002 <- Call = CallCodeData { Target = 35, Args = System.Int32[] }
+slot 0002 in 0001 <- Braces = BracesCodeData { Lines = System.Int32[] }
 === Build: return ===
-add type 1 = VoidTypeSlot { }
-add type 2 = FunctionTypeSlot { ReturnType = 1 }
-slot 0002 in 0001 <- Braces : 2 = BracesSlotData { Lines = System.Int32[] }
-slot 0004 in 0003 <- Braces : 2 = BracesSlotData { Lines = System.Int32[] }
-slot 0012 in 0008 <- Braces : 2 = BracesSlotData { Lines = System.Int32[] }
-slot 0014 in 0013 -> Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0013 in 0012 << Return = ReturnSlotData { Value = 15, Function = 0 }
-slot 0014 in 0013 << Unknown = InvalidSlotData { }
+add type 1 = VoidTypeData { }
+add type 2 = FunctionTypeData { ReturnType = 1 }
+slot 0002 in 0001 <- Braces : 2 = BracesCodeData { Lines = System.Int32[] }
+slot 0004 in 0003 <- Braces : 2 = BracesCodeData { Lines = System.Int32[] }
+slot 0012 in 0008 <- Braces : 2 = BracesCodeData { Lines = System.Int32[] }
+slot 0014 in 0013 -> Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0013 in 0012 << Return = ReturnCodeData { Value = 15, Function = 0 }
+slot 0014 in 0013 << Unknown = InvalidCodeData { }
 slot 0013 in 0012 -- call -> return
-slot 0016 in 0015 -> Identifier = IdentifierSlotData { Name = func, Target = 0 }
-slot 0019 in 0018 -> Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0018 in 0004 << Return = ReturnSlotData { Value = 20, Function = 0 }
-slot 0019 in 0018 << Unknown = InvalidSlotData { }
+slot 0016 in 0015 -> Identifier = IdentifierCodeData { Name = func, Target = 0 }
+slot 0019 in 0018 -> Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0018 in 0004 << Return = ReturnCodeData { Value = 20, Function = 0 }
+slot 0019 in 0018 << Unknown = InvalidCodeData { }
 slot 0018 in 0004 -- call -> return
-slot 0028 in 0027 -> Identifier = IdentifierSlotData { Name = func, Target = 0 }
-slot 0032 in 0031 -> Identifier = IdentifierSlotData { Name = print, Target = 0 }
-slot 0035 in 0034 -> Identifier = IdentifierSlotData { Name = return, Target = 0 }
-slot 0034 in 0002 << Return = ReturnSlotData { Value = 36, Function = 0 }
-slot 0035 in 0034 << Unknown = InvalidSlotData { }
+slot 0028 in 0027 -> Identifier = IdentifierCodeData { Name = func, Target = 0 }
+slot 0032 in 0031 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0035 in 0034 -> Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0034 in 0002 << Return = ReturnCodeData { Value = 36, Function = 0 }
+slot 0035 in 0034 << Unknown = InvalidCodeData { }
 slot 0034 in 0002 -- call -> return
 slot 0013 <- returns to 0012
-slot 0013 in 0012 <- Return = ReturnSlotData { Value = 15, Function = 12 }
-slot 0012 in 0008 <- Braces : 0 = BracesSlotData { Lines = System.Int32[] }
+slot 0013 in 0012 <- Return = ReturnCodeData { Value = 15, Function = 12 }
+slot 0012 in 0008 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 slot 0018 <- returns to 0004
-slot 0018 in 0004 <- Return = ReturnSlotData { Value = 20, Function = 4 }
-slot 0004 in 0003 <- Braces : 0 = BracesSlotData { Lines = System.Int32[] }
+slot 0018 in 0004 <- Return = ReturnCodeData { Value = 20, Function = 4 }
+slot 0004 in 0003 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 slot 0034 <- returns to 0002
-slot 0034 in 0002 <- Return = ReturnSlotData { Value = 36, Function = 2 }
-slot 0002 in 0001 <- Braces : 0 = BracesSlotData { Lines = System.Int32[] }
+slot 0034 in 0002 <- Return = ReturnCodeData { Value = 36, Function = 2 }
+slot 0002 in 0001 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 === Build: resolve identifiers ===
-identifier: 0006 = IdentifierSlotData { Name = bool, Target = 0 }
+identifier: 0006 = IdentifierCodeData { Name = bool, Target = 0 }
   0005 = Declare
       0003 = Declare
           0001 = File
-slot 0006 in 0005 << Intrinsic = IntrinsicSlotData { Name = bool }
-add type 3 = NativeTypeSlot { Name = bool }
-add type 4 = MetaTypeSlot { InstanceType = 3 }
-slot 0006 in 0005 <- Intrinsic : 4 = IntrinsicSlotData { Name = bool }
-identifier: 0009 = IdentifierSlotData { Name = if, Target = 0 }
+slot 0006 in 0005 << Intrinsic = IntrinsicCodeData { Name = bool }
+add type 3 = NativeTypeData { Name = bool }
+add type 4 = MetaTypeData { InstanceType = 3 }
+slot 0006 in 0005 <- Intrinsic : 4 = IntrinsicCodeData { Name = bool }
+identifier: 0009 = IdentifierCodeData { Name = if, Target = 0 }
   0008 = Call
       0003 = Declare
           0001 = File
-slot 0008 in 0004 << If = IfSlotData { Condition = 11, Body = 12 }
-slot 0009 in 0008 << Unknown = InvalidSlotData { }
-identifier: 0010 = IdentifierSlotData { Name = cond, Target = 0 }
+slot 0008 in 0004 << If = IfSlotCodeData { Condition = 11, Body = 12 }
+slot 0009 in 0008 << Unknown = InvalidCodeData { }
+identifier: 0010 = IdentifierCodeData { Name = cond, Target = 0 }
   0008 = If
-    0004 FOUND: BracesSlotData { Lines = System.Int32[] }
-slot 0010 in 0008 <- Identifier = IdentifierSlotData { Name = cond, Target = 5 }
-identifier: 0016 = IdentifierSlotData { Name = func, Target = 0 }
+    0004 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0010 in 0008 <- Identifier = IdentifierCodeData { Name = cond, Target = 5 }
+identifier: 0016 = IdentifierCodeData { Name = func, Target = 0 }
   0015 = Call
     0013 = Return
         0008 = If
             0003 = Declare
-              0002 FOUND: BracesSlotData { Lines = System.Int32[] }
-slot 0016 in 0015 <- Identifier = IdentifierSlotData { Name = func, Target = 3 }
-identifier: 0017 = IdentifierSlotData { Name = true, Target = 0 }
+              0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0016 in 0015 <- Identifier = IdentifierCodeData { Name = func, Target = 3 }
+identifier: 0017 = IdentifierCodeData { Name = true, Target = 0 }
   0015 = Call
     0013 = Return
         0008 = If
             0003 = Declare
                 0001 = File
-slot 0017 in 0015 << Boolean = BooleanSlotData { Value = True }
-slot 0017 in 0015 <- Boolean : 3 = BooleanSlotData { Value = True }
-identifier: 0026 = IdentifierSlotData { Name = a, Target = 0 }
+slot 0017 in 0015 << Boolean = BooleanCodeData { Value = True }
+slot 0017 in 0015 <- Boolean : 3 = BooleanCodeData { Value = True }
+identifier: 0026 = IdentifierCodeData { Name = a, Target = 0 }
   0025 = Add
     0024 = Add
       0023 = Declare
-        0002 FOUND: BracesSlotData { Lines = System.Int32[] }
-slot 0026 in 0025 <- Identifier = IdentifierSlotData { Name = a, Target = 21 }
-identifier: 0028 = IdentifierSlotData { Name = func, Target = 0 }
+        0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0026 in 0025 <- Identifier = IdentifierCodeData { Name = a, Target = 21 }
+identifier: 0028 = IdentifierCodeData { Name = func, Target = 0 }
   0027 = Call
     0025 = Add
       0024 = Add
         0023 = Declare
-          0002 FOUND: BracesSlotData { Lines = System.Int32[] }
-slot 0028 in 0027 <- Identifier = IdentifierSlotData { Name = func, Target = 3 }
-identifier: 0029 = IdentifierSlotData { Name = false, Target = 0 }
+          0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0028 in 0027 <- Identifier = IdentifierCodeData { Name = func, Target = 3 }
+identifier: 0029 = IdentifierCodeData { Name = false, Target = 0 }
   0027 = Call
     0025 = Add
       0024 = Add
         0023 = Declare
             0001 = File
-slot 0029 in 0027 << Boolean = BooleanSlotData { Value = False }
-slot 0029 in 0027 <- Boolean : 3 = BooleanSlotData { Value = False }
-identifier: 0032 = IdentifierSlotData { Name = print, Target = 0 }
+slot 0029 in 0027 << Boolean = BooleanCodeData { Value = False }
+slot 0029 in 0027 <- Boolean : 3 = BooleanCodeData { Value = False }
+identifier: 0032 = IdentifierCodeData { Name = print, Target = 0 }
   0031 = Call
       0001 = File
-slot 0032 in 0031 << Intrinsic = IntrinsicSlotData { Name = print }
-add type 5 = NativeTypeSlot { Name = string }
-add type 6 = FunctionTypeSlot { ReturnType = 5 }
-slot 0032 in 0031 <- Intrinsic : 6 = IntrinsicSlotData { Name = print }
-identifier: 0033 = IdentifierSlotData { Name = b, Target = 0 }
+slot 0032 in 0031 << Intrinsic = IntrinsicCodeData { Name = print }
+add type 5 = NativeTypeData { Name = string }
+add type 6 = FunctionTypeData { ReturnType = 5 }
+slot 0032 in 0031 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
+identifier: 0033 = IdentifierCodeData { Name = b, Target = 0 }
   0031 = Call
-    0002 FOUND: BracesSlotData { Lines = System.Int32[] }
-slot 0033 in 0031 <- Identifier = IdentifierSlotData { Name = b, Target = 23 }
-identifier: 0036 = IdentifierSlotData { Name = b, Target = 0 }
+    0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0033 in 0031 <- Identifier = IdentifierCodeData { Name = b, Target = 23 }
+identifier: 0036 = IdentifierCodeData { Name = b, Target = 0 }
   0034 = Return
-    0002 FOUND: BracesSlotData { Lines = System.Int32[] }
-slot 0036 in 0034 <- Identifier = IdentifierSlotData { Name = b, Target = 23 }
+    0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0036 in 0034 <- Identifier = IdentifierCodeData { Name = b, Target = 23 }
 === Build: types ===
 enqueue 0006
-intrinsic: 0006 = TableSlot { ParentSlot = 5, DataType = Intrinsic, Data = IntrinsicSlotData { Name = bool }, TypeSlot = 4 }
-add type 7 = ParameterTypeSlot { }
-slot 0007 in 0005 <- Parameter : 7 = ParameterSlotData { }
+intrinsic: 0006 = CodeSlot { ParentSlot = 5, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = bool }, TypeSlot = 4 }
+add type 7 = ParameterTypeData { }
+slot 0007 in 0005 <- Parameter : 7 = ParameterCodeData { }
 enqueue 0007
-add type 8 = NativeTypeSlot { Name = int }
-slot 0020 in 0018 <- Integer : 8 = IntegerSlotData { Value = 100 }
+add type 8 = NativeTypeData { Name = int }
+slot 0020 in 0018 <- Integer : 8 = IntegerCodeData { Value = 100 }
 enqueue 0020
-slot 0022 in 0021 <- Integer : 8 = IntegerSlotData { Value = 10 }
+slot 0022 in 0021 <- Integer : 8 = IntegerCodeData { Value = 10 }
 enqueue 0022
-slot 0030 in 0024 <- Integer : 8 = IntegerSlotData { Value = 1 }
+slot 0030 in 0024 <- Integer : 8 = IntegerCodeData { Value = 1 }
 enqueue 0030
 enqueue 0032
-intrinsic: 0032 = TableSlot { ParentSlot = 31, DataType = Intrinsic, Data = IntrinsicSlotData { Name = print }, TypeSlot = 6 }
+intrinsic: 0032 = CodeSlot { ParentSlot = 31, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
 dequeue: 0006
-slot 0005 in 0004 <- Declare : 3 = DeclareSlotData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
+slot 0005 in 0004 <- Declare : 3 = DeclareCodeData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
 dequeue: 0007
 dequeue: 0020
-slot 0018 return: type <- NativeTypeSlot { Name = int } 8 via 0020
-slot 0018 in 0004 <- Return : 8 = ReturnSlotData { Value = 20, Function = 4 }
+slot 0018 return: type <- NativeTypeData { Name = int } 8 via 0020
+slot 0018 in 0004 <- Return : 8 = ReturnCodeData { Value = 20, Function = 4 }
 dequeue: 0022
 add target: 21
-slot 0021 in 0002 <- Declare : 8 = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 22 }
+slot 0021 in 0002 <- Declare : 8 = DeclareCodeData { Name = a, IsStatic = False, Type = 0, Value = 22 }
 dequeue: 0030
 dequeue: 0032
 dequeue: 0005
 id target: 10
-slot 0010 in 0008 <- Identifier : 3 = IdentifierSlotData { Name = cond, Target = 5 }
+slot 0010 in 0008 <- Identifier : 3 = IdentifierCodeData { Name = cond, Target = 5 }
 dequeue: 0018
-add type 9 = FunctionTypeSlot { ReturnType = 8 }
+add type 9 = FunctionTypeData { ReturnType = 8 }
 slot 0004 braces: found return 0018 9
-slot 0004 in 0003 <- Braces : 9 = BracesSlotData { Lines = System.Int32[] }
+slot 0004 in 0003 <- Braces : 9 = BracesCodeData { Lines = System.Int32[] }
 dequeue: 0021
 id target: 26
-slot 0026 in 0025 <- Identifier : 8 = IdentifierSlotData { Name = a, Target = 21 }
+slot 0026 in 0025 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 21 }
 dequeue: 0010
 dequeue: 0004
 add target: 3
-slot 0003 in 0002 <- Declare : 9 = DeclareSlotData { Name = func, IsStatic = True, Type = 0, Value = 4 }
+slot 0003 in 0002 <- Declare : 9 = DeclareCodeData { Name = func, IsStatic = True, Type = 0, Value = 4 }
 dequeue: 0026
 dequeue: 0003
 id target: 16
-slot 0016 in 0015 <- Identifier : 9 = IdentifierSlotData { Name = func, Target = 3 }
+slot 0016 in 0015 <- Identifier : 9 = IdentifierCodeData { Name = func, Target = 3 }
 id target: 28
-slot 0028 in 0027 <- Identifier : 9 = IdentifierSlotData { Name = func, Target = 3 }
+slot 0028 in 0027 <- Identifier : 9 = IdentifierCodeData { Name = func, Target = 3 }
 dequeue: 0016
-slot 0015 in 0013 <- Call : 8 = CallSlotData { Target = 16, Args = System.Int32[] }
+slot 0015 in 0013 <- Call : 8 = CallCodeData { Target = 16, Args = System.Int32[] }
 dequeue: 0028
-slot 0027 in 0025 <- Call : 8 = CallSlotData { Target = 28, Args = System.Int32[] }
+slot 0027 in 0025 <- Call : 8 = CallCodeData { Target = 28, Args = System.Int32[] }
 dequeue: 0015
-slot 0013 return: type <- NativeTypeSlot { Name = int } 8 via 0015
-slot 0013 in 0012 <- Return : 8 = ReturnSlotData { Value = 15, Function = 12 }
-slot 0025 in 0024 <- Add : 8 = AddOpSlotData { Left = 26, Right = 27 }
+slot 0013 return: type <- NativeTypeData { Name = int } 8 via 0015
+slot 0013 in 0012 <- Return : 8 = ReturnCodeData { Value = 15, Function = 12 }
+slot 0025 in 0024 <- Add : 8 = AddOpCodeData { Left = 26, Right = 27 }
 dequeue: 0027
-slot 0024 in 0023 <- Add : 8 = AddOpSlotData { Left = 25, Right = 30 }
+slot 0024 in 0023 <- Add : 8 = AddOpCodeData { Left = 25, Right = 30 }
 dequeue: 0013
 slot 0012 braces: found return 0013 9
-slot 0012 in 0008 <- Braces : 9 = BracesSlotData { Lines = System.Int32[] }
+slot 0012 in 0008 <- Braces : 9 = BracesCodeData { Lines = System.Int32[] }
 dequeue: 0025
 dequeue: 0024
 add target: 23
-slot 0023 in 0002 <- Declare : 8 = DeclareSlotData { Name = b, IsStatic = False, Type = 0, Value = 24 }
+slot 0023 in 0002 <- Declare : 8 = DeclareCodeData { Name = b, IsStatic = False, Type = 0, Value = 24 }
 dequeue: 0012
 dequeue: 0023
 id target: 33
-slot 0033 in 0031 <- Identifier : 8 = IdentifierSlotData { Name = b, Target = 23 }
+slot 0033 in 0031 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 23 }
 id target: 36
-slot 0036 in 0034 <- Identifier : 8 = IdentifierSlotData { Name = b, Target = 23 }
+slot 0036 in 0034 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 23 }
 dequeue: 0033
-slot 0031 in 0002 <- Call : 5 = CallSlotData { Target = 32, Args = System.Int32[] }
+slot 0031 in 0002 <- Call : 5 = CallCodeData { Target = 32, Args = System.Int32[] }
 dequeue: 0036
-slot 0034 return: type <- NativeTypeSlot { Name = int } 8 via 0036
-slot 0034 in 0002 <- Return : 8 = ReturnSlotData { Value = 36, Function = 2 }
+slot 0034 return: type <- NativeTypeData { Name = int } 8 via 0036
+slot 0034 in 0002 <- Return : 8 = ReturnCodeData { Value = 36, Function = 2 }
 dequeue: 0031
 dequeue: 0034
 slot 0002 braces: found return 0034 9
-slot 0002 in 0001 <- Braces : 9 = BracesSlotData { Lines = System.Int32[] }
+slot 0002 in 0001 <- Braces : 9 = BracesCodeData { Lines = System.Int32[] }
 dequeue: 0002
 done after 27 iterations
 === Tree ===
