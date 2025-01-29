@@ -276,6 +276,10 @@ public static class Evaluator
 				var target = EvaluateSlot(memberData.Target, slotTable, programOutput, valueTable);
 				return new MemberEvaluation(target, memberName, memberData.Members);
 			}
+			case CodeSlotEnum.Void:
+			{
+				return VoidEvaluation.Instance;
+			}
 			default:
 			{
 				throw new InvalidOperationException($"Invalid slot type: {slot}");

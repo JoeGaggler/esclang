@@ -214,44 +214,50 @@ public static class Analyzer
 				continue;
 			}
 
-			// TODO: return void
+			// void return
 			if (node.CodeType == CodeSlotEnum.Identifier)
 			{
 				var idData = (IdentifierCodeData)node.Data;
 				if (idData.Name == "return")
 				{
-					var returnData2 = new ReturnCodeData(0);
-					analysis.ReplaceData(slot, CodeSlotEnum.Return, returnData2, log);
-					// var voidType = analysis.GetOrAddType(VoidTypeData.Instance, log);
-					analysis.UpdateType(slot, 0, log);
+					// TODO: shared void slot?
+					var voidSlot = analysis.Add(slot, CodeSlotEnum.Void, VoidCodeData.Instance, log);					
+					var voidType = analysis.GetOrAddType(VoidTypeData.Instance, log);
+					analysis.UpdateType(voidSlot, voidType, log);
+
+					var returnData = new ReturnCodeData(voidSlot);
+					analysis.ReplaceData(slot, CodeSlotEnum.Return, returnData, log);
+					analysis.UpdateType(slot, voidType, log);
 					returnQueue.Enqueue(slot);
 				}
 				continue;
 			}
 
-			if (node.CodeType != CodeSlotEnum.Call) { continue; }
-
-			var call = (CallCodeData)node.Data;
-			if (call.Target == 0) { continue; }
-			if (call.Args.Length != 1) { continue; }
-
-			if (!analysis.TryGetSlot<IdentifierCodeData>(call.Target, CodeSlotEnum.Identifier, out var targetId, log))
+			// call "return" id to return
+			if (node.CodeType == CodeSlotEnum.Call)
 			{
-				continue;
+				var call = (CallCodeData)node.Data;
+				if (call.Target == 0) { continue; }
+				if (call.Args.Length != 1) { continue; }
+
+				if (!analysis.TryGetSlot<IdentifierCodeData>(call.Target, CodeSlotEnum.Identifier, out var targetId, log))
+				{
+					continue;
+				}
+				if (targetId.Name != "return") { continue; }
+
+				var argSlot = call.Args[0];
+				if (argSlot == 0) { continue; }
+
+				var returnData = new ReturnCodeData(argSlot);
+				analysis.ReplaceData(slot, CodeSlotEnum.Return, returnData, log);
+				returnQueue.Enqueue(slot);
+
+				// Invalidate the "return" identifier
+				analysis.ReplaceData(call.Target, CodeSlotEnum.Unknown, InvalidCodeData.Instance, log);
+
+				log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
 			}
-			if (targetId.Name != "return") { continue; }
-
-			var argSlot = call.Args[0];
-			if (argSlot == 0) { continue; }
-
-			var returnData = new ReturnCodeData(argSlot);
-			analysis.ReplaceData(slot, CodeSlotEnum.Return, returnData, log);
-			returnQueue.Enqueue(slot);
-
-			// Invalidate the "return" identifier
-			analysis.ReplaceData(call.Target, CodeSlotEnum.Unknown, InvalidCodeData.Instance, log);
-
-			log.WriteLine($"slot {slot:0000} in {node.ParentSlot:0000} -- call -> return");
 		}
 
 		while (returnQueue.Count > 0)
@@ -401,6 +407,12 @@ public static class Analyzer
 		{
 			switch (node.CodeType)
 			{
+				case CodeSlotEnum.Void:
+				{
+					sourceQueue.Enqueue(slot);
+					log.WriteLine($"enqueue {slot:0000}");
+					break;
+				}
 				case CodeSlotEnum.Integer:
 				{
 					var intType = analysis.GetOrAddType(new NativeTypeData("int"), log);

@@ -108,6 +108,7 @@ public enum CodeSlotEnum
 	Call,
 	Identifier,
 	Braces,
+	Void,
 	Boolean,
 	Integer,
 	String,
@@ -150,6 +151,7 @@ public record class BracesCodeData(int[] Lines) : CodeData
 		return NameTable.TryGetValue(name, out slot);
 	}
 }
+public record class VoidCodeData : CodeData { public static readonly VoidCodeData Instance = new(); private VoidCodeData() { } }
 public record class BooleanCodeData(Boolean Value) : CodeData;
 public record class IntegerCodeData(Int32 Value) : CodeData;
 public record class StringCodeData(String Value) : CodeData;

@@ -411,8 +411,10 @@ slot 0051 in 0050 -> Identifier = IdentifierCodeData { Name = print, Target = 0 
 slot 0054 in 0053 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
 slot 0057 in 0056 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
 slot 0059 in 0058 -> Member = MemberCodeData { Target = 60, Member = 61, Members = System.Reflection.MemberInfo[] }
-slot 0063 in 0002 << Return = ReturnCodeData { Value = 0, Function = 0 }
-slot 0063 in 0002 <- Return : 0 = ReturnCodeData { Value = 0, Function = 0 }
+slot 0067 in 0063 :: Void = VoidCodeData { }
+slot 0067 in 0063 <- Void : 1 = VoidCodeData { }
+slot 0063 in 0002 << Return = ReturnCodeData { Value = 67, Function = 0 }
+slot 0063 in 0002 <- Return : 1 = ReturnCodeData { Value = 67, Function = 0 }
 slot 0065 in 0064 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
 slot 0012 <- returns to 0011
 slot 0012 in 0011 <- Return = ReturnCodeData { Value = 14, Function = 11 }
@@ -427,7 +429,7 @@ slot 0036 <- returns to 0027
 slot 0036 in 0027 <- Return = ReturnCodeData { Value = 38, Function = 27 }
 slot 0027 in 0026 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 slot 0063 <- returns to 0002
-slot 0063 in 0002 <- Return = ReturnCodeData { Value = 0, Function = 2 }
+slot 0063 in 0002 <- Return = ReturnCodeData { Value = 67, Function = 2 }
 slot 0002 in 0001 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 === Build: resolve identifiers ===
 identifier: 0006 = IdentifierCodeData { Name = bool, Target = 0 }
@@ -575,6 +577,7 @@ enqueue 0065
 intrinsic: 0065 = CodeSlot { ParentSlot = 64, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
 slot 0066 in 0064 <- String : 5 = StringCodeData { Value = unreachable }
 enqueue 0066
+enqueue 0067
 dequeue: 0006
 slot 0005 in 0004 <- Declare : 3 = DeclareCodeData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
 dequeue: 0007
@@ -604,6 +607,9 @@ dequeue: 0062
 dequeue: 0065
 slot 0064 in 0002 <- Call : 5 = CallCodeData { Target = 65, Args = System.Int32[] }
 dequeue: 0066
+dequeue: 0067
+slot 0063 return: type <- VoidTypeData { } 1 via 0067
+slot 0063 in 0002 <- Return : 1 = ReturnCodeData { Value = 67, Function = 2 }
 dequeue: 0005
 id target: 17
 slot 0017 in 0015 <- Identifier : 3 = IdentifierCodeData { Name = cond, Target = 5 }
@@ -629,6 +635,9 @@ id target: 52
 slot 0052 in 0050 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 39 }
 dequeue: 0041
 dequeue: 0064
+dequeue: 0063
+slot 0002 braces: found return 0063 2
+slot 0002 in 0001 <- Braces : 2 = BracesCodeData { Lines = System.Int32[] }
 dequeue: 0017
 dequeue: 0011
 dequeue: 0019
@@ -640,6 +649,7 @@ dequeue: 0042
 dequeue: 0047
 dequeue: 0052
 slot 0050 in 0002 <- Call : 5 = CallCodeData { Target = 51, Args = System.Int32[] }
+dequeue: 0002
 dequeue: 0003
 id target: 34
 slot 0034 in 0033 <- Identifier : 9 = IdentifierCodeData { Name = func2, Target = 3 }
@@ -665,16 +675,16 @@ add target: 26
 slot 0026 in 0002 <- Declare : 9 = DeclareCodeData { Name = func1, IsStatic = True, Type = 0, Value = 27 }
 dequeue: 0026
 id target: 48
-slot 0067 in 0048 :: Identifier = IdentifierCodeData { Name = func1, Target = 26 }
-slot 0067 in 0048 <- Identifier : 9 = IdentifierCodeData { Name = func1, Target = 26 }
-slot 0048 in 0046 << Call = CallCodeData { Target = 67, Args = System.Int32[] }
-id target: 67
-slot 0067 in 0048 <- Identifier : 9 = IdentifierCodeData { Name = func1, Target = 26 }
-dequeue: 0067
-slot 0048 in 0046 <- Call : 8 = CallCodeData { Target = 67, Args = System.Int32[] }
+slot 0068 in 0048 :: Identifier = IdentifierCodeData { Name = func1, Target = 26 }
+slot 0068 in 0048 <- Identifier : 9 = IdentifierCodeData { Name = func1, Target = 26 }
+slot 0048 in 0046 << Call = CallCodeData { Target = 68, Args = System.Int32[] }
+id target: 68
+slot 0068 in 0048 <- Identifier : 9 = IdentifierCodeData { Name = func1, Target = 26 }
+dequeue: 0068
+slot 0048 in 0046 <- Call : 8 = CallCodeData { Target = 68, Args = System.Int32[] }
 dequeue: 0048
 slot 0046 in 0045 <- Add : 8 = AddOpCodeData { Left = 47, Right = 48 }
-dequeue: 0067
+dequeue: 0068
 slot 0045 in 0044 <- Add : 8 = AddOpCodeData { Left = 46, Right = 49 }
 dequeue: 0048
 dequeue: 0046
@@ -699,10 +709,10 @@ slot 0058 in 0056 <- Call : 11 = CallCodeData { Target = 59, Args = System.Int32
 dequeue: 0058
 slot 0056 in 0002 <- Call : 5 = CallCodeData { Target = 57, Args = System.Int32[] }
 dequeue: 0056
-done after 54 iterations
+done after 57 iterations
 === Tree ===
 0001: file (unknown)
-0002:   braces (unknown)
+0002:   braces (function -> void)
 0003:     static func2 (function -> int)
             value
 0004:         braces (function -> int)
@@ -751,7 +761,7 @@ done after 54 iterations
 0046:           add (int)
 0047:             id: name = a (int) -> 0039
 0048:             call (int)
-0067:               id: name = func1 (function -> int) -> 0026
+0068:               id: name = func1 (function -> int) -> 0026
 0049:           integer=5 (int)
 0050:     call (string)
 0051:       intrinsic: name = print (function -> string)
@@ -766,7 +776,8 @@ done after 54 iterations
 0060:           id: name = b (int) -> 0044
 0061:           id: name = ToString (unknown)
 0062:         string="C" (string)
-0063:     return (unknown)
+0063:     return (void)
+0067:       void (void)
 0064:     call (string)
 0065:       intrinsic: name = print (function -> string)
 0066:       string="unreachable" (string)

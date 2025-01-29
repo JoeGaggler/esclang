@@ -472,6 +472,12 @@ public static class Printer
 				PrintTableSlot(table, outputFile, data.Member, level + 1);
 				break;
 			}
+			case CodeSlotEnum.Void:
+			{
+				var data = (VoidCodeData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"void ({GetTypeSlotName(table, slot.TypeSlot)})");
+				break;
+			}
 			default:
 			{
 				outputFile.WriteIndentLine(level, slotId, $"unknown {slot.CodeType} = {slot.Data}");
