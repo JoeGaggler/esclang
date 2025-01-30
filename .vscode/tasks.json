@@ -50,6 +50,22 @@
             },
             "problemMatcher": "$msCompile",
             "group": "test"
+        },
+        {
+            "label": "run",
+            "command": "${workspaceFolder}/src/esc-cs/bin/Debug/net9.0/esc",
+            "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/src/esc-out"
+            },
+            "args": [
+                "${workspaceFolder}/src/esc/program.esc"
+            ],
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": "$msCompile",
+            "group": "test"
         }
     ]
 }

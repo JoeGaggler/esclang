@@ -428,7 +428,7 @@ public static class Printer
 			case CodeSlotEnum.Return:
 			{
 				var data = (ReturnCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"return ({GetTypeSlotName(table, slot.TypeSlot)})");
+				outputFile.WriteIndentLine(level, slotId, $"return ({GetTypeSlotName(table, slot.TypeSlot)}) -> {data.Function:0000}");
 				if (data.Value != 0)
 				{
 					PrintTableSlot(table, outputFile, data.Value, level + 1);

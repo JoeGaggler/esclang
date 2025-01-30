@@ -40,6 +40,30 @@ public static class Evaluator
 		return VoidEvaluation.Instance;
 	}
 
+	private static Evaluation CallInlineSlot(int bracesSlotId, Evaluation[] args, Analysis slotTable, StringWriter programOutput, ValueTable valueTable)
+	{
+		var bracesSlot = slotTable.GetCodeSlot(bracesSlotId);
+		var bracesData = slotTable.GetCodeData<BracesCodeData>(bracesSlotId);
+
+		var bracesValueTable = new ValueTable(valueTable);
+		bracesValueTable.SetArguments(args);
+
+		foreach (var step in bracesData.Lines)
+		{
+			var stepNode = EvaluateSlot(step, slotTable, programOutput, bracesValueTable);
+			if (stepNode is ReturnValueEvaluation ret)
+			{
+				return stepNode; // returns propagate outside of current function
+			}
+			if (stepNode is ReturnVoidEvaluation)
+			{
+				return stepNode; // returns propagate outside of current function
+			}
+		}
+
+		return VoidEvaluation.Instance;
+	}
+
 	private static Evaluation EvaluateSlot(int slotId, Analysis slotTable, StringWriter programOutput, ValueTable valueTable)
 	{
 		var slot = slotTable.GetCodeSlot(slotId);
@@ -266,8 +290,8 @@ public static class Evaluator
 				{
 					return VoidEvaluation.Instance;
 				}
-				var ifBlock = EvaluateSlot(ifData.Body, slotTable, programOutput, valueTable);
-				return ifBlock;
+				var ifBodyResult = CallInlineSlot(ifData.Body, [], slotTable, programOutput, valueTable);
+				return ifBodyResult;
 			}
 			case CodeSlotEnum.Member:
 			{

@@ -725,6 +725,35 @@ public static class Analyzer
 					analysis.UpdateType(targetSlotId, sourceTypeId, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
+				else if (targetSlot.CodeType == CodeSlotEnum.If)
+				{
+					var ifSlot = analysis.GetCodeSlot(targetSlotId);
+					var ifData = analysis.GetCodeData<IfSlotCodeData>(targetSlotId);
+
+					if (ifSlot.TypeSlot != 0) { continue; } // already set
+					if (ifData.Body != sourceSlotId) { continue; } // not relevant
+
+					var condSlot = analysis.GetCodeSlot(ifData.Condition);
+					if (condSlot.TypeSlot == 0) { continue; } // not ready
+
+					var bodySlot = analysis.GetCodeSlot(ifData.Body);
+					if (bodySlot.TypeSlot == 0) { continue; } // not ready
+
+					log.WriteLine($"slot {targetSlotId:0000} if: type <- {condSlot} {bodySlot}");
+
+					var sourceSlot = analysis.GetCodeSlot(sourceSlotId);
+					if (sourceSlot.CodeType != CodeSlotEnum.Braces) { throw new InvalidOperationException("Invalid if body"); }
+
+					var typeRow = analysis.GetTypeData(sourceSlot.TypeSlot);
+					if (typeRow is not FunctionTypeData)
+					{
+						throw new InvalidOperationException("Invalid if body type");
+					}
+
+					log.WriteLine($"slot {targetSlotId:0000} if: type <- {typeRow} via {ifData.Condition:0000}");
+					analysis.UpdateType(targetSlotId, sourceSlot.TypeSlot, log);
+					sourceQueue.Enqueue(targetSlotId);
+				}
 				else
 				{
 					continue;

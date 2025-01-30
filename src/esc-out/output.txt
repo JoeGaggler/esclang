@@ -642,7 +642,13 @@ dequeue: 0017
 slot 0018 negation: type <- DotnetTypeData { Type = System.Boolean } 3 via 0017
 slot 0018 in 0015 <- LogicalNegation : 3 = LogicalNegationCodeData { Value = 17 }
 dequeue: 0011
+slot 0008 if: type <- CodeSlot { ParentSlot = 8, CodeType = Boolean, Data = BooleanCodeData { Value = False }, TypeSlot = 3 } CodeSlot { ParentSlot = 8, CodeType = Braces, Data = BracesCodeData { Lines = System.Int32[] }, TypeSlot = 9 }
+slot 0008 if: type <- FunctionTypeData { ReturnType = 8 } via 0010
+slot 0008 in 0004 <- If : 9 = IfSlotCodeData { Condition = 10, Body = 11 }
 dequeue: 0019
+slot 0015 if: type <- CodeSlot { ParentSlot = 15, CodeType = LogicalNegation, Data = LogicalNegationCodeData { Value = 17 }, TypeSlot = 3 } CodeSlot { ParentSlot = 15, CodeType = Braces, Data = BracesCodeData { Lines = System.Int32[] }, TypeSlot = 9 }
+slot 0015 if: type <- FunctionTypeData { ReturnType = 8 } via 0018
+slot 0015 in 0004 <- If : 9 = IfSlotCodeData { Condition = 18, Body = 19 }
 dequeue: 0004
 add target: 3
 slot 0003 in 0002 <- Declare : 9 = DeclareCodeData { Name = func2, IsStatic = True, Type = 0, Value = 4 }
@@ -653,6 +659,8 @@ dequeue: 0052
 slot 0050 in 0002 <- Call : 5 = CallCodeData { Target = 51, Args = System.Int32[] }
 dequeue: 0002
 dequeue: 0018
+dequeue: 0008
+dequeue: 0015
 dequeue: 0003
 id target: 34
 slot 0034 in 0033 <- Identifier : 9 = IdentifierCodeData { Name = func2, Target = 3 }
@@ -711,7 +719,7 @@ slot 0058 in 0056 <- Call : 5 = CallCodeData { Target = 59, Args = System.Int32[
 dequeue: 0058
 slot 0056 in 0002 <- Call : 5 = CallCodeData { Target = 57, Args = System.Int32[] }
 dequeue: 0056
-done after 58 iterations
+done after 60 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (function -> void)
@@ -723,18 +731,18 @@ done after 58 iterations
 0006:               intrinsic: name = bool (typeof -> dotnet -> System.Boolean)
                   value
 0007:               parameter (parameter)
-0008:           if (unknown)
+0008:           if (function -> dotnet -> System.Int32)
 0010:             boolean=False (dotnet -> System.Boolean)
 0011:             braces (function -> dotnet -> System.Int32)
-0012:               return (dotnet -> System.Int32)
+0012:               return (dotnet -> System.Int32) -> 0011
 0014:                 integer=0 (dotnet -> System.Int32)
-0015:           if (unknown)
+0015:           if (function -> dotnet -> System.Int32)
 0018:             not (dotnet -> System.Boolean)
 0017:               id: name = cond (dotnet -> System.Boolean) -> 0005
 0019:             braces (function -> dotnet -> System.Int32)
-0020:               return (dotnet -> System.Int32)
+0020:               return (dotnet -> System.Int32) -> 0019
 0022:                 integer=100 (dotnet -> System.Int32)
-0023:           return (dotnet -> System.Int32)
+0023:           return (dotnet -> System.Int32) -> 0004
 0025:             integer=9999 (dotnet -> System.Int32)
 0026:     static func1 (function -> dotnet -> System.Int32)
             value
@@ -749,7 +757,7 @@ done after 58 iterations
 0033:                 call (dotnet -> System.Int32)
 0034:                   id: name = func2 (function -> dotnet -> System.Int32) -> 0003
 0035:                   boolean=False (dotnet -> System.Boolean)
-0036:           return (dotnet -> System.Int32)
+0036:           return (dotnet -> System.Int32) -> 0027
 0038:             id: name = b (dotnet -> System.Int32) -> 0030
 0039:     declare a (dotnet -> System.Int32)
             value
@@ -778,7 +786,7 @@ done after 58 iterations
 0060:           id: name = b (dotnet -> System.Int32) -> 0044
 0061:           id: name = ToString (unknown)
 0062:         string="C" (dotnet -> System.String)
-0063:     return (void)
+0063:     return (void) -> 0002
 0067:       void (void)
 0064:     call (dotnet -> System.String)
 0065:       intrinsic: name = print (function -> dotnet -> System.String)
@@ -786,7 +794,7 @@ done after 58 iterations
 
 Output:
 39
-10045
+146
 10045
 
 Stats:
