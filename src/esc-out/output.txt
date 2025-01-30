@@ -795,7 +795,7 @@ done after 60 iterations
 Output:
 39
 146
-10045
+$146.00
 
 Stats:
 -   Start: 0.0s

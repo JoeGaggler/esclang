@@ -113,7 +113,6 @@ public class ValueTable
 public abstract record class Evaluation;
 public record class IntrinsicFunctionEvaluation(String Name) : Evaluation;
 public record class VoidEvaluation : Evaluation { public static readonly VoidEvaluation Instance = new(); private VoidEvaluation() { } };
-public record class ObjectEvaluation(Object Value) : Evaluation;
 public record class IntEvaluation(Int32 Value) : Evaluation;
 public record class StringEvaluation(String Value) : Evaluation;
 public record class BooleanEvaluation(Boolean Value) : Evaluation;

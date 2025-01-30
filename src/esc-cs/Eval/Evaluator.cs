@@ -70,13 +70,13 @@ public static class Evaluator
 		var slotData = slotTable.GetCodeData<CodeData>(slotId);
 		switch (slot.CodeType)
 		{
-			case CodeSlotEnum.Boolean: return new BooleanEvaluation(((Analyze.BooleanCodeData)slotData).Value);
-			case CodeSlotEnum.Integer: return new IntEvaluation(((Analyze.IntegerCodeData)slotData).Value);
-			case CodeSlotEnum.String: return new StringEvaluation(((Analyze.StringCodeData)slotData).Value);
+			case CodeSlotEnum.Boolean: return new BooleanEvaluation(((BooleanCodeData)slotData).Value);
+			case CodeSlotEnum.Integer: return new IntEvaluation(((IntegerCodeData)slotData).Value);
+			case CodeSlotEnum.String: return new StringEvaluation(((StringCodeData)slotData).Value);
 
 			case CodeSlotEnum.File:
 			{
-				var fileData = (Analyze.FileCodeData)slotData;
+				var fileData = (FileCodeData)slotData;
 				var mainDeclResult = EvaluateSlot(fileData.Main, slotTable, programOutput, valueTable);
 				if (mainDeclResult is not FunctionEvaluation { BracesSlotId: { } bracesSlotId })
 				{
@@ -92,14 +92,14 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Declare:
 			{
-				var declareData = (Analyze.DeclareCodeData)slotData;
+				var declareData = (DeclareCodeData)slotData;
 				var rhs = EvaluateSlot(declareData.Value, slotTable, programOutput, valueTable);
 				valueTable.Add(declareData.Name, rhs);
 				return rhs; // TODO: return l-value?
 			}
 			case CodeSlotEnum.Return:
 			{
-				var returnData = (Analyze.ReturnCodeData)slotData;
+				var returnData = (ReturnCodeData)slotData;
 				if (returnData.Value == 0)
 				{
 					return ReturnVoidEvaluation.Instance;
@@ -109,7 +109,7 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Identifier:
 			{
-				var identifierData = (Analyze.IdentifierCodeData)slotData;
+				var identifierData = (IdentifierCodeData)slotData;
 				var id = identifierData.Name;
 				if (valueTable.Get(id) is { } value)
 				{
@@ -122,7 +122,7 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Assign:
 			{
-				var assignData = (Analyze.AssignCodeData)slotData;
+				var assignData = (AssignCodeData)slotData;
 				var rhs = EvaluateSlot(assignData.Value, slotTable, programOutput, valueTable);
 
 				var idSlot = slotTable.GetCodeSlot(assignData.Target);
@@ -134,7 +134,7 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Add:
 			{
-				var addData = (Analyze.AddOpCodeData)slotData;
+				var addData = (AddOpCodeData)slotData;
 				var left = EvaluateSlot(addData.Left, slotTable, programOutput, valueTable);
 				var right = EvaluateSlot(addData.Right, slotTable, programOutput, valueTable);
 
@@ -164,18 +164,18 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Intrinsic:
 			{
-				var intrinsicData = (Analyze.IntrinsicCodeData)slotData;
+				var intrinsicData = (IntrinsicCodeData)slotData;
 				return new IntrinsicFunctionEvaluation(intrinsicData.Name);
 			}
 			case CodeSlotEnum.Parameter:
 			{
-				var parameterData = (Analyze.ParameterCodeData)slotData;
+				var parameterData = (ParameterCodeData)slotData;
 				var parameter = valueTable.GetNextParameter();
 				return parameter;
 			}
 			case CodeSlotEnum.LogicalNegation:
 			{
-				var logicalNegationData = (Analyze.LogicalNegationCodeData)slotData;
+				var logicalNegationData = (LogicalNegationCodeData)slotData;
 				var value = EvaluateSlot(logicalNegationData.Value, slotTable, programOutput, valueTable);
 				if (value is not BooleanEvaluation booleanExpressionResult)
 				{
@@ -185,7 +185,7 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Call:
 			{
-				var callData = (Analyze.CallCodeData)slotData;
+				var callData = (CallCodeData)slotData;
 				var args = new Evaluation[callData.Args.Length];
 				foreach (var (i, arg) in callData.Args.Index())
 				{
@@ -240,38 +240,62 @@ public static class Evaluator
 					var returnExpression = CallFunctionSlot(bracesSlotId, args, slotTable, programOutput, valueTable);
 					return returnExpression;
 				}
-				// else if (targetExpression is DotnetMemberMethodEvaluation { } eval)
-				// {
-				// 	var returnExpression = CallDotnetMemberMethodEvaluation(eval, args, slotTable, programOutput, valueTable);
-				// 	return returnExpression;
-				// }
 				else if (targetExpression is MemberEvaluation { Target: { } target, Name: { } memberName, Member: { } memberInfo } TODO)
 				{
-					// TODO: HARD-CODED FOR CURRENT PROGRAM.ESC FILE
-					var methodInfo = typeof(int).GetMethod("ToString", []);
-					// if (callExpression is not { MethodInfo: { } methodInfo, Target: { } targetExpression })
-					// {
-					// 	throw new NotImplementedException($"Invalid call expression: {callExpression}");
-					// }
-					// var args = new Object[evalArgs.Length];
-					// foreach (var (i, arg) in evalArgs.Index())
-					// {
-					// 	var argObj = EvaluateExpressionResult(arg);
-					// 	args[i] = argObj;
-					// }
+					// Determine dotnet type for each argument
+					var argTypes = new Type[args.Length];
+					foreach (var (i, arg) in args.Index())
+					{
+						argTypes[i] = arg switch
+						{
+							IntEvaluation => typeof(int),
+							StringEvaluation => typeof(string),
+							_ => throw new NotImplementedException($"Invalid call argument: {arg}"),
+						};
+					}
 
-					// var targetObject = EvaluateExpressionResult(targetExpression);
-					var targetObject = 10045;
+					// Find compatible method
+					MethodInfo? methodInfo = null;
+					foreach (var c in memberInfo)
+					{
+						if (c is not MethodInfo cmeth) { continue; }
+						if (cmeth.GetParameters().Length != args.Length) { continue; }
+						if (!cmeth.GetParameters().Select(i => i.ParameterType).SequenceEqual(argTypes)) { continue; }
 
-					args = []; // TODO: REMOVE THIS
-					var returnValue = methodInfo.Invoke(targetObject, args);
-					// var returnType = new DotnetAnalysisType(methodInfo.ReturnType);
+						methodInfo = cmeth;
+					}
 
-					// var returnExpression = CreateExpressionResult(returnType, returnValue);
-					var returnExpression = new StringEvaluation("10045");
-					
-					return returnExpression;
-					throw new NotImplementedException($"TODO: call member: {TODO}");
+					if (methodInfo is null)
+					{
+						throw new NotImplementedException($"Invalid call target: {targetExpression}");
+					}
+
+					static Object ObjFromEval(Evaluation eval)
+					{
+						return eval switch
+						{
+							IntEvaluation intExpressionResult => intExpressionResult.Value,
+							StringEvaluation stringExpressionResult => stringExpressionResult.Value,
+							_ => throw new NotImplementedException($"Invalid call argument: {eval}"),
+						};
+					}
+
+					static Evaluation EvalFromObj(Object obj)
+					{
+						return obj switch
+						{
+							int intResult => new IntEvaluation(intResult),
+							string stringResult => new StringEvaluation(stringResult),
+							_ => throw new NotImplementedException($"Invalid call argument: {obj}"),
+						};
+					}
+
+					var targetObject = ObjFromEval(target);
+					var dotnetArgs = args.Select(i => ObjFromEval(i)).ToArray();
+					var returnValue = methodInfo.Invoke(targetObject, dotnetArgs);
+					var returnEval = EvalFromObj(returnValue);
+
+					return returnEval;
 				}
 				else
 				{
@@ -280,7 +304,7 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.If:
 			{
-				var ifData = (Analyze.IfSlotCodeData)slotData;
+				var ifData = (IfSlotCodeData)slotData;
 				var condition = EvaluateSlot(ifData.Condition, slotTable, programOutput, valueTable);
 				if (condition is not BooleanEvaluation booleanExpressionResult)
 				{
@@ -295,7 +319,7 @@ public static class Evaluator
 			}
 			case CodeSlotEnum.Member:
 			{
-				var memberData = (Analyze.MemberCodeData)slotData;
+				var memberData = (MemberCodeData)slotData;
 				var memberName = slotTable.GetCodeData<IdentifierCodeData>(memberData.Member).Name;
 				var target = EvaluateSlot(memberData.Target, slotTable, programOutput, valueTable);
 				return new MemberEvaluation(target, memberName, memberData.Members);
