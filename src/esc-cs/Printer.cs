@@ -504,9 +504,8 @@ public static class Printer
 			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
 			ParameterTypeData => "parameter",
 			MetaTypeData { InstanceType: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
-			MemberTypeData => "member",
-			// DotnetMemberTypeData { TargetType: var targetTypeId, MemberType: var memberType, Members: var members } =>
-			// 	$"{memberType switch { MemberTypes.Method => "methodof", MemberTypes.Property => "propertyof", _ => "unknownof" }} -> {GetTypeSlotName(analysis, targetTypeId)}",
+			DotnetMemberTypeData { TargetType: var targetTypeId, MemberName: { } memberName, MemberType: var memberType, Members: var members } =>
+				$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
 			DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
 			_ => "unexpected",
 		};

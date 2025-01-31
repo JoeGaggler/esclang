@@ -95,7 +95,7 @@ public record class VoidTypeData : TypeData { public static readonly VoidTypeDat
 public record class ParameterTypeData : TypeData { public static readonly ParameterTypeData Instance = new(); private ParameterTypeData() { } }
 public record class MetaTypeData(int InstanceType) : TypeData;
 public record class FunctionTypeData(int ReturnType) : TypeData;
-public record class MemberTypeData : TypeData;
+public record class DotnetMemberTypeData(int TargetType, String MemberName, MemberTypes MemberType, MemberInfo[] Members) : TypeData;
 public record class DotnetTypeData(Type Type) : TypeData;
 
 public enum CodeSlotEnum
@@ -155,9 +155,7 @@ public record class IntegerCodeData(Int32 Value) : CodeData;
 public record class StringCodeData(String Value) : CodeData;
 public record class AddOpCodeData(Int32 Left = 0, Int32 Right = 0) : CodeData;
 public record class AssignCodeData(Int32 Target = 0, Int32 Value = 0) : CodeData;
-public record class MemberCodeData(Int32 Target, Int32 Member, DotnetMembers? DotnetMembers = null) : CodeData;
+public record class MemberCodeData(Int32 Target, Int32 Member) : CodeData;
 public record class ReturnCodeData(int Value = 0, int Function = 0) : CodeData;
 public record class ParameterCodeData : CodeData;
 public record class LogicalNegationCodeData(int Value = 0) : CodeData;
-
-public record class DotnetMembers(MemberTypes Type, MemberInfo[] Members);

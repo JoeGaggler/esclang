@@ -631,12 +631,11 @@ public static class Analyzer
 						sourceQueue.Enqueue(targetSlotId);
 						break;
 					}
-					else if (callTargetType is MemberTypeData)
+					else if (callTargetType is DotnetMemberTypeData { TargetType: { } ttt, MemberType: { } dotnetMemberType, Members: { } dotnetMembers })
 					{
 						var callMemberTargetData = analysis.GetCodeData<MemberCodeData>(callData.Target);
 
-						if (callMemberTargetData.DotnetMembers is not { } dotnetMembers) { throw new InvalidOperationException($"Invalid dotnet member call: {callMemberTargetData}"); }
-						if (dotnetMembers.Type != MemberTypes.Method) { throw new InvalidOperationException("Invalid dotnet member call type"); }
+						if (dotnetMemberType != MemberTypes.Method) { throw new InvalidOperationException("Invalid dotnet member call type"); }
 
 						var dotnetArgs = new Type[callData.Args.Length];
 						foreach (var (i, arg) in callData.Args.Index())
@@ -648,7 +647,7 @@ public static class Analyzer
 						}
 
 						MethodInfo? found = null;
-						foreach (var memberInfo in dotnetMembers.Members)
+						foreach (var memberInfo in dotnetMembers)
 						{
 							if (memberInfo is not MethodInfo methodInfo) { continue; }
 							if (methodInfo.GetParameters().Length != callData.Args.Length) { continue; }
@@ -719,12 +718,11 @@ public static class Analyzer
 							throw new InvalidOperationException("Mixed member types");
 						}
 
-						analysis.UpdateData(targetSlotId, memberData with { DotnetMembers = new DotnetMembers(memberType, members) }, log);
-
-						// var memberTypeData = new DotnetMemberTypeData(leftSlot.TypeSlot, memberType, members);
-						// var memberTypeId = analysis.GetOrAddType(memberTypeData, log);
-						// analysis.UpdateType(targetSlotId, memberTypeId, log);
-						var memberTypeData = new MemberTypeData();
+						var memberTypeData = new DotnetMemberTypeData(
+							TargetType: leftSlot.TypeSlot, 
+							MemberName: rightName, 
+							MemberType: memberType, 
+							Members: members);
 						var memberTypeId = analysis.GetOrAddType(memberTypeData, log);
 						analysis.UpdateType(targetSlotId, memberTypeId, log);
 

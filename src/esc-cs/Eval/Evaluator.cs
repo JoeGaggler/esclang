@@ -291,7 +291,8 @@ public static class Evaluator
 				var memberName = slotTable.GetCodeData<IdentifierCodeData>(memberData.Member).Name;
 				var target = EvaluateSlot(memberData.Target, slotTable, programOutput, valueTable);
 				var dotnetTarget = ObjFromEval(target);
-				if (memberData is { DotnetMembers: { Type: MemberTypes.Property, Members: { } propertyInfos } })
+				var memberType = slotTable.GetTypeData(slot.TypeSlot);
+				if (memberType is DotnetMemberTypeData { TargetType: { } targetType, MemberType: MemberTypes.Property, Members: { } propertyInfos })
 				{
 					if (propertyInfos is not [PropertyInfo propertyInfo, ..])
 					{
@@ -301,7 +302,10 @@ public static class Evaluator
 					var evalValue = EvalFromObj(dotnetValue);
 					return evalValue;
 				}
-				return new MemberEvaluation(target, memberName);
+				else
+				{
+					return new MemberEvaluation(target, memberName);
+				}
 			}
 			case CodeSlotEnum.Void:
 			{
