@@ -176,7 +176,7 @@ public static class Analyzer
 			}
 			case MemberNode { Target: { } target, Member: { } member }:
 			{
-				var data = new MemberCodeData(0, 0, []);
+				var data = new MemberCodeData(0, 0);
 				var slot = analysis.Add(parentSlot, CodeSlotEnum.Member, data, log);
 
 				// Target
@@ -631,11 +631,12 @@ public static class Analyzer
 						sourceQueue.Enqueue(targetSlotId);
 						break;
 					}
-					else if (callTargetType is MemberTypeData { TargetType: var targetType })
+					else if (callTargetType is MemberTypeData)
 					{
-						// TODO: update target type from Member to Method
-						var callMemberTargetSlot = analysis.GetCodeSlot(callData.Target);
 						var callMemberTargetData = analysis.GetCodeData<MemberCodeData>(callData.Target);
+
+						if (callMemberTargetData.DotnetMembers is not { } dotnetMembers) { throw new InvalidOperationException($"Invalid dotnet member call: {callMemberTargetData}"); }
+						if (dotnetMembers.Type != MemberTypes.Method) { throw new InvalidOperationException("Invalid dotnet member call type"); }
 
 						var dotnetArgs = new Type[callData.Args.Length];
 						foreach (var (i, arg) in callData.Args.Index())
@@ -647,14 +648,13 @@ public static class Analyzer
 						}
 
 						MethodInfo? found = null;
-						foreach (var memberInfo in callMemberTargetData.Members)
+						foreach (var memberInfo in dotnetMembers.Members)
 						{
 							if (memberInfo is not MethodInfo methodInfo) { continue; }
 							if (methodInfo.GetParameters().Length != callData.Args.Length) { continue; }
 							if (!methodInfo.GetParameters().Select(i => i.ParameterType).SequenceEqual(dotnetArgs)) { continue; }
-
-							// TODO: check arg types
 							found = methodInfo;
+							break;
 						}
 
 						if (found is null) { throw new InvalidOperationException("Invalid member call"); }
@@ -662,12 +662,16 @@ public static class Analyzer
 						var returnDotNetType = new DotnetTypeData(found.ReturnType);
 						var returnDotNetTypeId = analysis.GetOrAddType(returnDotNetType, log);
 
-						analysis.ReplaceData(targetSlotId, CodeSlotEnum.CallDotnetMemberMethod, new CallDotnetMemberMethodCodeData(callData.Target, callData.Args, found), log);
+						analysis.UpdateData(targetSlotId, callData with { DotnetMethod = found }, log);
+						// analysis.ReplaceData(targetSlotId, CodeSlotEnum.CallDotnetMemberMethod, new CallDotnetMemberMethodCodeData(callData.Target, callData.Args, found), log);
 						analysis.UpdateType(targetSlotId, returnDotNetTypeId, log);
 						sourceQueue.Enqueue(targetSlotId);
 						break;
 					}
-					else { throw new InvalidOperationException($"Invalid call target type: {callTargetType}"); }
+					else
+					{
+						throw new InvalidOperationException($"Invalid call target type: {callTargetType}");
+					}
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Assign)
 				{
@@ -709,12 +713,21 @@ public static class Analyzer
 							throw new InvalidOperationException($"Invalid member: {rightName}");
 						}
 
-						var memberCodeData = memberData with { Members = members };
-						analysis.UpdateData(targetSlotId, memberCodeData, log);
+						var memberType = members[0].MemberType;
+						if (!members.All(i => i.MemberType == memberType))
+						{
+							throw new InvalidOperationException("Mixed member types");
+						}
 
-						var ttt = new MemberTypeData(leftSlot.TypeSlot);
-						var tttt = analysis.GetOrAddType(ttt, log);
-						analysis.UpdateType(targetSlotId, tttt, log);
+						analysis.UpdateData(targetSlotId, memberData with { DotnetMembers = new DotnetMembers(memberType, members) }, log);
+
+						// var memberTypeData = new DotnetMemberTypeData(leftSlot.TypeSlot, memberType, members);
+						// var memberTypeId = analysis.GetOrAddType(memberTypeData, log);
+						// analysis.UpdateType(targetSlotId, memberTypeId, log);
+						var memberTypeData = new MemberTypeData();
+						var memberTypeId = analysis.GetOrAddType(memberTypeData, log);
+						analysis.UpdateType(targetSlotId, memberTypeId, log);
+
 						sourceQueue.Enqueue(targetSlotId);
 						continue;
 					}

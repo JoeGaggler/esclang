@@ -1,3 +1,4 @@
+using System.Reflection;
 using EscLang.Analyze;
 using EscLang.Lex;
 using EscLang.Parse;
@@ -379,7 +380,14 @@ public static class Printer
 			case CodeSlotEnum.Call:
 			{
 				var data = (CallCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"call ({GetTypeSlotName(table, slot.TypeSlot)})");
+				if (data.DotnetMethod is not null)
+				{
+					outputFile.WriteIndentLine(level, slotId, $"call-dotnet {{ {data.DotnetMethod} }} ({GetTypeSlotName(table, slot.TypeSlot)})");
+				}
+				else
+				{
+					outputFile.WriteIndentLine(level, slotId, $"call ({GetTypeSlotName(table, slot.TypeSlot)})");
+				}
 				PrintTableSlot(table, outputFile, data.Target, level + 1);
 				foreach (var arg in data.Args)
 				{
@@ -478,18 +486,6 @@ public static class Printer
 				outputFile.WriteIndentLine(level, slotId, $"void ({GetTypeSlotName(table, slot.TypeSlot)})");
 				break;
 			}
-			case CodeSlotEnum.CallDotnetMemberMethod:
-			{
-				var data = (CallDotnetMemberMethodCodeData)slot.Data;
-
-				outputFile.WriteIndentLine(level, slotId, $"call-dotnet-member-method {{ {data.Method} }} ({GetTypeSlotName(table, slot.TypeSlot)})");
-				PrintTableSlot(table, outputFile, data.Target, level + 1);
-				foreach (var arg in data.Args)
-				{
-					PrintTableSlot(table, outputFile, arg, level + 1);
-				}
-				break;
-			}
 			default:
 			{
 				outputFile.WriteIndentLine(level, slotId, $"unknown {slot.CodeType} = {slot.Data}");
@@ -508,7 +504,9 @@ public static class Printer
 			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
 			ParameterTypeData => "parameter",
 			MetaTypeData { InstanceType: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
-			MemberTypeData { TargetType: var targetTypeId } => $"memberof -> {GetTypeSlotName(analysis, targetTypeId)}",
+			MemberTypeData => "member",
+			// DotnetMemberTypeData { TargetType: var targetTypeId, MemberType: var memberType, Members: var members } =>
+			// 	$"{memberType switch { MemberTypes.Method => "methodof", MemberTypes.Property => "propertyof", _ => "unknownof" }} -> {GetTypeSlotName(analysis, targetTypeId)}",
 			DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
 			_ => "unexpected",
 		};

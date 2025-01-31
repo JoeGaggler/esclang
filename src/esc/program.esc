@@ -16,6 +16,8 @@ a = 39
 b := a + func1 + 5
 print a
 print b
-print (b.ToString "C") // C=currency
+format :: "C"
+print format.Length
+print (b.ToString format) // C=currency
 return // early return
 print "unreachable"

@@ -95,8 +95,7 @@ public record class VoidTypeData : TypeData { public static readonly VoidTypeDat
 public record class ParameterTypeData : TypeData { public static readonly ParameterTypeData Instance = new(); private ParameterTypeData() { } }
 public record class MetaTypeData(int InstanceType) : TypeData;
 public record class FunctionTypeData(int ReturnType) : TypeData;
-public record class MemberTypeData(int TargetType) : TypeData;
-// TODO: public record class MethodTypeData(int TargetType) : TypeData;
+public record class MemberTypeData : TypeData;
 public record class DotnetTypeData(Type Type) : TypeData;
 
 public enum CodeSlotEnum
@@ -119,7 +118,6 @@ public enum CodeSlotEnum
 	LogicalNegation,
 	Assign,
 	Member,
-	CallDotnetMemberMethod,
 }
 
 public record class CodeSlot(int ParentSlot, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
@@ -128,8 +126,7 @@ public abstract record class CodeData;
 public record class InvalidCodeData : CodeData { public static readonly InvalidCodeData Instance = new(); private InvalidCodeData() { } }
 public record class FileCodeData(int Main = 0) : CodeData;
 public record class DeclareCodeData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : CodeData;
-public record class CallCodeData(int Target, int[] Args) : CodeData;
-public record class CallDotnetMemberMethodCodeData(int Target, int[] Args, MethodInfo Method) : CodeData;
+public record class CallCodeData(int Target, int[] Args, MethodInfo? DotnetMethod = null) : CodeData;
 public record class IdentifierCodeData(String Name, int Target = 0) : CodeData;
 public record class IntrinsicCodeData(String Name) : CodeData;
 public record class IfSlotCodeData(int Condition, int Body) : CodeData;
@@ -158,7 +155,9 @@ public record class IntegerCodeData(Int32 Value) : CodeData;
 public record class StringCodeData(String Value) : CodeData;
 public record class AddOpCodeData(Int32 Left = 0, Int32 Right = 0) : CodeData;
 public record class AssignCodeData(Int32 Target = 0, Int32 Value = 0) : CodeData;
-public record class MemberCodeData(Int32 Target, Int32 Member, MemberInfo[] Members) : CodeData;
+public record class MemberCodeData(Int32 Target, Int32 Member, DotnetMembers? DotnetMembers = null) : CodeData;
 public record class ReturnCodeData(int Value = 0, int Function = 0) : CodeData;
 public record class ParameterCodeData : CodeData;
 public record class LogicalNegationCodeData(int Value = 0) : CodeData;
+
+public record class DotnetMembers(MemberTypes Type, MemberInfo[] Members);
