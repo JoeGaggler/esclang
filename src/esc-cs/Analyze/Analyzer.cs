@@ -634,14 +634,24 @@ public static class Analyzer
 					else if (callTargetType is MemberTypeData { TargetType: var targetType })
 					{
 						// TODO: update target type from Member to Method
-						var memberSlot = analysis.GetCodeSlot(callData.Target);
-						var memberData = analysis.GetCodeData<MemberCodeData>(callData.Target);
+						var callMemberTargetSlot = analysis.GetCodeSlot(callData.Target);
+						var callMemberTargetData = analysis.GetCodeData<MemberCodeData>(callData.Target);
+
+						var dotnetArgs = new Type[callData.Args.Length];
+						foreach (var (i, arg) in callData.Args.Index())
+						{
+							var argSlot = analysis.GetCodeSlot(arg);
+							var argType = analysis.GetTypeData(argSlot.TypeSlot);
+							if (argType is not DotnetTypeData { Type: { } dotnetType }) { throw new InvalidOperationException($"Invalid arg type: {argType} {argSlot}"); }
+							dotnetArgs[i] = dotnetType;
+						}
 
 						MethodInfo? found = null;
-						foreach (var memberInfo in memberData.Members)
+						foreach (var memberInfo in callMemberTargetData.Members)
 						{
 							if (memberInfo is not MethodInfo methodInfo) { continue; }
 							if (methodInfo.GetParameters().Length != callData.Args.Length) { continue; }
+							if (!methodInfo.GetParameters().Select(i => i.ParameterType).SequenceEqual(dotnetArgs)) { continue; }
 
 							// TODO: check arg types
 							found = methodInfo;
@@ -652,6 +662,7 @@ public static class Analyzer
 						var returnDotNetType = new DotnetTypeData(found.ReturnType);
 						var returnDotNetTypeId = analysis.GetOrAddType(returnDotNetType, log);
 
+						analysis.ReplaceData(targetSlotId, CodeSlotEnum.CallDotnetMemberMethod, new CallDotnetMemberMethodCodeData(callData.Target, callData.Args, found), log);
 						analysis.UpdateType(targetSlotId, returnDotNetTypeId, log);
 						sourceQueue.Enqueue(targetSlotId);
 						break;

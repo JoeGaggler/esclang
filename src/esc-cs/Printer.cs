@@ -478,6 +478,18 @@ public static class Printer
 				outputFile.WriteIndentLine(level, slotId, $"void ({GetTypeSlotName(table, slot.TypeSlot)})");
 				break;
 			}
+			case CodeSlotEnum.CallDotnetMemberMethod:
+			{
+				var data = (CallDotnetMemberMethodCodeData)slot.Data;
+
+				outputFile.WriteIndentLine(level, slotId, $"call-dotnet-member-method {{ {data.Method} }} ({GetTypeSlotName(table, slot.TypeSlot)})");
+				PrintTableSlot(table, outputFile, data.Target, level + 1);
+				foreach (var arg in data.Args)
+				{
+					PrintTableSlot(table, outputFile, arg, level + 1);
+				}
+				break;
+			}
 			default:
 			{
 				outputFile.WriteIndentLine(level, slotId, $"unknown {slot.CodeType} = {slot.Data}");

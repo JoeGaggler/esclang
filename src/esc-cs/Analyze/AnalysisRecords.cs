@@ -119,6 +119,7 @@ public enum CodeSlotEnum
 	LogicalNegation,
 	Assign,
 	Member,
+	CallDotnetMemberMethod,
 }
 
 public record class CodeSlot(int ParentSlot, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
@@ -128,6 +129,7 @@ public record class InvalidCodeData : CodeData { public static readonly InvalidC
 public record class FileCodeData(int Main = 0) : CodeData;
 public record class DeclareCodeData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : CodeData;
 public record class CallCodeData(int Target, int[] Args) : CodeData;
+public record class CallDotnetMemberMethodCodeData(int Target, int[] Args, MethodInfo Method) : CodeData;
 public record class IdentifierCodeData(String Name, int Target = 0) : CodeData;
 public record class IntrinsicCodeData(String Name) : CodeData;
 public record class IfSlotCodeData(int Condition, int Body) : CodeData;

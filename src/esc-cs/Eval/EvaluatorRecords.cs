@@ -121,4 +121,4 @@ public record class DotnetMemberMethodEvaluation(System.Reflection.MethodInfo Me
 public record class ReturnVoidEvaluation : Evaluation { public static readonly ReturnVoidEvaluation Instance = new(); private ReturnVoidEvaluation() { } };
 public record class ReturnValueEvaluation(Evaluation Value) : Evaluation;
 public record class FunctionEvaluation(int BracesSlotId) : Evaluation;
-public record class MemberEvaluation(Evaluation Target, String Name, System.Reflection.MemberInfo[] Member) : Evaluation;
+public record class MemberEvaluation(Evaluation Target, String Name) : Evaluation;

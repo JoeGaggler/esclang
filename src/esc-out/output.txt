@@ -715,7 +715,8 @@ add type 10 = MemberTypeData { TargetType = 8 }
 slot 0059 in 0058 <- Member : 10 = MemberCodeData { Target = 60, Member = 61, Members = System.Reflection.MemberInfo[] }
 dequeue: 0053
 dequeue: 0059
-slot 0058 in 0056 <- Call : 5 = CallCodeData { Target = 59, Args = System.Int32[] }
+slot 0058 in 0056 << CallDotnetMemberMethod = CallDotnetMemberMethodCodeData { Target = 59, Args = System.Int32[], Method = System.String ToString(System.String) }
+slot 0058 in 0056 <- CallDotnetMemberMethod : 5 = CallDotnetMemberMethodCodeData { Target = 59, Args = System.Int32[], Method = System.String ToString(System.String) }
 dequeue: 0058
 slot 0056 in 0002 <- Call : 5 = CallCodeData { Target = 57, Args = System.Int32[] }
 dequeue: 0056
@@ -781,7 +782,7 @@ done after 60 iterations
 0055:       id: name = b (dotnet -> System.Int32) -> 0044
 0056:     call (dotnet -> System.String)
 0057:       intrinsic: name = print (function -> dotnet -> System.String)
-0058:       call (dotnet -> System.String)
+0058:       call-dotnet-member-method { System.String ToString(System.String) } (dotnet -> System.String)
 0059:         member (memberof -> dotnet -> System.Int32)
 0060:           id: name = b (dotnet -> System.Int32) -> 0044
 0061:           id: name = ToString (unknown)

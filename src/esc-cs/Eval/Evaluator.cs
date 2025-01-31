@@ -240,67 +240,70 @@ public static class Evaluator
 					var returnExpression = CallFunctionSlot(bracesSlotId, args, slotTable, programOutput, valueTable);
 					return returnExpression;
 				}
-				else if (targetExpression is MemberEvaluation { Target: { } target, Name: { } memberName, Member: { } memberInfo } TODO)
-				{
-					// Determine dotnet type for each argument
-					var argTypes = new Type[args.Length];
-					foreach (var (i, arg) in args.Index())
-					{
-						argTypes[i] = arg switch
-						{
-							IntEvaluation => typeof(int),
-							StringEvaluation => typeof(string),
-							_ => throw new NotImplementedException($"Invalid call argument: {arg}"),
-						};
-					}
-
-					// Find compatible method
-					MethodInfo? methodInfo = null;
-					foreach (var c in memberInfo)
-					{
-						if (c is not MethodInfo cmeth) { continue; }
-						if (cmeth.GetParameters().Length != args.Length) { continue; }
-						if (!cmeth.GetParameters().Select(i => i.ParameterType).SequenceEqual(argTypes)) { continue; }
-
-						methodInfo = cmeth;
-					}
-
-					if (methodInfo is null)
-					{
-						throw new NotImplementedException($"Invalid call target: {targetExpression}");
-					}
-
-					static Object ObjFromEval(Evaluation eval)
-					{
-						return eval switch
-						{
-							IntEvaluation intExpressionResult => intExpressionResult.Value,
-							StringEvaluation stringExpressionResult => stringExpressionResult.Value,
-							_ => throw new NotImplementedException($"Invalid call argument: {eval}"),
-						};
-					}
-
-					static Evaluation EvalFromObj(Object obj)
-					{
-						return obj switch
-						{
-							int intResult => new IntEvaluation(intResult),
-							string stringResult => new StringEvaluation(stringResult),
-							_ => throw new NotImplementedException($"Invalid call argument: {obj}"),
-						};
-					}
-
-					var targetObject = ObjFromEval(target);
-					var dotnetArgs = args.Select(i => ObjFromEval(i)).ToArray();
-					var returnValue = methodInfo.Invoke(targetObject, dotnetArgs);
-					var returnEval = EvalFromObj(returnValue);
-
-					return returnEval;
-				}
 				else
 				{
 					throw new NotImplementedException($"Invalid call target: {targetExpression}");
 				}
+			}
+			case CodeSlotEnum.CallDotnetMemberMethod:
+			{
+				var callData = (CallDotnetMemberMethodCodeData)slotData;
+				var args = new Evaluation[callData.Args.Length];
+				foreach (var (i, arg) in callData.Args.Index())
+				{
+					var argExp = EvaluateSlot(arg, slotTable, programOutput, valueTable);
+					args[i] = argExp;
+				}
+				var targetExpression = EvaluateSlot(callData.Target, slotTable, programOutput, valueTable);
+				var methodInfo = callData.Method;
+				if (!(targetExpression is MemberEvaluation { Target: { } target, Name: { } memberName }))
+				{
+					throw new NotImplementedException($"Invalid call target: {targetExpression}");
+				}
+
+				// Determine dotnet type for each argument
+				var argTypes = new Type[args.Length];
+				foreach (var (i, arg) in args.Index())
+				{
+					argTypes[i] = arg switch
+					{
+						IntEvaluation => typeof(int),
+						StringEvaluation => typeof(string),
+						_ => throw new NotImplementedException($"Invalid call argument: {arg}"),
+					};
+				}
+
+				if (methodInfo is null)
+				{
+					throw new NotImplementedException($"Invalid call target: {targetExpression}");
+				}
+
+				static Object ObjFromEval(Evaluation eval)
+				{
+					return eval switch
+					{
+						IntEvaluation intExpressionResult => intExpressionResult.Value,
+						StringEvaluation stringExpressionResult => stringExpressionResult.Value,
+						_ => throw new NotImplementedException($"Invalid call argument: {eval}"),
+					};
+				}
+
+				static Evaluation EvalFromObj(Object obj)
+				{
+					return obj switch
+					{
+						int intResult => new IntEvaluation(intResult),
+						string stringResult => new StringEvaluation(stringResult),
+						_ => throw new NotImplementedException($"Invalid call argument: {obj}"),
+					};
+				}
+
+				var targetObject = ObjFromEval(target);
+				var dotnetArgs = args.Select(i => ObjFromEval(i)).ToArray();
+				var returnValue = methodInfo.Invoke(targetObject, dotnetArgs);
+				var returnEval = EvalFromObj(returnValue);
+
+				return returnEval;
 			}
 			case CodeSlotEnum.If:
 			{
@@ -322,7 +325,7 @@ public static class Evaluator
 				var memberData = (MemberCodeData)slotData;
 				var memberName = slotTable.GetCodeData<IdentifierCodeData>(memberData.Member).Name;
 				var target = EvaluateSlot(memberData.Target, slotTable, programOutput, valueTable);
-				return new MemberEvaluation(target, memberName, memberData.Members);
+				return new MemberEvaluation(target, memberName);
 			}
 			case CodeSlotEnum.Void:
 			{
