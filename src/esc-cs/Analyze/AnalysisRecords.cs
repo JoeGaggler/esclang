@@ -127,6 +127,7 @@ public enum CodeSlotEnum
 	Intrinsic,
 	Parameter,
 	LogicalNegation,
+	Negation,
 	Assign,
 	Member,
 }
@@ -170,3 +171,4 @@ public record class MemberCodeData(Int32 Target, Int32 Member) : CodeData;
 public record class ReturnCodeData(int Value = 0, int Function = 0) : CodeData;
 public record class ParameterCodeData : CodeData;
 public record class LogicalNegationCodeData(int Value = 0) : CodeData;
+public record class NegationCodeData(int Value = 0) : CodeData;

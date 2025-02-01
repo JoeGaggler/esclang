@@ -121,47 +121,61 @@ Lex:
 0118: 224 + 1 -- (16, 17) -- Spaces -- " "
 0119: 225 + 1 -- (16, 18) -- Number -- 5
 0120: 226 + 1 -- (16, 19) -- EndOfLine -- \n
-0121: 227 + 5 -- (17, 1) -- Identifier -- print
-0122: 232 + 1 -- (17, 6) -- Spaces -- " "
-0123: 233 + 1 -- (17, 7) -- Identifier -- a
-0124: 234 + 1 -- (17, 8) -- EndOfLine -- \n
-0125: 235 + 5 -- (18, 1) -- Identifier -- print
-0126: 240 + 1 -- (18, 6) -- Spaces -- " "
-0127: 241 + 1 -- (18, 7) -- Identifier -- b
-0128: 242 + 1 -- (18, 8) -- EndOfLine -- \n
-0129: 243 + 6 -- (19, 1) -- Identifier -- format
-0130: 249 + 1 -- (19, 7) -- Spaces -- " "
-0131: 250 + 1 -- (19, 8) -- Colon -- :
-0132: 251 + 1 -- (19, 9) -- Colon -- :
-0133: 252 + 1 -- (19, 10) -- Spaces -- " "
-0134: 253 + 3 -- (19, 11) -- LiteralString -- "C"
-0135: 256 + 1 -- (19, 14) -- EndOfLine -- \n
-0136: 257 + 5 -- (20, 1) -- Identifier -- print
-0137: 262 + 1 -- (20, 6) -- Spaces -- " "
-0138: 263 + 6 -- (20, 7) -- Identifier -- format
-0139: 269 + 1 -- (20, 13) -- Period -- .
-0140: 270 + 6 -- (20, 14) -- Identifier -- Length
-0141: 276 + 1 -- (20, 20) -- EndOfLine -- \n
-0142: 277 + 5 -- (21, 1) -- Identifier -- print
-0143: 282 + 1 -- (21, 6) -- Spaces -- " "
-0144: 283 + 1 -- (21, 7) -- ParenOpen -- (
-0145: 284 + 1 -- (21, 8) -- Identifier -- b
-0146: 285 + 1 -- (21, 9) -- Period -- .
-0147: 286 + 8 -- (21, 10) -- Identifier -- ToString
-0148: 294 + 1 -- (21, 18) -- Spaces -- " "
-0149: 295 + 6 -- (21, 19) -- Identifier -- format
-0150: 301 + 1 -- (21, 25) -- ParenClose -- )
-0151: 302 + 1 -- (21, 26) -- Spaces -- " "
-0152: 303 + 13 -- (21, 27) -- Comment -- // C=currency
-0153: 316 + 1 -- (21, 40) -- EndOfLine -- \n
-0154: 317 + 6 -- (22, 1) -- Identifier -- return
-0155: 323 + 1 -- (22, 7) -- Spaces -- " "
-0156: 324 + 15 -- (22, 8) -- Comment -- // early return
-0157: 339 + 1 -- (22, 23) -- EndOfLine -- \n
-0158: 340 + 5 -- (23, 1) -- Identifier -- print
-0159: 345 + 1 -- (23, 6) -- Spaces -- " "
-0160: 346 + 13 -- (23, 7) -- LiteralString -- "unreachable"
-0161: 359 + 0 -- (23, 20) -- EndOfFile -- <EOF>
+0121: 227 + 1 -- (17, 1) -- Identifier -- b
+0122: 228 + 1 -- (17, 2) -- Spaces -- " "
+0123: 229 + 1 -- (17, 3) -- Equals -- =
+0124: 230 + 1 -- (17, 4) -- Spaces -- " "
+0125: 231 + 1 -- (17, 5) -- Identifier -- b
+0126: 232 + 1 -- (17, 6) -- Spaces -- " "
+0127: 233 + 1 -- (17, 7) -- Plus -- +
+0128: 234 + 1 -- (17, 8) -- Spaces -- " "
+0129: 235 + 1 -- (17, 9) -- ParenOpen -- (
+0130: 236 + 1 -- (17, 10) -- Minus -- -
+0131: 237 + 1 -- (17, 11) -- Number -- 1
+0132: 238 + 1 -- (17, 12) -- ParenClose -- )
+0133: 239 + 1 -- (17, 13) -- EndOfLine -- \n
+0134: 240 + 5 -- (18, 1) -- Identifier -- print
+0135: 245 + 1 -- (18, 6) -- Spaces -- " "
+0136: 246 + 1 -- (18, 7) -- Identifier -- a
+0137: 247 + 1 -- (18, 8) -- EndOfLine -- \n
+0138: 248 + 5 -- (19, 1) -- Identifier -- print
+0139: 253 + 1 -- (19, 6) -- Spaces -- " "
+0140: 254 + 1 -- (19, 7) -- Identifier -- b
+0141: 255 + 1 -- (19, 8) -- EndOfLine -- \n
+0142: 256 + 6 -- (20, 1) -- Identifier -- format
+0143: 262 + 1 -- (20, 7) -- Spaces -- " "
+0144: 263 + 1 -- (20, 8) -- Colon -- :
+0145: 264 + 1 -- (20, 9) -- Colon -- :
+0146: 265 + 1 -- (20, 10) -- Spaces -- " "
+0147: 266 + 3 -- (20, 11) -- LiteralString -- "C"
+0148: 269 + 1 -- (20, 14) -- EndOfLine -- \n
+0149: 270 + 5 -- (21, 1) -- Identifier -- print
+0150: 275 + 1 -- (21, 6) -- Spaces -- " "
+0151: 276 + 6 -- (21, 7) -- Identifier -- format
+0152: 282 + 1 -- (21, 13) -- Period -- .
+0153: 283 + 6 -- (21, 14) -- Identifier -- Length
+0154: 289 + 1 -- (21, 20) -- EndOfLine -- \n
+0155: 290 + 5 -- (22, 1) -- Identifier -- print
+0156: 295 + 1 -- (22, 6) -- Spaces -- " "
+0157: 296 + 1 -- (22, 7) -- ParenOpen -- (
+0158: 297 + 1 -- (22, 8) -- Identifier -- b
+0159: 298 + 1 -- (22, 9) -- Period -- .
+0160: 299 + 8 -- (22, 10) -- Identifier -- ToString
+0161: 307 + 1 -- (22, 18) -- Spaces -- " "
+0162: 308 + 6 -- (22, 19) -- Identifier -- format
+0163: 314 + 1 -- (22, 25) -- ParenClose -- )
+0164: 315 + 1 -- (22, 26) -- Spaces -- " "
+0165: 316 + 13 -- (22, 27) -- Comment -- // C=currency
+0166: 329 + 1 -- (22, 40) -- EndOfLine -- \n
+0167: 330 + 6 -- (23, 1) -- Identifier -- return
+0168: 336 + 1 -- (23, 7) -- Spaces -- " "
+0169: 337 + 15 -- (23, 8) -- Comment -- // early return
+0170: 352 + 1 -- (23, 23) -- EndOfLine -- \n
+0171: 353 + 5 -- (24, 1) -- Identifier -- print
+0172: 358 + 1 -- (24, 6) -- Spaces -- " "
+0173: 359 + 13 -- (24, 7) -- LiteralString -- "unreachable"
+0174: 372 + 1 -- (24, 20) -- EndOfLine -- \n
+0175: 373 + 0 -- (25, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declare-static
@@ -247,6 +261,12 @@ declare-assign
         identifier: a
         identifier: func1
       5
+assign
+  identifier: b
+  plus
+    identifier: b
+    negation
+      1
 call
   target
     identifier: print
@@ -377,48 +397,57 @@ slot 0046 in 0045 <- Add = AddOpCodeData { Left = 47, Right = 48 }
 slot 0049 in 0045 :: Integer = IntegerCodeData { Value = 5 }
 slot 0045 in 0044 <- Add = AddOpCodeData { Left = 46, Right = 49 }
 slot 0044 in 0002 <- Declare = DeclareCodeData { Name = b, IsStatic = False, Type = 0, Value = 45 }
-slot 0050 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
-slot 0051 in 0050 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0050 in 0002 <- Call = CallCodeData { Target = 51, Args = System.Int32[], DotnetMethod =  }
-slot 0052 in 0050 :: Identifier = IdentifierCodeData { Name = a, Target = 0 }
-slot 0050 in 0002 <- Call = CallCodeData { Target = 51, Args = System.Int32[], DotnetMethod =  }
-slot 0053 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
-slot 0054 in 0053 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0053 in 0002 <- Call = CallCodeData { Target = 54, Args = System.Int32[], DotnetMethod =  }
-slot 0055 in 0053 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
-slot 0053 in 0002 <- Call = CallCodeData { Target = 54, Args = System.Int32[], DotnetMethod =  }
-slot 0056 in 0002 :: Declare = DeclareCodeData { Name = format, IsStatic = True, Type = 0, Value = 0 }
+slot 0050 in 0002 :: Assign = AssignCodeData { Target = 0, Value = 0 }
+slot 0051 in 0050 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
+slot 0050 in 0002 <- Assign = AssignCodeData { Target = 51, Value = 0 }
+slot 0052 in 0050 :: Add = AddOpCodeData { Left = 0, Right = 0 }
+slot 0053 in 0052 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
+slot 0054 in 0052 :: Integer = IntegerCodeData { Value = 1 }
+slot 0055 in 0052 :: Negation = NegationCodeData { Value = 54 }
+slot 0052 in 0050 <- Add = AddOpCodeData { Left = 53, Right = 55 }
+slot 0050 in 0002 <- Assign = AssignCodeData { Target = 51, Value = 52 }
+slot 0056 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
+slot 0057 in 0056 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0056 in 0002 <- Call = CallCodeData { Target = 57, Args = System.Int32[], DotnetMethod =  }
+slot 0058 in 0056 :: Identifier = IdentifierCodeData { Name = a, Target = 0 }
+slot 0056 in 0002 <- Call = CallCodeData { Target = 57, Args = System.Int32[], DotnetMethod =  }
+slot 0059 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
+slot 0060 in 0059 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0059 in 0002 <- Call = CallCodeData { Target = 60, Args = System.Int32[], DotnetMethod =  }
+slot 0061 in 0059 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
+slot 0059 in 0002 <- Call = CallCodeData { Target = 60, Args = System.Int32[], DotnetMethod =  }
+slot 0062 in 0002 :: Declare = DeclareCodeData { Name = format, IsStatic = True, Type = 0, Value = 0 }
 slot 0002 in 0001 -> Braces = BracesCodeData { Lines = System.Int32[] }
-slot 0057 in 0056 :: String = StringCodeData { Value = C }
-slot 0056 in 0002 <- Declare = DeclareCodeData { Name = format, IsStatic = True, Type = 0, Value = 57 }
-slot 0058 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
-slot 0059 in 0058 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0058 in 0002 <- Call = CallCodeData { Target = 59, Args = System.Int32[], DotnetMethod =  }
-slot 0060 in 0058 :: Member = MemberCodeData { Target = 0, Member = 0 }
-slot 0061 in 0060 :: Identifier = IdentifierCodeData { Name = format, Target = 0 }
-slot 0060 in 0058 <- Member = MemberCodeData { Target = 61, Member = 0 }
-slot 0062 in 0060 :: Identifier = IdentifierCodeData { Name = Length, Target = 0 }
-slot 0060 in 0058 <- Member = MemberCodeData { Target = 61, Member = 62 }
-slot 0058 in 0002 <- Call = CallCodeData { Target = 59, Args = System.Int32[], DotnetMethod =  }
-slot 0063 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
-slot 0064 in 0063 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0063 in 0002 <- Call = CallCodeData { Target = 64, Args = System.Int32[], DotnetMethod =  }
-slot 0065 in 0063 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
-slot 0066 in 0065 :: Member = MemberCodeData { Target = 0, Member = 0 }
-slot 0067 in 0066 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
-slot 0066 in 0065 <- Member = MemberCodeData { Target = 67, Member = 0 }
-slot 0068 in 0066 :: Identifier = IdentifierCodeData { Name = ToString, Target = 0 }
-slot 0066 in 0065 <- Member = MemberCodeData { Target = 67, Member = 68 }
-slot 0065 in 0063 <- Call = CallCodeData { Target = 66, Args = System.Int32[], DotnetMethod =  }
-slot 0069 in 0065 :: Identifier = IdentifierCodeData { Name = format, Target = 0 }
-slot 0065 in 0063 <- Call = CallCodeData { Target = 66, Args = System.Int32[], DotnetMethod =  }
-slot 0063 in 0002 <- Call = CallCodeData { Target = 64, Args = System.Int32[], DotnetMethod =  }
-slot 0070 in 0002 :: Identifier = IdentifierCodeData { Name = return, Target = 0 }
-slot 0071 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
-slot 0072 in 0071 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0071 in 0002 <- Call = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod =  }
-slot 0073 in 0071 :: String = StringCodeData { Value = unreachable }
-slot 0071 in 0002 <- Call = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod =  }
+slot 0063 in 0062 :: String = StringCodeData { Value = C }
+slot 0062 in 0002 <- Declare = DeclareCodeData { Name = format, IsStatic = True, Type = 0, Value = 63 }
+slot 0064 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
+slot 0065 in 0064 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0064 in 0002 <- Call = CallCodeData { Target = 65, Args = System.Int32[], DotnetMethod =  }
+slot 0066 in 0064 :: Member = MemberCodeData { Target = 0, Member = 0 }
+slot 0067 in 0066 :: Identifier = IdentifierCodeData { Name = format, Target = 0 }
+slot 0066 in 0064 <- Member = MemberCodeData { Target = 67, Member = 0 }
+slot 0068 in 0066 :: Identifier = IdentifierCodeData { Name = Length, Target = 0 }
+slot 0066 in 0064 <- Member = MemberCodeData { Target = 67, Member = 68 }
+slot 0064 in 0002 <- Call = CallCodeData { Target = 65, Args = System.Int32[], DotnetMethod =  }
+slot 0069 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
+slot 0070 in 0069 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0069 in 0002 <- Call = CallCodeData { Target = 70, Args = System.Int32[], DotnetMethod =  }
+slot 0071 in 0069 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
+slot 0072 in 0071 :: Member = MemberCodeData { Target = 0, Member = 0 }
+slot 0073 in 0072 :: Identifier = IdentifierCodeData { Name = b, Target = 0 }
+slot 0072 in 0071 <- Member = MemberCodeData { Target = 73, Member = 0 }
+slot 0074 in 0072 :: Identifier = IdentifierCodeData { Name = ToString, Target = 0 }
+slot 0072 in 0071 <- Member = MemberCodeData { Target = 73, Member = 74 }
+slot 0071 in 0069 <- Call = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod =  }
+slot 0075 in 0071 :: Identifier = IdentifierCodeData { Name = format, Target = 0 }
+slot 0071 in 0069 <- Call = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod =  }
+slot 0069 in 0002 <- Call = CallCodeData { Target = 70, Args = System.Int32[], DotnetMethod =  }
+slot 0076 in 0002 :: Identifier = IdentifierCodeData { Name = return, Target = 0 }
+slot 0077 in 0002 :: Call = CallCodeData { Target = 0, Args = System.Int32[], DotnetMethod =  }
+slot 0078 in 0077 :: Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0077 in 0002 <- Call = CallCodeData { Target = 78, Args = System.Int32[], DotnetMethod =  }
+slot 0079 in 0077 :: String = StringCodeData { Value = unreachable }
+slot 0077 in 0002 <- Call = CallCodeData { Target = 78, Args = System.Int32[], DotnetMethod =  }
 slot 0002 in 0001 <- Braces = BracesCodeData { Lines = System.Int32[] }
 === Build: return ===
 add type 1 = VoidTypeData { }
@@ -445,16 +474,16 @@ slot 0037 in 0036 -> Identifier = IdentifierCodeData { Name = return, Target = 0
 slot 0036 in 0027 << Return = ReturnCodeData { Value = 38, Function = 0 }
 slot 0037 in 0036 << Unknown = InvalidCodeData { }
 slot 0036 in 0027 -- call -> return
-slot 0051 in 0050 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0054 in 0053 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0059 in 0058 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0064 in 0063 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
-slot 0066 in 0065 -> Member = MemberCodeData { Target = 67, Member = 68 }
-slot 0074 in 0070 :: Void = VoidCodeData { }
-slot 0074 in 0070 <- Void : 1 = VoidCodeData { }
-slot 0070 in 0002 << Return = ReturnCodeData { Value = 74, Function = 0 }
-slot 0070 in 0002 <- Return : 1 = ReturnCodeData { Value = 74, Function = 0 }
-slot 0072 in 0071 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0057 in 0056 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0060 in 0059 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0065 in 0064 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0070 in 0069 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
+slot 0072 in 0071 -> Member = MemberCodeData { Target = 73, Member = 74 }
+slot 0080 in 0076 :: Void = VoidCodeData { }
+slot 0080 in 0076 <- Void : 1 = VoidCodeData { }
+slot 0076 in 0002 << Return = ReturnCodeData { Value = 80, Function = 0 }
+slot 0076 in 0002 <- Return : 1 = ReturnCodeData { Value = 80, Function = 0 }
+slot 0078 in 0077 -> Identifier = IdentifierCodeData { Name = print, Target = 0 }
 slot 0012 <- returns to 0011
 slot 0012 in 0011 <- Return = ReturnCodeData { Value = 14, Function = 11 }
 slot 0011 in 0008 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
@@ -467,8 +496,8 @@ slot 0004 in 0003 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 slot 0036 <- returns to 0027
 slot 0036 in 0027 <- Return = ReturnCodeData { Value = 38, Function = 27 }
 slot 0027 in 0026 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
-slot 0070 <- returns to 0002
-slot 0070 in 0002 <- Return = ReturnCodeData { Value = 74, Function = 2 }
+slot 0076 <- returns to 0002
+slot 0076 in 0002 <- Return = ReturnCodeData { Value = 80, Function = 2 }
 slot 0002 in 0001 <- Braces : 0 = BracesCodeData { Lines = System.Int32[] }
 === Build: resolve identifiers ===
 identifier: 0006 = IdentifierCodeData { Name = bool, Target = 0 }
@@ -541,68 +570,77 @@ identifier: 0048 = IdentifierCodeData { Name = func1, Target = 0 }
       0044 = Declare
         0002 FOUND: BracesCodeData { Lines = System.Int32[] }
 slot 0048 in 0046 <- Identifier = IdentifierCodeData { Name = func1, Target = 26 }
-identifier: 0051 = IdentifierCodeData { Name = print, Target = 0 }
-  0050 = Call
+identifier: 0051 = IdentifierCodeData { Name = b, Target = 0 }
+  0050 = Assign
+    0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0051 in 0050 <- Identifier = IdentifierCodeData { Name = b, Target = 44 }
+identifier: 0053 = IdentifierCodeData { Name = b, Target = 0 }
+  0052 = Add
+    0050 = Assign
+      0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0053 in 0052 <- Identifier = IdentifierCodeData { Name = b, Target = 44 }
+identifier: 0057 = IdentifierCodeData { Name = print, Target = 0 }
+  0056 = Call
       0001 = File
-slot 0051 in 0050 << Intrinsic = IntrinsicCodeData { Name = print }
+slot 0057 in 0056 << Intrinsic = IntrinsicCodeData { Name = print }
 add type 5 = DotnetTypeData { Type = System.String }
 add type 6 = FunctionTypeData { ReturnType = 5 }
-slot 0051 in 0050 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
-identifier: 0052 = IdentifierCodeData { Name = a, Target = 0 }
-  0050 = Call
+slot 0057 in 0056 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
+identifier: 0058 = IdentifierCodeData { Name = a, Target = 0 }
+  0056 = Call
     0002 FOUND: BracesCodeData { Lines = System.Int32[] }
-slot 0052 in 0050 <- Identifier = IdentifierCodeData { Name = a, Target = 39 }
-identifier: 0054 = IdentifierCodeData { Name = print, Target = 0 }
-  0053 = Call
+slot 0058 in 0056 <- Identifier = IdentifierCodeData { Name = a, Target = 39 }
+identifier: 0060 = IdentifierCodeData { Name = print, Target = 0 }
+  0059 = Call
       0001 = File
-slot 0054 in 0053 << Intrinsic = IntrinsicCodeData { Name = print }
-slot 0054 in 0053 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
-identifier: 0055 = IdentifierCodeData { Name = b, Target = 0 }
-  0053 = Call
+slot 0060 in 0059 << Intrinsic = IntrinsicCodeData { Name = print }
+slot 0060 in 0059 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
+identifier: 0061 = IdentifierCodeData { Name = b, Target = 0 }
+  0059 = Call
     0002 FOUND: BracesCodeData { Lines = System.Int32[] }
-slot 0055 in 0053 <- Identifier = IdentifierCodeData { Name = b, Target = 44 }
-identifier: 0059 = IdentifierCodeData { Name = print, Target = 0 }
-  0058 = Call
+slot 0061 in 0059 <- Identifier = IdentifierCodeData { Name = b, Target = 44 }
+identifier: 0065 = IdentifierCodeData { Name = print, Target = 0 }
+  0064 = Call
       0001 = File
-slot 0059 in 0058 << Intrinsic = IntrinsicCodeData { Name = print }
-slot 0059 in 0058 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
-identifier: 0061 = IdentifierCodeData { Name = format, Target = 0 }
-  0060 = Member
-    0058 = Call
+slot 0065 in 0064 << Intrinsic = IntrinsicCodeData { Name = print }
+slot 0065 in 0064 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
+identifier: 0067 = IdentifierCodeData { Name = format, Target = 0 }
+  0066 = Member
+    0064 = Call
       0002 FOUND: BracesCodeData { Lines = System.Int32[] }
-slot 0061 in 0060 <- Identifier = IdentifierCodeData { Name = format, Target = 56 }
-identifier: 0062 = IdentifierCodeData { Name = Length, Target = 0 }
-  0060 = Member
-    0058 = Call
+slot 0067 in 0066 <- Identifier = IdentifierCodeData { Name = format, Target = 62 }
+identifier: 0068 = IdentifierCodeData { Name = Length, Target = 0 }
+  0066 = Member
+    0064 = Call
         0001 = File
           0000 = ROOT
-identifier: 0064 = IdentifierCodeData { Name = print, Target = 0 }
-  0063 = Call
+identifier: 0070 = IdentifierCodeData { Name = print, Target = 0 }
+  0069 = Call
       0001 = File
-slot 0064 in 0063 << Intrinsic = IntrinsicCodeData { Name = print }
-slot 0064 in 0063 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
-identifier: 0067 = IdentifierCodeData { Name = b, Target = 0 }
-  0066 = Member
-    0065 = Call
-      0063 = Call
+slot 0070 in 0069 << Intrinsic = IntrinsicCodeData { Name = print }
+slot 0070 in 0069 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
+identifier: 0073 = IdentifierCodeData { Name = b, Target = 0 }
+  0072 = Member
+    0071 = Call
+      0069 = Call
         0002 FOUND: BracesCodeData { Lines = System.Int32[] }
-slot 0067 in 0066 <- Identifier = IdentifierCodeData { Name = b, Target = 44 }
-identifier: 0068 = IdentifierCodeData { Name = ToString, Target = 0 }
-  0066 = Member
-    0065 = Call
-      0063 = Call
+slot 0073 in 0072 <- Identifier = IdentifierCodeData { Name = b, Target = 44 }
+identifier: 0074 = IdentifierCodeData { Name = ToString, Target = 0 }
+  0072 = Member
+    0071 = Call
+      0069 = Call
           0001 = File
             0000 = ROOT
-identifier: 0069 = IdentifierCodeData { Name = format, Target = 0 }
-  0065 = Call
-    0063 = Call
-      0002 FOUND: BracesCodeData { Lines = System.Int32[] }
-slot 0069 in 0065 <- Identifier = IdentifierCodeData { Name = format, Target = 56 }
-identifier: 0072 = IdentifierCodeData { Name = print, Target = 0 }
+identifier: 0075 = IdentifierCodeData { Name = format, Target = 0 }
   0071 = Call
+    0069 = Call
+      0002 FOUND: BracesCodeData { Lines = System.Int32[] }
+slot 0075 in 0071 <- Identifier = IdentifierCodeData { Name = format, Target = 62 }
+identifier: 0078 = IdentifierCodeData { Name = print, Target = 0 }
+  0077 = Call
       0001 = File
-slot 0072 in 0071 << Intrinsic = IntrinsicCodeData { Name = print }
-slot 0072 in 0071 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
+slot 0078 in 0077 << Intrinsic = IntrinsicCodeData { Name = print }
+slot 0078 in 0077 <- Intrinsic : 6 = IntrinsicCodeData { Name = print }
 === Build: types ===
 enqueue 0006
 intrinsic: 0006 = CodeSlot { Parent = 5, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = bool }, TypeSlot = 4 }
@@ -624,21 +662,23 @@ slot 0043 in 0041 <- Integer : 8 = IntegerCodeData { Value = 39 }
 enqueue 0043
 slot 0049 in 0045 <- Integer : 8 = IntegerCodeData { Value = 5 }
 enqueue 0049
-enqueue 0051
-intrinsic: 0051 = CodeSlot { Parent = 50, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
+slot 0054 in 0052 <- Integer : 8 = IntegerCodeData { Value = 1 }
 enqueue 0054
-intrinsic: 0054 = CodeSlot { Parent = 53, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
-slot 0057 in 0056 <- String : 5 = StringCodeData { Value = C }
 enqueue 0057
-enqueue 0059
-intrinsic: 0059 = CodeSlot { Parent = 58, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
-enqueue 0064
-intrinsic: 0064 = CodeSlot { Parent = 63, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
-enqueue 0072
-intrinsic: 0072 = CodeSlot { Parent = 71, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
-slot 0073 in 0071 <- String : 5 = StringCodeData { Value = unreachable }
-enqueue 0073
-enqueue 0074
+intrinsic: 0057 = CodeSlot { Parent = 56, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
+enqueue 0060
+intrinsic: 0060 = CodeSlot { Parent = 59, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
+slot 0063 in 0062 <- String : 5 = StringCodeData { Value = C }
+enqueue 0063
+enqueue 0065
+intrinsic: 0065 = CodeSlot { Parent = 64, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
+enqueue 0070
+intrinsic: 0070 = CodeSlot { Parent = 69, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
+enqueue 0078
+intrinsic: 0078 = CodeSlot { Parent = 77, CodeType = Intrinsic, Data = IntrinsicCodeData { Name = print }, TypeSlot = 6 }
+slot 0079 in 0077 <- String : 5 = StringCodeData { Value = unreachable }
+enqueue 0079
+enqueue 0080
 dequeue: 0006
 slot 0005 in 0004 <- Declare : 3 = DeclareCodeData { Name = cond, IsStatic = True, Type = 6, Value = 7 }
 dequeue: 0007
@@ -659,16 +699,19 @@ dequeue: 0043
 slot 0041 assign: type <- DotnetTypeData { Type = System.Int32 } 8 via 0043
 slot 0041 in 0002 <- Assign : 8 = AssignCodeData { Target = 42, Value = 43 }
 dequeue: 0049
-dequeue: 0051
 dequeue: 0054
+slot 0055 negation: type <- DotnetTypeData { Type = System.Int32 } 8 via 0054
+slot 0055 in 0052 <- Negation : 8 = NegationCodeData { Value = 54 }
 dequeue: 0057
-slot 0056 in 0002 <- Declare : 5 = DeclareCodeData { Name = format, IsStatic = True, Type = 0, Value = 57 }
-dequeue: 0059
-dequeue: 0064
-dequeue: 0072
-slot 0071 in 0002 <- Call : 5 = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0073
-dequeue: 0074
+dequeue: 0060
+dequeue: 0063
+slot 0062 in 0002 <- Declare : 5 = DeclareCodeData { Name = format, IsStatic = True, Type = 0, Value = 63 }
+dequeue: 0065
+dequeue: 0070
+dequeue: 0078
+slot 0077 in 0002 <- Call : 5 = CallCodeData { Target = 78, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0079
+dequeue: 0080
 dequeue: 0005
 slot 0017 in 0015 <- Identifier : 3 = IdentifierCodeData { Name = cond, Target = 5 }
 dequeue: 0012
@@ -686,14 +729,15 @@ slot 0032 in 0031 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 28
 dequeue: 0039
 slot 0042 in 0041 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 39 }
 slot 0047 in 0046 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 39 }
-slot 0052 in 0050 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 39 }
+slot 0058 in 0056 <- Identifier : 8 = IdentifierCodeData { Name = a, Target = 39 }
 dequeue: 0041
-dequeue: 0056
-slot 0061 in 0060 <- Identifier : 5 = IdentifierCodeData { Name = format, Target = 56 }
-slot 0069 in 0065 <- Identifier : 5 = IdentifierCodeData { Name = format, Target = 56 }
-dequeue: 0071
+dequeue: 0055
+dequeue: 0062
+slot 0067 in 0066 <- Identifier : 5 = IdentifierCodeData { Name = format, Target = 62 }
+slot 0075 in 0071 <- Identifier : 5 = IdentifierCodeData { Name = format, Target = 62 }
+dequeue: 0077
 dequeue: 0017
-slot 0018 negation: type <- DotnetTypeData { Type = System.Boolean } 3 via 0017
+slot 0018 not: type <- DotnetTypeData { Type = System.Boolean } 3 via 0017
 slot 0018 in 0015 <- LogicalNegation : 3 = LogicalNegationCodeData { Value = 17 }
 dequeue: 0011
 slot 0008 if: type <- FunctionTypeData { ReturnType = 8 } via 0010
@@ -706,25 +750,25 @@ slot 0003 in 0002 <- Declare : 9 = DeclareCodeData { Name = func2, IsStatic = Tr
 dequeue: 0032
 dequeue: 0042
 dequeue: 0047
-dequeue: 0052
-slot 0050 in 0002 <- Call : 5 = CallCodeData { Target = 51, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0061
+dequeue: 0058
+slot 0056 in 0002 <- Call : 5 = CallCodeData { Target = 57, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0067
 add type 10 = DotnetMemberTypeData { TargetType = 5, MemberName = Length, MemberType = Property, Members = System.Reflection.MemberInfo[] }
-slot 0060 in 0058 <- Member : 10 = MemberCodeData { Target = 61, Member = 62 }
-slot 0062 in 0060 <- Identifier : 10 = IdentifierCodeData { Name = Length, Target = 0 }
-dequeue: 0069
+slot 0066 in 0064 <- Member : 10 = MemberCodeData { Target = 67, Member = 68 }
+slot 0068 in 0066 <- Identifier : 10 = IdentifierCodeData { Name = Length, Target = 0 }
+dequeue: 0075
 dequeue: 0018
 dequeue: 0008
 dequeue: 0015
 dequeue: 0003
 slot 0034 in 0033 <- Identifier : 9 = IdentifierCodeData { Name = func2, Target = 3 }
-dequeue: 0050
-dequeue: 0060
-slot 0058 in 0002 <- Call : 5 = CallCodeData { Target = 59, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0062
+dequeue: 0056
+dequeue: 0066
+slot 0064 in 0002 <- Call : 5 = CallCodeData { Target = 65, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0068
 dequeue: 0034
 slot 0033 in 0031 <- Call : 8 = CallCodeData { Target = 34, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0058
+dequeue: 0064
 dequeue: 0033
 slot 0031 in 0030 <- Add : 8 = AddOpCodeData { Left = 32, Right = 33 }
 dequeue: 0031
@@ -740,11 +784,11 @@ slot 0027 in 0026 <- Braces : 9 = BracesCodeData { Lines = System.Int32[] }
 dequeue: 0027
 slot 0026 in 0002 <- Declare : 9 = DeclareCodeData { Name = func1, IsStatic = True, Type = 0, Value = 27 }
 dequeue: 0026
-slot 0075 in 0048 :: Identifier = IdentifierCodeData { Name = func1, Target = 26 }
-slot 0075 in 0048 <- Identifier : 9 = IdentifierCodeData { Name = func1, Target = 26 }
-slot 0048 in 0046 << Call = CallCodeData { Target = 75, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0075
-slot 0048 in 0046 <- Call : 8 = CallCodeData { Target = 75, Args = System.Int32[], DotnetMethod =  }
+slot 0081 in 0048 :: Identifier = IdentifierCodeData { Name = func1, Target = 26 }
+slot 0081 in 0048 <- Identifier : 9 = IdentifierCodeData { Name = func1, Target = 26 }
+slot 0048 in 0046 << Call = CallCodeData { Target = 81, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0081
+slot 0048 in 0046 <- Call : 8 = CallCodeData { Target = 81, Args = System.Int32[], DotnetMethod =  }
 dequeue: 0048
 slot 0046 in 0045 <- Add : 8 = AddOpCodeData { Left = 47, Right = 48 }
 dequeue: 0048
@@ -753,23 +797,32 @@ slot 0045 in 0044 <- Add : 8 = AddOpCodeData { Left = 46, Right = 49 }
 dequeue: 0045
 slot 0044 in 0002 <- Declare : 8 = DeclareCodeData { Name = b, IsStatic = False, Type = 0, Value = 45 }
 dequeue: 0044
-slot 0055 in 0053 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 44 }
-slot 0067 in 0066 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 44 }
-dequeue: 0055
-slot 0053 in 0002 <- Call : 5 = CallCodeData { Target = 54, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0067
-add type 11 = DotnetMemberTypeData { TargetType = 8, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }
-slot 0066 in 0065 <- Member : 11 = MemberCodeData { Target = 67, Member = 68 }
-slot 0068 in 0066 <- Identifier : 11 = IdentifierCodeData { Name = ToString, Target = 0 }
+slot 0051 in 0050 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 44 }
+slot 0053 in 0052 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 44 }
+slot 0061 in 0059 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 44 }
+slot 0073 in 0072 <- Identifier : 8 = IdentifierCodeData { Name = b, Target = 44 }
+dequeue: 0051
 dequeue: 0053
-dequeue: 0066
-slot 0065 in 0063 <- Call = CallCodeData { Target = 66, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }
-slot 0065 in 0063 <- Call : 5 = CallCodeData { Target = 66, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }
-dequeue: 0068
-dequeue: 0065
-slot 0063 in 0002 <- Call : 5 = CallCodeData { Target = 64, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0063
-done after 65 iterations
+slot 0052 in 0050 <- Add : 8 = AddOpCodeData { Left = 53, Right = 55 }
+dequeue: 0061
+slot 0059 in 0002 <- Call : 5 = CallCodeData { Target = 60, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0073
+add type 11 = DotnetMemberTypeData { TargetType = 8, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }
+slot 0072 in 0071 <- Member : 11 = MemberCodeData { Target = 73, Member = 74 }
+slot 0074 in 0072 <- Identifier : 11 = IdentifierCodeData { Name = ToString, Target = 0 }
+dequeue: 0052
+slot 0050 assign: type <- DotnetTypeData { Type = System.Int32 } 8 via 0052
+slot 0050 in 0002 <- Assign : 8 = AssignCodeData { Target = 51, Value = 52 }
+dequeue: 0059
+dequeue: 0072
+slot 0071 in 0069 <- Call = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }
+slot 0071 in 0069 <- Call : 5 = CallCodeData { Target = 72, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }
+dequeue: 0074
+dequeue: 0050
+dequeue: 0071
+slot 0069 in 0002 <- Call : 5 = CallCodeData { Target = 70, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0069
+done after 71 iterations
 === Tree ===
 0001: file (unknown)
 0002:   braces (unknown)
@@ -821,34 +874,40 @@ done after 65 iterations
 0046:           add (dotnet -> System.Int32)
 0047:             id: name = a (dotnet -> System.Int32) -> 0039
 0048:             call (dotnet -> System.Int32)
-0075:               id: name = func1 (function -> dotnet -> System.Int32) -> 0026
+0081:               id: name = func1 (function -> dotnet -> System.Int32) -> 0026
 0049:           integer=5 (dotnet -> System.Int32)
-0050:     call (dotnet -> System.String)
-0051:       intrinsic: name = print (function -> dotnet -> System.String)
-0052:       id: name = a (dotnet -> System.Int32) -> 0039
-0053:     call (dotnet -> System.String)
-0054:       intrinsic: name = print (function -> dotnet -> System.String)
-0055:       id: name = b (dotnet -> System.Int32) -> 0044
-0056:     static format (dotnet -> System.String)
+0050:     assign (dotnet -> System.Int32)
+0051:       id: name = b (dotnet -> System.Int32) -> 0044
+0052:       add (dotnet -> System.Int32)
+0053:         id: name = b (dotnet -> System.Int32) -> 0044
+0055:         negate (dotnet -> System.Int32)
+0054:           integer=1 (dotnet -> System.Int32)
+0056:     call (dotnet -> System.String)
+0057:       intrinsic: name = print (function -> dotnet -> System.String)
+0058:       id: name = a (dotnet -> System.Int32) -> 0039
+0059:     call (dotnet -> System.String)
+0060:       intrinsic: name = print (function -> dotnet -> System.String)
+0061:       id: name = b (dotnet -> System.Int32) -> 0044
+0062:     static format (dotnet -> System.String)
             value
-0057:         string="C" (dotnet -> System.String)
-0058:     call (dotnet -> System.String)
-0059:       intrinsic: name = print (function -> dotnet -> System.String)
-0060:       member (Length : property : dotnet -> System.String)
-0061:         id: name = format (dotnet -> System.String) -> 0056
-0062:         id: name = Length (Length : property : dotnet -> System.String)
-0063:     call (dotnet -> System.String)
-0064:       intrinsic: name = print (function -> dotnet -> System.String)
-0065:       call-dotnet { System.String ToString(System.String) } (dotnet -> System.String)
-0066:         member (ToString : method : dotnet -> System.Int32)
-0067:           id: name = b (dotnet -> System.Int32) -> 0044
-0068:           id: name = ToString (ToString : method : dotnet -> System.Int32)
-0069:         id: name = format (dotnet -> System.String) -> 0056
-0070:     return (void) -> 0002
-0074:       void (void)
-0071:     call (dotnet -> System.String)
-0072:       intrinsic: name = print (function -> dotnet -> System.String)
-0073:       string="unreachable" (dotnet -> System.String)
+0063:         string="C" (dotnet -> System.String)
+0064:     call (dotnet -> System.String)
+0065:       intrinsic: name = print (function -> dotnet -> System.String)
+0066:       member (Length : property : dotnet -> System.String)
+0067:         id: name = format (dotnet -> System.String) -> 0062
+0068:         id: name = Length (Length : property : dotnet -> System.String)
+0069:     call (dotnet -> System.String)
+0070:       intrinsic: name = print (function -> dotnet -> System.String)
+0071:       call-dotnet { System.String ToString(System.String) } (dotnet -> System.String)
+0072:         member (ToString : method : dotnet -> System.Int32)
+0073:           id: name = b (dotnet -> System.Int32) -> 0044
+0074:           id: name = ToString (ToString : method : dotnet -> System.Int32)
+0075:         id: name = format (dotnet -> System.String) -> 0062
+0076:     return (void) -> 0002
+0080:       void (void)
+0077:     call (dotnet -> System.String)
+0078:       intrinsic: name = print (function -> dotnet -> System.String)
+0079:       string="unreachable" (dotnet -> System.String)
 
 Analyze Types:
 0000 :: unknown
@@ -866,9 +925,9 @@ Analyze Types:
 
 Output:
 39
-146
+145
 1
-$146.00
+$145.00
 
 Stats:
 -   Start: 0.0s

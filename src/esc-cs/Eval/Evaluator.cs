@@ -183,6 +183,16 @@ public static class Evaluator
 				}
 				return new BooleanEvaluation(!booleanExpressionResult.Value);
 			}
+			case CodeSlotEnum.Negation:
+			{
+				var negationData = (NegationCodeData)slotData;
+				var value = EvaluateSlot(negationData.Value, analysis, programOutput, valueTable);
+				if (value is not IntEvaluation intExpressionResult)
+				{
+					throw new NotImplementedException($"Invalid negation value: {value}");
+				}
+				return new IntEvaluation(-intExpressionResult.Value);
+			}
 			case CodeSlotEnum.Call:
 			{
 				var callData = (CallCodeData)slotData;

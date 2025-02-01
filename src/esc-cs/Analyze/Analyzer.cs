@@ -157,6 +157,14 @@ public static class Analyzer
 
 				return slot;
 			}
+			case NegationNode { Node: { } innerNode }:
+			{
+				var innerSlotId = BuildTable(innerNode, parentSlot, analysis, log);
+				var data = new NegationCodeData(Value: innerSlotId);
+				var slot = analysis.Add(parentSlot, CodeSlotEnum.Negation, data, log);
+
+				return slot;
+			}
 			case AssignNode { Target: { } target, Value: { } value }:
 			{
 				var data = new AssignCodeData();
@@ -694,6 +702,18 @@ public static class Analyzer
 				{
 					var negationSlot = analysis.GetCodeSlot(targetSlotId);
 					var negationData = analysis.GetCodeData<LogicalNegationCodeData>(targetSlotId);
+
+					if (negationData.Value != sourceSlotId) { continue; }
+
+					var typeRow = analysis.GetTypeData(sourceTypeId);
+					log.WriteLine($"slot {targetSlotId:0000} not: type <- {typeRow} {sourceTypeId} via {negationData.Value:0000}");
+					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					sourceQueue.Enqueue(targetSlotId);
+				}
+				else if (targetSlot.CodeType == CodeSlotEnum.Negation)
+				{
+					var negationSlot = analysis.GetCodeSlot(targetSlotId);
+					var negationData = analysis.GetCodeData<NegationCodeData>(targetSlotId);
 
 					if (negationData.Value != sourceSlotId) { continue; }
 

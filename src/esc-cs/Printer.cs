@@ -325,6 +325,14 @@ public static class Printer
 				break;
 			}
 
+			case NegationNode node:
+			{
+				outputFile.Indent(level);
+				outputFile.WriteLine("negation");
+				PrintSyntax(outputFile, node.Node, lexemes, level + 1);
+				break;
+			}
+
 			default:
 			{
 				outputFile.Indent(level);
@@ -447,6 +455,13 @@ public static class Printer
 			{
 				var data = (LogicalNegationCodeData)slot.Data;
 				outputFile.WriteIndentLine(level, slotId, $"not ({GetTypeSlotName(table, slot.TypeSlot)})");
+				PrintTableSlot(table, outputFile, data.Value, level + 1);
+				break;
+			}
+			case CodeSlotEnum.Negation:
+			{
+				var data = (NegationCodeData)slot.Data;
+				outputFile.WriteIndentLine(level, slotId, $"negate ({GetTypeSlotName(table, slot.TypeSlot)})");
 				PrintTableSlot(table, outputFile, data.Value, level + 1);
 				break;
 			}
