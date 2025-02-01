@@ -17,7 +17,7 @@ public class Analysis
 		log ??= TextWriter.Null;
 		var slot = CodeSlots[slotId] with { TypeSlot = typeSlotId };
 		CodeSlots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.CodeType} : {typeSlotId} = {slot.Data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} : {typeSlotId} = {slot.Data}");
 	}
 
 	public int GetOrAddType(TypeData type, TextWriter log)
@@ -47,7 +47,7 @@ public class Analysis
 	{
 		var slot = CodeSlots[slotId] with { Data = data };
 		CodeSlots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} <- {slot.CodeType} = {data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} = {data}");
 	}
 
 	public void ReplaceData(int slotId, CodeSlotEnum type, CodeData data, TextWriter log)
@@ -55,13 +55,13 @@ public class Analysis
 		// TODO: replacing a slot may invalidate previously referenced slots that are no longer reachable, caller should try to avoid this situation by marking the slots as invalid
 		var slot = CodeSlots[slotId] with { CodeType = type, Data = data };
 		CodeSlots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} << {slot.CodeType} = {data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} << {slot.CodeType} = {data}");
 	}
 
 	public bool TryGetSlot<T>(int slotId, CodeSlotEnum type, [MaybeNullWhen(false)] out T dataIfFound, TextWriter log) where T : CodeData
 	{
 		var slot = CodeSlots[slotId];
-		log.WriteLine($"slot {slotId:0000} in {slot.ParentSlot:0000} -> {slot.CodeType} = {slot.Data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} -> {slot.CodeType} = {slot.Data}");
 		if (slot.CodeType != type)
 		{
 			dataIfFound = default;
@@ -104,7 +104,7 @@ public abstract record class TypeData;
 public record class UnknownTypeData : TypeData { public static readonly UnknownTypeData Instance = new(); private UnknownTypeData() { } }
 public record class VoidTypeData : TypeData { public static readonly VoidTypeData Instance = new(); private VoidTypeData() { } }
 public record class ParameterTypeData : TypeData { public static readonly ParameterTypeData Instance = new(); private ParameterTypeData() { } }
-public record class MetaTypeData(int InstanceType) : TypeData;
+public record class MetaTypeData(int Type) : TypeData;
 public record class FunctionTypeData(int ReturnType) : TypeData;
 public record class DotnetMemberTypeData(int TargetType, String MemberName, MemberTypes MemberType, MemberInfo[] Members) : TypeData;
 public record class DotnetTypeData(Type Type) : TypeData;
@@ -131,7 +131,7 @@ public enum CodeSlotEnum
 	Member,
 }
 
-public record class CodeSlot(int ParentSlot, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
+public record class CodeSlot(int Parent, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
 
 public abstract record class CodeData;
 public record class InvalidCodeData : CodeData { public static readonly InvalidCodeData Instance = new(); private InvalidCodeData() { } }

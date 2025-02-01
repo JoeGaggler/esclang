@@ -505,7 +505,7 @@ public static class Printer
 				UnknownTypeData => "unknown",
 				FunctionTypeData { ReturnType: var returnType } => $"function -> {GetTypeSlotName(table, returnType)}",
 				ParameterTypeData => "parameter",
-				MetaTypeData { InstanceType: var instanceType } => $"typeof -> {GetTypeSlotName(table, instanceType)}",
+				MetaTypeData { Type: var instanceType } => $"typeof -> {GetTypeSlotName(table, instanceType)}",
 				DotnetMemberTypeData { TargetType: var targetType, MemberName: var memberName, MemberType: var memberType, Members: var members } =>
 					$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(table, targetType)}",
 				DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
@@ -524,7 +524,7 @@ public static class Printer
 			UnknownTypeData => "unknown",
 			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
 			ParameterTypeData => "parameter",
-			MetaTypeData { InstanceType: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
+			MetaTypeData { Type: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
 			DotnetMemberTypeData { TargetType: var targetTypeId, MemberName: { } memberName, MemberType: var memberType, Members: var members } =>
 				$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
 			DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
