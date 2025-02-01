@@ -82,9 +82,9 @@ class Program
 		Measure("Analyze", measurements, stopwatch);
 
 		// Debug Analyzer
-		// outputFile.WriteLine();
-		// outputFile.WriteLine("Analyze:");
-		// Printer.PrintAnalysis(outputFile, unit);
+		outputFile.WriteLine();
+		outputFile.WriteLine("Analyze Types:");
+		Printer.PrintTypeTable(unit, outputFile);
 
 		// Evaluator
 		var programOutput = new StringWriter();

@@ -876,6 +876,20 @@ done after 66 iterations
 0072:       intrinsic: name = print (function -> dotnet -> System.String)
 0073:       string="unreachable" (dotnet -> System.String)
 
+Analyze Types:
+0000 :: unknown
+0001 :: vaoid
+0002 :: function -> void
+0003 :: dotnet -> System.Boolean
+0004 :: typeof -> dotnet -> System.Boolean
+0005 :: dotnet -> System.String
+0006 :: function -> dotnet -> System.String
+0007 :: parameter
+0008 :: dotnet -> System.Int32
+0009 :: function -> dotnet -> System.Int32
+0010 :: Length : property : dotnet -> System.String
+0011 :: ToString : method : dotnet -> System.Int32
+
 Output:
 39
 146

@@ -83,6 +83,17 @@ public class Analysis
 		}
 	}
 
+	public IEnumerable<TypeData> AllTypes
+	{
+		get
+		{
+			for (var i = 0; i < TypeSlots.Count; i++)
+			{
+				yield return TypeSlots[i];
+			}
+		}
+	}
+
 	// Instance
 	public CodeSlot GetCodeSlot(int slotId) => CodeSlots[slotId];
 	public T GetCodeData<T>(int slotId) where T : CodeData => (T)CodeSlots[slotId].Data;
