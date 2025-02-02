@@ -355,20 +355,20 @@ public static class Printer
 			case CodeSlotEnum.Type:
 			{
 				var data = (TypeCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"type {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"type {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.File:
 			{
 				var data = (FileCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"file ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"file ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Main, level + 1);
 				break;
 			}
 			case CodeSlotEnum.Braces:
 			{
 				var data = (BracesCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"braces ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"braces ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				foreach (var line in data.Lines)
 				{
 					PrintTableSlot(analysis, outputFile, line, level + 1);
@@ -378,7 +378,7 @@ public static class Printer
 			case CodeSlotEnum.Declare:
 			{
 				var data = (DeclareCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"{(data.IsStatic ? "static" : "declare")} {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"{(data.IsStatic ? "static" : "declare")} {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				if (data.Type != 0)
 				{
 					outputFile.WriteIndentLine(level + 1, "type");
@@ -396,11 +396,11 @@ public static class Printer
 				var data = (CallCodeData)slot.Data;
 				if (data.DotnetMethod is not null)
 				{
-					outputFile.WriteIndentLine(level, slotId, $"call-dotnet {{ {data.DotnetMethod} }} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+					outputFile.WriteIndentLine(level, slotId, $"call-dotnet {{ {data.DotnetMethod} }} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				}
 				else
 				{
-					outputFile.WriteIndentLine(level, slotId, $"call ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+					outputFile.WriteIndentLine(level, slotId, $"call ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				}
 				PrintTableSlot(analysis, outputFile, data.Target, level + 1);
 				foreach (var arg in data.Args)
@@ -412,25 +412,25 @@ public static class Printer
 			case CodeSlotEnum.Integer:
 			{
 				var data = (IntegerCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"integer={data.Value} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"integer={data.Value} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.Boolean:
 			{
 				var data = (BooleanCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"boolean={data.Value} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"boolean={data.Value} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.String:
 			{
 				var data = (StringCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"string=\"{data.Value}\" ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"string=\"{data.Value}\" ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.Add:
 			{
 				var data = (AddOpCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"add ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"add ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Left, level + 1);
 				PrintTableSlot(analysis, outputFile, data.Right, level + 1);
 				break;
@@ -438,19 +438,19 @@ public static class Printer
 			case CodeSlotEnum.Identifier:
 			{
 				var data = (IdentifierCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"id: name = {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)}){(data.Target != 0 ? $" -> {data.Target:0000}" : "")}");
+				outputFile.WriteIndentLine(level, slotId, $"id: name = {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot2)}){(data.Target != 0 ? $" -> {data.Target:0000}" : "")}");
 				break;
 			}
 			case CodeSlotEnum.Intrinsic:
 			{
 				var data = (IntrinsicCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"intrinsic: name = {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"intrinsic: name = {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.Return:
 			{
 				var data = (ReturnCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"return ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)}) -> {data.Function:0000}");
+				outputFile.WriteIndentLine(level, slotId, $"return ({GetTypeSlotName(analysis, slot.TypeSlot2)}) -> {data.Function:0000}");
 				if (data.Value != 0)
 				{
 					PrintTableSlot(analysis, outputFile, data.Value, level + 1);
@@ -460,27 +460,27 @@ public static class Printer
 			case CodeSlotEnum.LogicalNegation:
 			{
 				var data = (LogicalNegationCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"not ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"not ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Value, level + 1);
 				break;
 			}
 			case CodeSlotEnum.Negation:
 			{
 				var data = (NegationCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"negate ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"negate ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Value, level + 1);
 				break;
 			}
 			case CodeSlotEnum.Parameter:
 			{
 				var data = (ParameterCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"parameter ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"parameter ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.If:
 			{
 				var data = (IfSlotCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"if ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"if ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Condition, level + 1);
 				PrintTableSlot(analysis, outputFile, data.Body, level + 1);
 				break;
@@ -488,7 +488,7 @@ public static class Printer
 			case CodeSlotEnum.Assign:
 			{
 				var data = (AssignCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"assign ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"assign ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Target, level + 1);
 				PrintTableSlot(analysis, outputFile, data.Value, level + 1);
 				break;
@@ -496,7 +496,7 @@ public static class Printer
 			case CodeSlotEnum.Member:
 			{
 				var data = (MemberCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"member ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"member ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				PrintTableSlot(analysis, outputFile, data.Target, level + 1);
 				PrintTableSlot(analysis, outputFile, data.Member, level + 1);
 				break;
@@ -504,7 +504,7 @@ public static class Printer
 			case CodeSlotEnum.Void:
 			{
 				var data = (VoidCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"void ({GetTypeSlotName(analysis, slot.TypeSlot, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"void ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			default:
@@ -549,27 +549,30 @@ public static class Printer
 		}
 	}
 
-	public static String GetTypeSlotName(Analysis analysis, int typeSlotId, int typeSlotId2 = Analyzer.TODO_SLOT)
+	public static String GetTypeSlotName(Analysis analysis, int typeSlotId2)
 	{
-		if (typeSlotId2 != Analyzer.TODO_SLOT)
+		if (typeSlotId2 == Analyzer.TODO_SLOT)
 		{
-			return $"NEWTYPE: {typeSlotId2:0000} -> {(analysis.GetCodeData<CodeData>(typeSlotId2) as TypeCodeData)?.Name ?? "?!?!?!?!?"}";
+			return $"NEWTYPE: TODO_SLOT";
 		}
+		var yyy = analysis.GetCodeData<CodeData>(typeSlotId2);
+		var xxx = yyy as TypeCodeData;
+		return $"NEWTYPE: {typeSlotId2:0000} -> {xxx?.Name ?? $"?!?!-{yyy}"}";
 
-		var typeSlot = analysis.GetTypeData(typeSlotId);
-		return typeSlot switch
-		{
-			TypeTypeData => "type",
-			VoidTypeData => "void",
-			UnknownTypeData => "unknown",
-			FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
-			ParameterTypeData => "parameter",
-			// MetaTypeData { Type: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
-			DotnetMemberTypeData { TargetType: var targetTypeId, MemberName: { } memberName, MemberType: var memberType, Members: var members } =>
-				$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
-			DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
-			_ => "unexpected",
-		};
+		// var typeSlot = analysis.GetTypeData(typeSlotId);
+		// return typeSlot switch
+		// {
+		// 	TypeTypeData => "type",
+		// 	VoidTypeData => "void",
+		// 	UnknownTypeData => "unknown",
+		// 	FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
+		// 	ParameterTypeData => "parameter",
+		// 	// MetaTypeData { Type: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
+		// 	DotnetMemberTypeData { TargetType: var targetTypeId, MemberName: { } memberName, MemberType: var memberType, Members: var members } =>
+		// 		$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
+		// 	DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
+		// 	_ => "unexpected",
+		// };
 	}
 
 	public static void Indent(this TextWriter textWriter, int level)

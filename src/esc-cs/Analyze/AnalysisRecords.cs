@@ -15,23 +15,9 @@ public class Analysis
 	public void UpdateType(int slotId, int typeSlotId, int typeSlotId2, TextWriter? log = null)
 	{
 		log ??= TextWriter.Null;
-		var slot = CodeSlots[slotId] with { TypeSlot = typeSlotId, TypeSlot2 = typeSlotId2 };
+		var slot = CodeSlots[slotId] with { TypeSlot2 = typeSlotId2 };
 		CodeSlots[slotId] = slot;
 		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} : ({typeSlotId}, {typeSlotId2:0000}) = {slot.Data}");
-	}
-
-	public int GetOrAddType(TypeData type, TextWriter log)
-	{
-		// TODO: linear search could be slow
-		var id = -1;
-		id = TypeSlots.IndexOf(type);
-		if (id == -1)
-		{
-			id = TypeSlots.Count;
-			TypeSlots.Add(type);
-			log.WriteLine($"add type {id} = {type}");
-		}
-		return id;
 	}
 
 	public int GetOrAddType2(TypeCodeData typeCodeData, TextWriter log)
@@ -107,9 +93,6 @@ public class Analysis
 	// Instance
 	public CodeSlot GetCodeSlot(int slotId) => CodeSlots[slotId];
 	public T GetCodeData<T>(int slotId) where T : CodeData => (T)CodeSlots[slotId].Data;
-
-	[Obsolete]
-	public TypeData GetTypeData(int typeSlotId) => TypeSlots[typeSlotId];
 }
 
 [Obsolete]
@@ -154,7 +137,7 @@ public enum CodeSlotEnum
 	Member,
 }
 
-public record class CodeSlot(int Parent, CodeSlotEnum CodeType, CodeData Data, [property: Obsolete] int TypeSlot = 0, int TypeSlot2 = 0);
+public record class CodeSlot(int Parent, CodeSlotEnum CodeType, CodeData Data, int TypeSlot2 = 0);
 
 public abstract record class CodeData;
 public record class InvalidCodeData : CodeData { public static readonly InvalidCodeData Instance = new(); private InvalidCodeData() { } }
