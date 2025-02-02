@@ -355,7 +355,7 @@ public static class Printer
 			case CodeSlotEnum.Type:
 			{
 				var data = (TypeCodeData)slot.Data;
-				outputFile.WriteIndentLine(level, slotId, $"type {data.Name} ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
+				outputFile.WriteIndentLine(level, slotId, $"type ({GetTypeSlotName(analysis, slot.TypeSlot2)})");
 				break;
 			}
 			case CodeSlotEnum.File:
@@ -523,7 +523,7 @@ public static class Printer
 			{
 				continue;
 			}
-			outputFile.WriteLine($"{i:0000} {xxx.Parent:0000}: {xxx}");
+			outputFile.WriteLine($"{i:0000} {xxx.Parent:0000}: {GetTypeSlotName(table, i)}");
 		}
 	}
 
@@ -551,28 +551,16 @@ public static class Printer
 
 	public static String GetTypeSlotName(Analysis analysis, int typeSlotId2)
 	{
-		if (typeSlotId2 == Analyzer.TODO_SLOT)
+		var typeSlot = analysis.GetCodeSlot(typeSlotId2);
+		return typeSlot.Data switch
 		{
-			return $"NEWTYPE: TODO_SLOT";
-		}
-		var yyy = analysis.GetCodeData<CodeData>(typeSlotId2);
-		var xxx = yyy as TypeCodeData;
-		return $"NEWTYPE: {typeSlotId2:0000} -> {xxx?.Name ?? $"?!?!-{yyy}"}";
-
-		// var typeSlot = analysis.GetTypeData(typeSlotId);
-		// return typeSlot switch
-		// {
-		// 	TypeTypeData => "type",
-		// 	VoidTypeData => "void",
-		// 	UnknownTypeData => "unknown",
-		// 	FunctionTypeData { ReturnType: var returnTypeId } => $"function -> {GetTypeSlotName(analysis, returnTypeId)}",
-		// 	ParameterTypeData => "parameter",
-		// 	// MetaTypeData { Type: var instanceTypeId } => $"typeof -> {GetTypeSlotName(analysis, instanceTypeId)}",
-		// 	DotnetMemberTypeData { TargetType: var targetTypeId, MemberName: { } memberName, MemberType: var memberType, Members: var members } =>
-		// 		$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
-		// 	DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
-		// 	_ => "unexpected",
-		// };
+			DotnetMemberTypeCodeData { TargetType: var targetTypeId, MemberName: var memberName, MemberType: var memberType, Members: var members } =>
+				$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
+			DotnetTypeCodeData { Type: var type } => $"dotnet -> {type.FullName}",
+			FuncTypeCodeData { ReturnType: var returnType } => $"func -> {GetTypeSlotName(analysis, returnType)}",
+			SomeTypeCodeData { Name: var name } => $"some -> {name}",
+			_ => $"unknown({typeSlotId2:0000}) -> {typeSlot.Data}",
+		};
 	}
 
 	public static void Indent(this TextWriter textWriter, int level)

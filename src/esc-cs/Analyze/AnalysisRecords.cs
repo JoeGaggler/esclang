@@ -142,10 +142,11 @@ public record class CodeSlot(int Parent, CodeSlotEnum CodeType, CodeData Data, i
 public abstract record class CodeData;
 public record class InvalidCodeData : CodeData { public static readonly InvalidCodeData Instance = new(); private InvalidCodeData() { } }
 public record class FileCodeData(int Main = 0) : CodeData;
-public record class TypeCodeData(String Name) : CodeData;
-public record class FuncTypeCodeData(String Name, int ReturnType) : TypeCodeData(Name: Name);
-public record class DotnetTypeCodeData(String Name, Type Type) : TypeCodeData(Name: Name);
-public record class DotnetMemberTypeCodeData(String Name, int TargetType, String MemberName, MemberTypes MemberType, MemberInfo[] Members) : TypeCodeData(Name: Name);
+public abstract record class TypeCodeData : CodeData;
+public record class SomeTypeCodeData(String Name) : TypeCodeData;
+public record class FuncTypeCodeData(int ReturnType) : TypeCodeData;
+public record class DotnetTypeCodeData(Type Type) : TypeCodeData;
+public record class DotnetMemberTypeCodeData(int TargetType, String MemberName, MemberTypes MemberType, MemberInfo[] Members) : TypeCodeData;
 public record class DeclareCodeData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : CodeData;
 public record class CallCodeData(int Target, int[] Args, MethodInfo? DotnetMethod = null) : CodeData;
 public record class IdentifierCodeData(String Name, int Target = 0) : CodeData;

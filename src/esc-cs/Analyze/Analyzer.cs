@@ -7,7 +7,6 @@ using EscLang.Parse;
 // TODO: collect declarations before analyzing possible references
 // TODO: combine call node handling across step/non-step methods
 
-
 public static class Analyzer
 {
 
@@ -35,8 +34,6 @@ public static class Analyzer
 
 	// TODO: these should looked up as identifiers in the current scope when needed
 	[Obsolete]
-	public const int TODO_SLOT = -13;
-	[Obsolete]
 	public const int FAKE_GLOBAL_PARENT = 2;
 	private static int TYPE_SLOT;
 	private static int FUNC_SLOT;
@@ -61,42 +58,42 @@ public static class Analyzer
 				var bracesSlot = analysis.Add(fileSlot, CodeSlotEnum.Braces, bracesData, log);
 
 				// type is a type!
-				var typeSlot = TYPE_SLOT = analysis.Add(bracesSlot, CodeSlotEnum.Type, new TypeCodeData(Name: "TYPE"), log);
+				var typeSlot = TYPE_SLOT = analysis.Add(bracesSlot, CodeSlotEnum.Type, new SomeTypeCodeData(Name: "TYPE"), log);
 				analysis.UpdateType(typeSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("type", typeSlot);
 
 				// dynamic
-				var dynamicTypeSlot = DYNAMIC_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "DYNAMIC"), log);
+				var dynamicTypeSlot = DYNAMIC_SLOT = analysis.GetOrAddType2(new SomeTypeCodeData(Name: "DYNAMIC"), log);
 				analysis.UpdateType(dynamicTypeSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("dynamic", dynamicTypeSlot);
 
 				// func
-				var funcTypeSlot = FUNC_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "FUNC"), log);
+				var funcTypeSlot = FUNC_SLOT = analysis.GetOrAddType2(new SomeTypeCodeData(Name: "FUNC"), log);
 				analysis.UpdateType(funcTypeSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("func", funcTypeSlot);
 
 				// dotnet
-				var dotnetTypeSlot = DOTNET_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "DOTNET"), log);
+				var dotnetTypeSlot = DOTNET_SLOT = analysis.GetOrAddType2(new SomeTypeCodeData(Name: "DOTNET"), log);
 				analysis.UpdateType(dotnetTypeSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("dotnet", dynamicTypeSlot);
 
 				// void
-				var voidSlot = VOID_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "VOID", typeof(void)), log);
+				var voidSlot = VOID_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(typeof(void)), log);
 				analysis.UpdateType(voidSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("void", voidSlot);
 
 				// int -> identifier for an instance of type that represents a dotnet integer
-				var intSlot = INT_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "INT", typeof(int)), log);
+				var intSlot = INT_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(typeof(int)), log);
 				analysis.UpdateType(intSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("int", intSlot);
 
 				// bool -> identifier for an instance of type that represents a dotnet boolean
-				var boolSlot = BOOL_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "BOOL", typeof(bool)), log);
+				var boolSlot = BOOL_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(typeof(bool)), log);
 				analysis.UpdateType(boolSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("bool", boolSlot);
 
 				// string
-				var stringSlot = STRING_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "STRING", typeof(string)), log);
+				var stringSlot = STRING_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(typeof(string)), log);
 				analysis.UpdateType(stringSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("string", stringSlot);
 
@@ -396,8 +393,8 @@ public static class Analyzer
 					if (ident == "print")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("print"), log);
-						var fff1 = analysis.GetOrAddType2(new TypeCodeData("STRING"), log);
-						var fff2 = analysis.GetOrAddType2(new FuncTypeCodeData("print func", fff1), log);
+						var fff1 = analysis.GetOrAddType2(new DotnetTypeCodeData(typeof(string)), log);
+						var fff2 = analysis.GetOrAddType2(new FuncTypeCodeData(fff1), log);
 						analysis.UpdateType(slot, 0, fff2, log);
 						break;
 					}
@@ -566,8 +563,6 @@ public static class Analyzer
 					// skip if neither operand matches source slot
 					if (addData.Left != sourceSlotId && addData.Right != sourceSlotId) { continue; }
 
-					// var leftType = analysis.GetCodeSlot(addData.Left).TypeSlot;
-					// var rightType = analysis.GetCodeSlot(addData.Right).TypeSlot;
 					var leftType = analysis.GetCodeSlot(addData.Left).TypeSlot2;
 					var rightType = analysis.GetCodeSlot(addData.Right).TypeSlot2;
 
@@ -578,11 +573,9 @@ public static class Analyzer
 					if (leftType != rightType)
 					{
 						log.WriteLine($"slot {targetSlotId:0000} add: {leftType} != {rightType}");
-						// throw new InvalidOperationException($"Type of add operands do not match: {leftType} != {rightType}");
-						continue;
+						throw new InvalidOperationException($"Type of add operands do not match: {leftType} != {rightType}");
 					}
 
-					// analysis.UpdateType(targetSlotId, leftType, TODO_SLOT, log);
 					analysis.UpdateType(targetSlotId, 0, leftType, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
@@ -651,38 +644,10 @@ public static class Analyzer
 					var returnData = (ReturnCodeData)sourceSlot.Data;
 					if (returnData.Function != targetSlotId) { continue; } // should be redundant
 
-					// var funcType = new FunctionTypeData(0, sourceTypeId2);
-					// var funcTypeId = analysis.GetOrAddType(funcType, log);
-
-					// TODO: FIND EXISTING FUNCTION TYPE
-
-					int? funcType2 = null;
-					CodeSlot? funcType2Slot = null;
-					foreach (var (i, j) in analysis.All.Index())
-					{
-						if (j.CodeType != CodeSlotEnum.Type) { continue; }
-						if (j.Data is not TypeCodeData { Name: { } nnn }) { continue; }
-						if (nnn != $"FUNC -> {sourceTypeId2}") { continue; }
-						funcType2 = i;
-						funcType2Slot = j;
-						break;
-					}
-					if (funcType2 is not null && funcType2Slot is not null)
-					{
-						log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} ({funcType2.Value:0000})");
-						analysis.UpdateType(targetSlotId, 0, funcType2.Value, log);
-						sourceQueue.Enqueue(targetSlotId);
-					}
-					else
-					{
-						// var sss = analysis.Add(2, CodeSlotEnum.Type, new TypeCodeData(Name: $"FUNC -> {sourceTypeId2}"), log);
-						var sss = analysis.Add(FAKE_GLOBAL_PARENT, CodeSlotEnum.Type, new FuncTypeCodeData(Name: $"FUNC -> {sourceTypeId2}", sourceTypeId2), log);
-						analysis.UpdateType(sss, 0, TYPE_SLOT, log);
-
-						log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} ({sss:0000})");
-						analysis.UpdateType(targetSlotId, 0, sss, log);
-						sourceQueue.Enqueue(targetSlotId);
-					}
+					var bracesType = analysis.GetOrAddType2(new FuncTypeCodeData(sourceTypeId2), log);
+					log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} ({bracesType:0000})");
+					analysis.UpdateType(targetSlotId, 0, bracesType, log);
+					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Call)
 				{
@@ -692,7 +657,6 @@ public static class Analyzer
 					// match dequeued source slot
 					if (callData.Target != sourceSlotId && !callData.Args.Contains(sourceSlotId)) { continue; }
 					var callTargetSlot = analysis.GetCodeSlot(callData.Target);
-					// log.WriteLine($"DOTNET_SLOT4: {targetSlotId} -< {sourceSlotId} {sourceSlot}");
 
 					// skip if target or arg types are not known yet
 					if (callTargetSlot.TypeSlot2 <= 0) { continue; }
@@ -733,12 +697,6 @@ public static class Analyzer
 
 						if (found is null) { throw new InvalidOperationException("Invalid member call"); }
 
-						// var returnDotNetType = new DotnetTypeData(found.ReturnType);
-						// var returnDotNetTypeId = analysis.GetOrAddType(returnDotNetType, log);
-
-						log.WriteLine("DOTNET_SLOT1");
-
-
 						analysis.UpdateData(targetSlotId, callData with { DotnetMethod = found }, log);
 						analysis.UpdateType(targetSlotId, 0/*returnDotNetTypeId*/, DOTNET_SLOT, log);
 						sourceQueue.Enqueue(targetSlotId);
@@ -778,7 +736,7 @@ public static class Analyzer
 					var rightName = rightData.Name;
 
 					var leftTypeSlot = analysis.GetCodeSlot(leftSlot.TypeSlot2);
-					if (leftTypeSlot.Data is DotnetTypeCodeData { Name: { }, Type: { } dotnetType2 })
+					if (leftTypeSlot.Data is DotnetTypeCodeData { Type: { } dotnetType2 })
 					{
 						var members = dotnetType2.GetMember(rightName);
 						if (members.Length == 0)
@@ -793,7 +751,6 @@ public static class Analyzer
 						}
 
 						var memberTypeData = new DotnetMemberTypeCodeData(
-							Name: "TODO_NAME_MEMBER_THING",
 							TargetType: leftSlot.TypeSlot2,
 							MemberName: rightName,
 							MemberType: memberType,
