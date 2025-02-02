@@ -533,10 +533,11 @@ public static class Printer
 		return typeSlot.Data switch
 		{
 			DotnetMemberTypeSlotData { TargetType: var targetTypeId, MemberName: var memberName, MemberType: var memberType, Members: var members } =>
-				$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
+				$"member -> {memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(analysis, targetTypeId)}",
 			DotnetTypeSlotData { Type: var type } => $"dotnet -> {type.FullName}",
 			FuncTypeSlotData { ReturnType: var returnType } => $"func -> {GetTypeSlotName(analysis, returnType)}",
-			SomeTypeSlotData { Name: var name } => $"some -> {name}",
+			MetaTypeSlotData { Type: 0 } => $"type",
+			MetaTypeSlotData { Type: var type } => $"typeof -> {GetTypeSlotName(analysis, type)}",
 			_ when typeSlotId2 == 0 => "unknown",
 			_ => $"unknown({typeSlotId2:0000}) -> {typeSlot.Data}",
 		};

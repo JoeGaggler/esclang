@@ -32,9 +32,6 @@ public static class Analyzer
 		return analysis;
 	}
 
-	// TODO: these should looked up as identifiers in the current scope when needed
-	private static int TYPE_SLOT;
-
 	private static int BuildTable(SyntaxNode node, int parentSlot, Analysis analysis, TextWriter log)
 	{
 		switch (node)
@@ -48,7 +45,7 @@ public static class Analyzer
 				var bracesSlot = analysis.Add(fileSlot, SlotEnum.Braces, bracesData, log);
 
 				// type
-				var typeSlot = TYPE_SLOT = analysis.GetOrAddType(new SomeTypeSlotData(Name: "TYPE"), log);
+				var typeSlot = analysis.GetOrAddType(MetaTypeSlotData.Root, log);
 				analysis.UpdateType(typeSlot, typeSlot, log); // type is a type!
 				bracesData.TryAddNameTableValue("type", typeSlot);
 
@@ -372,13 +369,17 @@ public static class Analyzer
 					if (ident == "int")
 					{
 						analysis.ReplaceData(slot, SlotEnum.Identifier, new IdentifierSlotData("int"), log);
-						analysis.UpdateType(slot, TYPE_SLOT, log);
+						var dotnetTypeSlot = analysis.GetOrAddType(new DotnetTypeSlotData(typeof(int)), log);
+						var metaTypeSlot = analysis.GetOrAddType(new MetaTypeSlotData(dotnetTypeSlot), log);
+						analysis.UpdateType(slot, metaTypeSlot, log);
 						break;
 					}
 					if (ident == "bool")
 					{
 						analysis.ReplaceData(slot, SlotEnum.Intrinsic, new IdentifierSlotData("bool"), log);
-						analysis.UpdateType(slot, TYPE_SLOT, log);
+						var dotnetTypeSlot = analysis.GetOrAddType(new DotnetTypeSlotData(typeof(bool)), log);
+						var metaTypeSlot = analysis.GetOrAddType(new MetaTypeSlotData(dotnetTypeSlot), log);
+						analysis.UpdateType(slot, metaTypeSlot, log);
 						break;
 					}
 					if (ident == "if")
@@ -432,7 +433,7 @@ public static class Analyzer
 			{
 				case SlotEnum.Type:
 				{
-					analysis.UpdateType(slot, TYPE_SLOT, log);
+					// types are always added with a meta type
 					sourceQueue.Enqueue(slot);
 					log.WriteLine($"enqueue {slot:0000}");
 					break;
@@ -558,7 +559,11 @@ public static class Analyzer
 					if (sourceSlot.CodeType == SlotEnum.Type)
 					{
 						// identifier to a type must turn into a type
-						analysis.UpdateType(targetSlotId, TYPE_SLOT, log);
+						// TODO: more direct way from source slot to target type?
+						var typeData = analysis.GetData<TypeSlotData>(sourceSlotId);
+						var dataSlot = analysis.GetOrAddType(typeData, log);
+						var metaSlot = analysis.GetOrAddType(new MetaTypeSlotData(dataSlot), log);
+						analysis.UpdateType(targetSlotId, metaSlot, log);
 						sourceQueue.Enqueue(targetSlotId);
 						continue;
 					}

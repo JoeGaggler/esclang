@@ -16,6 +16,7 @@ a := 13
 a = 39
 b := a + func1 + 5
 b = b + (-1)
+// c :: int.Abs (-1)
 print a
 print b
 format :: "C"

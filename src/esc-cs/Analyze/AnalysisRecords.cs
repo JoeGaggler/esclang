@@ -114,7 +114,7 @@ public abstract record class SlotData;
 public record class InvalidSlotData : SlotData { public static readonly InvalidSlotData Instance = new(); private InvalidSlotData() { } }
 public record class FileSlotData(int Main = 0) : SlotData;
 public abstract record class TypeSlotData : SlotData;
-public record class SomeTypeSlotData(String Name) : TypeSlotData;
+public record class MetaTypeSlotData(int Type) : TypeSlotData { public static readonly MetaTypeSlotData Root = new(0); }
 public record class FuncTypeSlotData(int ReturnType) : TypeSlotData;
 public record class DotnetTypeSlotData(Type Type) : TypeSlotData;
 public record class DotnetMemberTypeSlotData(int TargetType, String MemberName, MemberTypes MemberType, MemberInfo[] Members) : TypeSlotData;

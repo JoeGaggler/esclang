@@ -148,48 +148,50 @@ Lex:
 0145: 260 + 1 -- (18, 11) -- Number -- 1
 0146: 261 + 1 -- (18, 12) -- ParenClose -- )
 0147: 262 + 1 -- (18, 13) -- EndOfLine -- \n
-0148: 263 + 5 -- (19, 1) -- Identifier -- print
-0149: 268 + 1 -- (19, 6) -- Spaces -- " "
-0150: 269 + 1 -- (19, 7) -- Identifier -- a
-0151: 270 + 1 -- (19, 8) -- EndOfLine -- \n
-0152: 271 + 5 -- (20, 1) -- Identifier -- print
-0153: 276 + 1 -- (20, 6) -- Spaces -- " "
-0154: 277 + 1 -- (20, 7) -- Identifier -- b
-0155: 278 + 1 -- (20, 8) -- EndOfLine -- \n
-0156: 279 + 6 -- (21, 1) -- Identifier -- format
-0157: 285 + 1 -- (21, 7) -- Spaces -- " "
-0158: 286 + 1 -- (21, 8) -- Colon -- :
-0159: 287 + 1 -- (21, 9) -- Colon -- :
-0160: 288 + 1 -- (21, 10) -- Spaces -- " "
-0161: 289 + 3 -- (21, 11) -- LiteralString -- "C"
-0162: 292 + 1 -- (21, 14) -- EndOfLine -- \n
-0163: 293 + 5 -- (22, 1) -- Identifier -- print
-0164: 298 + 1 -- (22, 6) -- Spaces -- " "
-0165: 299 + 6 -- (22, 7) -- Identifier -- format
-0166: 305 + 1 -- (22, 13) -- Period -- .
-0167: 306 + 6 -- (22, 14) -- Identifier -- Length
-0168: 312 + 1 -- (22, 20) -- EndOfLine -- \n
-0169: 313 + 5 -- (23, 1) -- Identifier -- print
-0170: 318 + 1 -- (23, 6) -- Spaces -- " "
-0171: 319 + 1 -- (23, 7) -- ParenOpen -- (
-0172: 320 + 1 -- (23, 8) -- Identifier -- b
-0173: 321 + 1 -- (23, 9) -- Period -- .
-0174: 322 + 8 -- (23, 10) -- Identifier -- ToString
-0175: 330 + 1 -- (23, 18) -- Spaces -- " "
-0176: 331 + 6 -- (23, 19) -- Identifier -- format
-0177: 337 + 1 -- (23, 25) -- ParenClose -- )
-0178: 338 + 1 -- (23, 26) -- Spaces -- " "
-0179: 339 + 13 -- (23, 27) -- Comment -- // C=currency
-0180: 352 + 1 -- (23, 40) -- EndOfLine -- \n
-0181: 353 + 6 -- (24, 1) -- Identifier -- return
-0182: 359 + 1 -- (24, 7) -- Spaces -- " "
-0183: 360 + 15 -- (24, 8) -- Comment -- // early return
-0184: 375 + 1 -- (24, 23) -- EndOfLine -- \n
-0185: 376 + 5 -- (25, 1) -- Identifier -- print
-0186: 381 + 1 -- (25, 6) -- Spaces -- " "
-0187: 382 + 13 -- (25, 7) -- LiteralString -- "unreachable"
-0188: 395 + 1 -- (25, 20) -- EndOfLine -- \n
-0189: 396 + 0 -- (26, 1) -- EndOfFile -- <EOF>
+0148: 263 + 20 -- (19, 1) -- Comment -- // c :: int.Abs (-1)
+0149: 283 + 1 -- (19, 21) -- EndOfLine -- \n
+0150: 284 + 5 -- (20, 1) -- Identifier -- print
+0151: 289 + 1 -- (20, 6) -- Spaces -- " "
+0152: 290 + 1 -- (20, 7) -- Identifier -- a
+0153: 291 + 1 -- (20, 8) -- EndOfLine -- \n
+0154: 292 + 5 -- (21, 1) -- Identifier -- print
+0155: 297 + 1 -- (21, 6) -- Spaces -- " "
+0156: 298 + 1 -- (21, 7) -- Identifier -- b
+0157: 299 + 1 -- (21, 8) -- EndOfLine -- \n
+0158: 300 + 6 -- (22, 1) -- Identifier -- format
+0159: 306 + 1 -- (22, 7) -- Spaces -- " "
+0160: 307 + 1 -- (22, 8) -- Colon -- :
+0161: 308 + 1 -- (22, 9) -- Colon -- :
+0162: 309 + 1 -- (22, 10) -- Spaces -- " "
+0163: 310 + 3 -- (22, 11) -- LiteralString -- "C"
+0164: 313 + 1 -- (22, 14) -- EndOfLine -- \n
+0165: 314 + 5 -- (23, 1) -- Identifier -- print
+0166: 319 + 1 -- (23, 6) -- Spaces -- " "
+0167: 320 + 6 -- (23, 7) -- Identifier -- format
+0168: 326 + 1 -- (23, 13) -- Period -- .
+0169: 327 + 6 -- (23, 14) -- Identifier -- Length
+0170: 333 + 1 -- (23, 20) -- EndOfLine -- \n
+0171: 334 + 5 -- (24, 1) -- Identifier -- print
+0172: 339 + 1 -- (24, 6) -- Spaces -- " "
+0173: 340 + 1 -- (24, 7) -- ParenOpen -- (
+0174: 341 + 1 -- (24, 8) -- Identifier -- b
+0175: 342 + 1 -- (24, 9) -- Period -- .
+0176: 343 + 8 -- (24, 10) -- Identifier -- ToString
+0177: 351 + 1 -- (24, 18) -- Spaces -- " "
+0178: 352 + 6 -- (24, 19) -- Identifier -- format
+0179: 358 + 1 -- (24, 25) -- ParenClose -- )
+0180: 359 + 1 -- (24, 26) -- Spaces -- " "
+0181: 360 + 13 -- (24, 27) -- Comment -- // C=currency
+0182: 373 + 1 -- (24, 40) -- EndOfLine -- \n
+0183: 374 + 6 -- (25, 1) -- Identifier -- return
+0184: 380 + 1 -- (25, 7) -- Spaces -- " "
+0185: 381 + 15 -- (25, 8) -- Comment -- // early return
+0186: 396 + 1 -- (25, 23) -- EndOfLine -- \n
+0187: 397 + 5 -- (26, 1) -- Identifier -- print
+0188: 402 + 1 -- (26, 6) -- Spaces -- " "
+0189: 403 + 13 -- (26, 7) -- LiteralString -- "unreachable"
+0190: 416 + 1 -- (26, 20) -- EndOfLine -- \n
+0191: 417 + 0 -- (27, 1) -- EndOfFile -- <EOF>
 
 Parse:
 declare-static
@@ -333,8 +335,8 @@ Analysis Log:
 === Build: init ===
 slot 0001 in 0000 :: File = FileSlotData { Main = 0 }
 slot 0002 in 0001 :: Braces = BracesSlotData { Lines = System.Int32[] }
-slot 0003 in 0000 :: Type = SomeTypeSlotData { Name = TYPE }
-slot 0003 in 0000 <- Type : (0003) = SomeTypeSlotData { Name = TYPE }
+slot 0003 in 0000 :: Type = MetaTypeSlotData { Type = 0 }
+slot 0003 in 0000 <- Type : (0003) = MetaTypeSlotData { Type = 0 }
 slot 0004 in 0000 :: Type = DotnetTypeSlotData { Type = System.Int32 }
 slot 0005 in 0000 :: Type = DotnetTypeSlotData { Type = System.Boolean }
 slot 0006 in 0000 :: Type = DotnetTypeSlotData { Type = System.String }
@@ -680,13 +682,9 @@ identifier: 0086 = IdentifierSlotData { Name = print, Target = 0 }
 slot 0086 in 0085 << Intrinsic = IntrinsicSlotData { Name = print }
 slot 0086 in 0085 <- Intrinsic : (0090) = IntrinsicSlotData { Name = print }
 === Build: types ===
-slot 0003 in 0000 <- Type : (0003) = SomeTypeSlotData { Name = TYPE }
 enqueue 0003
-slot 0004 in 0000 <- Type : (0003) = DotnetTypeSlotData { Type = System.Int32 }
 enqueue 0004
-slot 0005 in 0000 <- Type : (0003) = DotnetTypeSlotData { Type = System.Boolean }
 enqueue 0005
-slot 0006 in 0000 <- Type : (0003) = DotnetTypeSlotData { Type = System.String }
 enqueue 0006
 slot 0011 in 0009 <- Parameter : (0000) = ParameterSlotData { }
 enqueue 0011
@@ -722,16 +720,16 @@ enqueue 0086
 intrinsic: 0086 = Slot { Parent = 85, CodeType = Intrinsic, Data = IntrinsicSlotData { Name = print }, TypeSlot = 90 }
 slot 0087 in 0085 <- String : (0006) = StringSlotData { Value = unreachable }
 enqueue 0087
-slot 0088 in 0000 <- Type : (0003) = DotnetTypeSlotData { Type = System.Void }
 enqueue 0088
 enqueue 0089
-slot 0090 in 0000 <- Type : (0003) = FuncTypeSlotData { ReturnType = 6 }
 enqueue 0090
 dequeue: 0003
 dequeue: 0004
-slot 0013 in 0012 <- Identifier : (0003) = IdentifierSlotData { Name = int, Target = 4 }
+slot 0091 in 0000 :: Type = MetaTypeSlotData { Type = 4 }
+slot 0013 in 0012 <- Identifier : (0091) = IdentifierSlotData { Name = int, Target = 4 }
 dequeue: 0005
-slot 0010 in 0009 <- Identifier : (0003) = IdentifierSlotData { Name = bool, Target = 5 }
+slot 0092 in 0000 :: Type = MetaTypeSlotData { Type = 5 }
+slot 0010 in 0009 <- Identifier : (0092) = IdentifierSlotData { Name = bool, Target = 5 }
 dequeue: 0006
 dequeue: 0011
 dequeue: 0014
@@ -749,11 +747,11 @@ dequeue: 0048
 slot 0047 in 0002 <- Declare : (0004) = DeclareSlotData { Name = a, IsStatic = False, Type = 0, Value = 48 }
 slot 0047 declare: NEW TYPE <- 4
 dequeue: 0051
-slot 0049 assign: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Int32 }, TypeSlot = 3 } 0004 via 0051
+slot 0049 assign: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Int32 }, TypeSlot = 0 } 0004 via 0051
 slot 0049 in 0002 <- Assign : (0004) = AssignSlotData { Target = 50, Value = 51 }
 dequeue: 0057
 dequeue: 0062
-slot 0063 negation: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Int32 }, TypeSlot = 3 } 0004 via 0062
+slot 0063 negation: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Int32 }, TypeSlot = 0 } 0004 via 0062
 slot 0063 in 0060 <- Negation : (0004) = NegationSlotData { Value = 62 }
 dequeue: 0065
 dequeue: 0068
@@ -773,12 +771,12 @@ slot 0012 in 0008 <- Declare : (0004) = DeclareSlotData { Name = num, IsStatic =
 dequeue: 0010
 slot 0009 in 0008 <- Declare : (0005) = DeclareSlotData { Name = cond, IsStatic = True, Type = 10, Value = 11 }
 dequeue: 0019
-slot 0091 in 0000 :: Type = FuncTypeSlotData { ReturnType = 4 }
-slot 0018 braces: found return 0019 (0091)
-slot 0018 in 0015 <- Braces : (0091) = BracesSlotData { Lines = System.Int32[] }
+slot 0093 in 0000 :: Type = FuncTypeSlotData { ReturnType = 4 }
+slot 0018 braces: found return 0019 (0093)
+slot 0018 in 0015 <- Braces : (0093) = BracesSlotData { Lines = System.Int32[] }
 dequeue: 0030
-slot 0008 braces: found return 0030 (0091)
-slot 0008 in 0007 <- Braces : (0091) = BracesSlotData { Lines = System.Int32[] }
+slot 0008 braces: found return 0030 (0093)
+slot 0008 in 0007 <- Braces : (0093) = BracesSlotData { Lines = System.Int32[] }
 dequeue: 0035
 slot 0039 in 0038 <- Identifier : (0004) = IdentifierSlotData { Name = a, Target = 35 }
 dequeue: 0047
@@ -796,37 +794,37 @@ slot 0029 in 0027 <- Identifier : (0004) = IdentifierSlotData { Name = num, Targ
 dequeue: 0009
 slot 0024 in 0022 <- Identifier : (0005) = IdentifierSlotData { Name = cond, Target = 9 }
 dequeue: 0018
-slot 0015 if: type <- 0091 via 0017
-slot 0015 in 0008 <- If : (0091) = IfSlotData { Condition = 17, Body = 18 }
+slot 0015 if: type <- 0093 via 0017
+slot 0015 in 0008 <- If : (0093) = IfSlotData { Condition = 17, Body = 18 }
 dequeue: 0008
-slot 0007 in 0002 <- Declare : (0091) = DeclareSlotData { Name = func2, IsStatic = True, Type = 0, Value = 8 }
-slot 0007 declare: NEW TYPE <- 91
+slot 0007 in 0002 <- Declare : (0093) = DeclareSlotData { Name = func2, IsStatic = True, Type = 0, Value = 8 }
+slot 0007 declare: NEW TYPE <- 93
 dequeue: 0039
 dequeue: 0050
 dequeue: 0055
 dequeue: 0066
 slot 0064 in 0002 <- Call : (0006) = CallSlotData { Target = 65, Args = System.Int32[], DotnetMethod =  }
 dequeue: 0075
-slot 0092 in 0000 :: Type = DotnetMemberTypeSlotData { TargetType = 6, MemberName = Length, MemberType = Property, Members = System.Reflection.MemberInfo[] }
-slot 0074 in 0072 <- Member : (0092) = MemberSlotData { Target = 75, Member = 76 }
-slot 0076 in 0074 <- Identifier : (0092) = IdentifierSlotData { Name = Length, Target = 0 }
+slot 0094 in 0000 :: Type = DotnetMemberTypeSlotData { TargetType = 6, MemberName = Length, MemberType = Property, Members = System.Reflection.MemberInfo[] }
+slot 0074 in 0072 <- Member : (0094) = MemberSlotData { Target = 75, Member = 76 }
+slot 0076 in 0074 <- Identifier : (0094) = IdentifierSlotData { Name = Length, Target = 0 }
 dequeue: 0083
 dequeue: 0029
 slot 0027 return: type <- 0004 via 0029
 slot 0027 in 0026 <- Return : (0004) = ReturnSlotData { Value = 29, Function = 26 }
 dequeue: 0024
-slot 0025 not: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Boolean }, TypeSlot = 3 } 0005 via 0024
+slot 0025 not: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Boolean }, TypeSlot = 0 } 0005 via 0024
 slot 0025 in 0022 <- LogicalNegation : (0005) = LogicalNegationSlotData { Value = 24 }
 dequeue: 0015
 dequeue: 0007
-slot 0041 in 0040 <- Identifier : (0091) = IdentifierSlotData { Name = func2, Target = 7 }
+slot 0041 in 0040 <- Identifier : (0093) = IdentifierSlotData { Name = func2, Target = 7 }
 dequeue: 0064
 dequeue: 0074
 slot 0072 in 0002 <- Call : (0006) = CallSlotData { Target = 73, Args = System.Int32[], DotnetMethod =  }
 dequeue: 0076
 dequeue: 0027
-slot 0026 braces: found return 0027 (0091)
-slot 0026 in 0022 <- Braces : (0091) = BracesSlotData { Lines = System.Int32[] }
+slot 0026 braces: found return 0027 (0093)
+slot 0026 in 0022 <- Braces : (0093) = BracesSlotData { Lines = System.Int32[] }
 dequeue: 0025
 slot 0022 if: type <- 0005 via 0025
 slot 0022 in 0008 <- If : (0005) = IfSlotData { Condition = 25, Body = 26 }
@@ -846,17 +844,17 @@ dequeue: 0046
 slot 0044 return: type <- 0004 via 0046
 slot 0044 in 0034 <- Return : (0004) = ReturnSlotData { Value = 46, Function = 34 }
 dequeue: 0044
-slot 0034 braces: found return 0044 (0091)
-slot 0034 in 0033 <- Braces : (0091) = BracesSlotData { Lines = System.Int32[] }
+slot 0034 braces: found return 0044 (0093)
+slot 0034 in 0033 <- Braces : (0093) = BracesSlotData { Lines = System.Int32[] }
 dequeue: 0034
-slot 0033 in 0002 <- Declare : (0091) = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 34 }
-slot 0033 declare: NEW TYPE <- 91
+slot 0033 in 0002 <- Declare : (0093) = DeclareSlotData { Name = func1, IsStatic = True, Type = 0, Value = 34 }
+slot 0033 declare: NEW TYPE <- 93
 dequeue: 0033
-slot 0093 in 0056 :: Identifier = IdentifierSlotData { Name = func1, Target = 33 }
-slot 0093 in 0056 <- Identifier : (0091) = IdentifierSlotData { Name = func1, Target = 33 }
-slot 0056 in 0054 << Call = CallSlotData { Target = 93, Args = System.Int32[], DotnetMethod =  }
-dequeue: 0093
-slot 0056 in 0054 <- Call : (0004) = CallSlotData { Target = 93, Args = System.Int32[], DotnetMethod =  }
+slot 0095 in 0056 :: Identifier = IdentifierSlotData { Name = func1, Target = 33 }
+slot 0095 in 0056 <- Identifier : (0093) = IdentifierSlotData { Name = func1, Target = 33 }
+slot 0056 in 0054 << Call = CallSlotData { Target = 95, Args = System.Int32[], DotnetMethod =  }
+dequeue: 0095
+slot 0056 in 0054 <- Call : (0004) = CallSlotData { Target = 95, Args = System.Int32[], DotnetMethod =  }
 dequeue: 0056
 slot 0054 in 0053 <- Add : (0004) = AddSlotData { Left = 55, Right = 56 }
 dequeue: 0056
@@ -876,11 +874,11 @@ slot 0060 in 0058 <- Add : (0004) = AddSlotData { Left = 61, Right = 63 }
 dequeue: 0069
 slot 0067 in 0002 <- Call : (0006) = CallSlotData { Target = 68, Args = System.Int32[], DotnetMethod =  }
 dequeue: 0081
-slot 0094 in 0000 :: Type = DotnetMemberTypeSlotData { TargetType = 4, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }
-slot 0080 in 0079 <- Member : (0094) = MemberSlotData { Target = 81, Member = 82 }
-slot 0082 in 0080 <- Identifier : (0094) = IdentifierSlotData { Name = ToString, Target = 0 }
+slot 0096 in 0000 :: Type = DotnetMemberTypeSlotData { TargetType = 4, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }
+slot 0080 in 0079 <- Member : (0096) = MemberSlotData { Target = 81, Member = 82 }
+slot 0082 in 0080 <- Identifier : (0096) = IdentifierSlotData { Name = ToString, Target = 0 }
 dequeue: 0060
-slot 0058 assign: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Int32 }, TypeSlot = 3 } 0004 via 0060
+slot 0058 assign: type <- Slot { Parent = 0, CodeType = Type, Data = DotnetTypeSlotData { Type = System.Int32 }, TypeSlot = 0 } 0004 via 0060
 slot 0058 in 0002 <- Assign : (0004) = AssignSlotData { Target = 59, Value = 60 }
 dequeue: 0067
 dequeue: 0080
@@ -900,12 +898,12 @@ done after 81 iterations
 0008:         braces (func -> dotnet -> System.Int32)
 0009:           static cond (dotnet -> System.Boolean)
                   type
-0010:               id: name = bool (some -> TYPE) -> 0005
+0010:               id: name = bool (typeof -> dotnet -> System.Boolean) -> 0005
                   value
 0011:               parameter (unknown)
 0012:           static num (dotnet -> System.Int32)
                   type
-0013:               id: name = int (some -> TYPE) -> 0004
+0013:               id: name = int (typeof -> dotnet -> System.Int32) -> 0004
                   value
 0014:               parameter (unknown)
 0015:           if (func -> dotnet -> System.Int32)
@@ -949,7 +947,7 @@ done after 81 iterations
 0054:           add (dotnet -> System.Int32)
 0055:             id: name = a (dotnet -> System.Int32) -> 0047
 0056:             call (dotnet -> System.Int32)
-0093:               id: name = func1 (func -> dotnet -> System.Int32) -> 0033
+0095:               id: name = func1 (func -> dotnet -> System.Int32) -> 0033
 0057:           integer=5 (dotnet -> System.Int32)
 0058:     assign (dotnet -> System.Int32)
 0059:       id: name = b (dotnet -> System.Int32) -> 0052
@@ -968,15 +966,15 @@ done after 81 iterations
 0071:         string="C" (dotnet -> System.String)
 0072:     call (dotnet -> System.String)
 0073:       intrinsic: name = print (func -> dotnet -> System.String)
-0074:       member (Length : property : dotnet -> System.String)
+0074:       member (member -> Length : property : dotnet -> System.String)
 0075:         id: name = format (dotnet -> System.String) -> 0070
-0076:         id: name = Length (Length : property : dotnet -> System.String)
+0076:         id: name = Length (member -> Length : property : dotnet -> System.String)
 0077:     call (dotnet -> System.String)
 0078:       intrinsic: name = print (func -> dotnet -> System.String)
 0079:       call-dotnet { System.String ToString(System.String) } (dotnet -> System.String)
-0080:         member (ToString : method : dotnet -> System.Int32)
+0080:         member (member -> ToString : method : dotnet -> System.Int32)
 0081:           id: name = b (dotnet -> System.Int32) -> 0052
-0082:           id: name = ToString (ToString : method : dotnet -> System.Int32)
+0082:           id: name = ToString (member -> ToString : method : dotnet -> System.Int32)
 0083:         id: name = format (dotnet -> System.String) -> 0070
 0084:     return (dotnet -> System.Void) -> 0002
 0089:       void (dotnet -> System.Void)
@@ -985,15 +983,17 @@ done after 81 iterations
 0087:       string="unreachable" (dotnet -> System.String)
 
 Analyze Types:
-0003 0000: some -> TYPE
+0003 0000: type
 0004 0000: dotnet -> System.Int32
 0005 0000: dotnet -> System.Boolean
 0006 0000: dotnet -> System.String
 0088 0000: dotnet -> System.Void
 0090 0000: func -> dotnet -> System.String
-0091 0000: func -> dotnet -> System.Int32
-0092 0000: Length : property : dotnet -> System.String
-0094 0000: ToString : method : dotnet -> System.Int32
+0091 0000: typeof -> dotnet -> System.Int32
+0092 0000: typeof -> dotnet -> System.Boolean
+0093 0000: func -> dotnet -> System.Int32
+0094 0000: member -> Length : property : dotnet -> System.String
+0096 0000: member -> ToString : method : dotnet -> System.Int32
 
 Output:
 39
