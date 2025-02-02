@@ -81,22 +81,22 @@ public static class Analyzer
 				bracesData.TryAddNameTableValue("dotnet", dynamicTypeSlot);
 
 				// void
-				var voidSlot = VOID_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "VOID"), log);
+				var voidSlot = VOID_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "VOID", typeof(void)), log);
 				analysis.UpdateType(voidSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("void", voidSlot);
 
 				// int -> identifier for an instance of type that represents a dotnet integer
-				var intSlot = INT_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "INT"), log);
+				var intSlot = INT_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "INT", typeof(int)), log);
 				analysis.UpdateType(intSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("int", intSlot);
 
 				// bool -> identifier for an instance of type that represents a dotnet boolean
-				var boolSlot = BOOL_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "BOOL"), log);
+				var boolSlot = BOOL_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "BOOL", typeof(bool)), log);
 				analysis.UpdateType(boolSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("bool", boolSlot);
 
 				// string
-				var stringSlot = STRING_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "STRING"), log);
+				var stringSlot = STRING_SLOT = analysis.GetOrAddType2(new DotnetTypeCodeData(Name: "STRING", typeof(string)), log);
 				analysis.UpdateType(stringSlot, 0, typeSlot, log);
 				bracesData.TryAddNameTableValue("string", stringSlot);
 
@@ -539,7 +539,7 @@ public static class Analyzer
 			// note two targets to be refreshed with each update: 1) parent, 2) arbitrary references
 			foreach (var (targetSlotId, targetSlot) in analysis.All.Index())
 			{
-				if (targetSlot.TypeSlot != 0) { continue; } // already set
+				if (targetSlot.TypeSlot2 != 0) { continue; } // already set
 				if (targetSlot.CodeType == CodeSlotEnum.Declare)
 				{
 					var declareData = analysis.GetCodeData<DeclareCodeData>(targetSlotId);
@@ -602,8 +602,10 @@ public static class Analyzer
 					// skip if neither operand matches source slot
 					if (addData.Left != sourceSlotId && addData.Right != sourceSlotId) { continue; }
 
-					var leftType = analysis.GetCodeSlot(addData.Left).TypeSlot;
-					var rightType = analysis.GetCodeSlot(addData.Right).TypeSlot;
+					// var leftType = analysis.GetCodeSlot(addData.Left).TypeSlot;
+					// var rightType = analysis.GetCodeSlot(addData.Right).TypeSlot;
+					var leftType = analysis.GetCodeSlot(addData.Left).TypeSlot2;
+					var rightType = analysis.GetCodeSlot(addData.Right).TypeSlot2;
 
 					// skip if both operands are not known yet
 					if (leftType == 0 || rightType == 0) { continue; }
@@ -611,10 +613,13 @@ public static class Analyzer
 					// type coercion not supported yet
 					if (leftType != rightType)
 					{
-						throw new InvalidOperationException("Type of add operands do not match");
+						log.WriteLine($"slot {targetSlotId:0000} add: {leftType} != {rightType}");
+						// throw new InvalidOperationException($"Type of add operands do not match: {leftType} != {rightType}");
+						continue;
 					}
 
-					analysis.UpdateType(targetSlotId, leftType, TODO_SLOT, log);
+					// analysis.UpdateType(targetSlotId, leftType, TODO_SLOT, log);
+					analysis.UpdateType(targetSlotId, 0, leftType, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Identifier)
@@ -630,7 +635,7 @@ public static class Analyzer
 					if (sourceSlot.CodeType == CodeSlotEnum.Type)
 					{
 						// identifier to a type must turn into a type
-						analysis.UpdateType(targetSlotId, sourceTypeId, TYPE_SLOT, log);
+						analysis.UpdateType(targetSlotId, 0, TYPE_SLOT, log);
 						sourceQueue.Enqueue(targetSlotId);
 						continue;
 					}
@@ -638,30 +643,29 @@ public static class Analyzer
 					if (sourceSlot.CodeType == CodeSlotEnum.Declare)
 					{
 						// identifier to a declaration returns the type of that declaration
-						analysis.UpdateType(targetSlotId, sourceTypeId, sourceSlot.TypeSlot2, log);
+
+						// identifier to a function must turn into a call
+						var ttt = analysis.GetCodeSlot(sourceSlot.TypeSlot2);
+						if (ttt.Data is FuncTypeCodeData fff)
+						{
+							var parentSlot = analysis.GetCodeSlot(targetSlot.Parent);
+							if (parentSlot.CodeType != CodeSlotEnum.Call)
+							{
+								var newIdSlotId = analysis.Add(targetSlotId, CodeSlotEnum.Identifier, idData, log);
+								analysis.UpdateType(newIdSlotId, 0, sourceSlot.TypeSlot2, log);
+								analysis.ReplaceData(targetSlotId, CodeSlotEnum.Call, new CallCodeData(Target: newIdSlotId, Args: []), log);
+								sourceQueue.Enqueue(newIdSlotId);
+								sourceQueue.Enqueue(targetSlotId);
+								continue;
+							}
+						}
+
+						analysis.UpdateType(targetSlotId, 0, sourceSlot.TypeSlot2, log);
 						sourceQueue.Enqueue(targetSlotId);
 						continue;
 					}
 
-					log.WriteLine($"slot {targetSlotId:0000} WHATAMI!: {sourceSlotId:0000} {sourceTypeId} {sourceSlot.CodeType}");
-
-					if (sourceTypeData is FunctionTypeData) // TODO: OBSOLETE
-					{
-						// identifier to a function must turn into a call
-						var parentSlot = analysis.GetCodeSlot(idSlot.Parent);
-						if (parentSlot.CodeType != CodeSlotEnum.Call)
-						{
-							var newIdSlotId = analysis.Add(targetSlotId, CodeSlotEnum.Identifier, idData, log);
-							analysis.UpdateType(newIdSlotId, sourceTypeId, TODO_SLOT, log);
-							analysis.ReplaceData(targetSlotId, CodeSlotEnum.Call, new CallCodeData(Target: newIdSlotId, Args: []), log);
-							sourceQueue.Enqueue(newIdSlotId);
-							sourceQueue.Enqueue(targetSlotId);
-							continue;
-						}
-					}
-
-					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
-					sourceQueue.Enqueue(targetSlotId);
+					throw new InvalidOperationException($"Type check failed for identifier");
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Return)
 				{
@@ -746,7 +750,7 @@ public static class Analyzer
 						sourceQueue.Enqueue(targetSlotId);
 						break;
 					}
-					else if (callTargetType is DotnetMemberTypeData { TargetType: { } ttt, MemberType: { } dotnetMemberType, Members: { } dotnetMembers })
+					else if (callTargetTypeData2 is DotnetMemberTypeCodeData { TargetType: { } ttt, MemberType: { } dotnetMemberType, Members: { } dotnetMembers })
 					{
 						var callMemberTargetData = analysis.GetCodeData<MemberCodeData>(callData.Target);
 
@@ -756,8 +760,8 @@ public static class Analyzer
 						foreach (var (i, arg) in callData.Args.Index())
 						{
 							var argSlot = analysis.GetCodeSlot(arg);
-							var argType = analysis.GetTypeData(argSlot.TypeSlot);
-							if (argType is not DotnetTypeData { Type: { } dotnetType }) { throw new InvalidOperationException($"Invalid arg type: {argType} {argSlot}"); }
+							var argType = analysis.GetCodeSlot(argSlot.TypeSlot2);
+							if (argType.CodeType != CodeSlotEnum.Type || argType.Data is not DotnetTypeCodeData { Type: { } dotnetType }) { throw new InvalidOperationException($"Invalid arg type: {argType} {argSlot}"); }
 							dotnetArgs[i] = dotnetType;
 						}
 
@@ -777,6 +781,7 @@ public static class Analyzer
 						// var returnDotNetTypeId = analysis.GetOrAddType(returnDotNetType, log);
 
 						log.WriteLine("DOTNET_SLOT1");
+
 
 						analysis.UpdateData(targetSlotId, callData with { DotnetMethod = found }, log);
 						analysis.UpdateType(targetSlotId, 0/*returnDotNetTypeId*/, DOTNET_SLOT, log);
@@ -810,16 +815,16 @@ public static class Analyzer
 					var leftSlot = analysis.GetCodeSlot(memberData.Target);
 					var rightSlot = analysis.GetCodeSlot(memberData.Member);
 
-					if (leftSlot.TypeSlot == 0) { continue; }
-					var leftType = analysis.GetTypeData(leftSlot.TypeSlot);
+					if (leftSlot.TypeSlot2 == 0) { continue; }
 
 					if (rightSlot.CodeType != CodeSlotEnum.Identifier) { throw new InvalidOperationException($"Invalid member type: {rightSlot.CodeType}"); }
 					var rightData = analysis.GetCodeData<IdentifierCodeData>(memberData.Member);
 					var rightName = rightData.Name;
 
-					if (leftType is DotnetTypeData { Type: { } dotnetType })
+					var leftTypeSlot = analysis.GetCodeSlot(leftSlot.TypeSlot2);
+					if (leftTypeSlot.Data is DotnetTypeCodeData { Name: { }, Type: { } dotnetType2 })
 					{
-						var members = dotnetType.GetMember(rightName);
+						var members = dotnetType2.GetMember(rightName);
 						if (members.Length == 0)
 						{
 							throw new InvalidOperationException($"Invalid member: {rightName}");
@@ -831,23 +836,24 @@ public static class Analyzer
 							throw new InvalidOperationException("Mixed member types");
 						}
 
-						var memberTypeData = new DotnetMemberTypeData(
+						var memberTypeData = new DotnetMemberTypeCodeData(
+							Name: "TODO_NAME_MEMBER_THING",
 							TargetType: leftSlot.TypeSlot,
 							MemberName: rightName,
 							MemberType: memberType,
 							Members: members);
-						var memberTypeId = analysis.GetOrAddType(memberTypeData, log);
-						analysis.UpdateType(targetSlotId, memberTypeId, TODO_SLOT, log);
+						var memberTypeId = analysis.GetOrAddType2(memberTypeData, log);
+						analysis.UpdateType(targetSlotId, 0, memberTypeId, log);
 						sourceQueue.Enqueue(targetSlotId);
 
-						analysis.UpdateType(memberData.Member, memberTypeId, TODO_SLOT, log);
+						analysis.UpdateType(memberData.Member, 0, memberTypeId, log);
 						sourceQueue.Enqueue(memberData.Member);
 
 						continue;
 					}
 					else
 					{
-						throw new NotImplementedException($"Invalid type: {leftType}");
+						throw new NotImplementedException($"Invalid type: {leftTypeSlot}");
 					}
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.LogicalNegation)
