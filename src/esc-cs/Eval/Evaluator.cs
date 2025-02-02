@@ -138,8 +138,8 @@ public static class Evaluator
 				var left = EvaluateSlot(addData.Left, analysis, programOutput, valueTable);
 				var right = EvaluateSlot(addData.Right, analysis, programOutput, valueTable);
 
-				var intTypeSlotId = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), StreamWriter.Null);
-				if (slot.TypeSlot != intTypeSlotId)
+				var intTypeSlotId = analysis.GetOrAddType2(new DotnetTypeCodeData("INT", typeof(int)), StreamWriter.Null);
+				if (slot.TypeSlot2 != intTypeSlotId)
 				{
 					throw new NotImplementedException($"Invalid add expression type: {slot} {left} {right}");
 				}
@@ -283,8 +283,8 @@ public static class Evaluator
 				var memberName = analysis.GetCodeData<IdentifierCodeData>(memberData.Member).Name;
 				var target = EvaluateSlot(memberData.Target, analysis, programOutput, valueTable);
 				var dotnetTarget = ObjFromEval(target);
-				var memberType = analysis.GetTypeData(slot.TypeSlot);
-				if (memberType is DotnetMemberTypeData { TargetType: { } targetType, MemberType: MemberTypes.Property, Members: { } propertyInfos })
+				var memberType = analysis.GetCodeSlot(slot.TypeSlot2);
+				if (memberType.Data is DotnetMemberTypeCodeData { TargetType: { } targetType, MemberType: MemberTypes.Property, Members: { } propertyInfos })
 				{
 					if (propertyInfos is not [PropertyInfo propertyInfo, ..])
 					{

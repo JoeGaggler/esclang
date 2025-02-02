@@ -800,9 +800,9 @@ public static class Analyzer
 
 					if (assignData.Value != sourceSlotId) { continue; }
 
-					var typeRow = analysis.GetTypeData(sourceTypeId);
+					var typeRow = analysis.GetCodeSlot(sourceSlot.TypeSlot2);
 					log.WriteLine($"slot {targetSlotId:0000} assign: type <- {typeRow} {sourceTypeId} via {assignData.Value:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
+					analysis.UpdateType(targetSlotId, 0, sourceSlot.TypeSlot2, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Member)
@@ -875,9 +875,9 @@ public static class Analyzer
 
 					if (negationData.Value != sourceSlotId) { continue; }
 
-					var typeRow = analysis.GetTypeData(sourceTypeId);
+					var typeRow = analysis.GetCodeSlot(sourceSlot.TypeSlot2);
 					log.WriteLine($"slot {targetSlotId:0000} negation: type <- {typeRow} {sourceTypeId} via {negationData.Value:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
+					analysis.UpdateType(targetSlotId, 0, sourceSlot.TypeSlot2, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.If)

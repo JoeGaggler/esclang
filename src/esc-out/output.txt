@@ -777,12 +777,12 @@ dequeue: 0052
 slot 0051 in 0002 <- Declare : (0, 0008) = DeclareCodeData { Name = a, IsStatic = False, Type = 0, Value = 52 }
 slot 0051 declare: NEW TYPE <- 8
 dequeue: 0055
-slot 0053 assign: type <- DotnetTypeData { Type = System.Int32 } 4 via 0055
-slot 0053 in 0002 <- Assign : (4, -0013) = AssignCodeData { Target = 54, Value = 55 }
+slot 0053 assign: type <- CodeSlot { Parent = 2, CodeType = Type, Data = DotnetTypeCodeData { Name = INT, Type = System.Int32 }, TypeSlot = 0, TypeSlot2 = 3 } 4 via 0055
+slot 0053 in 0002 <- Assign : (0, 0008) = AssignCodeData { Target = 54, Value = 55 }
 dequeue: 0061
 dequeue: 0066
-slot 0067 negation: type <- DotnetTypeData { Type = System.Int32 } 4 via 0066
-slot 0067 in 0064 <- Negation : (4, -0013) = NegationCodeData { Value = 66 }
+slot 0067 negation: type <- CodeSlot { Parent = 2, CodeType = Type, Data = DotnetTypeCodeData { Name = INT, Type = System.Int32 }, TypeSlot = 0, TypeSlot2 = 3 } 4 via 0066
+slot 0067 in 0064 <- Negation : (0, 0008) = NegationCodeData { Value = 66 }
 dequeue: 0069
 dequeue: 0072
 dequeue: 0075
@@ -910,7 +910,7 @@ slot 0073 in 0071 <- Identifier : (0, 0008) = IdentifierCodeData { Name = b, Tar
 slot 0085 in 0084 <- Identifier : (0, 0008) = IdentifierCodeData { Name = b, Target = 56 }
 dequeue: 0063
 dequeue: 0065
-slot 0064 add: 8 != -13
+slot 0064 in 0062 <- Add : (0, 0008) = AddOpCodeData { Left = 65, Right = 67 }
 dequeue: 0073
 DOTNET_SLOT3: 71 -< CodeSlot { Parent = 2, CodeType = Type, Data = FuncTypeCodeData { Name = print func, ReturnType = 93 }, TypeSlot = 0, TypeSlot2 = 3 }
 DOTNET_SLOT2: 71 -< CodeSlot { Parent = 71, CodeType = Identifier, Data = IdentifierCodeData { Name = b, Target = 56 }, TypeSlot = 0, TypeSlot2 = 8 } -< 93
@@ -919,6 +919,9 @@ dequeue: 0085
 slot 0098 in 0002 :: Type = DotnetMemberTypeCodeData { Name = TODO_NAME_MEMBER_THING, TargetType = 0, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }
 slot 0084 in 0083 <- Member : (0, 0098) = MemberCodeData { Target = 85, Member = 86 }
 slot 0086 in 0084 <- Identifier : (0, 0098) = IdentifierCodeData { Name = ToString, Target = 0 }
+dequeue: 0064
+slot 0062 assign: type <- CodeSlot { Parent = 2, CodeType = Type, Data = DotnetTypeCodeData { Name = INT, Type = System.Int32 }, TypeSlot = 0, TypeSlot2 = 3 } 0 via 0064
+slot 0062 in 0002 <- Assign : (0, 0008) = AssignCodeData { Target = 63, Value = 64 }
 dequeue: 0071
 dequeue: 0084
 DOTNET_SLOT3: 83 -< CodeSlot { Parent = 2, CodeType = Type, Data = DotnetMemberTypeCodeData { Name = TODO_NAME_MEMBER_THING, TargetType = 0, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }, TypeSlot = 0, TypeSlot2 = 0 }
@@ -926,12 +929,13 @@ DOTNET_SLOT1
 slot 0083 in 0081 <- Call = CallCodeData { Target = 84, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }
 slot 0083 in 0081 <- Call : (0, 0006) = CallCodeData { Target = 84, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }
 dequeue: 0086
+dequeue: 0062
 dequeue: 0083
 DOTNET_SLOT3: 81 -< CodeSlot { Parent = 2, CodeType = Type, Data = FuncTypeCodeData { Name = print func, ReturnType = 93 }, TypeSlot = 0, TypeSlot2 = 3 }
 DOTNET_SLOT2: 81 -< CodeSlot { Parent = 81, CodeType = Call, Data = CallCodeData { Target = 84, Args = System.Int32[], DotnetMethod = System.String ToString(System.String) }, TypeSlot = 0, TypeSlot2 = 6 } -< 93
 slot 0081 in 0002 <- Call : (0, 0093) = CallCodeData { Target = 82, Args = System.Int32[], DotnetMethod =  }
 dequeue: 0081
-done after 82 iterations
+done after 84 iterations
 === Tree ===
 0001: file (NEWTYPE: 0000 -> ?!?!?!?!?)
 0002:   braces (NEWTYPE: 0000 -> ?!?!?!?!?)
@@ -980,7 +984,7 @@ done after 82 iterations
 0051:     declare a (NEWTYPE: 0008 -> INT)
             value
 0052:         integer=13 (NEWTYPE: 0008 -> INT)
-0053:     assign (dotnet -> System.Int32)
+0053:     assign (NEWTYPE: 0008 -> INT)
 0054:       id: name = a (NEWTYPE: 0008 -> INT) -> 0051
 0055:       integer=39 (NEWTYPE: 0008 -> INT)
 0056:     declare b (NEWTYPE: 0008 -> INT)
@@ -991,11 +995,11 @@ done after 82 iterations
 0060:             call (NEWTYPE: 0008 -> INT)
 0097:               id: name = func1 (NEWTYPE: 0095 -> FUNC -> 8) -> 0037
 0061:           integer=5 (NEWTYPE: 0008 -> INT)
-0062:     assign (NEWTYPE: 0000 -> ?!?!?!?!?)
+0062:     assign (NEWTYPE: 0008 -> INT)
 0063:       id: name = b (NEWTYPE: 0008 -> INT) -> 0056
-0064:       add (NEWTYPE: 0000 -> ?!?!?!?!?)
+0064:       add (NEWTYPE: 0008 -> INT)
 0065:         id: name = b (NEWTYPE: 0008 -> INT) -> 0056
-0067:         negate (dotnet -> System.Int32)
+0067:         negate (NEWTYPE: 0008 -> INT)
 0066:           integer=1 (NEWTYPE: 0008 -> INT)
 0068:     call (NEWTYPE: 0093 -> STRING)
 0069:       intrinsic: name = print (NEWTYPE: 0094 -> print func)
@@ -1050,19 +1054,10 @@ Analyze Types2:
 0098 0002: CodeSlot { Parent = 2, CodeType = Type, Data = DotnetMemberTypeCodeData { Name = TODO_NAME_MEMBER_THING, TargetType = 0, MemberName = ToString, MemberType = Method, Members = System.Reflection.MemberInfo[] }, TypeSlot = 0, TypeSlot2 = 0 }
 
 Output:
-*** CRASH! ***
-System.NotImplementedException: Invalid add expression type: CodeSlot { Parent = 41, CodeType = Add, Data = AddOpCodeData { Left = 43, Right = 44 }, TypeSlot = 0, TypeSlot2 = 8 } IntEvaluation { Value = 2 } IntEvaluation { Value = 123 }
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 144
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 96
-   at EscLang.Eval.Evaluator.CallFunctionSlot(Int32 bracesSlotId, Evaluation[] args, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 29
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 257
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 139
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 138
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 96
-   at EscLang.Eval.Evaluator.CallFunctionSlot(Int32 bracesSlotId, Evaluation[] args, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 29
-   at EscLang.Eval.Evaluator.EvaluateSlot(Int32 slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 86
-   at EscLang.Eval.Evaluator.Evaluate(Analysis analysis, StringWriter programOutput) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Eval/Evaluator.cs:line 16
-   at EscLang.Program.Main(String[] args) in /Users/joe/source/joegaggler/esclang/src/esc-cs/Program.cs:line 98
+39
+168
+1
+$168.00
 
 Stats:
 -   Start: 0.0s
