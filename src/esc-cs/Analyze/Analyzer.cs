@@ -7,8 +7,10 @@ using EscLang.Parse;
 // TODO: collect declarations before analyzing possible references
 // TODO: combine call node handling across step/non-step methods
 
+
 public static class Analyzer
 {
+
 	public static Analysis Analyze(Parse.EscFile file, TextWriter log)
 	{
 		var analysis = new Analysis();
@@ -31,6 +33,21 @@ public static class Analyzer
 		return analysis;
 	}
 
+	// TODO: these should looked up as identifiers in the current scope when needed
+	[Obsolete]
+	public const int TODO_SLOT = -13;
+	[Obsolete]
+	public const int FAKE_GLOBAL_PARENT = 2;
+	private static int TYPE_SLOT;
+	private static int FUNC_SLOT;
+	private static int DYNAMIC_SLOT;
+	[Obsolete]
+	private static int DOTNET_SLOT;
+	private static int VOID_SLOT;
+	private static int INT_SLOT;
+	private static int BOOL_SLOT;
+	private static int STRING_SLOT;
+
 	private static int BuildTable(SyntaxNode node, int parentSlot, Analysis analysis, TextWriter log)
 	{
 		switch (node)
@@ -42,6 +59,46 @@ public static class Analyzer
 
 				var bracesData = new BracesCodeData(Lines: []);
 				var bracesSlot = analysis.Add(fileSlot, CodeSlotEnum.Braces, bracesData, log);
+
+				// type is a type!
+				var typeSlot = TYPE_SLOT = analysis.Add(bracesSlot, CodeSlotEnum.Type, new TypeCodeData(Name: "TYPE"), log);
+				analysis.UpdateType(typeSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("type", typeSlot);
+
+				// dynamic
+				var dynamicTypeSlot = DYNAMIC_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "DYNAMIC"), log);
+				analysis.UpdateType(dynamicTypeSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("dynamic", dynamicTypeSlot);
+
+				// func
+				var funcTypeSlot = FUNC_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "FUNC"), log);
+				analysis.UpdateType(funcTypeSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("func", funcTypeSlot);
+
+				// dotnet
+				var dotnetTypeSlot = DOTNET_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "DOTNET"), log);
+				analysis.UpdateType(dotnetTypeSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("dotnet", dynamicTypeSlot);
+
+				// void
+				var voidSlot = VOID_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "VOID"), log);
+				analysis.UpdateType(voidSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("void", voidSlot);
+
+				// int -> identifier for an instance of type that represents a dotnet integer
+				var intSlot = INT_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "INT"), log);
+				analysis.UpdateType(intSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("int", intSlot);
+
+				// bool -> identifier for an instance of type that represents a dotnet boolean
+				var boolSlot = BOOL_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "BOOL"), log);
+				analysis.UpdateType(boolSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("bool", boolSlot);
+
+				// string
+				var stringSlot = STRING_SLOT = analysis.GetOrAddType2(new TypeCodeData(Name: "STRING"), log);
+				analysis.UpdateType(stringSlot, 0, typeSlot, log);
+				bracesData.TryAddNameTableValue("string", stringSlot);
 
 				fileData = fileData with { Main = bracesSlot };
 				analysis.UpdateData(fileSlot, fileData, log);
@@ -217,8 +274,8 @@ public static class Analyzer
 			if (node.CodeType == CodeSlotEnum.Braces)
 			{
 				var voidType = analysis.GetOrAddType(VoidTypeData.Instance, log);
-				var retVoid = analysis.GetOrAddType(new FunctionTypeData(voidType), log);
-				analysis.UpdateType(slot, retVoid, log);
+				var retVoid = analysis.GetOrAddType(new FunctionTypeData(voidType, VOID_SLOT), log);
+				analysis.UpdateType(slot, retVoid, VOID_SLOT, log);
 				continue;
 			}
 
@@ -231,11 +288,11 @@ public static class Analyzer
 					// TODO: shared void slot?
 					var voidSlot = analysis.Add(slot, CodeSlotEnum.Void, VoidCodeData.Instance, log);
 					var voidType = analysis.GetOrAddType(VoidTypeData.Instance, log);
-					analysis.UpdateType(voidSlot, voidType, log);
+					analysis.UpdateType(voidSlot, voidType, VOID_SLOT, log);
 
 					var returnData = new ReturnCodeData(voidSlot);
 					analysis.ReplaceData(slot, CodeSlotEnum.Return, returnData, log);
-					analysis.UpdateType(slot, voidType, log);
+					analysis.UpdateType(slot, voidType, VOID_SLOT, log);
 					returnQueue.Enqueue(slot);
 				}
 				continue;
@@ -298,7 +355,7 @@ public static class Analyzer
 					analysis.UpdateData(slot, returnData with { Function = currentSlot }, log);
 
 					// clear "proc" type since we found a return statement
-					analysis.UpdateType(currentSlot, 0, log);
+					analysis.UpdateType(currentSlot, 0, 0, log);
 					break;
 				}
 
@@ -331,38 +388,38 @@ public static class Analyzer
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Boolean, new BooleanCodeData(true), log);
 						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
-						analysis.UpdateType(slot, fun, log);
+						analysis.UpdateType(slot, fun, BOOL_SLOT, log);
 						break;
 					}
 					if (ident == "false")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Boolean, new BooleanCodeData(false), log);
 						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
-						analysis.UpdateType(slot, fun, log);
+						analysis.UpdateType(slot, fun, BOOL_SLOT, log);
 						break;
 					}
 					if (ident == "print")
 					{
 						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("print"), log);
-						var str = analysis.GetOrAddType(new DotnetTypeData(typeof(string)), log);
-						var fun = analysis.GetOrAddType(new FunctionTypeData(str), log);
-						analysis.UpdateType(slot, fun, log);
+						var fff1 = analysis.GetOrAddType2(new TypeCodeData("STRING"), log);
+						var fff2 = analysis.GetOrAddType2(new FuncTypeCodeData("print func", fff1), log);
+						analysis.UpdateType(slot, 0, fff2, log);
 						break;
 					}
 					if (ident == "int")
 					{
-						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("int"), log);
-						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), log);
-						var meta = analysis.GetOrAddType(new MetaTypeData(fun), log);
-						analysis.UpdateType(slot, meta, log);
+						analysis.ReplaceData(slot, CodeSlotEnum.Identifier, new IdentifierCodeData("int"), log);
+						var type = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), log);
+						var meta = analysis.GetOrAddType(TypeTypeData.Instance, log);
+						analysis.UpdateType(slot, meta, TYPE_SLOT, log);
 						break;
 					}
 					if (ident == "bool")
 					{
-						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IntrinsicCodeData("bool"), log);
-						var fun = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
-						var meta = analysis.GetOrAddType(new MetaTypeData(fun), log);
-						analysis.UpdateType(slot, meta, log);
+						analysis.ReplaceData(slot, CodeSlotEnum.Intrinsic, new IdentifierCodeData("bool"), log);
+						var type = analysis.GetOrAddType(new DotnetTypeData(typeof(bool)), log);
+						var meta = analysis.GetOrAddType(TypeTypeData.Instance, log);
+						analysis.UpdateType(slot, meta, TYPE_SLOT, log);
 						break;
 					}
 					if (ident == "if")
@@ -390,7 +447,7 @@ public static class Analyzer
 					var bracesData = (BracesCodeData)currentNode.Data;
 					if (bracesData.TryGetNameTableValue(ident, out var valueSlot))
 					{
-						log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}{currentSlot:0000} FOUND: {bracesData}");
+						log.WriteLine($"{String.Concat(Enumerable.Repeat("  ", indent))}{currentSlot:0000} FOUND: {bracesData} = {valueSlot}");
 						var newData = slotData with { Target = valueSlot };
 						analysis.UpdateData(slot, newData, log);
 						break;
@@ -414,6 +471,17 @@ public static class Analyzer
 		{
 			switch (node.CodeType)
 			{
+				case CodeSlotEnum.Type:
+				{
+					// var typeData = (TypeCodeData)node.Data;
+					// var typeSlot = analysis.GetCodeSlot(slot);
+					// var type = typeData.Type;
+					// var typeType = analysis.GetOrAddType(TypeTypeData.Instance, log);
+					analysis.UpdateType(slot, 0, TYPE_SLOT, log);
+					sourceQueue.Enqueue(slot);
+					log.WriteLine($"enqueue {slot:0000}");
+					break;
+				}
 				case CodeSlotEnum.Void:
 				{
 					sourceQueue.Enqueue(slot);
@@ -423,7 +491,7 @@ public static class Analyzer
 				case CodeSlotEnum.Integer:
 				{
 					var intType = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), log);
-					analysis.UpdateType(slot, intType, log);
+					analysis.UpdateType(slot, intType, INT_SLOT, log);
 					sourceQueue.Enqueue(slot);
 					log.WriteLine($"enqueue {slot:0000}");
 					break;
@@ -431,7 +499,7 @@ public static class Analyzer
 				case CodeSlotEnum.String:
 				{
 					var strType = analysis.GetOrAddType(new DotnetTypeData(typeof(string)), log);
-					analysis.UpdateType(slot, strType, log);
+					analysis.UpdateType(slot, strType, STRING_SLOT, log);
 					sourceQueue.Enqueue(slot);
 					log.WriteLine($"enqueue {slot:0000}");
 					break;
@@ -446,8 +514,8 @@ public static class Analyzer
 				}
 				case CodeSlotEnum.Parameter:
 				{
-					var intType = analysis.GetOrAddType(ParameterTypeData.Instance, log);
-					analysis.UpdateType(slot, intType, log);
+					// var intType = analysis.GetOrAddType(ParameterTypeData.Instance, log);
+					analysis.UpdateType(slot, 0, DYNAMIC_SLOT, log);
 					sourceQueue.Enqueue(slot);
 					log.WriteLine($"enqueue {slot:0000}");
 					break;
@@ -478,11 +546,25 @@ public static class Analyzer
 
 					if (declareData.Type == sourceSlotId)
 					{
-						var typeCode = analysis.GetCodeSlot(declareData.Type);
-						var typeData = analysis.GetTypeData(typeCode.TypeSlot);
-						if (typeData is MetaTypeData { Type: { } instanceType })
+						var typeSlot = analysis.GetCodeSlot(declareData.Type);
+						if (typeSlot.CodeType == CodeSlotEnum.Identifier) // follow identifier to actual type
 						{
-							analysis.UpdateType(targetSlotId, instanceType, log);
+							var idData = analysis.GetCodeData<IdentifierCodeData>(declareData.Type);
+							analysis.UpdateType(targetSlotId, 0/*idTypeSlot*/, idData.Target, log);
+							sourceQueue.Enqueue(targetSlotId);
+							continue;
+						}
+
+						throw new InvalidOperationException($"BLAHHHH: {typeSlot}");
+
+						var typeData = analysis.GetTypeData(typeSlot.TypeSlot);
+						if (typeData is TypeTypeData)
+						{
+							var idData = analysis.GetCodeData<IdentifierCodeData>(declareData.Type);
+							var idTypeValue = analysis.GetCodeSlot(idData.Target); // slot where the instance of the type is defined
+																				   // var idTypeData = analysis.GetCodeData<TypeCodeData>(idData.Target);
+																				   // var idTypeSlot = idTypeData.Type; // known type this declaration value
+							analysis.UpdateType(targetSlotId, 0/*idTypeSlot*/, idData.Target, log);
 							sourceQueue.Enqueue(targetSlotId);
 						}
 						else
@@ -494,9 +576,22 @@ public static class Analyzer
 					{
 						var valueSlotId = declareData.Value;
 						var valueSlot = analysis.GetCodeSlot(valueSlotId);
-						var valueSlotType = valueSlot.TypeSlot;
-						analysis.UpdateType(targetSlotId, valueSlotType, log);
-						sourceQueue.Enqueue(targetSlotId);
+						if (valueSlot.TypeSlot2 is { } typeSlot2 and > 0)
+						{
+							var sss1 = analysis.GetCodeSlot(typeSlot2);
+							var sss2 = analysis.GetCodeData<TypeCodeData>(typeSlot2);
+							analysis.UpdateType(targetSlotId, 0, typeSlot2, log);
+							sourceQueue.Enqueue(targetSlotId);
+							log.WriteLine($"slot {targetSlotId:0000} declare: NEW TYPE <- {typeSlot2}");
+							// throw new InvalidOperationException($"TYPE2: {sss2}");
+						}
+						else
+						{
+							var valueSlotType = valueSlot.TypeSlot;
+							analysis.UpdateType(targetSlotId, valueSlotType, TODO_SLOT, log);
+							sourceQueue.Enqueue(targetSlotId);
+							log.WriteLine($"slot {targetSlotId:0000} declare: LEGACY TYPE <- {sourceTypeId} {sourceSlotId}");
+						}
 					}
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Add)
@@ -519,7 +614,7 @@ public static class Analyzer
 						throw new InvalidOperationException("Type of add operands do not match");
 					}
 
-					analysis.UpdateType(targetSlotId, leftType, log);
+					analysis.UpdateType(targetSlotId, leftType, TODO_SLOT, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Identifier)
@@ -529,14 +624,35 @@ public static class Analyzer
 
 					if (idData.Target != sourceSlotId) { continue; }
 
-					if (sourceTypeData is FunctionTypeData)
+					// var typeCodeData = analysis.GetCodeData<TypeCodeData>(sourceSlotId);
+					// throw new InvalidOperationException($"Invaasdfasdfsadflid type: {typeCodeData}");
+
+					if (sourceSlot.CodeType == CodeSlotEnum.Type)
+					{
+						// identifier to a type must turn into a type
+						analysis.UpdateType(targetSlotId, sourceTypeId, TYPE_SLOT, log);
+						sourceQueue.Enqueue(targetSlotId);
+						continue;
+					}
+
+					if (sourceSlot.CodeType == CodeSlotEnum.Declare)
+					{
+						// identifier to a declaration returns the type of that declaration
+						analysis.UpdateType(targetSlotId, sourceTypeId, sourceSlot.TypeSlot2, log);
+						sourceQueue.Enqueue(targetSlotId);
+						continue;
+					}
+
+					log.WriteLine($"slot {targetSlotId:0000} WHATAMI!: {sourceSlotId:0000} {sourceTypeId} {sourceSlot.CodeType}");
+
+					if (sourceTypeData is FunctionTypeData) // TODO: OBSOLETE
 					{
 						// identifier to a function must turn into a call
 						var parentSlot = analysis.GetCodeSlot(idSlot.Parent);
 						if (parentSlot.CodeType != CodeSlotEnum.Call)
 						{
 							var newIdSlotId = analysis.Add(targetSlotId, CodeSlotEnum.Identifier, idData, log);
-							analysis.UpdateType(newIdSlotId, sourceTypeId, log);
+							analysis.UpdateType(newIdSlotId, sourceTypeId, TODO_SLOT, log);
 							analysis.ReplaceData(targetSlotId, CodeSlotEnum.Call, new CallCodeData(Target: newIdSlotId, Args: []), log);
 							sourceQueue.Enqueue(newIdSlotId);
 							sourceQueue.Enqueue(targetSlotId);
@@ -544,7 +660,7 @@ public static class Analyzer
 						}
 					}
 
-					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Return)
@@ -555,8 +671,8 @@ public static class Analyzer
 					if (returnData.Value != sourceSlotId) { continue; }
 
 					var typeRow = analysis.GetTypeData(sourceTypeId);
-					log.WriteLine($"slot {targetSlotId:0000} return: type <- {typeRow} {sourceTypeId} via {returnData.Value:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					log.WriteLine($"slot {targetSlotId:0000} return: type <- {typeRow} {sourceTypeId} via {returnData.Value:0000} {sourceSlot.TypeSlot2:0000}x");
+					analysis.UpdateType(targetSlotId, sourceTypeId, sourceSlot.TypeSlot2, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Braces)
@@ -569,12 +685,38 @@ public static class Analyzer
 					if (returnData.Function != targetSlotId) { continue; } // should be redundant
 
 					var returnType = analysis.GetTypeData(sourceTypeId);
-					var funcType = new FunctionTypeData(sourceTypeId);
+					var funcType = new FunctionTypeData(sourceTypeId, sourceSlot.TypeSlot2);
 					var funcTypeId = analysis.GetOrAddType(funcType, log);
 
-					log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} {funcTypeId}");
-					analysis.UpdateType(targetSlotId, funcTypeId, log);
-					sourceQueue.Enqueue(targetSlotId);
+					// TODO: FIND EXISTING FUNCTION TYPE
+
+					int? funcType2 = null;
+					CodeSlot? funcType2Slot = null;
+					foreach (var (i, j) in analysis.All.Index())
+					{
+						if (j.CodeType != CodeSlotEnum.Type) { continue; }
+						if (j.Data is not TypeCodeData { Name: { } nnn }) { continue; }
+						if (nnn != $"FUNC -> {sourceSlot.TypeSlot2}") { continue; }
+						funcType2 = i;
+						funcType2Slot = j;
+						break;
+					}
+					if (funcType2 is not null && funcType2Slot is not null)
+					{
+						log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} ({funcTypeId}, {funcType2.Value:0000})");
+						analysis.UpdateType(targetSlotId, funcTypeId, funcType2.Value, log);
+						sourceQueue.Enqueue(targetSlotId);
+					}
+					else
+					{
+						// var sss = analysis.Add(2, CodeSlotEnum.Type, new TypeCodeData(Name: $"FUNC -> {sourceSlot.TypeSlot2}"), log);
+						var sss = analysis.Add(FAKE_GLOBAL_PARENT, CodeSlotEnum.Type, new FuncTypeCodeData(Name: $"FUNC -> {sourceSlot.TypeSlot2}", sourceSlot.TypeSlot2), log);
+						analysis.UpdateType(sss, 0, TYPE_SLOT, log);
+
+						log.WriteLine($"slot {targetSlotId:0000} braces: found return {sourceSlotId:0000} ({funcTypeId}, {sss:0000})");
+						analysis.UpdateType(targetSlotId, funcTypeId, sss, log);
+						sourceQueue.Enqueue(targetSlotId);
+					}
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Call)
 				{
@@ -584,15 +726,23 @@ public static class Analyzer
 					// match dequeued source slot
 					if (callData.Target != sourceSlotId && !callData.Args.Contains(sourceSlotId)) { continue; }
 					var callTargetSlot = analysis.GetCodeSlot(callData.Target);
+					// log.WriteLine($"DOTNET_SLOT4: {targetSlotId} -< {sourceSlotId} {sourceSlot}");
 
 					// skip if target or arg types are not known yet
-					if (callTargetSlot.TypeSlot == 0) { continue; }
-					if (callData.Args.Any(i => analysis.GetCodeSlot(i).TypeSlot == 0)) { continue; }
+					if (callTargetSlot.TypeSlot2 <= 0) { continue; }
+					if (callData.Args.Any(i => analysis.GetCodeSlot(i).TypeSlot2 == 0)) { continue; }
+
+					var callTargetType2 = analysis.GetCodeSlot(callTargetSlot.TypeSlot2);
+					var callTargetTypeData2 = analysis.GetCodeData<TypeCodeData>(callTargetSlot.TypeSlot2);
+					// callTargetTypeData2.Name
+
+					log.WriteLine($"DOTNET_SLOT3: {targetSlotId} -< {callTargetType2}");
 
 					var callTargetType = analysis.GetTypeData(callTargetSlot.TypeSlot);
-					if (callTargetType is FunctionTypeData { ReturnType: var returnType })
+					if (callTargetTypeData2 is FuncTypeCodeData { ReturnType: var returnType })
 					{
-						analysis.UpdateType(targetSlotId, returnType, log);
+						log.WriteLine($"DOTNET_SLOT2: {targetSlotId} -< {sourceSlot} -< {returnType}");
+						analysis.UpdateType(targetSlotId, 0, returnType, log);
 						sourceQueue.Enqueue(targetSlotId);
 						break;
 					}
@@ -623,17 +773,19 @@ public static class Analyzer
 
 						if (found is null) { throw new InvalidOperationException("Invalid member call"); }
 
-						var returnDotNetType = new DotnetTypeData(found.ReturnType);
-						var returnDotNetTypeId = analysis.GetOrAddType(returnDotNetType, log);
+						// var returnDotNetType = new DotnetTypeData(found.ReturnType);
+						// var returnDotNetTypeId = analysis.GetOrAddType(returnDotNetType, log);
+
+						log.WriteLine("DOTNET_SLOT1");
 
 						analysis.UpdateData(targetSlotId, callData with { DotnetMethod = found }, log);
-						analysis.UpdateType(targetSlotId, returnDotNetTypeId, log);
+						analysis.UpdateType(targetSlotId, 0/*returnDotNetTypeId*/, DOTNET_SLOT, log);
 						sourceQueue.Enqueue(targetSlotId);
 						break;
 					}
 					else
 					{
-						throw new InvalidOperationException($"Invalid call target type: {callTargetType}");
+						throw new InvalidOperationException($"Invalid call target type:\n{callTargetType}\n{callTargetTypeData2}\n{callTargetSlot.TypeSlot2}");
 					}
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Assign)
@@ -645,7 +797,7 @@ public static class Analyzer
 
 					var typeRow = analysis.GetTypeData(sourceTypeId);
 					log.WriteLine($"slot {targetSlotId:0000} assign: type <- {typeRow} {sourceTypeId} via {assignData.Value:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Member)
@@ -685,10 +837,10 @@ public static class Analyzer
 							MemberType: memberType,
 							Members: members);
 						var memberTypeId = analysis.GetOrAddType(memberTypeData, log);
-						analysis.UpdateType(targetSlotId, memberTypeId, log);
+						analysis.UpdateType(targetSlotId, memberTypeId, TODO_SLOT, log);
 						sourceQueue.Enqueue(targetSlotId);
 
-						analysis.UpdateType(memberData.Member, memberTypeId, log);
+						analysis.UpdateType(memberData.Member, memberTypeId, TODO_SLOT, log);
 						sourceQueue.Enqueue(memberData.Member);
 
 						continue;
@@ -707,7 +859,7 @@ public static class Analyzer
 
 					var typeRow = analysis.GetTypeData(sourceTypeId);
 					log.WriteLine($"slot {targetSlotId:0000} not: type <- {typeRow} {sourceTypeId} via {negationData.Value:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.Negation)
@@ -719,7 +871,7 @@ public static class Analyzer
 
 					var typeRow = analysis.GetTypeData(sourceTypeId);
 					log.WriteLine($"slot {targetSlotId:0000} negation: type <- {typeRow} {sourceTypeId} via {negationData.Value:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else if (targetSlot.CodeType == CodeSlotEnum.If)
@@ -734,16 +886,17 @@ public static class Analyzer
 
 					var bodySlot = analysis.GetCodeSlot(ifData.Body);
 					if (bodySlot.TypeSlot == 0) { continue; } // not ready
+					var bodyTypeData = analysis.GetTypeData(bodySlot.TypeSlot);
 
-					if (sourceSlot.CodeType != CodeSlotEnum.Braces) { throw new InvalidOperationException("Invalid if body"); }
+					if (bodySlot.CodeType != CodeSlotEnum.Braces) { throw new InvalidOperationException($"Invalid if body: {bodySlot.CodeType}"); }
 
-					if (sourceTypeData is not FunctionTypeData)
+					if (bodyTypeData is not FunctionTypeData)
 					{
 						throw new InvalidOperationException("Invalid if body type");
 					}
 
 					log.WriteLine($"slot {targetSlotId:0000} if: type <- {sourceTypeData} via {ifData.Condition:0000}");
-					analysis.UpdateType(targetSlotId, sourceTypeId, log);
+					analysis.UpdateType(targetSlotId, sourceTypeId, TODO_SLOT, log);
 					sourceQueue.Enqueue(targetSlotId);
 				}
 				else

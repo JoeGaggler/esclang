@@ -1,14 +1,15 @@
 func2 :: {
     cond : bool : <>
+    num : int : <>
     if false {
         return 0
     }
-    if !cond { return 100 }
+    if !cond { return num }
     return 9999 // unreachable
 }
 func1 :: {
     a := 2
-    b := a + func2 false
+    b := a + func2 false 123
     return b
 }
 a := 13

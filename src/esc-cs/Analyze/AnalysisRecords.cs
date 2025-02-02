@@ -12,12 +12,12 @@ public class Analysis
 	{
 	}
 
-	public void UpdateType(int slotId, int typeSlotId, TextWriter? log)
+	public void UpdateType(int slotId, int typeSlotId, int typeSlotId2, TextWriter? log = null)
 	{
 		log ??= TextWriter.Null;
-		var slot = CodeSlots[slotId] with { TypeSlot = typeSlotId };
+		var slot = CodeSlots[slotId] with { TypeSlot = typeSlotId, TypeSlot2 = typeSlotId2 };
 		CodeSlots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} : {typeSlotId} = {slot.Data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} : ({typeSlotId}, {typeSlotId2:0000}) = {slot.Data}");
 	}
 
 	public int GetOrAddType(TypeData type, TextWriter log)
@@ -32,6 +32,16 @@ public class Analysis
 			log.WriteLine($"add type {id} = {type}");
 		}
 		return id;
+	}
+
+	public int GetOrAddType2(TypeCodeData typeCodeData, TextWriter log)
+	{
+		foreach (var (i, slot) in CodeSlots.Index())
+		{
+			if (slot.CodeType != CodeSlotEnum.Type) { continue; }
+			if (slot.Data == typeCodeData) { return i; }
+		}
+		return Add(Analyzer.FAKE_GLOBAL_PARENT, CodeSlotEnum.Type, typeCodeData, log);
 	}
 
 	public int Add(int parentSlot, CodeSlotEnum type, CodeData data, TextWriter log)
@@ -97,21 +107,33 @@ public class Analysis
 	// Instance
 	public CodeSlot GetCodeSlot(int slotId) => CodeSlots[slotId];
 	public T GetCodeData<T>(int slotId) where T : CodeData => (T)CodeSlots[slotId].Data;
+
+	[Obsolete]
 	public TypeData GetTypeData(int typeSlotId) => TypeSlots[typeSlotId];
 }
 
+[Obsolete]
 public abstract record class TypeData;
+[Obsolete]
 public record class UnknownTypeData : TypeData { public static readonly UnknownTypeData Instance = new(); private UnknownTypeData() { } }
+[Obsolete]
+public record class TypeTypeData : TypeData { public static readonly TypeTypeData Instance = new(); private TypeTypeData() { } }
+[Obsolete]
 public record class VoidTypeData : TypeData { public static readonly VoidTypeData Instance = new(); private VoidTypeData() { } }
+[Obsolete]
 public record class ParameterTypeData : TypeData { public static readonly ParameterTypeData Instance = new(); private ParameterTypeData() { } }
-public record class MetaTypeData(int Type) : TypeData;
-public record class FunctionTypeData(int ReturnType) : TypeData;
+// public record class MetaTypeData(int Type) : TypeData;
+[Obsolete]
+public record class FunctionTypeData(int ReturnType, int ReturnType2) : TypeData;
+[Obsolete]
 public record class DotnetMemberTypeData(int TargetType, String MemberName, MemberTypes MemberType, MemberInfo[] Members) : TypeData;
+[Obsolete]
 public record class DotnetTypeData(Type Type) : TypeData;
 
 public enum CodeSlotEnum
 {
 	Unknown = 0,
+	Type,
 	File,
 	Declare,
 	Call,
@@ -132,11 +154,13 @@ public enum CodeSlotEnum
 	Member,
 }
 
-public record class CodeSlot(int Parent, CodeSlotEnum CodeType, CodeData Data, int TypeSlot = 0);
+public record class CodeSlot(int Parent, CodeSlotEnum CodeType, CodeData Data, [property: Obsolete] int TypeSlot = 0, int TypeSlot2 = 0);
 
 public abstract record class CodeData;
 public record class InvalidCodeData : CodeData { public static readonly InvalidCodeData Instance = new(); private InvalidCodeData() { } }
 public record class FileCodeData(int Main = 0) : CodeData;
+public record class TypeCodeData(String Name) : CodeData;
+public record class FuncTypeCodeData(String Name, int ReturnType) : TypeCodeData(Name: Name);
 public record class DeclareCodeData(String Name, Boolean IsStatic, int Type = 0, int Value = 0) : CodeData;
 public record class CallCodeData(int Target, int[] Args, MethodInfo? DotnetMethod = null) : CodeData;
 public record class IdentifierCodeData(String Name, int Target = 0) : CodeData;

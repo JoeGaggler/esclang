@@ -141,7 +141,7 @@ public static class Evaluator
 				var intTypeSlotId = analysis.GetOrAddType(new DotnetTypeData(typeof(int)), StreamWriter.Null);
 				if (slot.TypeSlot != intTypeSlotId)
 				{
-					throw new NotImplementedException($"Invalid add expression type: {slot.TypeSlot}");
+					throw new NotImplementedException($"Invalid add expression type: {slot} {left} {right}");
 				}
 
 				var leftObj = (IntEvaluation)left;
