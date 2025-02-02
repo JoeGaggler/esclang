@@ -6,18 +6,17 @@ namespace EscLang.Analyze;
 public class Analysis
 {
 	private readonly List<CodeSlot> CodeSlots = [new(0, CodeSlotEnum.Unknown, InvalidCodeData.Instance)];
-	private readonly List<TypeData> TypeSlots = [UnknownTypeData.Instance];
 
 	public Analysis()
 	{
 	}
 
-	public void UpdateType(int slotId, int typeSlotId, int typeSlotId2, TextWriter? log = null)
+	public void UpdateType(int slotId, int typeSlotId2, TextWriter? log = null)
 	{
 		log ??= TextWriter.Null;
 		var slot = CodeSlots[slotId] with { TypeSlot2 = typeSlotId2 };
 		CodeSlots[slotId] = slot;
-		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} : ({typeSlotId}, {typeSlotId2:0000}) = {slot.Data}");
+		log.WriteLine($"slot {slotId:0000} in {slot.Parent:0000} <- {slot.CodeType} : ({typeSlotId2:0000}) = {slot.Data}");
 	}
 
 	public int GetOrAddType2(TypeCodeData typeCodeData, TextWriter log)
@@ -75,17 +74,6 @@ public class Analysis
 			for (var i = 0; i < CodeSlots.Count; i++)
 			{
 				yield return CodeSlots[i];
-			}
-		}
-	}
-
-	public IEnumerable<TypeData> AllTypes
-	{
-		get
-		{
-			for (var i = 0; i < TypeSlots.Count; i++)
-			{
-				yield return TypeSlots[i];
 			}
 		}
 	}

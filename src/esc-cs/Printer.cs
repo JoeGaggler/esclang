@@ -527,28 +527,6 @@ public static class Printer
 		}
 	}
 
-	public static void PrintTypeTable(Analysis table, TextWriter outputFile)
-	{
-		foreach (var (i, t) in table.AllTypes.Index())
-		{
-			outputFile.Write($"{i:0000} :: ");
-			var line = t switch
-			{
-				TypeTypeData => "type",
-				VoidTypeData => "void",
-				UnknownTypeData => "unknown",
-				FunctionTypeData { ReturnType: var returnType } => $"function -> {GetTypeSlotName(table, returnType)}",
-				ParameterTypeData => "parameter",
-				// MetaTypeData { Type: var instanceType } => $"typeof -> {GetTypeSlotName(table, instanceType)}",
-				DotnetMemberTypeData { TargetType: var targetType, MemberName: var memberName, MemberType: var memberType, Members: var members } =>
-					$"{memberName} : {memberType switch { MemberTypes.Method => "method", MemberTypes.Property => "property", _ => "unknownof" }} : {GetTypeSlotName(table, targetType)}",
-				DotnetTypeData { Type: var type } => $"dotnet -> {type.FullName}",
-				_ => "unexpected",
-			};
-			outputFile.WriteLine(line);
-		}
-	}
-
 	public static String GetTypeSlotName(Analysis analysis, int typeSlotId2)
 	{
 		var typeSlot = analysis.GetCodeSlot(typeSlotId2);

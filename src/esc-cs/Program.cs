@@ -84,11 +84,6 @@ class Program
 		// Debug Analyzer
 		outputFile.WriteLine();
 		outputFile.WriteLine("Analyze Types:");
-		Printer.PrintTypeTable(unit, outputFile);
-
-		// Debug Analyzer
-		outputFile.WriteLine();
-		outputFile.WriteLine("Analyze Types2:");
 		Printer.PrintTypeTable2(unit, outputFile);
 
 		// Evaluator
