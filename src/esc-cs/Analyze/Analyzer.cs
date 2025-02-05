@@ -559,10 +559,7 @@ public static class Analyzer
 					if (sourceSlot.CodeType == SlotEnum.Type)
 					{
 						// identifier to a type must turn into a type
-						// TODO: more direct way from source slot to target type?
-						var typeData = analysis.GetData<TypeSlotData>(sourceSlotId);
-						var dataSlot = analysis.GetOrAddType(typeData, log);
-						var metaSlot = analysis.GetOrAddType(new MetaTypeSlotData(dataSlot), log);
+						var metaSlot = analysis.GetOrAddType(new MetaTypeSlotData(sourceSlotId), log);
 						analysis.UpdateType(targetSlotId, metaSlot, log);
 						sourceQueue.Enqueue(targetSlotId);
 						continue;
