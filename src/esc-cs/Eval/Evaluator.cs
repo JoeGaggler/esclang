@@ -24,6 +24,13 @@ public static class Evaluator
 		var bracesValueTable = new ValueTable(valueTable);
 		bracesValueTable.SetArguments(args);
 
+		// pass 1: static declarations
+		foreach (var step in bracesData.Lines)
+		{
+			_ = EvaluateSlotStaticOnly(step, analysis, programOutput, bracesValueTable);
+		}
+
+		// pass 2: dynamic execution
 		foreach (var step in bracesData.Lines)
 		{
 			var stepNode = EvaluateSlot(step, analysis, programOutput, bracesValueTable);
@@ -93,6 +100,7 @@ public static class Evaluator
 			case SlotEnum.Declare:
 			{
 				var declareData = (DeclareSlotData)slotData;
+				if (declareData.IsStatic) { return VoidEvaluation.Instance; } // only evaluate dynamic declarations
 				var rhs = EvaluateSlot(declareData.Value, analysis, programOutput, valueTable);
 				valueTable.Add(declareData.Name, rhs);
 				return rhs; // TODO: return l-value?
@@ -308,6 +316,24 @@ public static class Evaluator
 				throw new InvalidOperationException($"Invalid slot type: {slot}");
 			}
 		}
+	}
+
+	private static Evaluation EvaluateSlotStaticOnly(int slotId, Analysis analysis, StringWriter programOutput, ValueTable valueTable)
+	{
+		var slot = analysis.GetSlot(slotId);
+		var slotData = analysis.GetData<SlotData>(slotId);
+		switch (slot.CodeType)
+		{
+			case SlotEnum.Declare:
+			{
+				var declareData = (DeclareSlotData)slotData;
+				if (!declareData.IsStatic) { break; } // only evaluate static declarations
+				var rhs = EvaluateSlot(declareData.Value, analysis, programOutput, valueTable);
+				valueTable.Add(declareData.Name, rhs);
+				return rhs; // TODO: return l-value?
+			}
+		}
+		return VoidEvaluation.Instance;
 	}
 
 	private static Object ObjFromEval(Evaluation eval)
